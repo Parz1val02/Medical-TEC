@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="overflow-hidden">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Calendario
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Revisa la información correspondiente a mensajes, citas y más.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+                {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+                {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+            ]
+        });
+    });
+</script>
+
+
+</body>
+</html>
