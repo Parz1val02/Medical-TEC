@@ -5,7 +5,7 @@
 </head>
 
 
-<body class="overflow-hidden">
+<body class="">
 
 <!-- ===============================================-->
 <!--    Main Content-->
@@ -17,23 +17,94 @@
     <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
     <div class="content" >
       <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
-
-      <!--<div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
-        <div class="card-body" style="background: #FFFFFF">
-          <div class="row justify-content-between align-items-center">
-            <div class="col-md-11">
-              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Historial Clínico
-              </h1>
+      <div class="content">
+        <div class="card-deck">
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 16rem;">
+            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
             </div>
-            <div class="col-md-11">
-              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Información del paciente, citas/consultas del mismo, reportes y una bitácora para notas.
-              </h5>
+            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                 Sección de Pagos
+                </h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrás visualizar tus boletas emitidas y pagos de las citas</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info mr-1 mb-1" type="button">Ingresar</a>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem">
+            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
+            </div>
+            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="far fa-address-book" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Próximas Sesiones
+                </h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revisa tus futuras consultas médicas</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info mr-1 mb-1" type="button">Ingresar</a>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem">
+            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
+            </div>
+            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Cuestionarios
+                </h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso tu doctor solicite un cuestionario, aparecerá en esta sección</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info mr-1 mb-1" type="button">Ingresar</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>-->
+        <div class="row no-gutters">
+          <div class="col-lg-6 col-xxl-4 pr-lg-2 mb-3 mb-xxl-0">
+            <div class="card h-100 bg-gradient">
+              <div class="card-header bg-transparent">
+                <h5 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
+                  Sedes
+                </h5>
+              </div>
+              <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+                <div class="form-group" style="text-align: center">
+                  <label for="readonly" style="font-size: medium">Sede Actual</label>
+                  <input class="form-control col text-black" id="readonly" type="text" placeholder="Lima Centro" readonly="" style="text-align: center">
+                  <hr style="height: 1px; background-color: #FFFFFF; border: none">
+                  <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <button class="dropdown-item" type="button">Action</button>
+                      <button class="dropdown-item" type="button">Another action</button>
+                      <button class="dropdown-item" type="button">Something else here</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xxl-8 pl-xxl-2">
+            <div class="card mb-3">
+              <div class="card-header bg-light py-2">
+                <div class="row flex-between-center">
+                  <div class="col-auto">
+                    <h6 class="mb-0">Top Products</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body h-100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
