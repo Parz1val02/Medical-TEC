@@ -3,50 +3,9 @@
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
 </head>
-<style>
-    .modalDialog {
-        position: fixed;
-        font-family: Arial, Helvetica, sans-serif;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: rgba(0,0,0,0.8);
-        z-index: 99999;
-        opacity:0;
-        pointer-events: none;
-    }
-    .modalDialog:target {
-        opacity:1;
-        pointer-events: auto;
-    }
-    .modalDialog > div {
-        width: 600px;
-        height: 600px;
-        position: relative;
-        margin: 10% auto;
-        padding: 5px 20px 13px 20px;
-        border-radius: 10px;
-        background: #FFFFFF;
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 
-    }
-    .close {
-        background: #060b12;
-        color: #FFFFFF;
-        line-height: 25px;
-        position: absolute;
-        right: -12px;
-        text-align: center;
-        top: -10px;
-        width: 24px;
-        text-decoration: none;
-        font-weight: bold;
-        -webkit-border-radius: 12px;
-        -moz-border-radius: 12px;
-        border-radius: 12px;
-    }
-    .close:hover { background: #00d9ff; }
-</style>
 
 <body class="">
 
@@ -66,40 +25,59 @@
             <!--    static Content-->
             <!-- ===============================================-->
 
-            <div class="card mb-3 bg-card-gradient">
-                <div class="card-body ">
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
-                        <div class="col-md">
-                            <h5 class="mb-2 mb-md-0 text-white">Dashboard</h5>
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Dashboard
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Maneja y edita la información de los usuarios. Además, revisa un resumen de los últimos reportes y formularios
+                            </h5>
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
             <!-- Button trigger modal -->
-            <a href="#openModal"><button style="background: #00ff80; border-radius: 5px;">Cambiar UX/UI</button></a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #00ff80; border-radius: 5px;">
+                Cambiar UX/UI
+            </button>
 
-            <div id="openModal" class="modalDialog">
-                <div>
-                    <a href="#close" title="Close" class="close">X</a>
-                    <h2 style="color: #060b12">Cambio de interfaz</h2>
-                    <p>Seleccione la sede: </p>
-                    <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
-                        <option selected value>------</option>
-                        <option value="1">San Miguel</option>
-                        <option value="2">Jesús María</option>
-                        <option value="3">Lince</option>
-                    </select>
-                    <p>Escoja el color de la interfaz: </p>
-                    <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color" style="width:70px; margin-bottom: 20px">
-                    <p>Escoja el logo: </p>
-                    <img th:src="@{/img/logos/apple.png}" style="width:20%; margin-bottom: 20px; border-radius: 50%"/>
-                    <div class="mb-3" style="height: 100px">
-                        <input class="form-control" type="file" id="formFile" style="height:40px; width: 400px">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cambio de interfaz</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Seleccione la sede: </p>
+                            <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
+                                <option selected value>------</option>
+                                <option value="1">San Miguel</option>
+                                <option value="2">Jesús María</option>
+                                <option value="3">Lince</option>
+                            </select>
+                            <p>Escoja el color de la interfaz: </p>
+                            <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color" style="width:70px; margin-bottom: 20px">
+                            <p>Escoja el logo: </p>
+                            <img th:src="@{/img/logos/apple.png}" style="width:20%; margin-bottom: 20px; border-radius: 50%"/>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="formFile" style="height:40px; width: 400px">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary">Guardar cambios</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
             <br>
             <br>
             <span>Seleccione la sede </span>
