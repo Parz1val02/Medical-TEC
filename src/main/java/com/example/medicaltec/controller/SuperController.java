@@ -21,8 +21,11 @@ public class SuperController {
         return "super admin/reports";
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
-    public String uxUi(){
+    public String confSup(){
         return "super admin/confSup";
     }
-
+    @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
+    public String superPass(){
+        return "super admin/superPass";
+    }
 }
