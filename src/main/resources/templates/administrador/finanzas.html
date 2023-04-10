@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+
 </head>
 
 
@@ -40,12 +41,12 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
               <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Notificaciones
+                Finanzas
               </h1>
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Revisa la información correspondiente a mensajes, citas y más.
+                Gestiona la informacion de ingresos y gastos monetarios de la sede.
               </h5>
             </div>
           </div>
@@ -54,106 +55,10 @@
 
       <div class="card mb-3">
 
-        <div class="card-body border-top" >
-          <table class="table table-striped" id="userList">
-            <thead style="background: #cdeffc">
-            <tr>
-              <th class="sort align-middle" style="width: 20%">Fecha</th>
-              <th class="sort align-middle" style="width: 80%">Descripción</th>
-            </tr>
-            </thead>
-            <tbody class="bg-white">
-            <tr>
-              <td class="align-middle">
-                10/04/23 - 10:45hrs
-              </td>
-              <td class="align-middle">
-                Mensaje nuevo de Luis Ramos: "Doctor, estuve viendo lo que me comentó..."
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                10/04/23 - 08:32hrs
-              </td>
-              <td class="align-middle">
-                Mensaje nuevo de Leonardo Abanto: "Ya reservé mi cita, doctor. Nos vemos el lunes"
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                10/04/23 - 08:30hrs
-              </td>
-              <td class="align-middle">
-                Tiene una nueva cita registrada: 17/04/23 - 20:00hrs (Leonardo Abanto)
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                09/04/23 - 01:00hrs
-              </td>
-              <td class="align-middle">
-                Tiene una nueva cita registrada: 12/04/23 - 20:00hrs (Rodrigo Barrios)
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                09/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                08/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                07/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                06/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                05/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                04/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                04/04/23 - 10:00hrs
-              </td>
-              <td class="align-middle">
-                Leonardo Abanto
-              </td>
-            </tr>
-            </tbody>
-          </table>
+        <div class="card-body border-top d-flex justify-content-center" >
+          <div class="" id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
         </div>
+
       </div>
 
 
@@ -222,5 +127,66 @@
 </script>
 
 
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {packages: ['corechart', 'bar']});
+  google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('timeofday', 'Time of Day');
+    data.addColumn('number', 'Motivation Level');
+
+    data.addRows([
+      [{v: [8, 0, 0], f: '8 am'}, 1],
+      [{v: [9, 0, 0], f: '9 am'}, 2],
+      [{v: [10, 0, 0], f:'10 am'}, 3],
+      [{v: [11, 0, 0], f: '11 am'}, 4],
+      [{v: [12, 0, 0], f: '12 pm'}, 5],
+      [{v: [13, 0, 0], f: '1 pm'}, 6],
+      [{v: [14, 0, 0], f: '2 pm'}, 7],
+      [{v: [15, 0, 0], f: '3 pm'}, 8],
+      [{v: [16, 0, 0], f: '4 pm'}, 9],
+      [{v: [17, 0, 0], f: '5 pm'}, 10],
+    ]);
+
+    var options = {
+      title: 'Motivation Level Throughout the Day',
+      hAxis: {
+        title: 'Time of Day',
+        format: 'h:mm a',
+        chartArea: {
+          'width': '100%'
+        },
+        viewWindow: {
+          min: [7, 30, 0],
+          max: [17, 30, 0]
+        }
+      },
+      vAxis: {
+        title: 'Rating (scale of 1-10)'
+      }
+    };
+
+    var chart = new google.visualization.ColumnChart(
+            document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+  }
+
+  window.onresize = RedibujarGrafica;
+  function RedibujarGrafica() {
+    google.charts.setOnLoadCallback(drawChart);
+  };
+</script>
+
 </body>
 </html>
+
+
+
+
+
