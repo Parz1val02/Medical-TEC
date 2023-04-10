@@ -23,4 +23,9 @@ public class ExampController {
 
         return "administrativo/Perfil";
     }
+    @RequestMapping(value = {"/pass"},method = RequestMethod.GET)
+    public String CambiarPassword(){
+
+        return "administrativo/CambiarPassword";
+    }
 }

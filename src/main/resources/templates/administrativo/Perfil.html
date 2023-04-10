@@ -73,9 +73,7 @@
                     </h3>
                     <div class="row justify-content-between align-items-center" style="padding-left: 15px;">
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Cambiar Contraseña
-                        </button>
+                        <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" href="/pass">Cambiar Contraseña</button>
 
 
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,18 +81,18 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Advertencia</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                                     </div>
                                     <div class="modal-body">
-                                        Estás a punto de cambiar tu contraseña. Por favor, asegúrate de que tu nueva contraseña sea segura y única. No uses la misma contraseña que utilizas en otros sitios web y evita usar información personal, como tu nombre o fecha de nacimiento.
+                                        Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrate de que tu nueva contraseña sea segura y única. No uses la misma contraseña que utilizas en otros sitios web y evita usar información personal, como tu nombre o fecha de nacimiento.
 
-                                        Además, nunca compartas tu contraseña con nadie y no la guardes en lugares públicos como correos electrónicos o notas.
+                                        Además, nunca compartas tu contraseña con nadie y no la guardes en lugares públicos como correos electrónicos o notas.<br>
 
                                         Recuerda que una contraseña segura es esencial para proteger tus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener tu cuenta segura!
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <a type="button" class="btn btn-primary" href="/pass">Continuar</a>
                                     </div>
                                 </div>
                             </div>
