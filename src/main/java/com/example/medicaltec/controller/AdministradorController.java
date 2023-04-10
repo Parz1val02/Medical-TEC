@@ -1,5 +1,6 @@
 package com.example.medicaltec.controller;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -8,31 +9,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/administrador")
 public class AdministradorController {
 
-    @RequestMapping("/principal")
+    @GetMapping("/principal")
     public String pagprincipal(){
 
         return "administrador/principal";
     }
 
-    @RequestMapping("/usuarios")
+    @GetMapping("/usuarios")
     public String pagusuarios(){
 
         return "administrador/usuarios";
     }
 
-    @RequestMapping("/calendario")
+    @GetMapping("/calendario")
     public String calendario(){
 
         return "administrador/calendario";
     }
 
-    @RequestMapping("/finanzas")
+    @GetMapping("/finanzas")
     public String finanzas(){
 
         return "administrador/finanzas";
     }
 
-    @RequestMapping("/settings")
+
+    @GetMapping("/notificaciones")
+    public String notificaciones(){
+
+        return "administrador/notificaciones";
+    }
+
+    @GetMapping("/settings")
     public String settings(){
 
         return "administrador/settings";
