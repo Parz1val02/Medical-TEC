@@ -12,7 +12,7 @@ public class DoctorController {
     public String pagPrincipalDoctor(){return "doctor/principal";}
 
     @GetMapping("/historial")
-    public String verHistorialClinico(){return "doctor/historial";}
+    public String verHistorial(){return "doctor/historial";}
 
     @GetMapping("/notificaciones")
     public String verNotificaciones(){return "doctor/notificaciones";}
