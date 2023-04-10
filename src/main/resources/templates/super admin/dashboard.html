@@ -32,34 +32,31 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
 
+            <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                    <input type="text" class="form-control" id="recipient-name">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="message-text" class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
-                                </div>
-                            </form>
+                            <p>Clash</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Send message</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
+            <br>
             <span>Seleccione la sede </span>
             <select class="form-select" aria-label="Default select example">
                 <option selected value>------</option>
@@ -67,9 +64,9 @@
                 <option value="2">Jesús María</option>
                 <option value="3">Lince</option>
             </select>
-            </br>
+            <br>
             <span>Seleccione el tipo de usuario </span>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" style="margin: 15px">
                 <option selected value>------</option>
                 <option value="1">Paciente</option>
                 <option value="2">Doctor</option>
@@ -159,8 +156,8 @@
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
                                     <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1">Activo</option>
-                                        <option value="2">Inactivo</option>
+                                        <option selected value="1" style="background: #00ff00">Activo</option>
+                                        <option value="2" style="background: #bb110e">Inactivo</option>
                                     </select>
                                 </td>
                                 <td class="align-middle">
@@ -239,6 +236,24 @@
 <!-- Initialize DataTable in JavaScript -->
 <script>
     $(document).ready(function () {
+        const exampleModal = document.getElementById('exampleModal')
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                const recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+
+                // Update the modal's content.
+                const modalTitle = exampleModal.querySelector('.modal-title')
+                const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+                modalTitle.textContent = `New message to ${recipient}`
+                modalBodyInput.value = recipient
+            })
+        }
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
         $('#userList').DataTable({
