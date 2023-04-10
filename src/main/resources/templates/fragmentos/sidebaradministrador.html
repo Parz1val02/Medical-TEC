@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<nav th:fragment="sideBar" class="navbar navbar-vertical navbar-expand-xl navbar-light">
+  <div class="d-flex align-items-center">
+    <div class="toggle-icon-wrapper">
+      <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Opciones"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+    </div>
+    <!--a class="navbar-brand" href="#">
+    <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/falcon.png}" alt="" width="40" /><span class="text-sans-serif">falcon</span>
+    </div>
+    </a-->
+  </div>
+  <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+    <div class="navbar-vertical-content perfect-scrollbar scrollbar">
+      <ul class="navbar-nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" th:href="@{/administrador/principal}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <i class="fa fa-home"></i>
+                            </span>
+              <span class="nav-link-text"> Página Principal</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/usuarios}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span
+                                        class="fas fa-users">
+                                </span>
+                            </span>
+              <span class="nav-link-text"> Usuarios de sede </span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/calendario}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-calendar"></span>
+                            </span>
+              <span class="nav-link-text"> Calendario</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/formatos}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-file"></span>
+                            </span>
+              <span class="nav-link-text"> Formatos</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/finanzas}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-dollar"></span>
+                            </span>
+              <span class="nav-link-text"> Finanzas </span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/mensajeria}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-comments"></span>
+                            </span>
+              <span class="nav-link-text"> Mensajeria</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/notificaciones}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-bell"></span>
+                            </span>
+              <span class="nav-link-text"> Notificaciones </span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/administrador/settings}">
+            <div class="d-flex align-items-center">
+                            <span class="nav-link-icon">
+                                <span class="fas fa-cog"></span>
+                            </span>
+              <span class="nav-link-text"> Configuración</span>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                    class="fas fa-sign-out-alt">
+                    </span></span><span class="nav-link-text"> Cerrar Sesión</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <div class="navbar-vertical-divider">
+        <hr class="navbar-vertical-hr my-2"/>
+      </div>
+    </div>
+  </div>
+</nav>
