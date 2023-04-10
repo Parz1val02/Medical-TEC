@@ -1,0 +1,107 @@
+<div class="container" data-layout="container">
+  <nav th:replace="~{fragmentos/sidebar.html::sideBar}"></nav>
+  <div class="content">
+    <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+
+    <!-- ===============================================-->
+    <!--    static Content-->
+    <!-- ===============================================-->
+
+    <div class="card mb-3 bg-card-gradient">
+      <div class="card-body ">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-md">
+            <h5 class="mb-2 mb-md-0 text-white">Lista de Pacientes</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3" >
+      <div class="card-body border-top">
+        <table class="table table-striped" id="userList">
+          <thead class="bg-200">
+          <tr>
+            <th class="sort align-middle" style="width: 30%">Pacientes</th>
+            <th> <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Status
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <p>Invitado</p>
+                <p>Registrado</p>
+                <p>Activo</p>
+                <p>Agendado</p>
+                <p>En consulta</p>
+              </div>
+            </div></th>
+
+
+            <th class="sort align-middle" style="width: 20%">Modo de Registro</th>
+
+          </tr>
+          </thead>
+          <tbody class="bg-white">
+          <tr>
+            <td class="align-middle">
+              <a href="">Hiroshi Giotoku</a>
+            </td>
+            <td class="align-middle">
+              Registrado
+            </td>
+            <td class="align-middle">
+              Invitacion
+            </td>
+
+          </tr>
+          <tr>
+            <td class="align-middle">
+              Manuel Yarleque
+            </td>
+            <td class="align-middle">
+              En consulta
+            </td>
+            <td class="align-middle">
+              AutoRegistro
+            </td>
+
+          </tr>
+          <tr>
+            <td class="align-middle">
+              <a href="">Paola Vallejos</a>
+            </td>
+            <td class="align-middle">
+              Activo
+            </td>
+            <td class="align-middle">
+              Invitacion
+            </td>
+
+          </tr>
+          <tr>
+            <td class="align-middle">
+              Don Lucho
+            </td>
+            <td class="align-middle">
+              Inactivo
+            </td>
+            <td class="align-middle">
+              AutoRegistro
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div></div>
+
+    <!-- ===============================================-->
+    <!--    static Content-->
+    <!-- ===============================================-->
+
+    <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+  </div>
+</div>

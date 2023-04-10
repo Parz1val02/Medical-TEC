@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+
+<body class="">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebar.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Perfil de Administrativo
+                            </h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                        <div class="card-body" style="background: #FFFFFF">
+                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Datos
+                            </h3>
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Nombres: <span style="font-weight: normal">Luis Felipe</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Apellidos: <span style="font-weight: normal">Ramos Torres</span></p>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Email: <span style="font-weight: normal">donlucho@pucp.edu.pe</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Celular: <span style="font-weight: normal">987654321</span></p>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Sede: <span style="font-weight: normal">Sede C</span></p>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Idiomas: <span style="font-weight: normal">Español, Inglés</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6"  >
+
+                    <div class="card" style="text-align:center;">
+                        <img  th:src="@{/img/team/donLucho.png}" alt="Imagen Perfil"  width="300" height="300"/>
+                    </div>
+
+                    <br>
+                    <div class="card">
+                        <button type="button" class="btn btn-primary">Cambiar Imagen</button>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+            <br>
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF; padding-left: 15px; ">
+                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                        Cambiar Contraseña
+                    </h3>
+                    <div class="row justify-content-between align-items-center" style="padding-left: 15px;">
+
+                        <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" href="/pass">Cambiar Contraseña</button>
+
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Advertencia</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrate de que tu nueva contraseña sea segura y única. No uses la misma contraseña que utilizas en otros sitios web y evita usar información personal, como tu nombre o fecha de nacimiento.
+
+                                        Además, nunca compartas tu contraseña con nadie y no la guardes en lugares públicos como correos electrónicos o notas.<br>
+
+                                        Recuerda que una contraseña segura es esencial para proteger tus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener tu cuenta segura!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <a type="button" class="btn btn-primary" href="/pass">Continuar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+                {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+                {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+            ]
+        });
+    });
+</script>
+
+
+</body>
+</html>
