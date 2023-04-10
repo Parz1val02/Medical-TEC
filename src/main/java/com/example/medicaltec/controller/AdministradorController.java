@@ -11,7 +11,7 @@ public class AdministradorController {
     @RequestMapping("/principal")
     public String pagprincipal(){
 
-        return "administrador/paginaprincipal";
+        return "administrador/principal";
     }
 
     @RequestMapping("/usuarios")
