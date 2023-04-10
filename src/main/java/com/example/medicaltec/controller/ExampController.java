@@ -28,4 +28,10 @@ public class ExampController {
 
         return "administrativo/CambiarPassword";
     }
+
+    @RequestMapping(value = {"/form"},method = RequestMethod.GET)
+    public String previewForm(){
+
+        return "administrativo/FormPreview";
+    }
 }
