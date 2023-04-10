@@ -20,5 +20,9 @@ public class SuperController {
     public String reports(){
         return "super admin/reports";
     }
+    @RequestMapping(value = {"/uxUi"},method = RequestMethod.GET)
+    public String uxUi(){
+        return "super admin/uxUi";
+    }
 
 }
