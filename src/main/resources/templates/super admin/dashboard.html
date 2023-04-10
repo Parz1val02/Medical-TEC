@@ -76,25 +76,25 @@
                 </div>
             </div>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
-            </button>
+            <a href="#openModal"><button style="background: #00ff80; border-radius: 5px;">Cambiar UX/UI</button></a>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
+            <div id="openModal" class="modalDialog">
+                <div>
+                    <a href="#close" title="Close" class="close">X</a>
+                    <h2 style="color: #060b12">Cambio de interfaz</h2>
+                    <p>Seleccione la sede: </p>
+                    <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
+                        <option selected value>------</option>
+                        <option value="1">San Miguel</option>
+                        <option value="2">Jesús María</option>
+                        <option value="3">Lince</option>
+                    </select>
+                    <p>Escoja el color de la interfaz: </p>
+                    <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color" style="width:70px; margin-bottom: 20px">
+                    <p>Escoja el logo: </p>
+                    <img th:src="@{/img/logos/apple.png}" style="width:20%; margin-bottom: 20px; border-radius: 50%"/>
+                    <div class="mb-3" style="height: 100px">
+                        <input class="form-control" type="file" id="formFile" style="height:40px; width: 400px">
                     </div>
                 </div>
             </div>
