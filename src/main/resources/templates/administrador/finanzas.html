@@ -56,8 +56,9 @@
       <div class="card mb-3">
 
         <div class="card-body border-top d-flex justify-content-center" >
-          <div class="" id="curve_chart" ></div>
+          <div class="" id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
         </div>
+
       </div>
 
 
@@ -124,34 +125,54 @@
   });
 
 </script>
+
+
+
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
+  google.charts.load('current', {packages: ['corechart', 'bar']});
+  google.charts.setOnLoadCallback(drawBasic);
 
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ['Year', 'Sales', 'Expenses'],
-      ['2004',  1000,      400],
-      ['2005',  1170,      460],
-      ['2006',  660,       1120],
-      ['2007',  1030,      540]
+  function drawBasic() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('timeofday', 'Time of Day');
+    data.addColumn('number', 'Motivation Level');
+
+    data.addRows([
+      [{v: [8, 0, 0], f: '8 am'}, 1],
+      [{v: [9, 0, 0], f: '9 am'}, 2],
+      [{v: [10, 0, 0], f:'10 am'}, 3],
+      [{v: [11, 0, 0], f: '11 am'}, 4],
+      [{v: [12, 0, 0], f: '12 pm'}, 5],
+      [{v: [13, 0, 0], f: '1 pm'}, 6],
+      [{v: [14, 0, 0], f: '2 pm'}, 7],
+      [{v: [15, 0, 0], f: '3 pm'}, 8],
+      [{v: [16, 0, 0], f: '4 pm'}, 9],
+      [{v: [17, 0, 0], f: '5 pm'}, 10],
     ]);
 
     var options = {
-      title: 'Company Performance',
-      width: 600,
-      height: 600,
-      chartArea: {
-        'width': '100%'
+      title: 'Motivation Level Throughout the Day',
+      hAxis: {
+        title: 'Time of Day',
+        format: 'h:mm a',
+        chartArea: {
+          'width': '100%'
+        },
+        viewWindow: {
+          min: [7, 30, 0],
+          max: [17, 30, 0]
+        }
       },
-      curveType: 'function',
-      legend: {
-        position: 'bottom'
+      vAxis: {
+        title: 'Rating (scale of 1-10)'
       }
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+    var chart = new google.visualization.ColumnChart(
+            document.getElementById('chart_div'));
 
     chart.draw(data, options);
   }
@@ -162,6 +183,10 @@
   };
 </script>
 
-
 </body>
 </html>
+
+
+
+
+
