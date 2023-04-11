@@ -33,6 +33,18 @@ public class AdministradorController {
         return "administrador/finanzas";
     }
 
+    @GetMapping("/mensajeria")
+    public String mensajeria(){
+
+        return "administrador/mensajeria";
+    }
+
+
+    @GetMapping("/formatos")
+    public String formatos(){
+
+        return "administrador/formatos";
+    }
 
     @GetMapping("/notificaciones")
     public String notificaciones(){
