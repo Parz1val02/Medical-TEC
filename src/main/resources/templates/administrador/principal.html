@@ -18,6 +18,8 @@
         <div class="content" >
             <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
             <div class="content">
+
+
                 <div class="card-deck">
                     <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
                         <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
@@ -65,8 +67,12 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
                 <div class="row no-gutters">
-                    <div class="col-lg-4 pr-lg-2">
+                    <div class="col-lg-5 pr-lg-2">
                         <div class="card h-100 bg-gradient">
                             <div class="card-header bg-transparent">
                                 <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
@@ -92,17 +98,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-8 pl-lg-2">
+
+                    <div class="col-lg-7 pl-lg-2">
                         <div class="card h-100 mb-3">
                             <div class="card-header bg-light py-2">
                                 <div class="row flex-between-center">
-                                    <div class="col-auto">
+                                    <div class="col-md-6 col-lg-6">
                                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                                            Busca a tu Médico
+                                            Doctores
                                         </h4>
                                         <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualiza la información de los doctores</h5>
                                     </div>
-                                    <div class="col-auto">
+                                    <div class="col-md-6 col-lg-6">
                                         <div class="input-group">
                                             <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
                                             <span class="input-group-append">
@@ -312,7 +319,9 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
