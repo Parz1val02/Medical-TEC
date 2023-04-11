@@ -28,4 +28,9 @@ public class SuperController {
     public String superPass(){
         return "super admin/superPass";
     }
+    @RequestMapping(value = {"/formulario"},method = RequestMethod.GET)
+    public String formulario(){
+        return "super admin/formulario";
+    }
+
 }
