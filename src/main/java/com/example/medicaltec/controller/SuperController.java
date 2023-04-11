@@ -32,5 +32,9 @@ public class SuperController {
     public String formulario(){
         return "super admin/formulario";
     }
+    @RequestMapping(value = {"/reporte"},method = RequestMethod.GET)
+    public String reporte(){
+        return "super admin/reporte";
+    }
 
 }

@@ -19,7 +19,7 @@
     <div class="container" data-layout="container">
         <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
         <div class="content">
-            <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+            <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
 
             <!-- ===============================================-->
             <!--    static Content-->
@@ -179,8 +179,8 @@
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
                                     <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1" style="background: #00ff00">Activo</option>
-                                        <option value="2" style="background: #bb110e">Inactivo</option>
+                                        <option selected value="1">Activo</option>
+                                        <option value="2">Inactivo</option>
                                     </select>
                                 </td>
                                 <td class="align-middle">
