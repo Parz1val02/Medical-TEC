@@ -4,10 +4,8 @@
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
   <title>Formulario</title>
 </head>
-<link rel=stylesheet type="text/css" href="../static/css/formu.css">
-<script src="../static/js/formu.js" language="javascript" type="text/javascript"></script>
 
-<body class="overflow-hidden">
+<body>
 
 <!-- ===============================================-->
 <!--    Main Content-->
@@ -19,85 +17,124 @@
     <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
     <div class="content" >
       <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
-      <div class="form">
 
-        <ul class="tab-group">
-          <li class="tab active"><a href="#signup">Sign Up</a></li>
-          <li class="tab"><a href="#login">Log In</a></li>
-        </ul>
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
 
-        <div class="tab-content">
-          <div id="signup">
-            <h1>Sign Up for Free</h1>
-
-            <form action="/" method="post">
-
-              <div class="top-row">
-                <div class="field-wrap">
-                  <label>
-                    First Name<span class="req">*</span>
-                  </label>
-                  <input type="text" required autocomplete="off" />
-                </div>
-
-                <div class="field-wrap">
-                  <label>
-                    Last Name<span class="req">*</span>
-                  </label>
-                  <input type="text"required autocomplete="off"/>
-                </div>
-              </div>
-
-              <div class="field-wrap">
-                <label>
-                  Email Address<span class="req">*</span>
-                </label>
-                <input type="email"required autocomplete="off"/>
-              </div>
-
-              <div class="field-wrap">
-                <label>
-                  Set A Password<span class="req">*</span>
-                </label>
-                <input type="password"required autocomplete="off"/>
-              </div>
-
-              <button type="submit" class="button button-block"/>Get Started</button>
-
-            </form>
-
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Formulario
+              </h1>
+            </div>
+            <div class="col-md-11">
+              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                Registrate completando los campos indicados abajo
+              </h5>
+            </div>
           </div>
-
-          <div id="login">
-            <h1>Welcome Back!</h1>
-
-            <form action="/" method="post">
-
-              <div class="field-wrap">
-                <label>
-                  Email Address<span class="req">*</span>
-                </label>
-                <input type="email"required autocomplete="off"/>
-              </div>
-
-              <div class="field-wrap">
-                <label>
-                  Password<span class="req">*</span>
-                </label>
-                <input type="password"required autocomplete="off"/>
-              </div>
-
-              <p class="forgot"><a href="#">Forgot Password?</a></p>
-
-              <button class="button button-block"/>Log In</button>
-
-            </form>
-
+        </div>
+      </div>
+      <br>
+      <div class="card mb-3">
+        <div class="card-header position-relative min-vh-25 mb-7">
+          <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
           </div>
+          <!--/.bg-holder-->
 
-        </div><!-- tab-content -->
+          <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-8">
+              <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              </h4>
+              <form>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput1" class="form-label">Nombres</label>
+                      <input type="text" id="disabledTextInput1" class="form-control" placeholder="Nombres">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput2" class="form-label">Apellidos</label>
+                      <input type="text" id="disabledTextInput2" class="form-control" placeholder="Apellidos">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput3" class="form-label">DNI</label>
+                      <input type="text" id="disabledTextInput3" class="form-control" placeholder="00000000">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput4" class="form-label">Fecha de Nacimiento</label>
+                      <input type="date" id="disabledTextInput4" class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <p>Sexo </p>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected value>------</option>
+                        <option value="1">Hombre</option>
+                        <option value="2">Mujer</option>
+                      </select>
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput6" class="form-label">Domicio actual</label>
+                      <input type="text" id="disabledTextInput6" class="form-control" placeholder="PUCP">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput7" class="form-label">Teléfono</label>
+                      <input type="text" id="disabledTextInput7" class="form-control" placeholder="992505184">
+                    </div>
+                    <div class="col mb-3">
+                      <p>Donante de orgános </p>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected value>------</option>
+                        <option value="1">Sí</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput9" class="form-label">Correo electrónico</label>
+                      <input type="text" id="disabledTextInput9" class="form-control" placeholder="juanvaldez@pucp.edu.pe">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <span>La contraseña debe contener al menos un número, un carácter especial y una mayúscula</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput10" class="form-label">Contraseña</label>
+                      <input type="text" id="disabledTextInput10" class="form-control" placeholder="Rswdsf455$">
+                    </div>
+                    <div class="col mb-3">
+                      <p>Donante de orgános </p>
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected value>------</option>
+                        <option value="1">Sí</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      </div> <!-- /form -->
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
