@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+    <div class="content">
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+      <div class="content">
+        <div class="card mb-3 bg-card-gradient">
+          <div class="card-body" style="background: white;">
+            <div class="row justify-content-between align-items-center">
+              <div class="col-md-11">
+                <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                  Notificaciones
+                </h1>
+              </div>
+              <div class="col-md-11">
+                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                  Revisa la información correspondiente a mensajes, citas y más.
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body border-top" >
+          <table class="table table-striped" id="userList">
+            <thead style="background: #cdeffc">
+            <tr>
+              <th class="sort align-middle" style="width: 20%">Fecha</th>
+              <th class="sort align-middle" style="width: 80%">Descripción</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+            <tr>
+              <td class="align-middle">
+                10/04/23 - 10:45hrs
+              </td>
+              <td class="align-middle">
+                Mensaje nuevo de Luis Ramos: "Doctor, estuve viendo lo que me comentó..."
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                10/04/23 - 08:32hrs
+              </td>
+              <td class="align-middle">
+                Mensaje nuevo de Leonardo Abanto: "Ya reservé mi cita, doctor. Nos vemos el lunes"
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                10/04/23 - 08:30hrs
+              </td>
+              <td class="align-middle">
+                Tiene una nueva cita registrada: 17/04/23 - 20:00hrs (Leonardo Abanto)
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                09/04/23 - 01:00hrs
+              </td>
+              <td class="align-middle">
+                Tiene una nueva cita registrada: 12/04/23 - 20:00hrs (Rodrigo Barrios)
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                09/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                08/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                07/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                06/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                05/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                04/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                04/04/23 - 10:00hrs
+              </td>
+              <td class="align-middle">
+                Leonardo Abanto
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card overflow-hidden mb-3">
+        <div class="card-header bg-light">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-sm-auto">
+              <h5 class="mb-1 mb-md-0">Your Notifications</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body fs--1 p-0">
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/1.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">Announcing the winners of the <strong>The only book awards</strong> decided by you, the readers. Check out the champions and runners-up in all 21 categories now!</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">📢</span>Just Now</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 bg-200 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/2.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">Last chance to vote in <strong>The 2018 Falcon Choice Awards</strong>! See what made it to the Final Round and help your favorites take home the win. Voting closes on November 26</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🏆</span>15m</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/3.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>Jennifer Kent</strong> declared you as a <strong>President</strong> of Computer Science and Engineering Society</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">📢</span>1h</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 bg-200 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/4.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">Congratulate <strong>Woody Allen</strong> for starting a new position as Business Development Manager &amp; Implementation Engineer at <strong>Hewlett Packard Enterprise(HP)</strong></p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🎁</span>6h</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 bg-200 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/5.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>Christopher Nolan</strong> Mentioned you in a comment : "Congratulations! Wishing you a great future. Proud fo you ❤️"</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>8h</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/logos/harvard.png" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">Join <strong>GIS Institute Winter 2019</strong> Event arranged by <strong>Harvard University</strong>. Only three days to go.</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🚶</span>9h</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 bg-200 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/7.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>Peter Jackson</strong> set CSE Curnival Programe in New Museums Site in <strong>University of Cambridge</strong></p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💻</span>14h</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/8.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>David Fincher</strong> declared you as a verified member of <strong>Stanford University.</strong></p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">✔️</span>2d</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/9.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">Follow <strong>International Conference on Water and Environmental Engineering (ICWEE)</strong> event arranged by United Nations Development Program on 30 December 2018</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🔍</span>3d</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/team/10.jpg" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>James Cameron</strong> invited to join the group: United Nations International Children's Fund</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🙋‍</span>2d</span>
+
+            </div>
+          </a>
+
+          <a class="border-bottom-0 bg-200  notification rounded-0 border-x-0 border-300" href="#!">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl mr-3">
+                <img class="rounded-circle" src="/img/logos/oxford.png" alt="" />
+
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1"><strong>University of Oxford</strong> created an event : "Causal Inference Hilary 2019"</p>
+              <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">✌️</span>1w</span>
+
+            </div>
+          </a>
+
+        </div>
+      </div>
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+</body>
+
+</html>>
