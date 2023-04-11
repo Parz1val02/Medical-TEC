@@ -8,36 +8,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/paciente")
 public class PacienteController {
 
-   @RequestMapping("/principal")
-    public String pagprincipal(){
-
-
-       return "paciente/paginaprincipal";
-
+   @RequestMapping(value = {"/", "/principal"})
+    public String paginaprincipal(){
+       return "paciente/principal";
    }
 
-    @RequestMapping("/doctor")
+    @RequestMapping("/perfil")
     public String perfilpaciente(){
 
 
-        return "paciente/perfildoctor";
+        return "paciente/perfil";
 
     }
 
-    @RequestMapping("/historialcita")
-    public String historial(){
+    @RequestMapping("/citas")
+    public String citas(){
 
 
-        return "paciente/historialcita";
-
-    }
-
-
-    @RequestMapping("/agendarcita")
-    public String agendarcita(){
-
-
-        return "paciente/agendarcita";
+        return "paciente/citas";
 
     }
 }
