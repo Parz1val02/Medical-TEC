@@ -76,6 +76,10 @@
                                     Finanzas
                                 </h4>
                             </div>
+
+                            <div class="card-body border-top d-flex justify-content-center" >
+                                <div class="" id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
+                            </div>
                             <!--
                             <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
                                 <div class="form-group" style="text-align: center">
@@ -333,7 +337,7 @@
                                     Pacientes
                                 </h4>
                             </div>
-                            <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+                            <div class="card-body fs--1" style="display: flex; justify-content: space-around">
 
                                 <table class="table table-striped" id="userList">
                                     <thead style="background: #cdeffc">
@@ -797,6 +801,315 @@
 
                 </div>
 
+
+                <!-- TERCER ROW -->
+                <div class="row no-gutters" >
+                        <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                            <table class="table table-striped" id="userList2">
+                                <thead style="background: #cdeffc">
+                                <tr>
+                                    <th class="sort align-middle" style="width: 22%">Nombre Completo</th>
+                                    <th class="sort align-middle" style="width: 13%">DNI</th>
+                                    <th class="sort align-middle" style="width: 15%; text-align: center">Correo</th>
+                                    <th class="sort align-middle" style="width: 15%; text-align: center">Estado</th>
+                                    <th class="no-sort" style="width: 20%;" ></th> <!--style="width: 35%"-->
+                                    <th class="no-sort" style="width: 15%;" ></th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                <tr>
+                                    <td class="align-middle">
+                                        Leonardo Abanto
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Manuel Yarleque
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Dana Nolasco
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Luis Ramos
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Rodrigo Barrios
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Diego Lavado
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Gil Zanabria
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Carlos Pisco
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Alejandro Gutierrez
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Diego Lavado
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Carlos Pisco
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Alejandro Gutierrez
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle">
+                                        Diego Lavado
+                                    </td>
+                                    <td class="align-middle">
+                                        12345678
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        leo.abanto@hotmail.com
+                                    </td>
+                                    <td class="align-middle" style="text-align: center">
+                                        Activo
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                        border-radius: 15px">Ver historial clínico</button>
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                        border-radius: 15px">Editar</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
@@ -837,16 +1150,16 @@
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
         $('#userList').DataTable({
-            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+            dom:
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
                 "<'table-responsive'tr>\n" +
                 "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
+                lengthMenu: "Mostrar  _MENU_ usuarios ",
                 zeroRecords: "No se encontraron usuarios",
                 emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                info: "Usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
                 infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
                 infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
                 loadingRecords: "Cargando...",
@@ -858,7 +1171,7 @@
             },
             autoWidth: false,
             lengthMenu: [
-                [6], [6]
+                [3], [3]
             ],
             buttons: [
 
@@ -869,6 +1182,63 @@
 
 </script>
 
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('timeofday', 'Time of Day');
+        data.addColumn('number', 'Motivation Level');
+
+        data.addRows([
+            [{v: [8, 0, 0], f: '8 am'}, 1],
+            [{v: [9, 0, 0], f: '9 am'}, 2],
+            [{v: [10, 0, 0], f:'10 am'}, 3],
+            [{v: [11, 0, 0], f: '11 am'}, 4],
+            [{v: [12, 0, 0], f: '12 pm'}, 5],
+            [{v: [13, 0, 0], f: '1 pm'}, 6],
+            [{v: [14, 0, 0], f: '2 pm'}, 7],
+            [{v: [15, 0, 0], f: '3 pm'}, 8],
+            [{v: [16, 0, 0], f: '4 pm'}, 9],
+            [{v: [17, 0, 0], f: '5 pm'}, 10],
+        ]);
+
+        var options = {
+            title: 'Motivation Level Throughout the Day',
+            width: 450,
+            height: 300,
+
+            hAxis: {
+                title: 'Time of Day',
+                format: 'h:mm a',
+                chartArea: {
+                    'width': '70%'
+                },
+                viewWindow: {
+                    min: [7, 30, 0],
+                    max: [17, 30, 0]
+                }
+            },
+            vAxis: {
+                title: 'Rating (scale of 1-10)'
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(
+            document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+
+    window.onresize = RedibujarGrafica;
+    function RedibujarGrafica() {
+        google.charts.setOnLoadCallback(drawChart);
+    };
+</script>
 
 
 
