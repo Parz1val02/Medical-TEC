@@ -46,4 +46,5 @@ public class PacienteController {
     public String cuestionarios(){
        return "paciente/cuestionarios";
     }
+
 }

@@ -9,7 +9,7 @@
       <!-- Button trigger modal-->
       <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Agendar cita</button>
       <!-- Modal-->
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -17,7 +17,101 @@
               <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-              <p>Woohoo, you're reading this text in a modal!</p>
+              <div class="container">
+                <h1>Formulario con Columnas y Select</h1>
+
+                <form action="#" method="post">
+
+                  <div class="row">
+
+                    <!-- Columna 1 -->
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="nombre">dni del paciente </label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="pais">especialidad:</label>
+                        <select id="pais" name="pais" class="form-control">
+                          <option value="Argentina">Argentina</option>
+                          <option value="Brasil">Brasil</option>
+                          <option value="Chile">Chile</option>
+
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="fecha">fecha </label>
+                        <input type="text" id="fecha" name="nombre" class="form-control" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="tipocita">tipo de cita: </label>
+                        <select id="tipocita" name="pais" class="form-control">
+                          <option value="Argentina">Argentina</option>
+                          <option value="Brasil">Brasil</option>
+                          <option value="Chile">Chile</option>
+
+                        </select>
+                      </div>
+
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label" for="flexCheckChecked">
+                          enviar notificaciones
+                        </label>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary">Registrar cita</button>
+                      <a th:href="@{'/paciente/principal'}" class="btn btn-danger">Cancelar</a>
+
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="col-sm-4">
+
+                      <div class="form-group">
+                        <label for="sede">sede de atencion:  </label>
+                        <select id="sede" name="sede" class="form-control">
+                          <option value="Argentina">Argentina</option>
+                          <option value="Brasil">Brasil</option>
+                          <option value="Chile">Chile</option>
+                        </select>
+                      </div>
+
+
+                      <div class="form-group">
+                        <label for="doctor">doctor:  </label>
+                        <select id="doctor" name="sede" class="form-control">
+                          <option value="Argentina">Argentina</option>
+                          <option value="Brasil">Brasil</option>
+                          <option value="Chile">Chile</option>
+                        </select>
+                      </div>
+
+
+                      <div class="form-group">
+                        <label for="hora">hora</label>
+                        <input type="text" id="hora" name="apellido" class="form-control" required>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="seguro">seguro de salud:  </label>
+                        <select id="seguro" name="seguro" class="form-control">
+                          <option value="Argentina">Argentina</option>
+                          <option value="Brasil">Brasil</option>
+                          <option value="Chile">Chile</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <!-- Botón de envío -->
+
+                </form>
+              </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
