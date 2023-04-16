@@ -56,7 +56,7 @@
       <div class="card mb-3">
 
         <div class="card-body border-top d-flex justify-content-center" >
-          <div class="" id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
+          <div style="width: 95%; height: 27rem " id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
         </div>
 
       </div>
@@ -408,7 +408,7 @@
     //Esta busacando por el ID del tah <table>
     //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
     $('#userList').DataTable({
-      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+      dom:
               "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
               "<'table-responsive'tr>\n" +
               "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
@@ -468,9 +468,6 @@
 
     var options = {
       title: 'Motivation Level Throughout the Day',
-      width: 800,
-      height: 400,
-
       hAxis: {
         title: 'Time of Day',
         format: 'h:mm a',
@@ -493,10 +490,11 @@
     chart.draw(data, options);
   }
 
-  window.onresize = RedibujarGrafica;
-  function RedibujarGrafica() {
-    google.charts.setOnLoadCallback(drawChart);
-  };
+  $(window).resize(function(){
+    drawBasic();
+  });
+
+
 </script>
 
 </body>
