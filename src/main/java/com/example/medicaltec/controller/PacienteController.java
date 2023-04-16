@@ -21,11 +21,11 @@ public class PacienteController {
 
     }
 
-    @RequestMapping("/sesiones")
+    @RequestMapping("/consultas")
     public String citas(){
 
 
-        return "paciente/sesiones";
+        return "paciente/consultas";
 
     }
 
