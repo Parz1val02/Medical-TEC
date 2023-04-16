@@ -16,7 +16,7 @@
   <div class="container" data-layout="container">
     <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
     <div class="content" >
-      <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
       <div class="content">
         <div class="card-deck">
           <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
@@ -30,7 +30,7 @@
                  Sección de Pagos
                 </h4>
                 <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrás visualizar tus boletas emitidas y pagos de las citas</h5>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@
                   Próximas Sesiones
                 </h4>
                 <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revisa tus futuras consultas médicas</h5>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/sesiones}">Ingresar</a>
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
                   Cuestionarios
                 </h4>
                 <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso tu doctor solicite un cuestionario, aparecerá en esta sección</h5>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
               </div>
             </div>
           </div>
@@ -141,7 +141,30 @@
                               <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
                               <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
                             </div>
-                            <a href="#" class="btn btn-info">Ver más</a>
+
+
+
+                            <!-- Button trigger modal-->
+                            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModal">Ver más</button>
+
+                            <!-- Modal-->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p>Woohoo, you're reading this text in a modal!</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
+                                    <button class="btn btn-primary btn-sm" type="button">Save changes</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/paciente")
 public class PacienteController {
 
-   @RequestMapping(value = {"/", "/principal"})
+   @RequestMapping(value = {"", "/principal"})
     public String paginaprincipal(){
        return "paciente/principal";
    }
@@ -21,11 +21,29 @@ public class PacienteController {
 
     }
 
-    @RequestMapping("/citas")
+    @RequestMapping("/sesiones")
     public String citas(){
 
 
-        return "paciente/citas";
+        return "paciente/sesiones";
 
+    }
+
+    @RequestMapping("/notificaciones")
+    public String notificaciones(){
+       return "paciente/notificaciones";
+    }
+    @RequestMapping("/mensajeria")
+    public String mensajeria(){
+       return "paciente/mensajeria";
+    }
+
+    @RequestMapping("/pagos")
+    public String pagos(){
+       return "paciente/pagos";
+    }
+    @RequestMapping("cuestionarios")
+    public String cuestionarios(){
+       return "paciente/cuestionarios";
     }
 }

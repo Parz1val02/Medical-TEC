@@ -9,16 +9,16 @@
             <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Opciones"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
 
         </div>
-        <!--a class="navbar-brand" href="#">
-        <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/falcon.png}" alt="" width="40" /><span class="text-sans-serif">falcon</span>
-        </div>
-        </a-->
+        <a class="navbar-brand" href="#">
+            <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/shield.png}" alt="" width="40" /><span class="text-sans-serif">MedicalTec</span>
+            </div>
+        </a>
     </div>
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content perfect-scrollbar scrollbar">
             <ul class="navbar-nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active">
+                    <a class="nav-link active" th:href="@{/paciente/principal}">
                         <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <i class="fa fa-home"></i>
@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/paciente/perfil}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="fas fa-user">
                     </span></span><span class="nav-link-text">Perfil</span>
@@ -36,26 +36,42 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/paciente/sesiones}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="far fa-address-book">
-                    </span></span><span class="nav-link-text">Citas Médicas</span>
+                    </span></span><span class="nav-link-text">Próximas Sesiones</span>
                         </div>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/paciente/pagos}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                class="fa fa-list-alt">
+                                class="far fa-credit-card">
+                    </span></span><span class="nav-link-text">Sección de Pagos</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/paciente/cuestionarios}">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                class="far fa-file-alt">
                     </span></span><span class="nav-link-text">Cuestionarios</span>
                         </div>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/paciente/notificaciones}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="fas fa-bell">
                     </span></span><span class="nav-link-text">Notificaciones</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/paciente/mensajeria}">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                class="fab fa-facebook-messenger">
+                    </span></span><span class="nav-link-text">Mensajería</span>
                         </div>
                     </a>
                 </li>
