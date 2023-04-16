@@ -96,128 +96,11 @@
                                 Gregory House
                             </td>
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal2" data-target="#exampleModal2" style="text-align: center;
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
                                     border-radius: 15px">Ver más</button>
-
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel2">Modal title</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal2" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="col-md-6" style="margin: 0 auto">
-                                                    <div class="ibox" style="align-content: center">
-                                                        <div class="ibox-head">
-                                                            <div class="ibox-title">Detalles de la cita</div>
-                                                        </div>
-                                                        <div class="ibox-body">
-                                                            <form method="post">
-                                                                <div class="row g-2">
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <input type="text" class="form-control"
-                                                                                   id="floatingInputGrid1" placeholder="nombrecompleto" name="dni">
-                                                                            <label for="floatingInputGrid1">nombre completo del paciente</label>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <div class="mb-3">
-                                                                                <label for="sede">sede de atencion</label>
-                                                                                <input type="text" id="sede" class="form-control" placeholder="lima centro" disabled>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row g-2">
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <div class="mb-3">
-                                                                                <label for="disabledTextInput" class="form-label">especialidad</label>
-                                                                                <input type="text" id="disabledTextInput" class="form-control" placeholder="cardiologia" disabled>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <div class="mb-3">
-                                                                                <label for="disabledTextInput1" class="form-label">Doctor</label>
-                                                                                <input type="text" class="form-control" placeholder="hiroshi" id ="disabledTextInput1" disabled>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row g-2">
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <input type="text"
-                                                                                   class="form-control"
-                                                                                   id="floatingInputGrid5" placeholder="fecha" name="fecha">
-                                                                            <label for="floatingInputGrid5">fecha</label>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating" style="margin-bottom: 5px;">
-                                                                            <input type="text"
-                                                                                   class="form-control"
-                                                                                   id="floatingInputGrid6" placeholder="hora" name="hora">
-                                                                            <label for="disabledTextInput" >hora</label>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating">
-                                                                            <select class="form-select"
-                                                                                    name="tipo de cita" id="floatingSelectGrid7">
-                                                                                <!--<% for (Rol r : roles) {%>
-
-                                                                                <option value="<%=r.getIdRol()%>"<%=usuario != null ? (usuario.getRol().getIdRol() == r.getIdRol() ? "selected" : "") : ""%>><%= r.getNombreRol()%>
-                                                                                </option>-->
-                                                                                <option selected>Open this select menu</option>
-                                                                                <option value="1">One</option>
-                                                                                <option value="2">Two</option>
-                                                                                <option value="3">Three</option>
-                                                                            </select>
-                                                                            <label for="floatingSelectGrid7">tipo de cita</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <div class="form-floating">
-                                                                            <select class="form-select" name="seguro" id="floatingSelectGrid2">
-
-                                                                            </select>
-                                                                            <label for="floatingSelectGrid2">seguro de salud</label>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <button class="btn btn-primary" type="submit">Aceptar</button>
-                                                                    <a class="btn btn-secondary">Cancelar</a>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
+
                         </tr>
                         <tr>
                             <td class="align-middle">
@@ -269,12 +152,84 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="exampleModal2">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Aquí puedes agregar el contenido del modal -->
+                        <div class="modal-header">
+                            <h5 class="modal-title">Historial de la cita</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="nombre">nombre del paciente </label>
+                                        <input type="text" id="nombre" name="nombre"  placeholder="Carlos Pisco" class="form-control" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="especialidad">especialidad:</label>
+                                        <input type="text" id="especialidad" name="especialidad" placeholder="cardiologia" class="form-control" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fecha">fecha </label>
+                                        <input type="date" id="fecha" name="nombre" class="form-control" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tipocita">tipo de cita: </label>
+                                        <input type="text" id="tipocita" name="tipocita"  placeholder="Presencial" class="form-control" disabled>
+                                    </div>
+
+
+                                </div>
+
+                                <!-- Columna 2 -->
+                                <div class="col-sm-6">
+
+                                    <div class="form-group">
+                                        <label for="sede">sede de atencion:  </label>
+                                        <input type="text" id="sede" name="sede"  placeholder="Lima Centro" class="form-control" disabled>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="doctor">doctor:  </label>
+                                        <input type="text" id="doctor" name="doctor"  placeholder="Don Lucho" class="form-control" disabled>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="hora">hora</label>
+                                        <input type="text" id="hora" name="apellido"  placeholder="15:00 h" class="form-control" disabled>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="seguro">seguro de salud:  </label>
+                                        <input type="text" id="seguro" name="seguro"  placeholder="Rimac EPS" class="form-control" disabled>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
     </div>
+
+
+
 </main>
 <!-- ===============================================-->
 <!--    End of Main Content-->
