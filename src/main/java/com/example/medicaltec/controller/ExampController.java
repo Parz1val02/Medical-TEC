@@ -32,6 +32,13 @@ public class ExampController {
     @RequestMapping(value = {"/form"},method = RequestMethod.GET)
     public String previewForm(){
 
-        return "administrativo/FormPreview";
+        return "administrativo/clash";
     }
+
+    @RequestMapping(value = {"/mensajeria"},method = RequestMethod.GET)
+    public String mensajeria(){
+
+        return "administrativo/mensajeria";
+    }
+
 }
