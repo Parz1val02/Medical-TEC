@@ -337,7 +337,7 @@
                                     Pacientes
                                 </h4>
                             </div>
-                            <div class="card-body fs--1" style="display: flex; justify-content: space-around">
+                            <div class="card-body fs--1" >  <!--style="display: flex; justify-content: space-around; overflow-x: auto"-->
 
                                 <table class="table table-striped" id="userList">
                                     <thead style="background: #cdeffc">
@@ -808,7 +808,7 @@
                             <div class="card h-100 ">
                                 <div class="card-header bg-transparent">
                                     <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
-                                        Pacientes
+                                        Reportes
                                     </h4>
                                 </div>
 
@@ -959,6 +959,9 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+
+
+
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
@@ -966,7 +969,7 @@
             dom:
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
                 "<'table-responsive'tr>\n" +
-                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+                "<'row align-items-center'<'col-sm-12 col-md-12 d-flex justify-content-center'i><'col-sm-12 col-md-12 d-flex justify-content-center'p>>",
             language: {
                 processing: "Procesando...",
                 lengthMenu: "Mostrar  _MENU_ usuarios ",
@@ -992,6 +995,12 @@
         });
     });
 
+    $(document).ready(function () {
+        $('.dataTables_filter input[type="search"]').css(
+            {'max-width':'8rem','display':'inline-block'}
+        );
+    });
+
 
 </script>
 
@@ -1007,12 +1016,12 @@
                 "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_ usuarios ",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                lengthMenu: "Mostrar  _MENU_  reportes",
+                zeroRecords: "No se encontraron reportes",
+                emptyTable: "No hay reportes",
+                info: "Mostrando reportes del _START_ al _END_ <br>Total _TOTAL_ reportes",
+                infoEmpty: "Mostrando reportes del 0 al 0 <br>Total 0 reportes",
+                infoFiltered: "(filtrado de un total de _MAX_ reportes)",
                 loadingRecords: "Cargando...",
                 search: "Buscar:",
                 paginate: {
