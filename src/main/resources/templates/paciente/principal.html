@@ -19,47 +19,41 @@
       <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
       <div class="content">
         <div class="card-deck">
-          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
-            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
-            </div>
-            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="background-image:url(/img/illustrations/corner-2.png);display: flex; align-items: center; justify-content: space-around">
               <div style="text-align: center">
                 <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
                 <hr style="height: 1px; background-color: #333; border: none">
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                 Sección de Pagos
+                  Sección de Pagos
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrás visualizar tus boletas emitidas y pagos de las citas</h5>
+                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h5>
                 <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
               </div>
             </div>
           </div>
-          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
-            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
-            </div>
-            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="background-image:url(/img/illustrations/corner-2.png);display: flex; align-items: center; justify-content: space-around">
               <div style="text-align: center">
                 <span class="far fa-address-book" style="font-size: 3em; color: #0032aa"></span>
                 <hr style="height: 1px; background-color: #333; border: none">
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                  Próximas Sesiones
+                  Consultas Médicas
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revisa tus futuras consultas médicas</h5>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/sesiones}">Ingresar</a>
+                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revise información sobre sus consultas médicas</h5>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/consultas}">Ingresar</a>
               </div>
             </div>
           </div>
-          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
-            <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
-            </div>
-            <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="background-image:url(/img/illustrations/corner-2.png);display: flex; align-items: center; justify-content: space-around">
               <div style="text-align: center">
                 <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
                 <hr style="height: 1px; background-color: #333; border: none">
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                   Cuestionarios
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso tu doctor solicite un cuestionario, aparecerá en esta sección</h5>
+                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario, aparecerá en esta sección</h5>
                 <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
               </div>
             </div>
