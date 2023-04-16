@@ -40,5 +40,9 @@ public class SuperController {
     public String cuestionario(){
         return "super admin/cuestionario";
     }
+    @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
+    public String editarPerfil(){
+        return "super admin/editarPerfil";
+    }
 
 }
