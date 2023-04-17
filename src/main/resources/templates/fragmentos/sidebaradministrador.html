@@ -19,7 +19,7 @@
     <div class="navbar-vertical-content perfect-scrollbar scrollbar">
       <ul class="navbar-nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" th:href="@{/administrador/principal}">
+          <a class="nav-link" th:href="@{/administrador/principal}">
             <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
                                 <i class="fa fa-home"></i>
@@ -64,7 +64,7 @@
           <a class="nav-link" th:href="@{/administrador/finanzas}">
             <div class="d-flex align-items-center">
                             <span class="nav-link-icon">
-                                <span class="fas fa-comments"></span>
+                                <span class="fas fa-chart-bar"></span>
                             </span>
               <span class="nav-link-text"> Finanzas </span>
             </div>
@@ -101,7 +101,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link" th:href="@{/administrador/cerrasesion}">
             <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                     class="fas fa-sign-out-alt">
                     </span></span><span class="nav-link-text"> Cerrar Sesión</span>
@@ -115,3 +115,4 @@
     </div>
   </div>
 </nav>
+
