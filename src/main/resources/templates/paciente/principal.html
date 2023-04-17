@@ -135,30 +135,8 @@
                               <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
                               <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
                             </div>
-
-
-
                             <!-- Button trigger modal-->
-                            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-
-                            <!-- Modal-->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <p>Woohoo, you're reading this text in a modal!</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
-                                    <button class="btn btn-primary btn-sm" type="button">Save changes</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#PerfilDoctor">Ver más</button>
                           </div>
                         </div>
                       </div>
@@ -327,6 +305,183 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal-->
+      <div class="modal fade" id="PerfilDoctor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Perfil de Doctor</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <form action="#" method="post">
+
+                      <div class="row" style="display: flex; align-items: center">
+
+                        <!-- Columna 1 -->
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="nombres">Nombres</label>
+                            <input type="text" id="nombres" name="nombres"  placeholder="Ivan Hiroshi" class="form-control" disabled>
+                          </div>
+                          <div class="form-group">
+                            <label for="cedula">Cedula profesional</label>
+                            <input type="text" id="cedula" name="cedula" class="form-control" disabled>
+                          </div>
+                        </div>
+                        <!-- Columna 2 -->
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="apellidos">Apellidos</label>
+                            <input type="text" id="apellidos" name="apellidos"  placeholder="Giotoku Rejas" class="form-control" disabled>
+                          </div>
+                          <div class="form-group">
+                            <label for="especialidad">Especialidad</label>
+                            <input type="text" id="especialidad" name="especialidad" class="form-control" disabled>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <!-- Botón de envío -->
+
+                    </form>
+                  </div>
+                  <div class="col">
+                    <div class="avatar avatar-2x1" style="display: flex; align-items: center">
+                      <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row no-gutters">
+                  <div class="col-lg-6 pl-lg-2 mb-3">
+                    <div class="card mb-3 h-100">
+                      <div class="card-header bg-light" style="text-align: center;">
+                        <h5 class="mb-0">Horarios de disponibilidad</h5>
+                        <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
+                      </div>
+                      <div class="card-body fs--1">
+                        <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center">
+                            <div class="col" style="text-align: center;">
+                              <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                            </div>
+                            <div class="col" style="text-align: center">
+                              <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-primary">Agendar Cita</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 pl-lg-2 mb-3">
+                    <div class="card mb-3 h-100">
+                      <div class="card-header bg-light">
+                        <h5 class="mb-0">Experience</h5>
+                      </div>
+                      <div class="card-body fs--1">
+                        <div class="media"><a href="#!"> <img class="img-fluid" src="/img/logos/g.png" alt="" width="56"></a>
+                          <div class="media-body position-relative pl-3">
+                            <h6 class="fs-0 mb-0">Big Data Engineer<svg class="svg-inline--fa fa-check-circle fa-w-16 text-primary ml-1" data-toggle="tooltip" data-placement="top" title="" data-fa-transform="shrink-4 down-2" aria-labelledby="svg-inline--fa-title-HmyfWs6T5e8H" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;" data-original-title="Verified"><title id="svg-inline--fa-title-HmyfWs6T5e8H">Verified</title><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="top" title="Verified" data-fa-transform="shrink-4 down-2"></small> -->
+                            </h6>
+                            <p class="mb-1"> <a href="#!">Google</a></p>
+                            <p class="text-1000 mb-0">Apr 2012 - Present • 6 yrs 9 mos</p>
+                            <p class="text-1000 mb-0">California, USA</p>
+                            <hr class="border-dashed border-bottom-0">
+                          </div>
+                        </div>
+                        <div class="media"><a href="#!"> <img class="img-fluid" src="/img/logos/apple.png" alt="" width="56"></a>
+                          <div class="media-body position-relative pl-3">
+                            <h6 class="fs-0 mb-0">Software Engineer<svg class="svg-inline--fa fa-check-circle fa-w-16 text-primary ml-1" data-toggle="tooltip" data-placement="top" title="" data-fa-transform="shrink-4 down-2" aria-labelledby="svg-inline--fa-title-6aHrgOLGIpET" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;" data-original-title="Verified"><title id="svg-inline--fa-title-6aHrgOLGIpET">Verified</title><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="top" title="Verified" data-fa-transform="shrink-4 down-2"></small> -->
+                            </h6>
+                            <p class="mb-1"> <a href="#!">Apple</a></p>
+                            <p class="text-1000 mb-0">Jan 2012 - Apr 2012 • 4 mos</p>
+                            <p class="text-1000 mb-0">California, USA</p>
+                            <hr class="border-dashed border-bottom-0">
+                          </div>
+                        </div>
+                        <div class="media"><a href="#!"> <img class="img-fluid" src="/img/logos/nike.png" alt="" width="56"></a>
+                          <div class="media-body position-relative pl-3">
+                            <h6 class="fs-0 mb-0">Mobile App Developer<svg class="svg-inline--fa fa-check-circle fa-w-16 text-primary ml-1" data-toggle="tooltip" data-placement="top" title="" data-fa-transform="shrink-4 down-2" aria-labelledby="svg-inline--fa-title-SFYwTmQvLYlI" data-prefix="fas" data-icon="check-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.625em;" data-original-title="Verified"><title id="svg-inline--fa-title-SFYwTmQvLYlI">Verified</title><g transform="translate(256 256)"><g transform="translate(0, 64)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="top" title="Verified" data-fa-transform="shrink-4 down-2"></small> -->
+                            </h6>
+                            <p class="mb-1"> <a href="#!">Nike</a></p>
+                            <p class="text-1000 mb-0">Jan 2011 - Apr 2012 • 1 yr 4 mos</p>
+                            <p class="text-1000 mb-0">Beaverton, USA</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-falcon-secondary btn-sm" type="button" data-dismiss="modal">Aceptar</button>
             </div>
           </div>
         </div>
