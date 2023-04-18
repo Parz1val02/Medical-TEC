@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebaradministrador.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
+            <div class="content">
+
+
+                <!--<div class="card-deck">
+                    <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
+                        <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
+                        </div>
+                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+                            <div style="text-align: center">
+                                <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
+                                <hr style="height: 1px; background-color: #333; border: none">
+                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                    Sección de Pagos
+                                </h4>
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrás visualizar tus boletas emitidas y pagos de las citas</h5>
+                                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
+                        <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
+                        </div>
+                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+                            <div style="text-align: center">
+                                <span class="far fa-address-book" style="font-size: 3em; color: #0032aa"></span>
+                                <hr style="height: 1px; background-color: #333; border: none">
+                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                    Próximas Sesiones
+                                </h4>
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revisa tus futuras consultas médicas</h5>
+                                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 12rem;">
+                        <div class="bg-holder bg-card" style="background-image:url(/img/illustrations/corner-2.png);">
+                        </div>
+                        <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
+                            <div style="text-align: center">
+                                <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
+                                <hr style="height: 1px; background-color: #333; border: none">
+                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                    Cuestionarios
+                                </h4>
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso tu doctor solicite un cuestionario, aparecerá en esta sección</h5>
+                                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" href="#">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div class="row no-gutters">
+                    <div class="col-lg-5 pr-lg-2" style="padding-top: 25px">
+                        <div class="card h-100 bg-gradient">
+                            <div class="card-header bg-transparent">
+                                <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
+                                    Finanzas
+                                </h4>
+                            </div>
+
+                            <div class="card-body border-top d-flex justify-content-center" >
+                                <div style="width: 100%; height: 20rem " id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
+                            </div>
+                            <!--
+                            <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+                                <div class="form-group" style="text-align: center">
+                                    <label for="" style="font-size: medium">Sede Actual</label>
+                                    <input class="form-control col text-black" id="" type="text" placeholder="Lima Centro" readonly="" style="text-align: center">
+                                    <hr style="height: 1px; background-color: #FFFFFF; border: none">
+                                    <div class="dropdown">
+                                        <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <button class="dropdown-item" type="button">Action</button>
+                                            <button class="dropdown-item" type="button">Another action</button>
+                                            <button class="dropdown-item" type="button">Something else here</button>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1950.7672059942151!2d-77.0690430410581!3d-12.075522405736658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91046bc86a9%3A0xc44e2f0808f16654!2sAv.%20Jos%C3%A9%20Legu%C3%ADa%20y%20Mel%C3%A9ndez%2C%20Pueblo%20Libre%2015084!5e0!3m2!1ses!2spe!4v1681093467425!5m2!1ses!2spe" height="pixels" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 pl-lg-2" style="padding-top: 25px">
+                        <div class="card h-100 mb-3">
+                            <div class="card-header h-100  bg-light py-2">
+                                <div class="row flex-between-center">
+                                    <div class="col-md-6 col-lg-6">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                            Calendario
+                                        </h4>
+                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="input-group">
+                                            <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
+                                            <span class="input-group-append">
+                          <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!--SEGUNDO ROW -->
+
+                <div class="row no-gutters" >
+                    <div class="col-lg-5 pr-lg-2" style="padding-top: 25px">
+                        <div class="card h-100 ">
+                            <div class="card-header bg-transparent">
+                                <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
+                                    Pacientes
+                                </h4>
+                            </div>
+                            <div class="card-body fs--1" >  <!--style="display: flex; justify-content: space-around; overflow-x: auto"-->
+
+                                <table class="table table-striped" id="userList">
+                                    <thead style="background: #cdeffc">
+                                    <tr>
+                                        <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
+                                        <th class="sort align-middle" style="width: 30%; text-align: center">Correo</th>
+                                        <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                        <th class="no-sort" style="width: 25%;" ></th> <!--style="width: 35%"-->
+
+                                    </tr>
+                                    </thead>
+                                    <tbody class="bg-white">
+                                    <tr>
+                                        <td class="align-middle">
+                                            Leonardo Abanto
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Manuel Yarleque
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Dana Nolasco
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Luis Ramos
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Rodrigo Barrios
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Diego Lavado
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Gil Zanabria
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Carlos Pisco
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Alejandro Gutierrez
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Diego Lavado
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Carlos Pisco
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Alejandro Gutierrez
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="align-middle">
+                                            Diego Lavado
+                                        </td>
+
+                                        <td class="align-middle" style="text-align: center">
+                                            leo.abanto@hotmail.com
+                                        </td>
+                                        <td class="align-middle" style="text-align: center">
+                                            Activo
+                                        </td>
+                                        <td class="align-middle" align="center">
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Ver historial clínico</button>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 pl-lg-2" style="padding-top: 25px">
+                        <div class="card h-100 mb-3">
+                            <div class="card-header bg-light py-2">
+                                <div class="row flex-between-center">
+                                    <div class="col-md-6 col-lg-6">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                            Doctores
+                                        </h4>
+                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualiza la información de los doctores</h5>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="input-group">
+                                            <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
+                                            <span class="input-group-append">
+                          <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 20rem">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col" style="display: flex; align-items: center">
+                                                        <div class="avatar avatar-2x1">
+                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col" style="">
+                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Don Lucho
+                                                        </h4>
+                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Medicina General</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                            Próximos horarios de disponibilidad:
+                                                        </h6>
+                                                        <div class="form-group" style="text-align: center">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        </div>
+                                                        <a href="#" class="btn btn-info">Ver más</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- TERCER ROW -->
+
+                        <div class="" style="padding-top: 25px">
+                            <div class="card h-100 ">
+                                <div class="card-header bg-transparent">
+                                    <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
+                                        Reportes
+                                    </h4>
+                                </div>
+
+
+                                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                                    <table class="table table-striped" id="userList2">
+                                        <thead style="background: #cdeffc">
+                                        <tr>
+                                            <th class="sort align-middle" style="width: 33%">Nombre de reporte</th>
+                                            <th class="sort align-middle" style="width: 33%;text-align: center">Fecha de creacion</th>
+                                            <th class="sort align-middle" style="width: 33%; text-align: center">Descargar reporte</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="bg-white">
+                                        <tr>
+                                            <td class="align-middle">
+                                                documento1.pdf
+                                            </td>
+                                            <td class="align-middle" style="text-align: center">
+                                                12345678
+                                            </td>
+                                            <td class="align-middle" align="center">
+                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Descargar</button>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle">
+                                                documento2.pdf
+                                            </td>
+                                            <td class="align-middle" style="text-align: center">
+                                                12345678
+                                            </td>
+                                            <td class="align-middle" align="center">
+                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Descargar</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle">
+                                                documento3.pdf
+                                            </td>
+                                            <td class="align-middle" style="text-align: center">
+                                                12345678
+                                            </td>
+                                            <td class="align-middle" align="center">
+                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Descargar</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle">
+                                                documento4.pdf
+                                            </td>
+                                            <td class="align-middle" style="text-align: center">
+                                                12345678
+                                            </td>
+                                            <td class="align-middle" align="center">
+                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Descargar</button>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+            </div>
+
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+
+
+
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom:
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-12 d-flex justify-content-center'i><'col-sm-12 col-md-12 d-flex justify-content-center'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_ usuarios ",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [3], [3]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+
+    $(document).ready(function () {
+        $('.dataTables_filter input[type="search"]').css(
+            {'max-width':'8rem','display':'inline-block'}
+        );
+    });
+
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList2').DataTable({
+            dom:
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  reportes",
+                zeroRecords: "No se encontraron reportes",
+                emptyTable: "No hay reportes",
+                info: "Mostrando reportes del _START_ al _END_ <br>Total _TOTAL_ reportes",
+                infoEmpty: "Mostrando reportes del 0 al 0 <br>Total 0 reportes",
+                infoFiltered: "(filtrado de un total de _MAX_ reportes)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [5], [5]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+
+
+</script>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+
+    function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('timeofday', 'Time of Day');
+        data.addColumn('number', 'Motivation Level');
+
+        data.addRows([
+            [{v: [8, 0, 0], f: '8 am'}, 1],
+            [{v: [9, 0, 0], f: '9 am'}, 2],
+            [{v: [10, 0, 0], f:'10 am'}, 3],
+            [{v: [11, 0, 0], f: '11 am'}, 4],
+            [{v: [12, 0, 0], f: '12 pm'}, 5],
+            [{v: [13, 0, 0], f: '1 pm'}, 6],
+            [{v: [14, 0, 0], f: '2 pm'}, 7],
+            [{v: [15, 0, 0], f: '3 pm'}, 8],
+            [{v: [16, 0, 0], f: '4 pm'}, 9],
+            [{v: [17, 0, 0], f: '5 pm'}, 10],
+        ]);
+
+        var options = {
+            title: 'Motivation Level Throughout the Day',
+            hAxis: {
+                title: 'Time of Day',
+                format: 'h:mm a',
+                chartArea: {
+                    'width': '70%'
+                },
+                viewWindow: {
+                    min: [7, 30, 0],
+                    max: [17, 30, 0]
+                }
+            },
+            vAxis: {
+                title: 'Rating (scale of 1-10)'
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(
+            document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+
+    $(window).resize(function(){
+        drawBasic();
+    });
+
+
+
+</script>
+
+
+
+</body>
+</html>
