@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-1rC8rTfT1RVztF9dZTbLW8+MUtIbMSs3sDdiw2rMYfqmCvFnb9XZINkrOZHXtOtwMpyvDzubqy3RF/gQzYJNlQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+
+<body class="">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebaradministrativo.html::sideBar}"></nav>
+        <div class="content">
+        <nav th:replace="~{fragmentos/topbaradministrativo.html::topBar}"></nav>
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <!-- <div class="card mb-3 bg-card-gradient">
+                        <div class="card-body ">
+                            <div class="row justify-content-between align-items-center">
+                                <div class="col-md">
+                                    <h5 class="mb-2 mb-md-0 text-white">Lista de Pacientes</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+
+                    <div class="content">
+                        <div class="card mb-3 bg-card-gradient">
+                            <div class="card-body" style="background: white;">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-md-11">
+                                        <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                            Tabla de Pacientes
+                                        </h1>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-striped" id="userList" style="max-width: 600px; margin-left: 0;">
+                        <thead class="bg-200">
+                        <tr>
+                            <th class="sort align-middle" style="width: 30%">Pacientes</th>
+                            <th>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Status
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <p>Invitado</p>
+                                        <p>Registrado</p>
+                                        <p>Activo</p>
+                                        <p>Agendado</p>
+                                        <p>En consulta</p>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="sort align-middle" style="width: 20%">Modo de Registro</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr>
+                            <td class="align-middle">
+                                <a href="form">Hiroshi Giotoku</a>
+                            </td>
+                            <td class="align-middle">
+                                Registrado
+                            </td>
+                            <td class="align-middle">
+                                Invitacion
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                Manuel Yarleque
+                            </td>
+                            <td class="align-middle">
+                                En consulta
+                            </td>
+                            <td class="align-middle">
+                                AutoRegistro
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                <a href="form">Paola Vallejos</a>
+                            </td>
+                            <td class="align-middle">
+                                Activo
+                            </td>
+                            <td class="align-middle">
+                                Invitacion
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                Don Lucho
+                            </td>
+                            <td class="align-middle">
+                                Inactivo
+                            </td>
+                            <td class="align-middle">
+                                AutoRegistro
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="col-md-6" style="margin-right: 0;">
+
+                    <div >
+                        <div>
+
+                            <div class="content">
+                                <div class="card mb-3 bg-card-gradient">
+                                    <div class="card-body" style="background: white;">
+                                        <div class="row justify-content-between align-items-center">
+
+                                            <div class="col-md-11">
+                                                <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                                    Invitar a un paciente
+                                                </h2>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <h6 class="mb-2 mb-md-0 text-black">Conoce los requisitos para invitar un paciente:</h6>
+                            <p>- El paciente debe aceptar los términos y condiciones <br>
+                                - Este se registrara en la sede que se encuentra dicho administrativo. <br>
+                                - El form prellenado registrará los datos a través del DNI del usurario.</p>
+                            <div class="d-flex justify-content-end">
+                                <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Invitar Paciente</button>
+
+
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Invitar paciente</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                                    <div class="col-md-6">
+                                                        <p style="font-weight: bold; margin: 0px">DNI: </p>
+                                                        <input type="text" id="disabledTextInput" class="form-control" placeholder="dni">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p style="font-weight: bold; margin: 0px">Correo: </p>
+                                                        <input type="text" id="disabledTextInput2" class="form-control" placeholder="correo">
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                                    <div class="col-md-6">
+                                                        <p style="font-weight: bold; margin: 0px">Nombres: </p>
+                                                        <input type="text" id="disabledTextInput3" class="form-control" placeholder="Nombres">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p style="font-weight: bold; margin: 0px">Apellidos: </p>
+                                                        <input type="text" id="disabledTextInput4" class="form-control" placeholder="Apellidos">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                <a type="button" class="btn btn-primary" >Enviar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <a class="btn btn-primary ml-2" th:href="form">Preview Form</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="content">
+                        <div class="card mb-3 bg-card-gradient">
+                            <div class="card-body" style="background: white;">
+                                <div class="row justify-content-between align-items-center">
+
+                                    <div class="col-md-11">
+                                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                            Sede Actual: Sede C
+                                        </h2>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1950.7672059942151!2d-77.0690430410581!3d-12.075522405736658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91046bc86a9%3A0xc44e2f0808f16654!2sAv.%20Jos%C3%A9%20Legu%C3%ADa%20y%20Mel%C3%A9ndez%2C%20Pueblo%20Libre%2015084!5e0!3m2!1ses!2spe!4v1681093467425!5m2!1ses!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    <br>
+                    <br>
+
+                    <!-- Mensajeria Notificaciones -->
+
+                    <!-- <div class="card">
+
+                        <div class="card mb-3 bg-card-gradient">
+                            <div class="card-body ">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-md">
+                                        <h5 class="mb-2 mb-md-0 text-white">Mensajeria</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="message" style="font-weight: bold; margin: 0px">Luis Ramos: La operacion salio exitosamente ...<span style="font-weight: normal"></span></a><br>
+                            <a href="message" style="font-weight: bold; margin: 0px">Rodrigo Barrios ✔️✔️<span style="font-weight: normal"></span></a><br>
+                            <a href="message" style="font-weight: bold; margin: 0px">Leonardo Abanto ✔️✔️<span style="font-weight: normal"></span></a><br>
+                            <a href="message" style="font-weight: bold; margin: 0px">Julio Aranda: El paciente Gil Zanabria se recupero...<span style="font-weight: normal"></span></a>
+                        </div>
+
+
+
+
+                    </div> -->
+
+                </div>
+
+
+            </div>
+            <hr>
+
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+                {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+                {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+            ]
+        });
+    });
+</script>
+
+
+</body>
+
+</html>
