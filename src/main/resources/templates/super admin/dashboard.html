@@ -107,6 +107,7 @@
                             <th class="sort align-middle" style="width: 20%">Email</th>
                             <th class="sort align-middle" style="width: 20%">DNI</th>
                             <th class="sort align-middle" style="width: 20%">Estado</th>
+                            <th class="sort align-middle" style="width: 20%">Cambiar Estado</th>
                             <th class="sort align-middle" style="width: 10%"></th>
                         </tr>
                         </thead>
@@ -123,11 +124,38 @@
                                 </td>
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1">Activo</option>
-                                        <option value="2">Inactivo</option>
-                                    </select>
-
+                                    Activo
+                                </td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal1">Editar</button>
+                                            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel1">Cambio de Estado</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <span>Seleccione el nuevo estado del usuario </span>
+                                                            <select class="form-select" aria-label="Default select example">
+                                                                <option selected value="1">Activo</option>
+                                                                <option value="2">Inactivo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #3d8af7;
+          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->
@@ -151,10 +179,38 @@
                                 </td>
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1">Activo</option>
-                                        <option value="2">Inactivo</option>
-                                    </select>
+                                    Activo
+                                </td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal2">Editar</button>
+                                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel2">Cambio de Estado</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <span>Seleccione el nuevo estado del usuario </span>
+                                                            <select class="form-select" aria-label="Default select example">
+                                                                <option selected value="1">Activo</option>
+                                                                <option value="2">Inactivo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #3d8af7;
+          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->
@@ -178,10 +234,38 @@
                                 </td>
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1">Activo</option>
-                                        <option value="2">Inactivo</option>
-                                    </select>
+                                    Activo
+                                </td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal3">Editar</button>
+                                            <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel3">Cambio de Estado</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <span>Seleccione el nuevo estado del usuario </span>
+                                                            <select class="form-select" aria-label="Default select example">
+                                                                <option selected value="1">Activo</option>
+                                                                <option value="2">Inactivo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #3d8af7;
+          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->
@@ -205,10 +289,38 @@
                                 </td>
                                 <td class="align-middle">
                                     <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected value="1">Activo</option>
-                                        <option value="2">Inactivo</option>
-                                    </select>
+                                    Activo
+                                </td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal4">Editar</button>
+                                            <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel4">Cambio de Estado</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <span>Seleccione el nuevo estado del usuario </span>
+                                                            <select class="form-select" aria-label="Default select example">
+                                                                <option selected value="1">Activo</option>
+                                                                <option value="2">Inactivo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #3d8af7;
+          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->
