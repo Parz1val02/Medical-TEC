@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+    <div class="content">
+      <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Perfil
+              </h1>
+            </div>
+            <div class="col-md-11">
+              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                Visualiza y edita tus datos personales
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header position-relative min-vh-25 mb-7">
+          <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
+          </div>
+          <!--/.bg-holder-->
+
+          <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-8">
+              <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              </h4>
+              <form>
+                <fieldset>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput1" class="form-label">Nombres</label>
+                      <input type="text" id="disabledTextInput1" class="form-control" placeholder="Carlos Eduardo">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput2" class="form-label">Apellidos</label>
+                      <input type="text" id="disabledTextInput2" class="form-control" placeholder="Pisco Tejada">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput3" class="form-label">Correo</label>
+                      <input type="text" id="disabledTextInput3" class="form-control" placeholder="epifanioexe@protonmail.com">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput4" class="form-label">Celular</label>
+                      <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput5" class="form-label">DNI</label>
+                      <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                    </div>
+                  </div>
+                </fieldset>
+                <br>
+                <a th:href="@{/superAdmin/confSup}" class="btn btn-secondary" style="text-align: center;background: #748194;
+          border-radius: 15px; border-color: #FFFFFF">Cancelar</a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Guardar cambios</button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cambios de Perfil</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        ¿Está seguro de querer modificar su perfil?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a th:href="@{/superAdmin/confSup}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+</body>
+
+</html>

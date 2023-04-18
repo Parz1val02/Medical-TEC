@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+    <div class="content">
+      <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Forms
+              </h1>
+            </div>
+            <div class="col-md-11">
+              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                Maneja la tabla de formularios
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <span>Seleccione la sede </span>
+      <select class="form-select" aria-label="Default select example">
+        <option selected value>------</option>
+        <option value="1">San Miguel</option>
+        <option value="2">Jesús María</option>
+        <option value="3">Lince</option>
+      </select>
+      <br></br>
+
+      <div class="card mb-3">
+        <div class="card-body border-top">
+          <a th:href="@{/superAdmin/formulario}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+          border-radius: 15px; border-color: #FFFFFF">Crear formulario</a>
+          <table class="table table-striped" id="userList">
+            <thead class="bg-200">
+            <tr>
+              <th class="sort align-middle" style="width: 30%">Nombre</th>
+              <th class="sort align-middle" style="width: 20%">Fecha de envío</th>
+              <th class="sort align-middle" style="width: 20%">Fecha de registro</th>
+              <th class="sort align-middle" style="width: 20%">Registrado</th>
+              <th class="sort align-middle" style="width: 10%">Borrar</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+            <tr>
+              <td class="align-middle">
+                Hiroshi Giotoku
+              </td>
+              <td class="align-middle">
+                10-04-2023
+              </td>
+              <td class="align-middle">
+                11-04-2023
+              </td>
+              <td class="align-middle">
+                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
+                Sí
+              </td>
+              <td class="align-middle">
+                <!-- A esto me referia con opciones-->
+                <div class="dropdown font-sans-serif">
+                  <div class="form-group" align="center">
+                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cambios de Perfil</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ¿Está seguro de querer borrar este formulario?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a th:href="@{/superAdmin/forms}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                Manuel Yarleque
+              </td>
+              <td class="align-middle">
+                14-05-2023
+              </td>
+              <td class="align-middle">
+                18-05-2023
+              </td>
+              <td class="align-middle">
+                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
+                No
+              </td>
+              <td class="align-middle">
+                <!-- A esto me referia con opciones-->
+                <div class="dropdown font-sans-serif">
+                  <div class="form-group" align="center">
+                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel1">Cambios de Perfil</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ¿Está seguro de querer borrar este formulario?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a th:href="@{/superAdmin/forms}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                Paola Vallejos
+              </td>
+              <td class="align-middle">
+                04-05-2023
+              </td>
+              <td class="align-middle">
+                06-06-2023
+              </td>
+              <td class="align-middle">
+                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
+                Sí
+              </td>
+              <td class="align-middle">
+                <!-- A esto me referia con opciones-->
+                <div class="dropdown font-sans-serif">
+                  <div class="form-group" align="center">
+                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
+                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel2">Cambios de Perfil</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ¿Está seguro de querer borrar este formulario?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a th:href="@{/superAdmin/forms}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="align-middle">
+                Don Lucho
+              </td>
+              <td class="align-middle">
+                23-02-2023
+              </td>
+              <td class="align-middle">
+                20-03-2023
+              </td>
+              <td class="align-middle">
+                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
+                No
+              </td>
+              <td class="align-middle">
+                <!-- A esto me referia con opciones-->
+                <div class="dropdown font-sans-serif">
+                  <div class="form-group" align="center">
+                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
+                    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel3">Cambios de Perfil</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ¿Está seguro de querer borrar este formulario?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a th:href="@{/superAdmin/forms}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+  $(document).ready(function () {
+    //Esta busacando por el ID del tah <table>
+    //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
+    $('#userList').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  usuarios",
+        zeroRecords: "No se encontraron usuarios",
+        emptyTable: "No hay usuarios",
+        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      lengthMenu: [
+        [10, 25, 50, -1], [10, 25, 50, "Todos"]
+      ],
+      buttons: [
+      ]
+    });
+  });
+</script>
+
+
+</body>
+
+</html>
