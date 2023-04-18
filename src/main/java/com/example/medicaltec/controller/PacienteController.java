@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/paciente")
 public class PacienteController {
 
-   @RequestMapping(value = {"", "/principal"})
+   @RequestMapping(value = "/principal")
     public String paginaprincipal(){
        return "paciente/principal";
    }
