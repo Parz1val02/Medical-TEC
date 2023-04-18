@@ -15,18 +15,12 @@ public class PacienteController {
 
     @RequestMapping("/perfil")
     public String perfilpaciente(){
-
-
         return "paciente/perfil";
-
     }
 
     @RequestMapping("/consultas")
     public String citas(){
-
-
         return "paciente/consultas";
-
     }
 
     @RequestMapping("/notificaciones")
