@@ -82,6 +82,7 @@
                             <th class="sort align-middle" style="width: 13%">Fecha</th>
                             <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
                             <th class="no-sort" style="width: 15%;" ></th>
+                            <th class="no-sort" style="width: 15%;" ></th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
@@ -97,39 +98,14 @@
                             </td>
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
+                                    border-radius: 15px">Detalles</button>
                                 <!-- Modal -->
                             </td>
 
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
+                                    border-radius: 15px">Receta</button>
+                                <!-- Modal -->
                             </td>
                         </tr>
                         <tr>
@@ -143,8 +119,59 @@
                                 Gregory House
                             </td>
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
+                                    border-radius: 15px">Detalles</button>
+                                <!-- Modal -->
+                            </td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
+                                    border-radius: 15px">Receta</button>
+                                <!-- Modal -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                Dermatología
+                            </td>
+                            <td class="align-middle">
+                                23-02-2023
+                            </td>
+                            <td class="align-middle" style="text-align: center">
+                                Gregory House
+                            </td>
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
+                                    border-radius: 15px">Detalles</button>
+                                <!-- Modal -->
+                            </td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
+                                    border-radius: 15px">Receta</button>
+                                <!-- Modal -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle">
+                                Dermatología
+                            </td>
+                            <td class="align-middle">
+                                23-02-2023
+                            </td>
+                            <td class="align-middle" style="text-align: center">
+                                Gregory House
+                            </td>
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
+                                    border-radius: 15px">Detalles</button>
+                                <!-- Modal -->
+                            </td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
+                                    border-radius: 15px">Receta</button>
+                                <!-- Modal -->
                             </td>
                         </tr>
                         </tbody>
@@ -222,7 +249,35 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="exampleModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Aquí puedes agregar el contenido del modal -->
+                        <div class="modal-header">
+                            <h5 class="modal-title">Receta Medica</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h5 class="card-title">diagnostico</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id. Sed rhoncus, tortor sed eleifend tristique, tortor mauris molestie elit, et lacinia ipsum quam nec dui. Quisque nec mauris sit amet elit iaculis pretium sit amet quis magna. Aenean velit odio, elementum in tempus ut, vehicula eu diam. Pellentesque rhoncus aliquam mattis. </p>
+                                </div>
 
+                                <!-- Columna 2 -->
+                                <div class="col-sm-6">
+                                    <h5 class="card-title">tratamiento</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id. Sed rhoncus, tortor sed eleifend tristique, tortor mauris molestie elit, et lacinia ipsum quam nec dui. Quisque nec mauris sit amet elit iaculis pretium sit amet quis magna. Aenean velit odio, elementum in tempus ut, vehicula eu diam. Pellentesque rhoncus aliquam mattis. </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>

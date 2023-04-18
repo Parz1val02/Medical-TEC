@@ -36,8 +36,48 @@
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
                     <!--/.bg-holder-->
-
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                </div>
+                <!-- Modal-->
+                <div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+
+                                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;assets/img/team&quot;}]}">
+
+                                        <div class="col-md-auto">
+                                            <div class="dz-preview dz-preview-single">
+                                                <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
+                                                <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
+                                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+                                            </div></div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
+                                                <div class="text-center"><img class="mr-2" src="/img/icons/cloud-upload.svg" alt="" width="25">Upload your profile picture
+                                                    <p class="mb-0 fs--1 text-400">Upload a 300x300 jpg image with <br>a maximum size of 400KB</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
+                                <button class="btn btn-primary btn-sm" type="button">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -134,26 +174,57 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <div class="card">
-                                <h5 class="card-header" style="color: #0032aa; font-weight: bold">Recetas</h5>
-                                <div class="card-body">
 
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <h5 class="card-title">diagnostico</h5>
-                                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id. Sed rhoncus, tortor sed eleifend tristique, tortor mauris molestie elit, et lacinia ipsum quam nec dui. Quisque nec mauris sit amet elit iaculis pretium sit amet quis magna. Aenean velit odio, elementum in tempus ut, vehicula eu diam. Pellentesque rhoncus aliquam mattis. </p>
-
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <h5 class="card-title">tratamiento</h5>
-                                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id. Sed rhoncus, tortor sed eleifend tristique, tortor mauris molestie elit, et lacinia ipsum quam nec dui. Quisque nec mauris sit amet elit iaculis pretium sit amet quis magna. Aenean velit odio, elementum in tempus ut, vehicula eu diam. Pellentesque rhoncus aliquam mattis. </p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <table class="table table-striped" id="Alergias">
+                                <thead style="background: #cdeffc">
+                                <tr>
+                                    <th class="sort align-middle" style="width: 15%; text-align: center">Alergia</th>
+                                    <th class="no-sort" style="width: 15%;" ></th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -178,6 +249,52 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#Alergias').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+</script>
 </body>
 
 </html>
