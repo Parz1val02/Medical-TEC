@@ -12,8 +12,4 @@ public class ExampController {
         return "auth/login";
     }
 
-    @RequestMapping(value = {"/dashboard"},method = RequestMethod.GET)
-    public String dashboard(){
-        return "ejemplo/dashboard";
-    }
 }
