@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="cabecera(titulo)">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title th:text="${titulo}"></title>
+
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <!--link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/favicons/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/favicons/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/favicons/favicon-16x16.png}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/favicons/favicon.ico}">
+    <link rel="manifest" th:href="@{/img/favicons/manifest.json}"-->
+    <meta name="theme-color" content="#ffffff">
+
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <script th:src="@{/js/config.navbar-vertical.js}"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link th:href="@{/lib/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet">
+    <link th:href="@{/lib/prismjs/prism-okaidia.css}" rel="stylesheet">
+    <link th:href="@{/lib/emojionearea/emojionearea.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/fancybox/jquery.fancybox.min.css}" rel="stylesheet">
+    <link th:href="@{/css/theme.css}" rel="stylesheet">
+    <link th:href="@{/lib/datatables-bs4/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.css}" rel="stylesheet">
+</head>

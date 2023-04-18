@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <div class="card mb-3 bg-card-gradient">
+                <div class="card-body ">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md">
+                            <h5 class="mb-2 mb-md-0 text-white">Perfil de paciente</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header position-relative min-vh-25 mb-7">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
+                    </div>
+                    <!--/.bg-holder-->
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                </div>
+                <!-- Modal-->
+                <div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+
+                                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;assets/img/team&quot;}]}">
+
+                                        <div class="col-md-auto">
+                                            <div class="dz-preview dz-preview-single">
+                                                <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
+                                                <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
+                                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+                                            </div></div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
+                                                <div class="text-center"><img class="mr-2" src="/img/icons/cloud-upload.svg" alt="" width="25">Upload your profile picture
+                                                    <p class="mb-0 fs--1 text-400">Upload a 300x300 jpg image with <br>a maximum size of 400KB</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
+                                <button class="btn btn-primary btn-sm" type="button">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            </h4>
+                            <form>
+                                <fieldset disabled>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput1" class="form-label">Nombres</label>
+                                            <input type="text" id="disabledTextInput1" class="form-control" placeholder="Carlos Eduardo">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput2" class="form-label">Apellidos</label>
+                                            <input type="text" id="disabledTextInput2" class="form-control" placeholder="Pisco Tejada">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput3" class="form-label">Correo</label>
+                                            <input type="text" id="disabledTextInput3" class="form-control" placeholder="epifanioexe@protonmail.com">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput4" class="form-label">Celular</label>
+                                            <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">DNI</label>
+                                            <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Sede actual</label>
+                                            <input type="text" id="disabledTextInput6" class="form-control" placeholder="Lima Centro">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col pl-2 pl-lg-3" >
+                            <div class="mb-3" style="display: flex; align-items: center; justify-content: space-around">
+                                <div style="text-align: center">
+                                    <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                        Seguro de salud
+                                    </h5>
+                                    <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su seguro de salud?</h6>
+                                    <form>
+                                        <div class="mb-3">
+                                            <select class="form-control" aria-label="Default select example">
+                                                <option selected>Mapfre EPS</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                        <!--div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                                        </div-->
+                                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body border-top">
+                    <div class="row">
+                        <div class="col pl-2 pl-lg-3">
+                            <div class="mb-3" style="display: flex; align-items: center; justify-content: space-around">
+                                <div style="text-align: center">
+                                    <div class="" style="text-align: center">
+                                        <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                            Alergias
+                                        </h5>
+                                        <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agregue sus alergias</h6>
+                                        <form>
+                                            <div class="mb-3">
+                                                <input type="text" class="form-control" id="alergiasInput" aria-describedby="">
+                                                <div id="help" class="form-text">Indique sus alergias para poder agregarlas a su historial médico</div>
+                                            </div>
+                                            <!--div class="mb-3 form-check">
+                                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                                            </div-->
+                                            <button type="submit" class="btn btn-primary">Aceptar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+
+                            <table class="table table-striped" id="Alergias">
+                                <thead style="background: #cdeffc">
+                                <tr>
+                                    <th class="sort align-middle" style="width: 15%; text-align: center">Alergia</th>
+                                    <th class="no-sort" style="width: 15%;" ></th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white">
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle" style="text-align: center">
+                                        Penicilina
+                                    </td>
+                                    <td class="align-middle" align="center">
+                                        <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px">Borrar</button>
+                                        <!-- Modal -->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+
+                <div class="card-body" style="background: #FFFFFF; padding-left: 15px; ">
+                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                        Cambio de contraseña
+                    </h3>
+                    <h4 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; text-align: center">
+                        Requisitos
+                    </h5>
+                    <p style="text-align: center">Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+
+                        • Que la contraseña contenga al menos un número.<br>
+
+                        • Que la contraseña contenga al menos un carácter especial.<br>
+
+                        • Que la contraseña contenga al menos una mayúscula.<br>
+
+                        • Que la contraseña tenga una longitud de al menos una 8 caracteres.
+                    </p>
+                </div>
+
+                <div class="card-body d-flex justify-content-center"  style="background: #FFFFFF ">
+
+                    <form style=" width: 35% " method="POST" action=""> <!--falta el action con th-->
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Contraseña actual</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword2" class="form-label">Contraseña nueva</label>
+                            <input type="password" class="form-control" id="exampleInputPassword2">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword3" class="form-label">Confirmar contraseña nueva</label>
+                            <input type="password" class="form-control" id="exampleInputPassword3">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <a class="btn btn-light" th:href="@{/paciente/perfil}">Cancelar</a>
+                    </form>
+
+                </div>
+
+            </div>
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#Alergias').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+</script>
+</body>
+
+</html>
