@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbar.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
+                                Configuración
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold">
+                                Revisa tu información y cambia de sede.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
+                        Perfil
+                    </h3>
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">Nombres: <span style="font-weight: normal">Dana Paola</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">Apellidos: <span style="font-weight: normal">Nolasco Vallejos</span></p>
+                        </div>
+                    </div>
+                    <div style="height: 10px"></div>
+                    <div class="row justify-content-between align-items-center" style="">
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">Email: <span style="font-weight: normal">dnolasco@pucp.edu.pe</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">Celular: <span style="font-weight: normal">951899507</span></p>
+                        </div>
+                    </div>
+                    <div style="height: 10px"></div>
+                    <div class="row justify-content-between align-items-center" style="">
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">CMP:  <span style="font-weight: normal">30111</span>, RNE: <span style="font-weight: normal">13308</span></p>
+
+                        </div>
+                        <div class="col-md-6">
+                            <p style="font-weight: bold; margin: 0px">Idiomas: <span style="font-weight: normal">Español, Inglés</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                        <div class="card-body" style="  background: #FFFFFF; ">
+                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">
+                                Cambio de Sede
+                            </h3>
+                            <div class="form-group">
+                                    <p style="font-weight: bold; margin: 0px" >Sede Actual</p>
+                                    <p type="text"> La Molina</p>
+                            </div>
+                            <div class="form-group">
+                                    <p style="font-weight: bold; margin: 0px" for="newSede">Elija una nueva Sede:</p>
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Select--</option>
+                                        <option value="1">Sede Chorrillos</option>
+                                        <option value="2">Sede San Martin de Porres</option>
+                                        <option value="3">Sede San Isidro</option>
+                                    </select>
+                            </div>
+                            <div align="center">
+                                <a th:href="@{config}" type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border-color: #FFFFFF">Elegir</a>
+                                <a th:href="@{config}" style="text-decoration: underline; padding-left: 15px; color: #3d4858"> Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF" align="center">
+                        <div class="card-body" style="  background: #FFFFFF; ">
+                            <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 10px" align="left">
+                                Conoce las sedes:
+                            </h4>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1950.7672059942151!2d-77.0690430410581!3d-12.075522405736658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91046bc86a9%3A0xc44e2f0808f16654!2sAv.%20Jos%C3%A9%20Legu%C3%ADa%20y%20Mel%C3%A9ndez%2C%20Pueblo%20Libre%2015084!5e0!3m2!1ses!2spe!4v1681093467425!5m2!1ses!2spe"
+                                height="pixels" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <div style="height: 11px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+</script>
+
+
+</body>
+</html>
