@@ -14,9 +14,9 @@ import lombok.Setter;
 public class Estado {
     @Id
     @Column(name = "idestado", nullable = false)
-    private Integer id;
+    private Integer idEstado;
 
     @Column(name = "nombre", nullable = false, length = 45)
-    private String nombre;
+    private String nombreEstado;
 
 }

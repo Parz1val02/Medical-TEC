@@ -113,11 +113,10 @@
                         </thead>
                         <tbody class="bg-white">
                             <tr th:each="usuario, info : ${usuarioList}">
-                                <td th:text="${info.index + 1}" class="align-middle"></td>
                                 <td th:text="${usuario.nombre}" class="align-middle"></td>
+                                <td th:text="${usuario.email}" class="align-middle"></td>
                                 <td th:text="${usuario.id}" class="align-middle"></td>
-                                <td th:text="${usuario.estadosIdestado}" class="align-middle">
-                                </td>
+                                <td th:text="${usuario.estadosIdestado.nombreEstado}" class="align-middle"></td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->
                                     <div class="dropdown font-sans-serif">
@@ -133,10 +132,12 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <span>Seleccione el nuevo estado del usuario </span>
-                                                            <select class="form-select" aria-label="Default select example">
-                                                                <option selected value="1">Activo</option>
-                                                                <option value="2">Inactivo</option>
-                                                            </select>
+                                                            <form method="post" th:action="@{/super admin/save}" class="mt-2">
+                                                                <select class="form-select" aria-label="Default select example">
+                                                                    <option selected th:text="${usuario.estadosIdestado}"></option>
+                                                                    <option th:text="${usuario.estadosIdestado}"></option>
+                                                                </select>
+                                                            </form>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
