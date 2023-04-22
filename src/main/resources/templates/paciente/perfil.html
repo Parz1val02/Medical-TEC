@@ -82,8 +82,8 @@
                                 </fieldset>
                             </form>
                         </div>
-                        <div class="col pl-2 pl-lg-3" >
-                            <div class="mb-3" style="display: flex; align-items: center; justify-content: space-around">
+                        <div class="col pl-2 pl-lg-3" style="display: flex; align-items: center; justify-content: space-around">
+                            <div class="mb-3" >
                                 <div style="text-align: center">
                                     <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                                         Seguro de salud
@@ -113,8 +113,8 @@
             <div class="card mb-3">
                 <div class="card-body border-top">
                     <div class="row">
-                        <div class="col pl-2 pl-lg-3">
-                            <div class="mb-3" style="display: flex; align-items: center; justify-content: space-around">
+                        <div class="col pl-2 pl-lg-3" style="display: flex; align-items: center; justify-content: space-around">
+                            <div class="mb-3" >
                                 <div style="text-align: center">
                                     <div class="" style="text-align: center">
                                         <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
@@ -260,15 +260,14 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-
-                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;assets/img/team&quot;}]}">
-
+                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;/img/team&quot;}]}">
                         <div class="col-md-auto">
                             <div class="dz-preview dz-preview-single">
                                 <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
                                     <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
                                     <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
-                                </div></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md">
                             <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
@@ -294,6 +293,8 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<!--    Scripts de Dropzone -->
+<script th:src="@{/lib/dropzone/dropzone.min.js}"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
