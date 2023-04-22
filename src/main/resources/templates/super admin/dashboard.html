@@ -112,7 +112,7 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                            <tr th:each="usuario, info : ${usuarioLista}">
+                            <tr th:each="usuario, info : ${usuarioList}">
                                 <td th:text="${info.index + 1}" class="align-middle"></td>
                                 <td th:text="${usuario.nombre}" class="align-middle"></td>
                                 <td class="align-middle">

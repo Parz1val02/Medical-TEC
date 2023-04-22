@@ -3,6 +3,7 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.entity.Usuario;
 import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ui.Model;
@@ -19,10 +20,10 @@ public class SuperController {
     }
 
 
-    @RequestMapping(value = {"/dashboard"},method = RequestMethod.GET)
+    @GetMapping(value = {"/dashboard"})
     public String dashboard(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
-        model.addAttribute("usuarioLista", lista);
+        model.addAttribute("usuarioList", lista);
         return "super admin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
