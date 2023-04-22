@@ -112,13 +112,9 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                            <tr>
-                                <td class="align-middle">
-                                    Hiroshi Giotoku
-                                </td>
-                                <td class="align-middle">
-                                    hiro.giotoku@pucp.edu.pe
-                                </td>
+                            <tr th:each="usuario, info : ${usuarioLista}">
+                                <td th:text="${info.index + 1}" class="align-middle"></td>
+                                <td th:text="${usuario.nombre}" class="align-middle"></td>
                                 <td class="align-middle">
                                     12345678
                                 </td>

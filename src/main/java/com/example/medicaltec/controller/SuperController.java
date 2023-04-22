@@ -1,15 +1,28 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 @RequestMapping("/superAdmin")
 public class SuperController {
 
+    final UsuarioRepository usuarioRepository;
+
+    public SuperController(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+
     @RequestMapping(value = {"/dashboard"},method = RequestMethod.GET)
-    public String dashboard(){
+    public String dashboard(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioLista", lista);
         return "super admin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
