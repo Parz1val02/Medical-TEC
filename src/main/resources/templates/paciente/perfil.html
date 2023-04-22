@@ -38,46 +38,9 @@
                     <!--/.bg-holder-->
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
                 </div>
+                <br>
                 <div class="col">
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
-                </div>
-                <!-- Modal-->
-                <div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
-                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-
-                                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;assets/img/team&quot;}]}">
-
-                                        <div class="col-md-auto">
-                                            <div class="dz-preview dz-preview-single">
-                                                <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
-                                                <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
-                                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
-                                            </div></div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
-                                                <div class="text-center"><img class="mr-2" src="/img/icons/cloud-upload.svg" alt="" width="25">Upload your profile picture
-                                                    <p class="mb-0 fs--1 text-400">Upload a 300x300 jpg image with <br>a maximum size of 400KB</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
-                                <button class="btn btn-primary btn-sm" type="button">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -287,6 +250,44 @@
 <!-- ===============================================-->
 
 
+<!-- Modal-->
+<div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+
+                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;assets/img/team&quot;}]}">
+
+                        <div class="col-md-auto">
+                            <div class="dz-preview dz-preview-single">
+                                <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
+                                    <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
+                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
+                                </div></div>
+                        </div>
+                        <div class="col-md">
+                            <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
+                                <div class="text-center"><img class="mr-2" src="/img/icons/cloud-upload.svg" alt="" width="25">Upload your profile picture
+                                    <p class="mb-0 fs--1 text-400">Upload a 300x300 jpg image with <br>a maximum size of 400KB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary btn-sm" type="button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- ===============================================-->

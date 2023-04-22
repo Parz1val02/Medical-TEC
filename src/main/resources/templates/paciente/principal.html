@@ -86,7 +86,7 @@
                     <h6 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
                       Consentimientos:
                     </h6>
-                    <a href="#" style="color: #FFFFFF">Descargue los consentimientos a los que accedio</a>
+                    <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
                   </div>
                 </div>
               </div>
@@ -361,7 +361,7 @@
                     </form>
                   </div>
                   <div class="col">
-                    <div class="avatar avatar-2x1" style="display: flex; align-items: center">
+                    <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
                       <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
                     </div>
                   </div>
@@ -446,11 +446,7 @@
                   </div>
                   <div class="col-lg-6 pl-lg-2 mb-3">
                     <div class="card mb-3 h-100">
-                      <div class="card-header bg-light">
-                        <h5 class="mb-0"></h5>
-                      </div>
-                      <div class="card-body fs--1">
-                      </div>
+                      <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
                     </div>
                   </div>
 
@@ -475,6 +471,8 @@
 
 
 
+<!--    Scripts de Calendar -->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
