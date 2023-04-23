@@ -88,6 +88,12 @@ public class AdministradorController {
         return "administrador/settings";
     }
 
+    @GetMapping("/password")
+    public String changePassword(){
+
+        return "administrador/password";
+    }
+
 
 
 }
