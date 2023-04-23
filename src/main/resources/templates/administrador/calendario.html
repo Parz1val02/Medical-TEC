@@ -35,6 +35,8 @@
         </div>
       </div>
 
+      <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
   </div>
@@ -49,6 +51,8 @@
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
+<!--    Scripts de Calendar -->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div  th:fragment="calendar" class="card-header">
+  <div class="row no-gutters align-items-center">
+    <div class="col-auto d-flex justify-content-end order-md-1">
+      <button class="btn icon-item icon-item-sm icon-item-hover shadow-none p-0 mr-1 ml-md-2" type="button" data-event="prev" data-toggle="tooltip" title="" data-original-title="Previous"><svg class="svg-inline--fa fa-arrow-left fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg><!-- <span class="fas fa-arrow-left"></span> --></button>
+      <button class="btn icon-item icon-item-sm icon-item-hover shadow-none p-0 mr-1" type="button" data-event="next" data-toggle="tooltip" title="" data-original-title="Next"><svg class="svg-inline--fa fa-arrow-right fa-w-14" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg><!-- <span class="fas fa-arrow-right"></span> --></button>
+    </div>
+    <div class="col-auto col-md-auto order-md-2">
+      <h4 class="mb-0 fs-0 fs-sm-1 fs-lg-2 calendar-title">April 2023</h4>
+    </div>
+    <div class="col col-md-auto d-flex justify-content-end order-md-3">
+      <button class="btn btn-falcon-primary btn-sm" type="button" data-event="today">Today</button>
+    </div>
+    <div class="col-md-auto d-md-none">
+      <hr>
+    </div>
+    <div class="col d-flex justify-content-end order-md-2">
+      <div class="dropdown text-sans-serif mr-md-2">
+        <button class="btn btn-falcon-default text-600 btn-sm dropdown-toggle dropdown-caret-none" type="button" id="email-filter" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span data-view-title="data-view-title">Month View</span><svg class="svg-inline--fa fa-sort fa-w-10 ml-2 fs--1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sort" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"></path></svg><!-- <span class="fas fa-sort ml-2 fs--1"></span> --></button>
+        <div class="dropdown-menu dropdown-menu-right border py-2" aria-labelledby="email-filter"><a class="active dropdown-item d-flex justify-content-between" href="#!" data-fc-view="dayGridMonth">Month View<span><svg class="svg-inline--fa fa-check fa-w-16" data-fa-transform="down-4 shrink-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.75em;"><g transform="translate(256 256)"><g transform="translate(0, 128)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span> --></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridWeek">Week View<span><svg class="svg-inline--fa fa-check fa-w-16" data-fa-transform="down-4 shrink-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.75em;"><g transform="translate(256 256)"><g transform="translate(0, 128)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span> --></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="timeGridDay">Day View<span><svg class="svg-inline--fa fa-check fa-w-16" data-fa-transform="down-4 shrink-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.75em;"><g transform="translate(256 256)"><g transform="translate(0, 128)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span> --></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listWeek">List View<span><svg class="svg-inline--fa fa-check fa-w-16" data-fa-transform="down-4 shrink-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.75em;"><g transform="translate(256 256)"><g transform="translate(0, 128)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span> --></span></a><a class="dropdown-item d-flex justify-content-between" href="#!" data-fc-view="listYear">Year View<span><svg class="svg-inline--fa fa-check fa-w-16" data-fa-transform="down-4 shrink-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" style="transform-origin: 0.5em 0.75em;"><g transform="translate(256 256)"><g transform="translate(0, 128)  scale(0.75, 0.75)  rotate(0 0 0)"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" transform="translate(-256 -256)"></path></g></g></svg><!-- <span class="fas fa-check" data-fa-transform="down-4 shrink-4"></span> --></span></a></div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div id="appCalendar" class="fc fc-media-screen fc-direction-ltr fc-theme-bootstrap" style="height: 800px;">
+      <div class="fc-view-harness fc-view-harness-active">
+        <div class="fc-daygrid fc-dayGridMonth-view fc-view">
+          <table class="fc-scrollgrid table-bordered fc-scrollgrid-liquid">
+            <thead>
+            <tr class="fc-scrollgrid-section fc-scrollgrid-section-header ">
+              <td><div class="fc-scroller-harness">
+                <div class="fc-scroller" style="overflow: hidden;">
+                  <table class="fc-col-header " style="width: 860px;">
+                    <colgroup></colgroup>
+                    <tbody>
+                    <tr>
+                      <th class="fc-col-header-cell fc-day fc-day-sun">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Sun</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-mon">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Mon</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-tue">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Tue</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-wed">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Wed</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-thu">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Thu</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-fri">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Fri</a>
+                        </div>
+                      </th>
+                      <th class="fc-col-header-cell fc-day fc-day-sat">
+                        <div class="fc-scrollgrid-sync-inner">
+                          <a class="fc-col-header-cell-cushion ">Sat</a>
+                        </div>
+                      </th>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="fc-scrollgrid-section fc-scrollgrid-section-body  fc-scrollgrid-section-liquid">
+              <td>
+                <div class="fc-scroller-harness fc-scroller-harness-liquid">
+                  <div class="fc-scroller fc-scroller-liquid-absolute" style="overflow: hidden auto;">
+                    <div class="fc-daygrid-body fc-daygrid-body-unbalanced " style="width: 860px;">
+                      <table class="fc-scrollgrid-sync-table" style="width: 860px; height: 874px;">
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</html>
