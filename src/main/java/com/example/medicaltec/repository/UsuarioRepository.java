@@ -13,10 +13,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     List<Usuario> findByNombre(String nombre);
 
 
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2")
+    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1")
     List<Usuario> obtenerListaPacientes();
 
-    @Query(nativeQuery = true,value = "select * from Usuario u where u.roles_idroles = 1")
+    @Query(nativeQuery = true,value = "select * from Usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1")
     List<Usuario> obtenerlistaDoctores();
 
 

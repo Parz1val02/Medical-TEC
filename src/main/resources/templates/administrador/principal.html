@@ -356,6 +356,25 @@
                                     </tr>
                                     </thead>
                                     <tbody class="bg-white">
+                                    <tr th:each="paciente, vEstado : ${listaPacientes}">
+
+                                        <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
+
+                                        <td th:text="${paciente.email}"></td>
+                                        <td style="text-align: center" th:text="${paciente.estadosIdestado.nombreEstado}"></td>
+
+                                        <td class="align-middle" align="center">
+                                            <a class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Ver historial clínico</a>
+                                        </td>
+
+
+                                        <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
+                                        <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
+                                    </tr>
+
+
+                                    <!--
                                     <tr>
                                         <td class="align-middle">
                                             Leonardo Abanto
@@ -576,6 +595,7 @@
                                         </td>
 
                                     </tr>
+                                    -->
                                     </tbody>
                                 </table>
 

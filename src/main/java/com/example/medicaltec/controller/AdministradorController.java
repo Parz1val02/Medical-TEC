@@ -34,8 +34,11 @@ public class AdministradorController {
 
 
     @GetMapping("/principal")
-    public String pagprincipal(){
-
+    public String pagprincipal(Model model){
+        List listaPacientes = usuarioRepository.obtenerListaPacientes();
+        List listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        model.addAttribute("listaPacientes",listaPacientes);
+        model.addAttribute("listaDoctores",listaDoctores);
         return "administrador/principal";
     }
 
@@ -43,8 +46,8 @@ public class AdministradorController {
     public String pagusuarios(Model model){
         List listaPacientes = usuarioRepository.obtenerListaPacientes();
         List listaDoctores = usuarioRepository.obtenerlistaDoctores();
-
-
+        model.addAttribute("listaPacientes",listaPacientes);
+        model.addAttribute("listaDoctores",listaDoctores);
         return "administrador/usuarios";
     }
 
