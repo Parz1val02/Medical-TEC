@@ -31,6 +31,10 @@
                                 Revisa la información correspondiente a mensajes, citas y más.
                             </h5>
                         </div>
+
+                        <div class="card mb-3">
+                            <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,6 +53,7 @@
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->
