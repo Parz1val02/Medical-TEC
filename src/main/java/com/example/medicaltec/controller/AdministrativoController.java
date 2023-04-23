@@ -32,7 +32,7 @@ public class AdministrativoController {
     @RequestMapping(value = {"/mensajeria"},method = RequestMethod.GET)
     public String mensajeria(){
 
-        return "administrativo/mensajeria";
+        return "administrativo/notificaciones";
     }
 
 }
