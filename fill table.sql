@@ -112,7 +112,9 @@ VALUES
 ('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1), /* doctor */
 ('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1), /* doctor */
 ('48764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4),/* administrador */
-('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5);/* superadmin */
+('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5),/* superadmin */
+('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St','2'), /* paciente */
+('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St','2'); /* paciente */
 
 /* Aqui van los administrativos*/
 INSERT INTO `Telesystem`.`usuario`
