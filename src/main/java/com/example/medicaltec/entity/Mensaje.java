@@ -13,7 +13,7 @@ public class Mensaje {
     @Column(name = "idmensajes", nullable = false)
     private Integer id;
 
-    @Column(name = "contenido", nullable = false, length = 45)
+    @Column(name = "contenido", nullable = false, length = 500)
     private String contenido;
 
     @Column(name = "fecha", nullable = false, length = 45)

@@ -13,7 +13,7 @@ public class Notificacione {
     @Column(name = "idnotificaciones", nullable = false)
     private Integer id;
 
-    @Column(name = "contenido", length = 45)
+    @Column(name = "contenido", length = 500)
     private String contenido;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -19,7 +19,7 @@ public class Reporte {
     @Column(name = "firma", nullable = false)
     private byte[] firma;
 
-    @Column(name = "bitacora", length = 200)
+    @Column(name = "bitacora", length = 500)
     private String bitacora;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
