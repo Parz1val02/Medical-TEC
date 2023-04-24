@@ -55,7 +55,9 @@ public class SuperController {
         return "redirect:/superAdmin/forms";
     }
     @RequestMapping(value = {"/reports"},method = RequestMethod.GET)
-    public String reports(){
+    public String reports(Model model){
+        List<Reporte> listaReportes = reporteRepository.findAll();
+        model.addAttribute("reporteList", listaReportes);
         return "superAdmin/reports";
     }
     @GetMapping("/reports/delete")

@@ -57,26 +57,17 @@
           <table class="table table-striped" id="userList">
             <thead class="bg-200">
             <tr>
-              <th class="sort align-middle" style="width: 30%">Nombre</th>
-              <th class="sort align-middle" style="width: 20%">Fecha de guardado</th>
-              <th class="sort align-middle" style="width: 20%">Registrado</th>
+              <th class="sort align-middle" style="width: 30%">N° reporte</th>
+              <th class="sort align-middle" style="width: 20%">Especialidad</th>
               <th class="sort align-middle" style="width: 20%">Descargar</th>
               <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr>
-              <td class="align-middle">
-                Hiroshi Giotoku
-              </td>
-              <td class="align-middle">
-                11-04-2023
-              </td>
-              <td class="align-middle">
-                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                Sí
-              </td>
-              <td class="align-middle">
+            <tr th:each="reporte, info : ${reporteList}">
+              <td th:text="${reporte.id}"></td>
+              <td th:text="${reporte.citaIdcita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
+              <td class="align-middle"></td>
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
@@ -104,150 +95,6 @@
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <a th:href="@{'/superAdmin/forms/delete?id=' + ${reporte.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar reporte</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Manuel Yarleque
-              </td>
-              <td class="align-middle">
-                18-05-2023
-              </td>
-              <td class="align-middle">
-                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                No
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #0275d8;
-                                border-radius: 15px; border-color: #FFFFFF; width: 90%">Descargar</button>
-                  </div>
-                </div>
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
-                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel1">Cambios de Perfil</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            ¿Está seguro de querer borrar este reporte?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar reporte</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Paola Vallejos
-              </td>
-              <td class="align-middle">
-                06-06-2023
-              </td>
-              <td class="align-middle">
-                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                Sí
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #0275d8;
-                                border-radius: 15px; border-color: #FFFFFF; width: 90%">Descargar</button>
-                  </div>
-                </div>
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel2">Cambios de Perfil</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            ¿Está seguro de querer borrar este reporte?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{/superAdmin/reports}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar reporte</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Don Lucho
-              </td>
-              <td class="align-middle">
-                20-03-2023
-              </td>
-              <td class="align-middle">
-                <!-- Esta solo es una idea para que sus estados se vean bien, denle una vuelta a esto-->
-                No
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #0275d8;
-                                border-radius: 15px; border-color: #FFFFFF; width: 90%">Descargar</button>
-                  </div>
-                </div>
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
-                    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel3">Cambios de Perfil</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            ¿Está seguro de querer borrar este reporte?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/edit?id=' + ${formulario.}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar reporte</a>
                           </div>
                         </div>

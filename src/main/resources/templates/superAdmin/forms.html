@@ -57,8 +57,8 @@
           <table class="table table-striped" id="userList">
             <thead class="bg-200">
             <tr>
-              <th class="sort align-middle" style="width: 30%">N° Reporte</th>
-              <th class="sort align-middle" style="width: 20%">Historial asociado</th>
+              <th class="sort align-middle" style="width: 30%">N° Formulario</th>
+              <th class="sort align-middle" style="width: 20%">Nombre</th>
               <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
@@ -84,7 +84,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/forms/delete?id=' + ${formulario.}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/forms/delete?id=' + ${formulario.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
                           </div>
                         </div>
