@@ -75,15 +75,10 @@
                     <hr style="height: 1px; background-color: #FFFFFF; border: none">
                     <div class="dropdown">
                       <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                      <div th:each="sede : ${sedes}" class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
-                        <select th:each="sede : ${sedes}">
-
-                          <option th:value="${sede.id}"
-                                  th:text="${sede.nombre}"></option>
-
-                        </select>
-                        <!--<button class="dropdown-item" type="button">Action</button>
+                        <button th:value="${sede.id}"
+                                th:text="${sede.nombre}" class="dropdown-item" type="button">Action</button>
                         <button class="dropdown-item" type="button">Another action</button>
                         <button class="dropdown-item" type="button">Something else here</button>-->
                       </div>
