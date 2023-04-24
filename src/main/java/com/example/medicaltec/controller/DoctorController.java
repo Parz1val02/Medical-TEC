@@ -1,9 +1,11 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.entity.Cuestionarios;
+import com.example.medicaltec.entity.Cuestionario;
 import com.example.medicaltec.entity.Sede;
+import com.example.medicaltec.entity.Usuario;
 import com.example.medicaltec.repository.CuestionarioRepository;
 import com.example.medicaltec.repository.SedeRepository;
+import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,18 +21,34 @@ public class DoctorController {
 
     final SedeRepository sedeRepository;
     final CuestionarioRepository cuestionarioRepository;
+    final UsuarioRepository usuarioRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
     public String pagPrincipalDoctor(@RequestParam("email") String email,
                                      @RequestParam("password") String password,
                                      Model model){
-
-        return "doctor/principal";
+        int i=0;
+        Usuario user1 = new Usuario();
+        List<Usuario> userList = usuarioRepository.findAll();
+        for(Usuario u : userList){
+            if(u.getEmail().equals(email) && u.getContrasena().equals(password)) {
+                i=1;
+                user1 = u;
+                break;
+            }
+        }
+        if (i==1){
+            model.addAttribute("user", user1);
+            return "doctor/principal";
+        }else {
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/historial")
@@ -46,11 +64,13 @@ public class DoctorController {
     public String verMensajes(){return "doctor/mensajeria";}
 
     @GetMapping("/pacientes")
-    public String verPacientes(){return "doctor/pacientes";}
+    public String verPacientes(Model model){
+        return "doctor/pacientes";
+    }
 
     @GetMapping("/cuestionarios")
     public String verCuestionarios(Model model){
-        List<Cuestionarios> cuestionariosList = cuestionarioRepository.findAll();
+        List<Cuestionario> cuestionariosList = cuestionarioRepository.findAll();
         model.addAttribute("cuestionariosList",cuestionariosList);
         return "doctor/cuestionarios";
     }
