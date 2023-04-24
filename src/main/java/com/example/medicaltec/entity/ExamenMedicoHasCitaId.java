@@ -13,6 +13,6 @@ import java.io.Serializable;
 public class ExamenMedicoHasCitaId implements Serializable {
     @Column(name = "examen_medico_idexamen", nullable = false)
     private Integer exMedicoId;
-    @Column(name = "cita_idcita")
+    @Column(name = "cita_idcita", nullable = false)
     private Integer citaMedicaId;
 }

@@ -13,12 +13,12 @@ public class RecetaHasMedicamento {
     private RecetaHasMedicamentoId id;
 
     @MapsId("recetaIdreceta")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "receta_idreceta", nullable = false)
     private Receta recetaIdreceta;
 
     @MapsId("medicamentosIdmedicamentos")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "medicamentos_idmedicamentos", nullable = false)
     private Medicamento medicamentosIdmedicamentos;
 

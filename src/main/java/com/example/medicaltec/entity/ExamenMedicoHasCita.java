@@ -13,12 +13,12 @@ public class ExamenMedicoHasCita {
     private ExamenMedicoHasCitaId examenMedicoHasCitaId;
 
     @MapsId("exMedicoId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "examen_medico_idexamen", nullable = false)
     private ExamenMedico examenMedicoIdexamen;
 
     @MapsId("citaMedicaId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 
