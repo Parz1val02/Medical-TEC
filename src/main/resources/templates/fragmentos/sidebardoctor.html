@@ -10,10 +10,12 @@
         <div class="toggle-icon-wrapper">
             <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Opciones"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
         </div>
-        <!--a class="navbar-brand" href="#">
-        <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/falcon.png}" alt="" width="40" /><span class="text-sans-serif">falcon</span>
-        </div>
-        </a-->
+        <a class="navbar-brand" th:href="@{/doctor/principal}">
+            <div class="d-flex align-items-center py-3">
+                <img class="mr-2" th:src="@{/img/illustrations/shield.png}"  alt="" width="30" />
+                <span class="text-sans-serif" style="font-size: x-large" >MedicalTec</span>
+            </div>
+        </a>
     </div>
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content perfect-scrollbar scrollbar">
@@ -101,7 +103,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/doctor/principal}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="fas fa-sign-out-alt">
                     </span></span><span class="nav-link-text"> Cerrar Sesión</span>
