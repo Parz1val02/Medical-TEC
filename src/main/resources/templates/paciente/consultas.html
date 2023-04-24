@@ -68,15 +68,13 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
+                        <tr th:each="doctor, info : ${listaDoc}">
+                            <td th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
                             </td>
-                            <td class="align-middle">
+                            <td th:text="${doctor.especialidadesIdEspecialidades}" class="align-middle">
                                 23-02-2023
                             </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
+                            <td th:text="${doctor.nombre}" class="align-middle" style="text-align: center">
                             </td>
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;

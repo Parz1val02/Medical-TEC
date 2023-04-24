@@ -15,8 +15,5 @@ public class Alergia {
         @Column(name = "nombre", length = 100)
         private String nombre;
 
-        @ManyToOne(optional = false)
-        @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
-        private Historialmedico historialmedicoIdhistorialmedico;
 
 }

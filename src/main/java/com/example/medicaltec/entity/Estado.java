@@ -5,17 +5,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "estados")
+public class Estado {
 
         @Id
-        @Column(name = "idroles", nullable = false)
-        private Integer id;
+        @Column(name = "idestado", nullable = false)
+        private Integer idEstado;
 
-        @Column(name = "nombre_rol", nullable = false, length = 45)
-        private String nombreRol;
+        @Column(name = "nombre", nullable = false, length = 45)
+        private String nombreEstado;
 
 }

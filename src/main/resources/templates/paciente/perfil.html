@@ -143,43 +143,12 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-white">
-                                <tr>
-                                    <td class="align-middle" style="text-align: center">
-                                        Penicilina
+                                <tr th:each="alergia, info : ${alergias}">
+                                    <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center">
                                     </td>
                                     <td class="align-middle" align="center">
                                         <button type="button" class="btn btn-secondary" style="text-align: center;border-radius: 15px;"
                                          >Borrar</button>
-                                        <!-- Modal -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="align-middle" style="text-align: center">
-                                        Penicilina
-                                    </td>
-                                    <td class="align-middle" align="center">
-                                        <button type="button" class="btn btn-secondary" style="text-align: center;
-                                    border-radius: 15px">Borrar</button>
-                                        <!-- Modal -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="align-middle" style="text-align: center">
-                                        Penicilina
-                                    </td>
-                                    <td class="align-middle" align="center">
-                                        <button type="button" class="btn btn-secondary" style="text-align: center;
-                                    border-radius: 15px">Borrar</button>
-                                        <!-- Modal -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="align-middle" style="text-align: center">
-                                        Penicilina
-                                    </td>
-                                    <td class="align-middle" align="center">
-                                        <button type="button" class="btn btn-secondary" style="text-align: center;
-                                    border-radius: 15px">Borrar</button>
                                         <!-- Modal -->
                                     </td>
                                 </tr>

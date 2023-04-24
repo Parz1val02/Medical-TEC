@@ -12,4 +12,5 @@ public class ExampController {
         return "auth/login";
     }
 
+
 }

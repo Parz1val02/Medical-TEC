@@ -1,13 +1,14 @@
 package com.example.medicaltec.controller;
 
 
-import com.example.medicaltec.repository.EspecialidadRepository;
-import com.example.medicaltec.repository.SedeRepository;
-import com.example.medicaltec.repository.SeguroRepository;
+import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/paciente")
@@ -18,16 +19,27 @@ public class PacienteController {
 
     final EspecialidadRepository especialidadRepository;
 
-    public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository) {
+    final AlergiaRepository alergiaRepository;
+
+    final UsuarioRepository usuarioRepository;
+
+    final RolesRepository rolesRepository;
+
+
+    public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
+        this.alergiaRepository = alergiaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.rolesRepository = rolesRepository;
     }
 
     @RequestMapping(value = "/principal")
     public String paginaprincipal(Model model){
 
        model.addAttribute("sedes",sedeRepository.findAll());
+
        return "paciente/principal";
    }
 
@@ -47,6 +59,8 @@ public class PacienteController {
     public String perfilpaciente(Model model){
 
         model.addAttribute("seguros",seguroRepository.findAll());
+        model.addAttribute("alergias",alergiaRepository.findAll());
+
         return "paciente/perfil";
     }
 
@@ -57,7 +71,13 @@ public class PacienteController {
     }
 
     @RequestMapping("/consultas")
-    public String citas(){
+    public String citas(Model model){
+
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        model.addAttribute("listaDoc",listaDoctores);
+        //model.addAttribute("roles",rolesRepository.findAll());
+
+        System.out.print(listaDoctores);
         return "paciente/consultas";
     }
 
