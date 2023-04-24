@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
@@ -82,12 +82,12 @@
                                     <p type="text"> La Molina</p>
                             </div>
                             <div class="form-group">
-                                    <p style="font-weight: bold; margin: 0px" for="newSede">Elija una nueva Sede:</p>
+                                    <p style="font-weight: bold; margin: 0px" >Elija una nueva Sede:</p>
                                     <select class="form-select" aria-label="Default select example">
-                                        <option selected>Select--</option>
-                                        <option value="1">Sede Chorrillos</option>
-                                        <option value="2">Sede San Martin de Porres</option>
-                                        <option value="3">Sede San Isidro</option>
+                                        <<option selected>Select--</option>
+                                        <option th:each="sede : ${sedeList}"
+                                                th:value="${sede.id}"
+                                                th:text="${sede.nombre}"></option>
                                     </select>
                             </div>
                             <div align="center">

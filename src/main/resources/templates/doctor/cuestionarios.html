@@ -47,11 +47,11 @@
                     <br>
                     <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
                         <div class="row">
-                            <div class="col-sm-4 mb-3">
+                            <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionariosList}">
                                 <div class="card" style="min-height: 15rem">
                                     <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
+                                        <h5 class="card-title" th:text="|Cuestionario ${i.index+1}|">Cuestionario #</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h6>
                                         <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
                                         / Información de Cuestionario</p>
                                         <div class="row">
