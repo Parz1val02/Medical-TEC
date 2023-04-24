@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.entity.FormulariosRegistro;
+import com.example.medicaltec.entity.Reporte;
 import com.example.medicaltec.entity.Usuario;
 import com.example.medicaltec.repository.FormulariosRegistroRepository;
 import com.example.medicaltec.repository.ReporteRepository;
@@ -33,57 +34,72 @@ public class SuperController {
     public String dashboard(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
-        return "super admin/dashboard";
+        return "superAdmin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
-    public String forms(){
-        return "super admin/forms";
+    public String forms(Model model){
+        List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
+        model.addAttribute("formularioList", listaFormularios);
+        return "superAdmin/forms";
     }
-    @RequestMapping(value = {"/reports"},method = RequestMethod.GET)
-    public String reports(){
-        return "super admin/reports";
-    }
-    @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
-    public String confSup(){
-        return "super admin/confSup";
-    }
-    @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
-    public String superPass(){
-        return "super admin/superPass";
-    }
-    @RequestMapping(value = {"/formulario"},method = RequestMethod.GET)
-    public String formulario(){
-        return "super admin/formulario";
-    }
-
-    @GetMapping("/delete")
+    @GetMapping("/forms/delete")
     public String borrarFormulario(Model model,
-                                      @RequestParam("id") int id,
-                                      RedirectAttributes attr) {
+                                   @RequestParam("id") int id,
+                                   RedirectAttributes attr) {
 
         Optional<FormulariosRegistro> optionalFormulariosRegistro = formulariosRegistroRepository.findById(id);
 
         if (optionalFormulariosRegistro.isPresent()) {
             formulariosRegistroRepository.deleteById(id);
         }
-        return "redirect:/super admin/forms";
+        return "redirect:/superAdmin/forms";
     }
+    @RequestMapping(value = {"/reports"},method = RequestMethod.GET)
+    public String reports(){
+        return "superAdmin/reports";
+    }
+    @GetMapping("/reports/delete")
+    public String borrarReporte(Model model,
+                                   @RequestParam("id") int id,
+                                   RedirectAttributes attr) {
+
+        Optional<Reporte> optionalReporte = reporteRepository.findById(id);
+
+        if (optionalReporte.isPresent()) {
+            reporteRepository.deleteById(id);
+        }
+        return "redirect:/superAdmin/reports";
+    }
+    @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
+    public String confSup(){
+        return "superAdmin/confSup";
+    }
+    @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
+    public String superPass(){
+        return "superAdmin/superPass";
+    }
+    @RequestMapping(value = {"/formulario"},method = RequestMethod.GET)
+    public String formulario(){
+        return "superAdmin/formulario";
+    }
+
+
 
     @RequestMapping(value = {"/reporte"},method = RequestMethod.GET)
     public String reporte(){
-        return "super admin/reporte";
+        return "superAdmin/reporte";
     }
     @RequestMapping(value = {"/cuestionario"},method = RequestMethod.GET)
     public String cuestionario(){
-        return "super admin/cuestionario";
+        return "superAdmin/cuestionario";
     }
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
     public String cuestionarios(){
-        return "super admin/cuestionarios";
+        return "superAdmin/cuestionarios";
     }
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
     public String editarPerfil(){
-        return "super admin/editarPerfil";
+        return "superAdmin/editarPerfil";
     }
 
 }
