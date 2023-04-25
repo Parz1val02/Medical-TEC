@@ -23,8 +23,8 @@
                     <!-- Columna 1 -->
                     <div class="col-sm-6">
                       <div class="form-group">
-                        <label for="dni">DNI</label>
-                        <input type="text" id="dni" name="id" th:placeholder="${usuario.id}" class="form-control" disabled>
+                        <label for="dni1">DNI</label>
+                        <input type="text" id="dni1" name="id" th:placeholder="${usuario.id}" class="form-control" disabled>
                       </div>
                       <div class="form-group">
                         <label for="especialidad">Especialidad:</label>
@@ -45,6 +45,10 @@
                                    th:value="${tipo.id}"
                                    th:text="${tipo.tipoCita}"></option>
                         </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="modalidad">Modalidad:</label>
+                        <input type="text" id="modalidad" name="modalidad" class="form-control">
                       </div>
                     </div>
                     <!-- Columna 2 -->
@@ -78,12 +82,19 @@
                                    th:text="${seguro.nombreSeguro}"></option>
                         </select>
                       </div>
+                      <div class="form-group">
+                        <label for="formapago">Forma de pago:</label>
+                        <input type="text" id="formapago" name="formapago" class="form-control">
+                      </div>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <input type="hidden" id="dni" name="id" th:value="${usuario.id}" class="form-control">
+                  </div>
                   <!-- Botón de envío -->
-                  <a th:href="@{'/paciente/principal'}" class="btn btn-primary submit">Registrar cita</a>
-                  <button class="btn btn-secondary" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px;" type="button" data-dismiss="modal">Cancelar</button>
+                  <button class="btn btn-primary submit">Registrar cita</button>
+                  <a class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px;" type="button" data-dismiss="modal">Cancelar</a>
                 </form>
               </div>
             </div>

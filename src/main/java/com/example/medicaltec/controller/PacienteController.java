@@ -7,9 +7,13 @@ import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -26,11 +30,11 @@ public class PacienteController {
     final UsuarioRepository usuarioRepository;
 
     final RolesRepository rolesRepository;
-    private final TipoCitaRepository tipoCitaRepository;
-
+    final TipoCitaRepository tipoCitaRepository;
+    final CitaRepository citaRepository;
 
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
-                              TipoCitaRepository tipoCitaRepository) {
+                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -38,6 +42,7 @@ public class PacienteController {
         this.usuarioRepository = usuarioRepository;
         this.rolesRepository = rolesRepository;
         this.tipoCitaRepository = tipoCitaRepository;
+        this.citaRepository = citaRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -56,21 +61,41 @@ public class PacienteController {
     @RequestMapping("/perfil")
     public String perfilpaciente(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
-        model.addAttribute("seguros",seguroRepository.findAll());
         model.addAttribute("alergias",alergiaRepository.findAll());
 
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
         return "paciente/perfil";
     }
 
     @GetMapping("/password")
     public String cambiarContra(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
         return "paciente/cambioContrasena";
     }
 
     @RequestMapping("/consultas")
     public String citas(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
         //List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
         //model.addAttribute("listaDoc",listaDoctores);
         //model.addAttribute("roles",rolesRepository.findAll());
@@ -80,26 +105,75 @@ public class PacienteController {
     }
 
     @RequestMapping("/notificaciones")
-    public String notificaciones(){
+    public String notificaciones(Model model){
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
        return "paciente/notificaciones";
     }
     @RequestMapping("/mensajeria")
-    public String mensajeria(){
+    public String mensajeria(Model model){
+
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
        return "paciente/mensajeria";
     }
 
     @RequestMapping("/pagos")
-    public String pagos(){
+    public String pagos(Model model){
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
        return "paciente/pagos";
     }
     @RequestMapping("cuestionarios")
-    public String cuestionarios(){
+    public String cuestionarios(Model model){
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
        return "paciente/cuestionarios";
     }
 
     @GetMapping("/sede")
     public String cambiarSede(@RequestParam("id")String idSede){
         sedeRepository.cambiarSede(idSede);
+        return "redirect:/paciente/principal";
+    }
+    @PostMapping("/guardarCita")
+    public String guardarCita(@RequestParam("id") String dni,
+                              @RequestParam("especialidad") String idEspecialidad,
+                              @RequestParam("tipocita") String idTipoCita,
+                              @RequestParam("sede") String idSede,
+                              @RequestParam("doctor") String idDoctor,
+                              @RequestParam("seguro") String idSeguro,
+                              @RequestParam("formapago") String formaPago,
+                              @RequestParam("modalidad") String modalidad,
+                              @RequestParam("hora")LocalTime hora,
+                              @RequestParam("fecha")LocalDate fecha,
+                              RedirectAttributes attr){
+        citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora);
+        attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         return "redirect:/paciente/principal";
     }
 }
