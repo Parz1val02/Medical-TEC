@@ -1,6 +1,9 @@
 /*Por favor ejecutar en orden para que se llene adecuadamente*/
-
-
+INSERT INTO `Telesystem`.`tipocita`
+(`idtipocita`,`tipo_cita`)
+VALUES
+(1,'consulta medica'),
+(2,'examen medico');
 
 INSERT INTO `Telesystem`.`roles`
 (`idroles`,`nombre_rol`)
@@ -24,7 +27,7 @@ insert into `Telesystem`.`seguros`
 (`id_seguro`,`nombre_seguro`,`porc_seguro`,`porc_doctor`)
 values 
 (1,'Rimac-EPS ','15%', '60%'),
-		(2,'Rimas seguros','25%','70%'),
+		(2,'Rimac seguros','25%','70%'),
         (3,'Pacifico EPS','10%','60%'),
         (4,'Pacifico Seguros','20%','70%'),
         (5,'Mapfre','40%','50%'),
