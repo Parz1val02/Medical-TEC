@@ -43,7 +43,7 @@
             </div>
             <br>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #00ff80; border-radius: 5px;">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #bd93f9; border-radius: 5px;">
                 Cambiar UX/UI
             </button>
 
@@ -80,7 +80,7 @@
             </div>
             <br>
             <br>
-            <span>Seleccione la sede </span>
+        <!--<span>Seleccione la sede </span>
             <select class="form-select" aria-label="Default select example" style="margin-left: 15px">
                 <option selected value>------</option>
                 <option value="1">San Miguel</option>
@@ -95,8 +95,8 @@
                 <option value="2">Doctor</option>
                 <option value="3">Administrativo</option>
                 <option value="4">Administrador</option>
-            </select>
-            <br>
+            </select>//
+            <br>      -->
 
             <div class="card mb-3">
                 <div class="card-body border-top">
@@ -104,8 +104,9 @@
                         <thead class="bg-200">
                         <tr>
                             <th class="sort align-middle" style="width: 30%">Nombres</th>
-                            <th class="sort align-middle" style="width: 20%">Email</th>
                             <th class="sort align-middle" style="width: 20%">DNI</th>
+                            <th class="sort align-middle" style="width: 20%">Sede</th>
+                            <th class="sort align-middle" style="width: 20%">Usuario</th>
                             <th class="sort align-middle" style="width: 20%">Estado</th>
                             <th class="sort align-middle" style="width: 20%">Cambiar Estado</th>
                             <th class="sort align-middle" style="width: 10%">Logueo</th>
@@ -114,8 +115,9 @@
                         <tbody class="bg-white">
                             <tr th:each="usuario, info : ${usuarioList}">
                                 <td th:text="${usuario.nombre}" class="align-middle"></td>
-                                <td th:text="${usuario.email}" class="align-middle"></td>
                                 <td th:text="${usuario.id}" class="align-middle"></td>
+                                <td th:text="${usuario.sedesIdsedes.nombre}" class="align-middle"></td>
+                                <td th:text="${usuario.rolesIdroles.nombreRol}" class="align-middle"></td>
                                 <td th:text="${usuario.estadosIdestado.nombreEstado}" class="align-middle"></td>
                                 <td class="align-middle">
                                     <!-- A esto me referia con opciones-->

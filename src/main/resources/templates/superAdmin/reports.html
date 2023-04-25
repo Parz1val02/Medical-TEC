@@ -41,14 +41,14 @@
         </div>
       </div>
       <br>
-      <span>Seleccione la sede </span>
+      <!--<span>Seleccione la sede </span>
       <select class="form-select" aria-label="Default select example">
         <option selected value>------</option>
         <option value="1">San Miguel</option>
         <option value="2">Jesús María</option>
         <option value="3">Lince</option>
       </select>
-      <br></br>
+      <br></br> -->
 
       <div class="card mb-3">
         <div class="card-body border-top">
@@ -94,7 +94,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/forms/delete?id=' + ${reporte.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/reports/delete?id=' + ${reporte.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar reporte</a>
                           </div>
                         </div>

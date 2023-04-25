@@ -13,7 +13,7 @@ import lombok.Setter;
 @Table(name = "tarjeta")
 public class Tarjeta {
     @Id
-    @Column(name = "idTarjetas", nullable = false)
+    @Column(name = "idtarjetas", nullable = false)
     private Integer id;
 
     @Column(name = "numero", nullable = false)

@@ -64,7 +64,7 @@ public class Usuario {
     @Column(name = "modooscuro")
     private Boolean modooscuro;
 
-    /*/@Column(name = "modoregistro")
+    @Column(name = "modoregistro")
     private String modoregistro;
-/*/
+
 }

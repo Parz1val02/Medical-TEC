@@ -38,7 +38,7 @@ public class Cita {
     private Receta recetaIdreceta;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tarjeta_idTarjetas")
+    @JoinColumn(name = "tarjeta_idtarjetas")
     private Tarjeta tarjetaIdtarjetas;
 
     @Column(name = "formapago", nullable = false, length = 45)

@@ -13,9 +13,6 @@ public class Historialmedico {
     @Column(name = "idhistorialmedico", nullable = false)
     private Integer id;
 
-    @Column(name = "alergias", nullable = false, length = 200)
-    private String alergias;
-
     @Column(name = "tratamiento", nullable = false, length = 200)
     private String tratamiento;
 
