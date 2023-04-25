@@ -4,8 +4,11 @@ import com.example.medicaltec.entity.Usuario;
 import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -18,7 +21,6 @@ public class AdministrativoController {
     public AdministrativoController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-
 
 
 
@@ -58,5 +60,17 @@ public class AdministrativoController {
 
         return "administrativo/notificaciones";
     }
+
+    @PostMapping("/change")
+    public String changePassword(@RequestParam("pass1") String pass1,
+                                 @RequestParam("pass2") String pass2,
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr)
+    {
+
+        usuarioRepository.cambiarContra(pass3);
+        attr.addFlashAttribute("msg","su contraseña ha sido cambiada exitosamente");
+        return "redirect:/administrativo/perfil";
+    }
+
 
 }
