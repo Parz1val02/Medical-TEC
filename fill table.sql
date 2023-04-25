@@ -1,3 +1,7 @@
+/*Por favor ejecutar en orden para que se llene adecuadamente*/
+
+
+
 INSERT INTO `Telesystem`.`roles`
 (`idroles`,`nombre_rol`)
 VALUES
@@ -11,7 +15,10 @@ INSERT INTO `Telesystem`.`estados`
 (`idestado`,`nombre`)
 VALUES
 (1,"activo"),
-(2,"inactivo");
+(2,"registrado"),
+(3,"agendado"),
+(4,"en consulta"),
+(5,"invitado");
 
 insert into `Telesystem`.`seguros` 
 (`id_seguro`,`nombre_seguro`,`porc_seguro`,`porc_doctor`)
@@ -24,10 +31,27 @@ values
 		(6,'Plan Salud','10%','80%'),
         (7,'Sin seguro','100%','100%');
 
+
 insert into `Telesystem`.`cuestionario` 
 (`idcuestionario`,`nombrecuestionario`)
 values 
 (1,'Antecendentes familiares');
+
+
+
+insert into `Telesystem`.`estadoscita`
+(`idestados`,`tipo`)
+values 
+(1,"agendada"),
+(2,"en transcurso"),
+(3,"culminada");
+
+INSERT INTO `Telesystem`.`sedes` (`nombre`, `color`, `latitud`, `longitud`, `torre`, `piso`) 
+VALUES 
+('Sede Los Olivos', 'Rojo', 37.7749, -122.4194, 'Torre 2', 11),
+('Sede Surco', 'Verde', 52.5200, 13.4050, 'Torre 3', 10),
+('Sede Lima Centro', 'Azul', 19.4326, -99.1332, 'Torre 1', 3);
+
 
 insert into `Telesystem`.`examen_medico` (`idexamen`,`nombre`,`descripcion`)
 							values (1,"examen fisico", "es un examen en el que el médico revisa el cuerpo del paciente para evaluar su estado de salud general"),
@@ -40,13 +64,14 @@ insert into `Telesystem`.`examen_medico` (`idexamen`,`nombre`,`descripcion`)
                                     (8,"Colonoscopia","es un examen que se realiza para detectar cáncer de colon y otras afecciones del tracto intestinal."),
                                     (9,"Prueba de esfuerzo","se utiliza para evaluar la salud del corazón durante el ejercicio"),
                                     (10,"Examen de la vista","se utiliza para evaluar la visión y detectar problemas como la miopía, la hipermetropía y el astigmatismo");
-								
-insert into `Telesystem`.`estadoscita`
-(`idestados`,`tipo`)
+                                    
+                                    
+
+insert into `Telesystem`.`medicamentos`
+(`idmedicamentos`,`nombre`,`precio`,`cantidad`,`frecuencia`)
 values 
-(1,"agendada"),
-(2,"en transcurso"),
-(3,"culminada");          
+(1,"paracetamol",10,2,"diario");
+
 
 insert into `Telesystem`.`tarjeta`
 (`idtarjetas`,`numero`,`nombre`)
@@ -55,43 +80,63 @@ values
 (2,"87654321","mastercard"),
 (3,"14785296","american express");
 
-INSERT INTO `Telesystem`.`sedes` (`nombre`, `color`, `latitud`, `longitud`, `torre`, `piso`) 
-VALUES 
-('Sede C', 'Rojo', 37.7749, -122.4194, 'Torre 2', 11),
-('Sede D', 'Verde', 52.5200, 13.4050, 'Torre 3', 10),
-('Sede E', 'Azul', 19.4326, -99.1332, 'Torre 1', 3);                     
- 
+
+insert into `Telesystem`.`alergias`
+(`idalergias`,`nombre`)
+values 
+(1,"moho"),
+(2,"picadura de insectos"),
+(3,"polvo de cereales"),
+(4,"animales domésticos"),
+(5,"látex");
+
+
 insert into `Telesystem`.`especialidades` (nombre_especialidad)
 values ('Cardiología'),('Traumatología'),('Cirugía cardiovascular'),('Laboratorio'),('Rayos X'),('Ecografía'),('Ginecología'),
 ('Urología'),('Medicina Interna'),('Neumología'),('Pediatría'),('Neurología'),('Gastroenterología'),('Endocrinología'),
 ('Otorrinolaringología'),('Nefrología'),('Dermatología');
 
- 
-INSERT INTO usuario 
+
+insert into `Telesystem`.`historialmedico` 
+(`idhistorialmedico`,`tratamiento`,`validahistorial`,`seguros_id_seguro`,`cuestionario_idcuestionario`)
+values 
+(1,'Rehabilitacion','1',2,1);
+
+
+
+/* Un doctor, un administrador, un superadmin*/
+INSERT INTO `Telesystem`.`usuario`
 (dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles) 
 VALUES 
-('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1),
-('98764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4),
-('34567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5);
+('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1), /* doctor */
+('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1), /* doctor */
+('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1), /* doctor */
+('48764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4),/* administrador */
+('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5),/* superadmin */
+('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St','2'), /* paciente */
+('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St','2'); /* paciente */
 
-
-INSERT INTO usuario 
+/* Aqui van los administrativos*/
+INSERT INTO `Telesystem`.`usuario`
 (dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,especialidades_id_especialidad) 
 VALUES 
-('74185296', 'lucho', 'lucho@example.com', 'lucho', 'Ramos', 22, '775555566', 'M', '234 Main Ave', 3,1);
+('34185296', 'lucho', 'lucho@example.com', 'lucho', 'Ramos', 22, '775555566', 'M', '234 Main Ave', 3,1);
 
-
-INSERT INTO usuario 
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico) 
+/* Aqui van los pacientes*/
+INSERT INTO `Telesystem`.`usuario`
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro) 
 VALUES 
-('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '456 Oak St', 2,1);
+('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado"),
+('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado"),
+('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro"),
+('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro");
 
 
-
+/* Solo para doctor */
 INSERT INTO `Telesystem`.`horasdoctor`
 (`idhorasdoctor`,`horainicio`,`horafin`,`horalibre`,`usuario_dni`)
 VALUES
-(1,'2023-04-20 08:00:00','2023-04-20 16:00:00','2023-04-19 18:00:00','23456789');
+(1,'2023-04-20 08:00:00','2023-04-20 16:00:00','2023-04-19 18:00:00','12345678');
 
 
 
@@ -100,34 +145,45 @@ VALUES
 INSERT INTO `Telesystem`.`notificaciones`
 (`idnotificaciones`,`contenido`,`usuario_dni`)
 VALUES
-(1,"Le informamos que su cita.",34567890),
-(2,"Nos complace informarle  ",23456789),
-(3,"Le informamos que los .",12345678);
+(1,"Recordatorio de cita: Recuerda que tienes una cita con el Dr. García el martes 27 de abril a las 2 p.m. en nuestra clínica. Por favor, confirma tu asistencia ",23766788),
+(2,"Resultados de exámenes: Los resultados de tus análisis de sangre están disponibles. Por favor, llama a nuestra clínica para programar una cita para revisarlos con el Dr. Sánchez.  ",23456789),
+(3,"Cambio de horario: Queremos informarte que debido a una emergencia médica, el Dr. Rodríguez no estará disponible hoy. Tu cita ha sido reprogramada para el próximo martes a la misma hora.",22647853),
+(4,"Notificación de facturación: Te informamos que tienes un saldo pendiente en nuestra clínica. Por favor, llama a nuestro departamento de facturación para solucionar este asunto.",28573467);
+
 
 
 
 INSERT INTO `Telesystem`.`conversaciones`
 (`idconversaciones`,`fechacreacion`,`usuario_dni`,`usuario_dni1`)
 VALUES
-(1,"2023-04-22 20:00:00",'74185296','23456789'),
-(2,"2023-04-22 16:00:00",'12345678','98764321'),
-(3,"2023-04-22 18:00:00",'23456789','74185296');
+(1,"2023-04-22 20:00:00",'12345678','14578934'),
+(2,"2023-04-22 16:00:00",'14578934','17845767');
+
+
+
 
 INSERT INTO `Telesystem`.`mensajes`
 (`idmensajes`,`contenido`,`fecha`,`conversaciones_idconversaciones`)
 VALUES
-(1,"El usuario  se ha registrado ","2023-04-25 20:00:00",1),
-(2,"Los resultados fueron ","2023-04-26 20:00:00",2),
-(3,"Si tiene alguna pregunta ,","2023-04-27 20:00:00",3);
+(1,"Hola, este es el Dr. Pérez de la Clínica XYZ. Quería recordarte que tienes una cita programada conmigo el próximo martes a las 10 am. Por favor, confirma si podrás asistir o si necesitas reprogramarla. ¡Gracias!","2023-04-25 20:00:00",1),
+(2,"Hola, soy la Dra. Sánchez. Quería informarte que los resultados de tus análisis de sangre ya están disponibles. Todo parece estar normal, pero necesito que vengas a la clínica para revisarlos juntos y resolver cualquier duda que puedas tener. Por favor, dime cuándo puedes venir.","2023-04-26 20:00:00",2);
 
 
 
-
-
-insert into `Telesystem`.`historialmedico` 
-(`idhistorialmedico`,`alergias`,`tratamiento`,`validahistorial`,`seguros_id_seguro`,`cuestionario_idcuestionario`)
+insert into `Telesystem`.`receta`
+(`idreceta`,`observaciones`)
 values 
-(1,'Alergia al Polen','Rehabilitacion','1',2,1);
+(1,"ninguna");
+
+insert into `Telesystem`.`cita` 
+(`idcita`,`fechahora`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idTarjetas`,`formapago`,`modalidad`)
+values 
+(1,"2023-04-22 20:00:00",0,1,1,1,1,1,"efectivo","virtual");
+
+
+
+
+
 
 
 
@@ -163,12 +219,11 @@ insert into `Telesystem`.`documentos`
 values 
 (1,1);
 
-                                   
 
-insert into `Telesystem`.`cita` 
-(`idcita`,`fechahora`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idTarjetas`,`formapago`,`modalidad`)
-values 
-(1,"2023-04-22 20:00:00",0,1,1,1,1,1,"efectivo","virtual");
+                                    
+                                    
+
+
 
 
 insert into `Telesystem`.`examen_medico_has_cita`
@@ -177,18 +232,10 @@ values
 (1,1);
 
 
-
-
-
-
-
 insert into `Telesystem`.`sedes_has_especialidades`
 (`sedes_idsedes`,`especialidades_id_especialidad`)
 values 
 (1,1);
-
-
-
 
 insert into `Telesystem`.`deliverymedicamentos`
 (`iddeliverymedicamentos`,`latitudinicial`,`latitudfinal`,`longitudinicial`,`longitudfinal`,`estado`,`receta_idreceta`)
@@ -196,10 +243,7 @@ values
 (1,40.4168,-3.7038,51.5072,-0.1276,"en proceso",1);
 
 
-insert into `Telesystem`.`receta`
-(`idreceta`,`observaciones`,`receta_idreceta`)
-values 
-(1,"ninguna",1);
+
 
 
 insert into `Telesystem`.`receta_has_medicamentos`
@@ -207,10 +251,7 @@ insert into `Telesystem`.`receta_has_medicamentos`
 values 
 (1,1);
 
-insert into `Telesystem`.`medicamentos`
-(`idmedicamentos`,`nombre`,`precio`,`cantidad`,`frecuencia`)
-values 
-(1,"paracetamol",10,2,"diario");
+
 
 insert into `Telesystem`.`boletas`
 (`idboletas`,`conceptopago`,`monto`,`seguros_id_seguro`,`receta_idreceta`,`cita_idcita`,`examen_medico_idexamen`)
@@ -218,6 +259,11 @@ values
 (1,"tarjeta",10,2,1,1,1);
 
 
+
+insert into `Telesystem`.`historialmedico_has_alergias`
+(`historialmedico_idhistorialmedico`,`alergias_idalergias`)
+values 
+(1,1);
 
 
 
