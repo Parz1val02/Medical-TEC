@@ -1,8 +1,10 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.entity.Cuestionario;
 import com.example.medicaltec.entity.FormulariosRegistro;
 import com.example.medicaltec.entity.Reporte;
 import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.repository.CuestionarioRepository;
 import com.example.medicaltec.repository.FormulariosRegistroRepository;
 import com.example.medicaltec.repository.ReporteRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
@@ -24,10 +26,12 @@ public class SuperController {
     final UsuarioRepository usuarioRepository;
     final FormulariosRegistroRepository formulariosRegistroRepository;
     final ReporteRepository reporteRepository;
-    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository) {
+    final CuestionarioRepository cuestionarioRepository;
+    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.reporteRepository = reporteRepository;
+        this.cuestionarioRepository = cuestionarioRepository;
     }
 
     @GetMapping(value = {"/dashboard"})
@@ -85,8 +89,6 @@ public class SuperController {
         return "superAdmin/formulario";
     }
 
-
-
     @RequestMapping(value = {"/reporte"},method = RequestMethod.GET)
     public String reporte(){
         return "superAdmin/reporte";
@@ -96,8 +98,22 @@ public class SuperController {
         return "superAdmin/cuestionario";
     }
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
-    public String cuestionarios(){
+    public String cuestionarios(Model model){
+        List<Cuestionario> listaCuestionarios = cuestionarioRepository.findAll();
+        model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
+    }
+    @GetMapping("/cuestionarios/delete")
+    public String borrarCuestionarioLleno(Model model,
+                                          @RequestParam("id") int id,
+                                          RedirectAttributes attr) {
+
+        Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
+
+        if (optionalCuestionario.isPresent()) {
+            cuestionarioRepository.deleteById(id);
+        }
+        return "redirect:/superAdmin/cuestionarios";
     }
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
     public String editarPerfil(){
