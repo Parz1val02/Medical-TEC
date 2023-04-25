@@ -61,7 +61,7 @@ public class SuperController {
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
             @RequestParam("id") String id,
-            @RequestParam("apellido") String apellido,
+
             @RequestParam("telefono") String telefono,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
@@ -78,8 +78,7 @@ public class SuperController {
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
             @RequestParam("id") String id,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("especialidad") int especialidad,
+
             @RequestParam("telefono") String telefono,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
@@ -88,7 +87,7 @@ public class SuperController {
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
         usuarioRepository.editarDoctor( email,  nombre,   telefono,   id,  sede, estado );
-        return "redirect:/administrador/usuarios";
+        return "redirect:/superAdmin/dashboard";
     }
     @PostMapping("/editarAdministrativos")
     public String editarAdministrativo(
@@ -96,8 +95,7 @@ public class SuperController {
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
             @RequestParam("id") String id,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("especialidad") int especialidad,
+
             @RequestParam("telefono") String telefono,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
@@ -114,8 +112,7 @@ public class SuperController {
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
             @RequestParam("id") String id,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("especialidad") int especialidad,
+
             @RequestParam("telefono") String telefono,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
