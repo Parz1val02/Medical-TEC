@@ -65,7 +65,7 @@ public class AdministradorController {
             @RequestParam("sede") int sede,
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
-            @RequestParam("id") String id,
+            @RequestParam("id") String dni,
             @RequestParam("apellido") String apellido,
             @RequestParam("especialidad") int especialidad,
             @RequestParam("telefono") String telefono,
@@ -74,8 +74,44 @@ public class AdministradorController {
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( email,  nombre,  apellido,  telefono,  especialidad,  id,  sede );
+        usuarioRepository.editarDoctor( email,  nombre,  apellido,  telefono,  especialidad,  dni,  sede );
         return "redirect:/administrador/usuarios";
+    }
+
+    @PostMapping("/crearDoctor")
+    public String crearDoctor(
+            @RequestParam("sede") int sede,
+            @RequestParam("edad") int edad,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("sexo") String sexo,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("contrasena") String contrasena,
+            @RequestParam("id") String dni,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("especialidad") int especialidad,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        System.out.println(nombre);
+        boolean existeDoctor = false;
+        for (Usuario doctor : listaDoctores) {
+            if (dni.equalsIgnoreCase(doctor.getId()) ) {
+                existeDoctor = true;
+            }
+        }
+
+
+        if ( existeDoctor) {
+            attr.addFlashAttribute("msgDanger","El doctor ingresado ya existe");
+            return "redirect:/administrador/usuarios";
+        } else {
+            usuarioRepository.crearDoctor( email,  nombre,  apellido,  telefono,  especialidad,  dni,  sede, edad, direccion, sexo, contrasena );
+            attr.addFlashAttribute("msg","Doctor creado exitosamente");
+            return "redirect:/administrador/usuarios";
+        }
     }
 
 
