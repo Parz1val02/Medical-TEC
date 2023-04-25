@@ -71,15 +71,13 @@
                 <div class="row">
                   <div class="form-group" style="text-align: center">
                     <label for="" style="font-size: medium">Sede Actual</label>
-                    <input class="form-control col text-black" id="" type="text" placeholder="Lima Centro" readonly="" style="text-align: center">
+                    <input th:each="sede : ${sedes}" th:if="${sede.id == usuario.sedesIdsedes.id}" class="form-control col text-black" id="" type="text" th:placeholder="${sede.nombre}" readonly="" style="text-align: center">
                     <hr style="height: 1px; background-color: #FFFFFF; border: none">
                     <div class="dropdown">
                       <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
-                      <div th:each="sede : ${sedes}" class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                        <button th:value="${sede.id}"
-                                th:text="${sede.nombre}" class="dropdown-item" type="button"></button>
-
+                      <div  class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <a th:each="sede : ${sedes}" th:value="${sede.id}"
+                                th:text="${sede.nombre}" class="dropdown-item btn" type="button" th:href="@{'/paciente/sede' + '?id=' + ${sede.id}}"></a>
                       </div>
                     </div>
                     <br>

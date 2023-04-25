@@ -18,55 +18,43 @@
             </div>
             <div class="modal-body">
               <div class="container">
-
                 <form action="#" method="post">
-
                   <div class="row">
-
                     <!-- Columna 1 -->
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label for="dni">DNI</label>
                         <input type="text" id="dni" name="dni"  placeholder="12345678" class="form-control" disabled>
                       </div>
-
                       <div class="form-group">
                         <label for="especialidad">Especialidad:</label>
                         <select id="especialidad" name="especialidad" class="form-control">
                           <option  th:each="especialidad : ${especialidades}"
                                    th:value="${especialidad.id}"
                                    th:text="${especialidad.nombreEspecialidad}"></option>
-
                         </select>
                       </div>
                       <div class="form-group">
                         <label for="fecha">Fecha </label>
                         <input type="date" id="fecha" name="nombre" class="form-control" required>
                       </div>
-
                       <div class="form-group">
                         <label for="tipocita">Tipo de cita: </label>
                         <select id="tipocita" name="tipocita" class="form-control">
                           <option value="Argentina">Argentina</option>
                           <option value="Brasil">Brasil</option>
                           <option value="Chile">Chile</option>
-
                         </select>
                       </div>
-
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
                         <label class="form-check-label" for="flexCheckChecked">
                           Enviar notificaciones
                         </label>
                       </div>
-
-x
                     </div>
-
                     <!-- Columna 2 -->
                     <div class="col-sm-6">
-
                       <div class="form-group">
                         <label for="sede">Sede de atencion:  </label>
                         <select id="sede" name="sede" class="form-control">
@@ -75,8 +63,6 @@ x
                                    th:text="${sede.nombre}"></option>
                         </select>
                       </div>
-
-
                       <div class="form-group">
                         <label for="doctor">Doctor:  </label>
                         <select id="doctor" name="doctor" class="form-control">
@@ -85,12 +71,10 @@ x
                           <option value="Chile">Chile</option>
                         </select>
                       </div>
-
                       <div class="form-group">
                         <label for="hora">Hora</label>
                         <input type="time" id="hora" name="hora" class="form-control" required>
                       </div>
-
                       <div class="form-group">
                         <label for="seguro">Seguro de salud:  </label>
                         <select id="seguro" name="seguro" class="form-control">
@@ -99,14 +83,9 @@ x
                                    th:text="${seguro.nombreSeguro}"></option>
                         </select>
                       </div>
-
-
                     </div>
-
                   </div>
-
                   <!-- Botón de envío -->
-
                 </form>
               </div>
             </div>

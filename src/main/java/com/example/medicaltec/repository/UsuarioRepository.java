@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
-
+    Usuario findBydni(String dni);
     @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1")
     List<Usuario> obtenerlistaDoctores();
 

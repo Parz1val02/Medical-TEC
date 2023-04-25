@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Usuario {
     @Id
     @Column(name = "dni", nullable = false, length = 8)
-    private String id;
+    private String dni;
 
     @Column(name = "contrasena", nullable = false, length = 45)
     private String contrasena;
@@ -62,6 +62,12 @@ public class Usuario {
 
     @Column(name = "modooscuro")
     private Boolean modooscuro;
+
+    @Column(name = "modoregistro", length = 45)
+    private String modoregistro;
+
+   @Column(name = "ceduladoctor", length = 45)
+    private String cedulaDoctor;
 
 }
 

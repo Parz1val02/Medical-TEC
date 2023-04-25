@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -37,22 +38,11 @@ public class PacienteController {
 
     @RequestMapping(value = "/principal")
     public String paginaprincipal(Model model){
-
-       model.addAttribute("sedes",sedeRepository.findAll());
-
-       return "paciente/principal";
-   }
-
-   @GetMapping("/")
-   public String mandarDatos(Model model){
-
-
+        model.addAttribute("usuario", usuarioRepository.findBydni("22647853"));
         model.addAttribute("sedes", sedeRepository.findAll());
-       model.addAttribute("seguros", seguroRepository.findAll());
-       model.addAttribute("especialidades", especialidadRepository.findAll());
-
-
-        return "fragmentos/topbarpaciente";
+        model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        return "paciente/principal";
    }
 
     @RequestMapping("/perfil")
@@ -99,4 +89,9 @@ public class PacienteController {
        return "paciente/cuestionarios";
     }
 
+    @GetMapping("/sede")
+    public String cambiarSede(@RequestParam("id")String idSede){
+        sedeRepository.cambiarSede(idSede);
+        return "redirect:/paciente/principal";
+    }
 }

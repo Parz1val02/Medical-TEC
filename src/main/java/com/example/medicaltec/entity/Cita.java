@@ -37,6 +37,9 @@ public class Cita {
         @JoinColumn(name = "receta_idreceta")
         private Receta recetaIdreceta;
 
+        @ManyToOne
+        @JoinColumn(name = "tipocita_idtipocita")
+        private TipoCita tipoCita;
         //@ManyToOne
         //@JoinColumn(name = "tarjeta_idTarjetas")
         //private Tarjeta tarjetaIdtarjetas;
