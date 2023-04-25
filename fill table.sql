@@ -127,12 +127,12 @@ VALUES
 
 /* Aqui van los pacientes*/
 INSERT INTO `Telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes) 
 VALUES 
-('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado"),
-('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado"),
-('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro"),
-('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro");
+('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1),
+('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2),
+('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3),
+('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2);
 
 
 /* Solo para doctor */
