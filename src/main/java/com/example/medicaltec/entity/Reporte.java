@@ -22,11 +22,11 @@ public class Reporte {
     @Column(name = "bitacora", length = 500)
     private String bitacora;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 

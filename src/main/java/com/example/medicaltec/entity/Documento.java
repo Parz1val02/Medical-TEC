@@ -13,7 +13,7 @@ public class Documento {
     @Column(name = "iddocumentos", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 

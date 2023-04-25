@@ -19,19 +19,19 @@ public class Boleta {
     @Column(name = "monto", nullable = false)
     private Double monto;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "seguros_id_seguro", nullable = false)
     private Seguro segurosIdSeguro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "receta_idreceta")
     private Receta recetaIdreceta;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "examen_medico_idexamen", nullable = false)
     private ExamenMedico examenMedicoIdexamen;
 

@@ -24,7 +24,7 @@ public class Horasdoctor {
     @Column(name = "horalibre", nullable = false)
     private Instant horalibre;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "usuario_dni", nullable = false)
     private Usuario usuarioDni;
 

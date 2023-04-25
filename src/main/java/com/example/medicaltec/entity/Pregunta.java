@@ -16,11 +16,11 @@ public class Pregunta {
     @Column(name = "pregunta", nullable = false, length = 200)
     private String pregunta;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "cuestionario_idcuestionario", nullable = false)
     private Cuestionario cuestionarioIdcuestionario;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
     private Especialidade especialidadesIdEspecialidad;
 

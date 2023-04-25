@@ -1,14 +1,32 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 @RequestMapping("/administrativo")
 @Controller
 public class AdministrativoController {
+
+    UsuarioRepository usuarioRepository;
+
+    public AdministrativoController(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+
+
+
+
     @RequestMapping(value = {"/dashboard", ""},method = RequestMethod.GET)
-    public String dashboard(){
+    public String dashboard(Model model){
+        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+        model.addAttribute("listaUsuarios",listaUsuarios);
         return "administrativo/dashboard";
     }
 

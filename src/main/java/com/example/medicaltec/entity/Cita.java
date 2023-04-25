@@ -21,23 +21,23 @@ public class Cita {
     @Column(name = "citacancelada")
     private Boolean citacancelada;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
     private Especialidade especialidadesIdEspecialidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "estadoscita_idestados")
     private Estadoscita estadoscitaIdestados;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "receta_idreceta")
     private Receta recetaIdreceta;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "tarjeta_idTarjetas")
     private Tarjeta tarjetaIdtarjetas;
 

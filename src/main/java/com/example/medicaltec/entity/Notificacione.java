@@ -16,7 +16,7 @@ public class Notificacione {
     @Column(name = "contenido", length = 500)
     private String contenido;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "usuario_dni", nullable = false)
     private Usuario usuarioDni;
 

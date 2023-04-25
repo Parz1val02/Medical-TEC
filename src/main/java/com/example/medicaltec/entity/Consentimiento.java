@@ -16,7 +16,7 @@ public class Consentimiento {
     @Column(name = "consentimiento", nullable = false)
     private byte[] consentimiento;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 

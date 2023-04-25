@@ -19,11 +19,11 @@ public class Historialmedico {
     @Column(name = "validahistorial", nullable = false)
     private Boolean validahistorial = false;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "seguros_id_seguro", nullable = false)
     private Seguro segurosIdSeguro;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "cuestionario_idcuestionario", nullable = false)
     private Cuestionario cuestionarioIdcuestionario;
 

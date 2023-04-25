@@ -19,7 +19,7 @@ public class Mensaje {
     @Column(name = "fecha", nullable = false, length = 45)
     private String fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "conversaciones_idconversaciones", nullable = false)
     private Conversacione conversacionesIdconversaciones;
 

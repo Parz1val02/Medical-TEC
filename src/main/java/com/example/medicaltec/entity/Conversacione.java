@@ -18,11 +18,11 @@ public class Conversacione {
     @Column(name = "fechacreacion", nullable = false)
     private Instant fechacreacion;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "usuario_dni", nullable = false)
     private Usuario usuarioDni;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "usuario_dni1", nullable = false)
     private Usuario usuarioDni1;
 

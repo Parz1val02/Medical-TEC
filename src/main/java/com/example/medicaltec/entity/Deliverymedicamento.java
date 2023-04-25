@@ -28,7 +28,7 @@ public class Deliverymedicamento {
     @Column(name = "estado", nullable = false, length = 45)
     private String estado;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "receta_idreceta", nullable = false)
     private Receta recetaIdreceta;
 

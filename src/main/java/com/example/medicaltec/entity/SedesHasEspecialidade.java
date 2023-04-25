@@ -13,12 +13,12 @@ public class SedesHasEspecialidade {
     private SedesHasEspecialidadeId id;
 
     @MapsId("especialidadesIdEspecialidad")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
     private Especialidade especialidadesIdEspecialidad;
 
     @MapsId("sedesIdsedes")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
