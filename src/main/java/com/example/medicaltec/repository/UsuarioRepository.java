@@ -15,7 +15,17 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "update usuario u set u.estados_idestado=?1")
-    void editarEstado(String estado);
+    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 3")
+    List<Usuario> obtenerListaAdministrativos();
+
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6 and u.sedes_idsedes = ?7")
+    void editarAdministrativo(String email, String nombre, String apellido, String telefono, int especialidad, String id, int sede );
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6 and u.sedes_idsedes = ?7")
+    void editarAdministrador(String email, String nombre, String apellido, String telefono, int especialidad, String id, int sede );
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6 and u.sedes_idsedes = ?7")
+    void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String id, int sede );
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6")
+    void editarPaciente(String email, String nombre, String apellido, String telefono, int especialidad, String id);
+
 
 }

@@ -3,11 +3,8 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.entity.*;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.print.DocFlavor;
@@ -42,16 +39,76 @@ public class SuperController {
     public String dashboard(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
-        List<Estado> listaEstados = estadoRepository.findAll();
-        model.addAttribute("listEstados",listaEstados);
+
         return "superAdmin/dashboard";
     }
-    @GetMapping(value = {"/editarEstado"})
-    public String dashboard(Model model, @RequestParam("estado") String estado, RedirectAttributes attr){
-        List<Estado> listaEstados = estadoRepository.findAll();
-        model.addAttribute("listEstados",listaEstados);
-        usuarioRepository.editarEstado(estado);
-        return "superAdmin/dashboard";
+    @PostMapping("/editarPaciente")
+    public String editarPaciente(
+            @RequestParam("sede") int sede,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("id") String id,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("especialidad") int especialidad,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        System.out.println(nombre);
+        attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
+        usuarioRepository.editarPaciente( email,  nombre,  apellido,  telefono,  especialidad,  id);
+        return "redirect:/superAdmin/dashboard";
+    }
+    @PostMapping("/editarDoctor")
+    public String editarDoctor(
+            @RequestParam("sede") int sede,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("id") String id,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("especialidad") int especialidad,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        System.out.println(nombre);
+        attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
+        usuarioRepository.editarDoctor( email,  nombre,  apellido,  telefono,  especialidad,  id,  sede );
+        return "redirect:/administrador/usuarios";
+    }
+    @PostMapping("/editarAdministrativo")
+    public String editarAdministrativo(
+            @RequestParam("sede") int sede,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("id") String id,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("especialidad") int especialidad,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        System.out.println(nombre);
+        attr.addFlashAttribute("msg","Administrativo actualizado exitosamente");
+        usuarioRepository.editarAdministrativo( email,  nombre,  apellido,  telefono,  especialidad,  id,  sede );
+        return "redirect:/superAdmin/dashboard";
+    }
+    @PostMapping("/editarAdministrador")
+    public String editarAdministrador(
+            @RequestParam("sede") int sede,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("id") String id,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("especialidad") int especialidad,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        System.out.println(nombre);
+        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
+        usuarioRepository.editarAdministrador( email,  nombre,  apellido,  telefono,  especialidad,  id,  sede );
+        return "redirect:/superAdmin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model){

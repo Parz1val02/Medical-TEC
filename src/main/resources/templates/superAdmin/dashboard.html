@@ -133,13 +133,58 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="supplier">Seleccione el nuevo estado del usuario</label>
-                                                                <select class="form-control" name="supplier" id="supplier">
-                                                                    <option th:each="estado : ${listEstados}" th:value="${estado.idEstado}" th:text="${estado.nombreEstado}"
-                                                                            th:selected="${estado.idEstado== usuario.estadosIdestado.idEstado}" th:if="${estado.nombreEstado == 'activo' or estado.nombreEstado == 'inactivo'}"></option>
-                                                                </select>
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre">Nombre </label>
+                                                                        <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control" >
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="email">Email </label>
+                                                                        <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" >
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="id">DNI </label>
+                                                                        <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                                                        <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" >
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="estado">Estado </label>
+                                                                        <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                                <!-- Columna 2 -->
+                                                                <div class="col-sm-6">
+
+                                                                    <div class="form-group">
+                                                                        <label for="apellido">Apellido  </label>
+                                                                        <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${doctor.apellido}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="especialidad">Especialidad</label>
+                                                                        <select class="form-control" name="especialidad" id="especialidad">
+                                                                            <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                                                    th:selected="${especialidad.id == usuario.especialidadesIdEspecialidad.id}"></option>
+                                                                        </select>
+
+
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="telefono"> Teléfono  </label>
+                                                                        <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${usuario.telefono}">
+                                                                    </div>
+
+                                                                </div>
                                                             </div>
+
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -243,7 +288,7 @@
             },
             autoWidth: false,
             lengthMenu: [
-                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+                [10, 25, 50, -1], [5, 10, 15, "Todos"]
             ],
             buttons: [
                ]
