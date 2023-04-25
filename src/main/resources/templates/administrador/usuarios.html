@@ -52,6 +52,8 @@
                 </div>
             </div>
 
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+
             <div class="card mb-3">
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
@@ -239,7 +241,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-sm-12 col-lg-6">
                                 <form action="#" method="post">
 
                                     <div class="row" style="display: flex; align-items: center">
@@ -273,9 +275,9 @@
 
                                 </form>
                             </div>
-                            <div class="col">
+                            <div class="col-lg-6 justify-content-center d-flex align-items-center">
                                 <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
-                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 100px; max-width: 100px"/>
                                 </div>
                             </div>
                         </div>
@@ -288,70 +290,54 @@
                                         <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
                                     </div>
                                     <div class="card-body fs--1">
-                                        <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                                        <div class="card-body" style="max-height:100%; overflow-y: auto; text-align: center">
                                             <div class="row" style="display: flex; align-items: center">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">10:00 - 10:30 am</p>
+                                                    <p class="text-1000 mb-0 h4">10:00 - 10:30 am</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">10:30 - 11:00 am</p>
+                                                    <p class="text-1000 mb-0 h4">10:30 - 11:00 am</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">11:30 - 12:00 pm</p>
+                                                    <p class="text-1000 mb-0 h4">11:30 - 12:00 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">12:00 - 12:30 pm</p>
+                                                    <p class="text-1000 mb-0 h4">12:00 - 12:30 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">13:30 - 14:00 pm</p>
+                                                    <p class="text-1000 mb-0 h4">13:30 - 14:00 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">14:30 - 15:00 pm</p>
+                                                    <p class="text-1000 mb-0 h4">14:30 - 15:00 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">15:30 - 16:00 pm</p>
+                                                    <p class="text-1000 mb-0 h4">15:30 - 16:00 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
                                             <div class="row" style="display: flex; align-items: center">
                                                 <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0">16:00 - 16:30 pm</p>
+                                                    <p class="text-1000 mb-0 h4">16:00 - 16:30 pm</p>
                                                 </div>
-                                                <div class="col" style="text-align: center">
-                                                    <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -359,7 +345,7 @@
                             </div>
                             <div class="col-lg-6 pl-lg-2 mb-3">
                                 <div class="card mb-3 h-100">
-                                    <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                                    <div th:replace="~{fragmentos/calendar.html::calendar(iteracion = ${vEstado.index + 1} )}"></div>
                                 </div>
                             </div>
 
@@ -373,6 +359,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 <!-- ===============================================-->
 <!--   Modals -->
@@ -389,6 +379,7 @@
                 </div>
 
                 <form method="post" th:action="@{/administrador/editarDoctor}">
+                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6">
@@ -404,12 +395,13 @@
 
                                 <div class="form-group">
                                     <label for="id">DNI </label>
-                                    <input type="text" id="id" name="id" class="form-control" th:value="${doctor.id}" disabled>
+                                    <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" >
                                 </div>
 
                                 <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"  th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
                                 </div>
 
 
@@ -425,7 +417,12 @@
 
                                 <div class="form-group">
                                     <label for="especialidad">Especialidad</label>
-                                    <input type="text" id="especialidad" name="especialidad" th:value="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" class="form-control" >
+                                    <select class="form-control" name="especialidad" id="especialidad">
+                                        <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
+                                    </select>
+
+
                                 </div>
 
                                 <div class="form-group">
@@ -438,16 +435,17 @@
 
                     </div>
 
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" > Editar doctor </button>
-                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                </div>
-            </form>
-        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar doctor </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>
 </div>
+
 
 
 
