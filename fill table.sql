@@ -179,9 +179,9 @@ values
 (1,"ninguna");
 
 insert into `Telesystem`.`cita` 
-(`idcita`,`fechahora`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idTarjetas`,`formapago`,`modalidad`)
+(`idcita`,`fechahora`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idTarjetas`,`formapago`,`modalidad`,`tipocita_idtipocita`)
 values 
-(1,"2023-04-22 20:00:00",0,1,1,1,1,1,"efectivo","virtual");
+(1,"2023-04-22 20:00:00",0,1,1,1,1,1,"efectivo","virtual",1);
 
 
 
