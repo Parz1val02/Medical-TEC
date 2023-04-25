@@ -18,13 +18,13 @@
             </div>
             <div class="modal-body">
               <div class="container">
-                <form action="#" method="post">
+                <form th:action="@{/paciente/guardarCita}" method="post">
                   <div class="row">
                     <!-- Columna 1 -->
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label for="dni">DNI</label>
-                        <input type="text" id="dni" name="dni"  placeholder="12345678" class="form-control" disabled>
+                        <input type="text" id="dni" name="id" th:placeholder="${usuario.id}" class="form-control" disabled>
                       </div>
                       <div class="form-group">
                         <label for="especialidad">Especialidad:</label>
@@ -36,21 +36,15 @@
                       </div>
                       <div class="form-group">
                         <label for="fecha">Fecha </label>
-                        <input type="date" id="fecha" name="nombre" class="form-control" required>
+                        <input type="date" id="fecha" name="fecha" class="form-control" required>
                       </div>
                       <div class="form-group">
                         <label for="tipocita">Tipo de cita: </label>
                         <select id="tipocita" name="tipocita" class="form-control">
-                          <option value="Argentina">Argentina</option>
-                          <option value="Brasil">Brasil</option>
-                          <option value="Chile">Chile</option>
+                          <option  th:each="tipo : ${tipos}"
+                                   th:value="${tipo.id}"
+                                   th:text="${tipo.tipoCita}"></option>
                         </select>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Enviar notificaciones
-                        </label>
                       </div>
                     </div>
                     <!-- Columna 2 -->
@@ -66,9 +60,10 @@
                       <div class="form-group">
                         <label for="doctor">Doctor:  </label>
                         <select id="doctor" name="doctor" class="form-control">
-                          <option value="Argentina">Argentina</option>
-                          <option value="Brasil">Brasil</option>
-                          <option value="Chile">Chile</option>
+                          <option  th:each="doctor : ${doctores}"
+                                   th:value="${doctor.id}"
+                                   th:text="|${doctor.nombre} ${doctor.apellido}|"></option>
+
                         </select>
                       </div>
                       <div class="form-group">
@@ -86,13 +81,11 @@
                     </div>
                   </div>
                   <!-- Botón de envío -->
+                  <a th:href="@{'/paciente/principal'}" class="btn btn-primary submit">Registrar cita</a>
+                  <button class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px;" type="button" data-dismiss="modal">Cancelar</button>
                 </form>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px;" type="button" data-dismiss="modal">Cancelar</button>
-              <a th:href="@{'/paciente/principal'}" class="btn btn-primary">Registrar cita</a>
             </div>
           </div>
         </div>

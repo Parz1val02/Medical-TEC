@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 
+import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.entity.Usuario;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
@@ -25,29 +26,36 @@ public class PacienteController {
     final UsuarioRepository usuarioRepository;
 
     final RolesRepository rolesRepository;
+    private final TipoCitaRepository tipoCitaRepository;
 
 
-    public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository) {
+    public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
+                              TipoCitaRepository tipoCitaRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
         this.alergiaRepository = alergiaRepository;
         this.usuarioRepository = usuarioRepository;
         this.rolesRepository = rolesRepository;
+        this.tipoCitaRepository = tipoCitaRepository;
     }
 
     @RequestMapping(value = "/principal")
     public String paginaprincipal(Model model){
-        model.addAttribute("usuario", usuarioRepository.findBydni("22647853"));
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
         model.addAttribute("seguros", seguroRepository.findAll());
         model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
         return "paciente/principal";
    }
 
     @RequestMapping("/perfil")
     public String perfilpaciente(Model model){
-
+        Usuario usuario = usuarioRepository.findByid("22647853");
         model.addAttribute("seguros",seguroRepository.findAll());
         model.addAttribute("alergias",alergiaRepository.findAll());
 
@@ -56,18 +64,18 @@ public class PacienteController {
 
     @GetMapping("/password")
     public String cambiarContra(Model model){
-
+        Usuario usuario = usuarioRepository.findByid("22647853");
         return "paciente/cambioContrasena";
     }
 
     @RequestMapping("/consultas")
     public String citas(Model model){
-
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
-        model.addAttribute("listaDoc",listaDoctores);
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        //List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        //model.addAttribute("listaDoc",listaDoctores);
         //model.addAttribute("roles",rolesRepository.findAll());
 
-        System.out.print(listaDoctores);
+        //System.out.print(listaDoctores);
         return "paciente/consultas";
     }
 
