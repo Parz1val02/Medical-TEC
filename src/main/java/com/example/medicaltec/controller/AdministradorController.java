@@ -114,6 +114,58 @@ public class AdministradorController {
         }
     }
 
+    @PostMapping("/editarPaciente")
+    public String editarPaciente(
+            @RequestParam("sede") int sede,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("id") String dni,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        System.out.println(nombre);
+        attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
+        usuarioRepository.editarPaciente( email,  nombre,  apellido,  telefono, dni,  sede );
+        return "redirect:/administrador/usuarios";
+    }
+
+    @PostMapping("/crearPaciente")
+    public String crearPaciente(
+            @RequestParam("sede") int sede,
+            @RequestParam("edad") int edad,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("sexo") String sexo,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("contrasena") String contrasena,
+            @RequestParam("id") String dni,
+            @RequestParam("apellido") String apellido,
+            @RequestParam("telefono") String telefono,
+            RedirectAttributes attr
+
+    ){
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        System.out.println(nombre);
+        boolean existePaciente = false;
+        for (Usuario paciente : listaPacientes) {
+            if (dni.equalsIgnoreCase(paciente.getId()) ) {
+                existePaciente = true;
+            }
+        }
+
+
+        if ( existePaciente) {
+            attr.addFlashAttribute("msgDanger","El paciente ingresado ya existe");
+            return "redirect:/administrador/usuarios";
+        } else {
+            usuarioRepository.crearPaciente( email,  nombre,  apellido,  telefono, dni,  sede, edad, direccion, sexo, contrasena );
+            attr.addFlashAttribute("msg","Paciente creado exitosamente");
+            return "redirect:/administrador/usuarios";
+        }
+    }
+
 
 
 

@@ -28,8 +28,20 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
+    void editarPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede );
+
+
+
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, especialidades_id_especialidad, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,1,1)")
     void crearDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1)")
+    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
 
 
 }

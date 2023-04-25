@@ -58,7 +58,7 @@
             <div class="card mb-3">
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                    <button th:href="@{/administrador/crearpaciente}" class="btn btn-secondary" data-toggle="modal" th:data-target="'#modalCrearPaciente'" style="text-align: center;background: #02b0fb;
+                    <button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearPaciente" style="text-align: center;background: #02b0fb;
                         border-color: #FFFFFF">Crear paciente
                     </button>
 
@@ -83,11 +83,11 @@
 
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modal-' + ${vEstado.index + 1}">Ver historial clínico</button>
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalHistorial-' + ${vEstado.index + 1}">Ver historial clínico</button>
                             </td>
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>
                             </td>
 
                             <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
@@ -579,7 +579,173 @@
 
 
 
+<!--  Crear Paciente -->
+<!-- ===============================================-->
 
+<div class="modal fade" id="modalCrearPaciente">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Aquí puedes agregar el contenido del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Paciente  </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" th:action="@{/administrador/crearPaciente}">
+                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="nombre">Nombre </label>
+                                <input type="text" id="nombre" name="nombre"  class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id">DNI </label>
+                                <input type="text" id="id" name="id" class="form-control" >
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="edad">Edad </label>
+                                <input type="text" id="edad" name="edad"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" id="telefono" name="telefono"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email </label>
+                                <input type="email" id="email" name="email"   class="form-control" >
+                            </div>
+
+
+
+                        </div>
+
+                        <!-- Columna 2 -->
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="apellido">Apellido  </label>
+                                <input type="text" id="apellido" name="apellido"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sexo">Sexo  </label>
+                                <select class="form-control" name="sexo" id="sexo">
+                                    <option value="masculino"> Masculino </option>
+                                    <option value="femenino"> Femenino </option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="direccion">Direccion </label>
+                                <input type="direccion" id="direccion" name="direccion"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="contrasena">Contrasena </label>
+                                <input type="text" id="contrasena" name="contrasena"    class="form-control" >
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" > Crear paciente </button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!--   Modals -->
+<!-- ===============================================-->
+
+<div th:each="paciente, vEstado : ${listaPacientes}">
+    <div class="modal fade" th:id="'modalEditarPaciente-' + ${vEstado.index + 1}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Aquí puedes agregar el contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Paciente <span th:text="' ' + ${vEstado.index + 1}"></span>   </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form method="post" th:action="@{/administrador/editarPaciente}">
+                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre </label>
+                                    <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email </label>
+                                    <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="id">DNI </label>
+                                    <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
+                                </div>
+
+
+
+                            </div>
+
+                            <!-- Columna 2 -->
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label for="apellido">Apellido  </label>
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${paciente.apellido}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${paciente.telefono}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado">Estado </label>
+                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar paciente </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <!-- ===============================================-->
 <!--  End of Modals -->
