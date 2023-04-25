@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.DocFlavor;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,22 +24,33 @@ public class SuperController {
     final CuestionarioRepository cuestionarioRepository;
     final PreguntaRepository preguntaRepository;
     final RespuestaRepository respuestaRepository;
+    final EstadoRepository estadoRepository;
 
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
-                           RespuestaRepository respuestaRepository) {
+                           RespuestaRepository respuestaRepository, EstadoRepository estadoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.reporteRepository = reporteRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.preguntaRepository = preguntaRepository;
         this.respuestaRepository = respuestaRepository;
+        this.estadoRepository = estadoRepository;
     }
 
     @GetMapping(value = {"/dashboard"})
     public String dashboard(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("listEstados",listaEstados);
+        return "superAdmin/dashboard";
+    }
+    @GetMapping(value = {"/dashboard"})
+    public String dashboard(Model model, @RequestParam("estado") String estado, RedirectAttributes attr){
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("listEstados",listaEstados);
+        usuarioRepository.editarEstado(estado);
         return "superAdmin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
@@ -104,7 +116,7 @@ public class SuperController {
         model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
     }
-    @GetMapping("/cuestionarios/delete")
+    /*/@GetMapping("/cuestionarios/delete")
     public String borrarCuestionarioLleno(Model model,
                                           @RequestParam("id") int id,
                                           RedirectAttributes attr) {
@@ -120,6 +132,7 @@ public class SuperController {
         }
         return "redirect:/superAdmin/cuestionarios";
     }
+    /*/
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
     public String editarPerfil(){
         return "superAdmin/editarPerfil";

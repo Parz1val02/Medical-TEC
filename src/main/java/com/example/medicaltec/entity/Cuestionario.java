@@ -19,4 +19,6 @@ public class Cuestionario {
     @Column(name = "nombrecuestionario", nullable = false, length = 45)
     private String nombrecuestionario;
 
+    @Column(name = "Activo", nullable = false, length = 45)
+    private String activo;
 }
