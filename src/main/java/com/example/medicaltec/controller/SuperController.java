@@ -46,7 +46,7 @@ public class SuperController {
         model.addAttribute("listEstados",listaEstados);
         return "superAdmin/dashboard";
     }
-    @GetMapping(value = {"/dashboard"})
+    @GetMapping(value = {"/editarEstado"})
     public String dashboard(Model model, @RequestParam("estado") String estado, RedirectAttributes attr){
         List<Estado> listaEstados = estadoRepository.findAll();
         model.addAttribute("listEstados",listaEstados);
