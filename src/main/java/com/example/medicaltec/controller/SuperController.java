@@ -63,12 +63,13 @@ public class SuperController {
             @RequestParam("id") String id,
             @RequestParam("apellido") String apellido,
             @RequestParam("telefono") String telefono,
+            @RequestParam("estado") int estado,
             RedirectAttributes attr
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente( email,  nombre,  apellido,  telefono, id);
+        usuarioRepository.editarPaciente( email,  nombre,  telefono, id, sede, estado);
         return "redirect:/superAdmin/dashboard";
     }
     @PostMapping("/editarDoctores")
@@ -80,12 +81,13 @@ public class SuperController {
             @RequestParam("apellido") String apellido,
             @RequestParam("especialidad") int especialidad,
             @RequestParam("telefono") String telefono,
+            @RequestParam("estado") int estado,
             RedirectAttributes attr
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( email,  nombre,  apellido,  telefono,   id,  sede );
+        usuarioRepository.editarDoctor( email,  nombre,   telefono,   id,  sede, estado );
         return "redirect:/administrador/usuarios";
     }
     @PostMapping("/editarAdministrativos")
@@ -97,12 +99,13 @@ public class SuperController {
             @RequestParam("apellido") String apellido,
             @RequestParam("especialidad") int especialidad,
             @RequestParam("telefono") String telefono,
+            @RequestParam("estado") int estado,
             RedirectAttributes attr
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Administrativo actualizado exitosamente");
-        usuarioRepository.editarAdministrativo( email,  nombre,  apellido,  telefono,  id,  sede );
+        usuarioRepository.editarAdministrativo( email,  nombre,  telefono,  id,  sede, estado );
         return "redirect:/superAdmin/dashboard";
     }
     @PostMapping("/editarAdministradores")
@@ -114,12 +117,13 @@ public class SuperController {
             @RequestParam("apellido") String apellido,
             @RequestParam("especialidad") int especialidad,
             @RequestParam("telefono") String telefono,
+            @RequestParam("estado") int estado,
             RedirectAttributes attr
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
-        usuarioRepository.editarAdministradores( email,  nombre,  apellido,  telefono,  id,  sede );
+        usuarioRepository.editarAdministradores( email,  nombre,  telefono,  id,  sede, estado );
         return "redirect:/superAdmin/dashboard";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)

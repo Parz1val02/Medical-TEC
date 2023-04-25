@@ -25,14 +25,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     List<Usuario> obtenerListaAdministradores();
 
 
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarAdministrativo(String email, String nombre, String apellido, String telefono,  String id, int sede );
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarAdministradores(String email, String nombre, String apellido, String telefono,  String id, int sede );
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarDoctor(String email, String nombre, String apellido, String telefono,  String id, int sede );
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarPaciente(String email, String nombre, String apellido, String telefono, String id);
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
+    void editarAdministrativo(String email, String nombre, String telefono,  String id, int sede, int estado );
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
+    void editarAdministradores(String email, String nombre, String telefono,  String id, int sede, int estado );
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
+    void editarDoctor(String email, String nombre, String telefono,  String id, int sede, int estado);
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
+    void editarPaciente(String email, String nombre, String telefono, String id, int sede, int estado);
 
 
 }
