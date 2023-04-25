@@ -18,10 +18,11 @@ INSERT INTO `Telesystem`.`estados`
 (`idestado`,`nombre`)
 VALUES
 (1,"activo"),
-(2,"registrado"),
-(3,"agendado"),
-(4,"en consulta"),
-(5,"invitado");
+(2,"inactivo"),
+(3,"registrado"),
+(4,"agendado"),
+(5,"en consulta"),
+(6,"invitado");
 
 insert into `Telesystem`.`seguros` 
 (`id_seguro`,`nombre_seguro`,`porc_seguro`,`porc_doctor`)
@@ -36,9 +37,9 @@ values
 
 
 insert into `Telesystem`.`cuestionario` 
-(`idcuestionario`,`nombrecuestionario`)
+(`idcuestionario`,`nombrecuestionario`,`activo`)
 values 
-(1,'Antecendentes familiares');
+(1,'Antecendentes familiares',1);
 
 
 
@@ -107,18 +108,20 @@ values
 
 
 
-/* Un doctor, un administrador, un superadmin*/
+/* Un doctores*/
+INSERT INTO `Telesystem`.`usuario`
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles, sedes_idsedes,especialidades_id_especialidad, ceduladoctor) 
+VALUES 
+('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1,1,1, "AE32423"), /* doctor */
+('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1,1,2,"AE32423"), /* doctor */
+('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1,1,3,"AE32423"); /* doctor */
+
+/*un administrador, un superadmin*/
 INSERT INTO `Telesystem`.`usuario`
 (dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles) 
 VALUES 
-('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1), /* doctor */
-('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1), /* doctor */
-('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1), /* doctor */
 ('48764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4),/* administrador */
-('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5),/* superadmin */
-('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St','2'), /* paciente */
-('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St','2'); /* paciente */
-
+('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5);/* superadmin */
 /* Aqui van los administrativos*/
 INSERT INTO `Telesystem`.`usuario`
 (dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,especialidades_id_especialidad) 
@@ -127,12 +130,14 @@ VALUES
 
 /* Aqui van los pacientes*/
 INSERT INTO `Telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes, seguros_id_seguro) 
 VALUES 
-('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1),
-('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2),
-('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3),
-('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2);
+('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1,1),
+('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2,2),
+('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3,3),
+('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2,4),
+('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St',2,1,"autoregistro",2,5), /* paciente */
+('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St',2,1,"autoregistro",2,6); /* paciente */
 
 
 /* Solo para doctor */
@@ -179,9 +184,9 @@ values
 (1,"ninguna");
 
 insert into `Telesystem`.`cita` 
-(`idcita`,`fechahora`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idTarjetas`,`formapago`,`modalidad`,`tipocita_idtipocita`)
+(`idcita`,`citacancelada`,`sedes_idsedes`,`especialidades_id_especialidad`,`estadoscita_idestados`,`receta_idreceta`,`tarjeta_idtarjetas`,`formapago`,`modalidad`,`tipocita_idtipocita`, `fecha`, `hora`)
 values 
-(1,"2023-04-22 20:00:00",0,1,1,1,1,1,"efectivo","virtual",1);
+(1,0,1,1,1,1,1,"efectivo","virtual",1,"2023-04-22","20:00:00");
 
 
 
