@@ -51,6 +51,7 @@ public class DoctorController {
         }
     }
 
+
     @GetMapping("/historial")
     public String verHistorial(){return "doctor/historial";}
 
@@ -65,6 +66,9 @@ public class DoctorController {
 
     @GetMapping("/pacientes")
     public String verPacientes(Model model){
+
+        List listaPacientes = usuarioRepository.obtenerPacientes();
+        model.addAttribute("pacientes", listaPacientes);
         return "doctor/pacientes";
     }
 
