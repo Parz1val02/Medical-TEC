@@ -1,13 +1,7 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.entity.Cuestionario;
-import com.example.medicaltec.entity.FormulariosRegistro;
-import com.example.medicaltec.entity.Reporte;
-import com.example.medicaltec.entity.Usuario;
-import com.example.medicaltec.repository.CuestionarioRepository;
-import com.example.medicaltec.repository.FormulariosRegistroRepository;
-import com.example.medicaltec.repository.ReporteRepository;
-import com.example.medicaltec.repository.UsuarioRepository;
+import com.example.medicaltec.entity.*;
+import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +21,18 @@ public class SuperController {
     final FormulariosRegistroRepository formulariosRegistroRepository;
     final ReporteRepository reporteRepository;
     final CuestionarioRepository cuestionarioRepository;
-    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository) {
+    final PreguntaRepository preguntaRepository;
+    final RespuestaRepository respuestaRepository;
+
+    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository,
+                           PreguntaRepository preguntaRepository,
+                           RespuestaRepository respuestaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.reporteRepository = reporteRepository;
         this.cuestionarioRepository = cuestionarioRepository;
+        this.preguntaRepository = preguntaRepository;
+        this.respuestaRepository = respuestaRepository;
     }
 
     @GetMapping(value = {"/dashboard"})
@@ -109,9 +110,13 @@ public class SuperController {
                                           RedirectAttributes attr) {
 
         Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
+        Optional<Pregunta> optionalPregunta = preguntaRepository.findById(id);
+        Optional<Respuesta> optionalRespuesta = respuestaRepository.findById(id);
 
         if (optionalCuestionario.isPresent()) {
             cuestionarioRepository.deleteById(id);
+            preguntaRepository.deleteById(id);
+            respuestaRepository.deleteById(id);
         }
         return "redirect:/superAdmin/cuestionarios";
     }
