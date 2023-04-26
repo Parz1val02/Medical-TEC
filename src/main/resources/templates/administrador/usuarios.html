@@ -52,12 +52,15 @@
                 </div>
             </div>
 
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
+
             <div class="card mb-3">
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                    <a th:href="@{/administrador/crearpaciente}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                    <button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearPaciente" style="text-align: center;background: #02b0fb;
                         border-color: #FFFFFF">Crear paciente
-                    </a>
+                    </button>
 
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
@@ -71,6 +74,26 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
+                        <tr th:each="paciente, vEstado : ${listaPacientes}">
+
+                            <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
+                            <td th:text="${paciente.id}"></td>
+                            <td th:text="${paciente.email}"></td>
+                            <td style="text-align: center" th:text="${paciente.estadosIdestado.nombreEstado}"></td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalHistorial-' + ${vEstado.index + 1}">Ver historial clínico</button>
+                            </td>
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>
+                            </td>
+
+                            <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
+                            <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
+                        </tr>
+                        <!--
                         <tr>
                             <td class="align-middle">
                                 Leonardo Abanto
@@ -93,50 +116,8 @@
                                     border-radius: 15px">Editar</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Manuel Yarleque
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dana Nolasco
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
+
+
                         <tr>
                             <td class="align-middle">
                                 Luis Ramos
@@ -159,204 +140,7 @@
                                     border-radius: 15px">Editar</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Rodrigo Barrios
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Gil Zanabria
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Carlos Pisco
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Alejandro Gutierrez
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Carlos Pisco
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Alejandro Gutierrez
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle">
-                                12345678
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver historial clínico</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
+                        -->
                         </tbody>
                     </table>
                 </div>
@@ -368,9 +152,9 @@
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Doctor </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
 
-                    <a th:href="@{/administrador/crearpaciente}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearDoctor" style="text-align: center;background: #02b0fb;
                          border-color: #FFFFFF">Crear doctor
-                    </a>
+                    </button>
 
                     <table class="table table-striped" id="userList2">
                         <thead style="background: #cdeffc">
@@ -384,6 +168,28 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
+                        <tr th:each="doctor, vEstado : ${listaDoctores}">
+
+                            <td th:text="${doctor.nombre} + ' ' + ${doctor.apellido} "></td>
+                            <td th:text="${doctor.email}"></td>
+                            <td style="text-align: center" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
+                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombreEstado}"></td>
+
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
+                            </td>
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfilEditar-' + ${vEstado.index + 1}">Editar</button>
+                            </td>
+
+                            <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
+                            <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
+                        </tr>
+
+                        <!--
                         <tr>
                             <td class="align-middle">
                                 Leonardo Abanto
@@ -406,270 +212,9 @@
                                     border-radius: 15px">Editar</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Manuel Yarleque
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dana Nolasco
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Luis Ramos
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Rodrigo Barrios
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Gil Zanabria
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Carlos Pisco
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Alejandro Gutierrez
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Carlos Pisco
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Alejandro Gutierrez
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Diego Lavado
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                leo.abanto@hotmail.com
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Cardiologia
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Activo
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Ver Perfil</button>
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px">Editar</button>
-                            </td>
-                        </tr>
+
+
+                       -->
                         </tbody>
                     </table>
                 </div>
@@ -685,11 +230,536 @@
 <!-- ===============================================-->
 
 
+<!-- Modal-->
+<div th:each="doctor, vEstado : ${listaDoctores}">
+    <div class="modal fade" th:id="'modalPerfil-' + ${vEstado.index + 1}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Perfil de Doctor <span th:text="' ' + ${vEstado.index + 1}"></span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6">
+                                <form action="#" method="post">
+
+                                    <div class="row" style="display: flex; align-items: center">
+
+                                        <!-- Columna 1 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="nombres">Nombres</label>
+                                                <input type="text" id="nombres"   th:value="${doctor.nombre}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="text" id="email"  th:value="${doctor.email}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- Columna 2 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="apellidos">Apellidos</label>
+                                                <input type="text" id="apellidos"   th:value="${doctor.apellido}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="especialidad">Especialidad</label>
+                                                <input type="text" id="especialidad"  class="form-control" th:value="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" disabled>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row justify-content-center" >
+
+                                        <!-- Columna 1 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Telefono">Telefono</label>
+                                                <input type="text" id="telefono"  th:value="${doctor.telefono}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Edad</label>
+                                                <input type="text" id="edad" th:value="${doctor.edad}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- Columna 2 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="estado">Estado</label>
+                                                <input type="text" id="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Botón de envío -->
+
+                                </form>
+                            </div>
+                            <div class="col-lg-6 justify-content-center d-flex align-items-center">
+                                <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
+                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-lg-6 pl-lg-2 mb-3">
+                                <div class="card mb-3 h-100">
+                                    <div class="card-header bg-light" style="text-align: center;">
+                                        <h5 class="mb-0">Horarios de disponibilidad</h5>
+                                        <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
+                                    </div>
+                                    <div class="card-body fs--1">
+                                        <div class="card-body" style="max-height:100%; overflow-y: auto; text-align: center">
+                                            <div class="row" style="display: flex; align-items: center">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">10:00 - 10:30 am</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">10:30 - 11:00 am</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">11:30 - 12:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">12:00 - 12:30 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">13:30 - 14:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">14:30 - 15:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">15:30 - 16:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">16:00 - 16:30 pm</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 pl-lg-2 mb-3">
+                                <div class="card mb-3 h-100">
+                                    <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-falcon-secondary btn-sm" type="button" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- ===============================================-->
+<!--   Modals -->
+<!-- ===============================================-->
+
+<div th:each="doctor, vEstado : ${listaDoctores}">
+    <div class="modal fade" th:id="'modalPerfilEditar-' + ${vEstado.index + 1}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Aquí puedes agregar el contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Doctor <span th:text="' ' + ${vEstado.index + 1}"></span>   </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form method="post" th:action="@{/administrador/editarDoctor}">
+                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre </label>
+                                    <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email </label>
+                                    <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="id">DNI </label>
+                                    <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado">Estado </label>
+                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                </div>
+
+
+                            </div>
+
+                            <!-- Columna 2 -->
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label for="apellido">Apellido  </label>
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${doctor.apellido}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="especialidad">Especialidad</label>
+                                    <select class="form-control" name="especialidad" id="especialidad">
+                                        <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
+                                    </select>
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${doctor.telefono}">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar doctor </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- ===============================================-->
+<!--  Crear Doctor -->
+<!-- ===============================================-->
+
+<div class="modal fade" id="modalCrearDoctor">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Aquí puedes agregar el contenido del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Doctor  </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" th:action="@{/administrador/crearDoctor}">
+                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="nombre">Nombre </label>
+                                <input type="text" id="nombre" name="nombre"  class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id">DNI </label>
+                                <input type="text" id="id" name="id" class="form-control" >
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="edad">Edad </label>
+                                <input type="text" id="edad" name="edad"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" id="telefono" name="telefono"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email </label>
+                                <input type="email" id="email" name="email"   class="form-control" >
+                            </div>
+
+
+
+                        </div>
+
+                        <!-- Columna 2 -->
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="apellido">Apellido  </label>
+                                <input type="text" id="apellido" name="apellido"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sexo">Sexo  </label>
+                                <select class="form-control" name="sexo" id="sexo">
+                                    <option value="masculino"> Masculino </option>
+                                    <option value="femenino"> Femenino </option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="direccion">Direccion </label>
+                                <input type="direccion" id="direccion" name="direccion"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="especialidad">Especialidad</label>
+                                <select class="form-control" name="especialidad" id="especialidad">
+                                    <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                            ></option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contrasena">Contrasena </label>
+                                <input type="text" id="contrasena" name="contrasena"    class="form-control" >
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" > Crear doctor </button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!--  Crear Paciente -->
+<!-- ===============================================-->
+
+<div class="modal fade" id="modalCrearPaciente">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Aquí puedes agregar el contenido del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Paciente  </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" th:action="@{/administrador/crearPaciente}">
+                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="nombre">Nombre </label>
+                                <input type="text" id="nombre" name="nombre"  class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id">DNI </label>
+                                <input type="text" id="id" name="id" class="form-control" >
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="edad">Edad </label>
+                                <input type="text" id="edad" name="edad"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" id="telefono" name="telefono"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email </label>
+                                <input type="email" id="email" name="email"   class="form-control" >
+                            </div>
+
+
+
+                        </div>
+
+                        <!-- Columna 2 -->
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="apellido">Apellido  </label>
+                                <input type="text" id="apellido" name="apellido"   class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sexo">Sexo  </label>
+                                <select class="form-control" name="sexo" id="sexo">
+                                    <option value="masculino"> Masculino </option>
+                                    <option value="femenino"> Femenino </option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="direccion">Direccion </label>
+                                <input type="direccion" id="direccion" name="direccion"   class="form-control" >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="contrasena">Contrasena </label>
+                                <input type="text" id="contrasena" name="contrasena"    class="form-control" >
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" > Crear paciente </button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!--   Modals -->
+<!-- ===============================================-->
+
+<div th:each="paciente, vEstado : ${listaPacientes}">
+    <div class="modal fade" th:id="'modalEditarPaciente-' + ${vEstado.index + 1}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Aquí puedes agregar el contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Paciente <span th:text="' ' + ${vEstado.index + 1}"></span>   </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form method="post" th:action="@{/administrador/editarPaciente}">
+                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre </label>
+                                    <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email </label>
+                                    <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="id">DNI </label>
+                                    <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
+                                </div>
+
+
+
+                            </div>
+
+                            <!-- Columna 2 -->
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label for="apellido">Apellido  </label>
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${paciente.apellido}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${paciente.telefono}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado">Estado </label>
+                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar paciente </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ===============================================-->
+<!--  End of Modals -->
+<!-- ===============================================-->
+
+
+
 
 
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
+<!--    Scripts de Calendar -->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->

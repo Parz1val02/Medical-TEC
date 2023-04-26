@@ -38,6 +38,59 @@
       <br>
       <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
         <div class="card-body" style="background: #FFFFFF">
+
+          <div class="row">
+            <div class="col-lg-8">
+              <h4 class="mb-1">Nombre completo administrador<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              </h4>
+              <form>
+                <fieldset disabled>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput1" class="form-label">Nombres</label>
+                      <input type="text" id="disabledTextInput1" class="form-control" placeholder="Nombre administrador">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput2" class="form-label">Apellidos</label>
+                      <input type="text" id="disabledTextInput2" class="form-control" placeholder="Apellidos administrador">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput3" class="form-label">Correo</label>
+                      <input type="text" id="disabledTextInput3" class="form-control" placeholder="admin@correo.com">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput4" class="form-label">Celular</label>
+                      <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput5" class="form-label">DNI</label>
+                      <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput6" class="form-label">Sede actual</label>
+                      <input type="text" id="disabledTextInput6" class="form-control" placeholder="Lima Centro">
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+            <div class="col pl-2 pl-lg-3" style="display: flex; align-items: center; justify-content: space-around">
+              <div class="mb-3" >
+                <div style="text-align: center">
+                  <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                    Cambio de contraseña
+                  </h5>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su contraseña?</h6>
+                  <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" th:href="@{/paciente/password}">Cambiar Contraseña</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--
           <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
             Perfil
           </h3>
@@ -67,52 +120,15 @@
             <div class="col-md-6">
               <p style="font-weight: bold; margin: 0px">Idiomas: <span style="font-weight: normal">Español, Inglés</span></p>
             </div>
-          </div>
+          </div>-->
+
+
         </div>
       </div>
-      <br>
 
 
-      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
 
-        <div class="card-body" style="background: #FFFFFF; padding-left: 15px; ">
-          <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-            Cambio de contraseña
-          </h3>
-          <div class="row justify-content-between align-items-center" style="padding-left: 15px;padding-right: 15px">
-            <div class="form-group" style="padding-left: 15px;">
-              <p style="font-weight: bold; margin: 0px" for="disabledTextInput">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sed vehicula nibh, sit amet ullamcorper magna. Nulla justo lorem, scelerisque
-                et magna sit amet, lacinia euismod metus. Cras congue lorem nec suscipit maximus. Pellentesque tincidunt viverra nisl
-                eu molestie. Vestibulum tempor a erat non consectetur. Maecenas vulputate orci bibendum, commodo quam id, tempus urna. Nam in
-                eros et sapien bibendum luctus. Nunc fermentum sagittis dictum. Etiam consectetur blandit tristique. Fusce ac posuere sapien.
-                Donec consequat auctor tellus gravida aliquet.</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="card-body d-flex justify-content-center"  style="background: #FFFFFF ">
-
-            <form style=" width: 35% " method="POST" action=""> <!--falta el action con th-->
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Contraseña actual</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword2" class="form-label">Contraseña nueva</label>
-                <input type="password" class="form-control" id="exampleInputPassword2">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword3" class="form-label">Confirmar contraseña nueva</label>
-                <input type="password" class="form-control" id="exampleInputPassword3">
-              </div>
-
-              <button type="submit" class="btn btn-primary">Guardar cambios</button>
-              <a class="btn btn-light" th:href="@{/administrador/settings}">Cancelar</a>
-            </form>
-
-        </div>
-
-      </div>
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
@@ -122,7 +138,31 @@
 <!--    End of Main Content-->
 <!-- ===============================================-->
 
+<!--modal-->
+<div class="modal fade" id="cambioContrasena" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal1Label">Advertencia</h1>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrese de que su nueva contraseña sea segura y única. No use la misma contraseña que utiliza en otros sitios web y evite usar información personal, como su nombre o fecha de nacimiento.
 
+          Además, nunca comparta su contraseña con nadie y no la guarde en lugares públicos como correos electrónicos o notas.<br>
+
+          Recuerda que una contraseña segura es esencial para proteger sus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener su cuenta segura!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a type="button" class="btn btn-primary" th:href="@{/administrador/password}">Continuar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--modal-->
 
 
 <!-- ===============================================-->

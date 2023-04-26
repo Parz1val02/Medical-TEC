@@ -104,6 +104,7 @@
 
                     <div class="col-lg-7 pl-lg-2" style="padding-top: 25px">
                         <div class="card h-100 mb-3">
+
                             <div class="card-header h-100  bg-light py-2">
                                 <div class="row flex-between-center">
                                     <div class="col-md-6 col-lg-6">
@@ -116,14 +117,19 @@
                                         <div class="input-group">
                                             <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
                                             <span class="input-group-append">
-                          <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </span>
+                                              <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+                                                <i class="fas fa-search"></i>
+                                              </button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
                             <!--
                             <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
                                 <div class="row">
@@ -350,6 +356,25 @@
                                     </tr>
                                     </thead>
                                     <tbody class="bg-white">
+                                    <tr th:each="paciente, vEstado : ${listaPacientes}">
+
+                                        <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
+
+                                        <td th:text="${paciente.email}"></td>
+                                        <td style="text-align: center" th:text="${paciente.estadosIdestado.nombreEstado}"></td>
+
+                                        <td class="align-middle" align="center">
+                                            <a class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px">Ver historial clínico</a>
+                                        </td>
+
+
+                                        <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
+                                        <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
+                                    </tr>
+
+
+                                    <!--
                                     <tr>
                                         <td class="align-middle">
                                             Leonardo Abanto
@@ -570,6 +595,7 @@
                                         </td>
 
                                     </tr>
+                                    -->
                                     </tbody>
                                 </table>
 
@@ -902,6 +928,7 @@
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->
