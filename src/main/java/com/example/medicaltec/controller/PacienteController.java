@@ -33,8 +33,10 @@ public class PacienteController {
     final TipoCitaRepository tipoCitaRepository;
     final CitaRepository citaRepository;
 
+    final MedicamentoRepository medicamentoRepository;
+
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
-                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository) {
+                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -43,6 +45,7 @@ public class PacienteController {
         this.rolesRepository = rolesRepository;
         this.tipoCitaRepository = tipoCitaRepository;
         this.citaRepository = citaRepository;
+        this.medicamentoRepository = medicamentoRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -96,6 +99,7 @@ public class PacienteController {
         model.addAttribute("seguros", seguroRepository.findAll());
         model.addAttribute("especialidades", especialidadRepository.findAll());
         model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("medicamentos", medicamentoRepository.findAll());
         //List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
         //model.addAttribute("listaDoc",listaDoctores);
         //model.addAttribute("roles",rolesRepository.findAll());
@@ -175,5 +179,15 @@ public class PacienteController {
         citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora);
         attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         return "redirect:/paciente/principal";
+    }
+
+
+    @PostMapping("/guardarAlergias")
+    public String guardarAlergias(@RequestParam("nombre") String nombre, RedirectAttributes attr){
+
+
+        alergiaRepository.guardarAlergias(nombre);
+        attr.addFlashAttribute("msg", "se agregó exitosamente");
+        return "redirect:/paciente/perfil";
     }
 }

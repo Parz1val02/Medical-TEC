@@ -240,19 +240,17 @@
                         <div class="modal-body">
                             <header>
                                 <h1>Receta Médica</h1>
-                                <p>Nombre del paciente: <strong>Carlos Pisco</strong></p>
-                                <p>Nombre del doctor: <strong>Manuel Yarleque</strong></p>
+                                <p>Nombre del paciente: <strong th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Carlos Pisco</strong></p>
+                                <p th:each=" doc : ${doctores}">Nombre del doctor: <strong th:text="${doc.nombre} + ' ' + ${doc.apellido}">Manuel Yarleque</strong></p>
                                 <p>Fecha de emisión: <strong>21 de abril de 2023</strong></p>
-
                             </header>
 
                             <section>
                                 <h2>Medicamentos Recetados</h2>
-                                <ul>
-                                    <li><strong>Nombre del Medicamento:</strong> Ibuprofeno</li>
+                                <ul th:each="med : ${medicamentos}">
+                                    <li th:text="${med.getNombre()}" ><strong>Nombre del Medicamento:</strong> Ibuprofeno</li>
                                     <li><strong>Dosis:</strong> 400mg</li>
-                                    <li><strong>Frecuencia:</strong> Cada 8 horas</li>
-                                    <li><strong>Duración:</strong> 5 días</li>
+                                    <li th:text="${med.getFrecuencia()}"><strong>Frecuencia:</strong> Cada 8 horas</li>
                                 </ul>
 
                                 <ul>
