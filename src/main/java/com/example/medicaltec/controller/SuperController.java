@@ -22,12 +22,14 @@ public class SuperController {
     final PreguntaRepository preguntaRepository;
     final RespuestaRepository respuestaRepository;
     final EstadoRepository estadoRepository;
+
+    final SedeRepository sedeRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           EspecialidadeRepository especialidadeRepository) {
+                           EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.reporteRepository = reporteRepository;
@@ -36,6 +38,7 @@ public class SuperController {
         this.respuestaRepository = respuestaRepository;
         this.estadoRepository = estadoRepository;
         this.especialidadeRepository = especialidadeRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     @GetMapping(value = {"/dashboard"})
@@ -54,6 +57,78 @@ public class SuperController {
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
         return "superAdmin/dashboard";
+    }
+
+    @GetMapping(value = {"/dashboard/Doctor"})
+    public String dashboardDoctor(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        return "superAdmin/dashboardDoctor";
+    }
+
+    @GetMapping(value = {"/dashboard/Paciente"})
+    public String dashboardPaciente(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        return "superAdmin/dashboardPaciente";
+    }
+
+    @GetMapping(value = {"/dashboard/AdmT"})
+    public String dashboardAdmT(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        return "superAdmin/dashboardAdmT";
+    }
+
+    @GetMapping(value = {"/dashboard/Adm"})
+    public String dashboardAdm(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        return "superAdmin/dashboardAdmSede";
     }
     @PostMapping("/editarPacientes")
     public String editarPaciente(
@@ -128,6 +203,70 @@ public class SuperController {
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
         model.addAttribute("formularioList", listaFormularios);
         return "superAdmin/forms";
+    }
+
+    @RequestMapping(value = {"/Crear/AdmSede"},method = RequestMethod.GET)
+    public String crearAdmSEDE(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        return "superAdmin/crearAdmSede";
+    }
+
+    @RequestMapping(value = {"/Crear/AdmT"},method = RequestMethod.GET)
+    public String crearAdmT(Model model){
+        List<Usuario> lista = usuarioRepository.findAll();
+        model.addAttribute("usuarioList", lista);
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
+        model.addAttribute("especialidadList", listaEspecialidades);
+
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        model.addAttribute("pacientesList", listaPacientes);
+        List<Usuario> listaDoctores = usuarioRepository.obtenerListaDoctores();
+        model.addAttribute("doctoresList", listaDoctores);
+        List<Usuario> listaAdministrativos = usuarioRepository.obtenerListaAdministrativos();
+        model.addAttribute("administrativosList", listaAdministrativos);
+        List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
+        model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        return "superAdmin/crearAdmT";
+    }
+
+    @PostMapping(value = "/Guardar/AdmSede")
+    public String guardarAdmSede(Model model, RedirectAttributes attr,
+                                 @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                 @RequestParam("correo") String correo, @RequestParam("password") String password,
+                                 @RequestParam("edad") int edad, @RequestParam("telefono") String telefono,
+                                 @RequestParam("address") String address, @RequestParam("sede") int sede,
+                                 @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
+        usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede);
+        attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
+        return "redirect:/superAdmin/dashboard/Adm";
+    }
+
+    @PostMapping(value = "/Nuevo/Guardar")
+    public String guardarAdmT(Model model, RedirectAttributes attr,
+                                       @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                       @RequestParam("correo") String correo, @RequestParam("password") String password,
+                                       @RequestParam("edad") int edad, @RequestParam("telefono") String telefono,
+                                       @RequestParam("address") String address, @RequestParam("sede") int sede,
+                                        @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
+        usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede);
+        attr.addFlashAttribute("msg","Administrativo creado exitosamente");
+        return "redirect:/superAdmin/dashboard/AdmT";
     }
     @GetMapping("/forms/delete")
     public String borrarFormulario(Model model,

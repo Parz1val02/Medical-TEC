@@ -127,27 +127,27 @@
             </div>
             <br>
             <br>
-        <!--<span>Seleccione la sede </span>
-            <select class="form-select" aria-label="Default select example" style="margin-left: 15px">
-                <option selected value>------</option>
-                <option value="1">San Miguel</option>
-                <option value="2">Jesús María</option>
-                <option value="3">Lince</option>
-            </select>
-            <br>
-            <span>Seleccione el tipo de usuario</span>
-            <select class="form-select" aria-label="Default select example" style="margin: 15px">
-                <option selected value>------</option>
-                <option value="1">Paciente</option>
-                <option value="2">Doctor</option>
-                <option value="3">Administrativo</option>
-                <option value="4">Administrador</option>
-            </select>//
-            <br>      -->
+            <!--<span>Seleccione la sede </span>
+                <select class="form-select" aria-label="Default select example" style="margin-left: 15px">
+                    <option selected value>------</option>
+                    <option value="1">San Miguel</option>
+                    <option value="2">Jesús María</option>
+                    <option value="3">Lince</option>
+                </select>
+                <br>
+                <span>Seleccione el tipo de usuario</span>
+                <select class="form-select" aria-label="Default select example" style="margin: 15px">
+                    <option selected value>------</option>
+                    <option value="1">Paciente</option>
+                    <option value="2">Doctor</option>
+                    <option value="3">Administrativo</option>
+                    <option value="4">Administrador</option>
+                </select>//
+                <br>      -->
             <div class="card mb-3">
                 <div class="card-body border-top">
                     <table class="table table-striped" id="userList">
-                        <h2>Todos los Usuarios</h2>
+                        <h2>Pacientes</h2>
                         <thead class="bg-200">
                         <tr>
                             <th class="sort align-middle" style="width: 30%">Nombres</th>
@@ -178,45 +178,45 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form method="post" th:action="@{/superAdmin/editarPacientes}">
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="nombre2">Nombre </label>
-                                                                    <input type="text" id="nombre2" name="nombre"  th:value="${paciente.nombre}" class="form-control" >
-                                                                </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre2">Nombre </label>
+                                                                        <input type="text" id="nombre2" name="nombre"  th:value="${paciente.nombre}" class="form-control" >
+                                                                    </div>
 
-                                                                <div class="form-group">
-                                                                    <label for="id2">DNI </label>
-                                                                    <input type="text" class="form-control" th:value="${paciente.id}" disabled>
-                                                                    <input type="hidden" id="id2" name="id2" class="form-control" th:value="${paciente.id}" >
+                                                                    <div class="form-group">
+                                                                        <label for="id2">DNI </label>
+                                                                        <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                                                        <input type="hidden" id="id2" name="id2" class="form-control" th:value="${paciente.id}" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="email2">Email </label>
+                                                                        <input type="email" id="email2" name="email"   class="form-control" th:value="${paciente.email}" >
+                                                                    </div>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="email2">Email </label>
-                                                                    <input type="email" id="email2" name="email"   class="form-control" th:value="${paciente.email}" >
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="sede2"> Sede  </label>
+                                                                        <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${paciente.sedesIdsedes.nombre}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="estado2">Estado </label>
+                                                                        <input type="text" id="estado2" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="telefono2"> Teléfono  </label>
+                                                                        <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${paciente.telefono}">
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="sede2"> Sede  </label>
-                                                                    <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${paciente.sedesIdsedes.nombre}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="estado2">Estado </label>
-                                                                    <input type="text" id="estado2" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" >
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="telefono2"> Teléfono  </label>
-                                                                    <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${paciente.telefono}">
-                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary" > Editar paciente </button>
+                                                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                                                             </div>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-primary" > Editar paciente </button>
-                                                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                                                        </div>
-                                                    </div>
 
                                                     </form>
                                                 </div>
@@ -254,25 +254,25 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                            <tr th:each="doctor, info : ${doctoresList}">
-                                <td th:text="${doctor.nombre}" class="align-middle"></td>
-                                <td th:text="${doctor.id}" class="align-middle"></td>
-                                <td th:text="${doctor.sedesIdsedes.nombre}" class="align-middle"></td>
-                                <td th:text="${doctor.estadosIdestado.nombreEstado}" class="align-middle"></td>
-                                <td class="align-middle">
-                                    <!-- A esto me referia con opciones-->
-                                    <div class="dropdown font-sans-serif">
-                                        <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                        <tr th:each="doctor, info : ${doctoresList}">
+                            <td th:text="${doctor.nombre}" class="align-middle"></td>
+                            <td th:text="${doctor.id}" class="align-middle"></td>
+                            <td th:text="${doctor.sedesIdsedes.nombre}" class="align-middle"></td>
+                            <td th:text="${doctor.estadosIdestado.nombreEstado}" class="align-middle"></td>
+                            <td class="align-middle">
+                                <!-- A esto me referia con opciones-->
+                                <div class="dropdown font-sans-serif">
+                                    <div class="form-group" align="center">
+                                        <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal2">Editar</button>
-                                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel2">Editar usuario</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <form method="post" th:action="@{/superAdmin/editarDoctores}">
+                                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel2">Editar usuario</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form method="post" th:action="@{/superAdmin/editarDoctores}">
                                                         <div class="modal-body">
                                                             <div class="row">
                                                                 <div class="col-sm-6">
@@ -307,33 +307,33 @@
                                                                         <label for="telefono1"> Teléfono  </label>
                                                                         <input type="text" id="telefono1" name="telefono"  class="form-control" th:value="${doctor.telefono}">
                                                                     </div>
-                                                                    </div>
-
-
                                                                 </div>
+
+
+                                                            </div>
                                                             <div class="modal-footer">
                                                                 <button type="submit" class="btn btn-primary" > Editar doctor </button>
                                                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                                                             </div>
-                                                            </div>
-                                                        </form>
                                                         </div>
-
-                                                    </div>
+                                                    </form>
                                                 </div>
+
                                             </div>
                                         </div>
-                                </td>
-                                <td class="align-middle">
-                                    <!-- A esto me referia con opciones-->
-                                    <div class="dropdown font-sans-serif">
-                                        <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
-                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
-                                        </div>
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <!-- A esto me referia con opciones-->
+                                <div class="dropdown font-sans-serif">
+                                    <div class="form-group" align="center">
+                                        <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
+                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -373,63 +373,63 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form method="post" th:action="@{/superAdmin/editarAdministrativos}">
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="nombre3">Nombre </label>
-                                                                    <input type="text" id="nombre3" name="nombre"  th:value="${administrativo.nombre}" class="form-control" >
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre3">Nombre </label>
+                                                                        <input type="text" id="nombre3" name="nombre"  th:value="${administrativo.nombre}" class="form-control" >
+                                                                    </div>
+
+
+
+                                                                    <div class="form-group">
+                                                                        <label for="id3">DNI </label>
+                                                                        <input type="text" class="form-control" th:value="${administrativo.id}" disabled>
+                                                                        <input type="hidden" id="id3" name="id" class="form-control" th:value="${administrativo.id}" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="email3">Email </label>
+                                                                        <input type="email" id="email3" name="email"   class="form-control" th:value="${administrativo.email}" >
+                                                                    </div>
+
+
                                                                 </div>
 
+                                                                <!-- Columna 2 -->
+                                                                <div class="col-sm-6">
+
+                                                                    <div class="form-group">
+                                                                        <label for="sede3">Sede  </label>
+                                                                        <input type="text" id="sede3" name="apellido"   class="form-control" th:value="${administrativo.sedesIdsedes.nombre}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="estado3">Estado </label>
+                                                                        <input type="text" id="estado3" name="estado"   th:value="${administrativo.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                                                    </div>
+                                                                    <!--<div class="form-group">
+                                                                        <label for="especialidad3">Especialidad</label>
+                                                                        <select class="form-control" name="especialidad" id="especialidad3">
+                                                                            <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                                                    th:selected="${especialidad.id == administrativo.especialidadesIdEspecialidad.id}"></option>
+                                                                        </select>
 
 
-                                                                <div class="form-group">
-                                                                    <label for="id3">DNI </label>
-                                                                    <input type="text" class="form-control" th:value="${administrativo.id}" disabled>
-                                                                    <input type="hidden" id="id3" name="id" class="form-control" th:value="${administrativo.id}" >
+                                                                    </div>-->
+
+                                                                    <div class="form-group">
+                                                                        <label for="telefono3"> Teléfono  </label>
+                                                                        <input type="text" id="telefono3" name="telefono"  class="form-control" th:value="${administrativo.telefono}">
+                                                                    </div>
+
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="email3">Email </label>
-                                                                    <input type="email" id="email3" name="email"   class="form-control" th:value="${administrativo.email}" >
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary" > Editar administrativo </button>
+                                                                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                                                                 </div>
-
-
                                                             </div>
 
-                                                            <!-- Columna 2 -->
-                                                            <div class="col-sm-6">
-
-                                                                <div class="form-group">
-                                                                    <label for="sede3">Sede  </label>
-                                                                    <input type="text" id="sede3" name="apellido"   class="form-control" th:value="${administrativo.sedesIdsedes.nombre}">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="estado3">Estado </label>
-                                                                    <input type="text" id="estado3" name="estado"   th:value="${administrativo.estadosIdestado.nombreEstado}" class="form-control" disabled>
-                                                                </div>
-                                                                <!--<div class="form-group">
-                                                                    <label for="especialidad3">Especialidad</label>
-                                                                    <select class="form-control" name="especialidad" id="especialidad3">
-                                                                        <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
-                                                                                th:selected="${especialidad.id == administrativo.especialidadesIdEspecialidad.id}"></option>
-                                                                    </select>
-
-
-                                                                </div>-->
-
-                                                                <div class="form-group">
-                                                                    <label for="telefono3"> Teléfono  </label>
-                                                                    <input type="text" id="telefono3" name="telefono"  class="form-control" th:value="${administrativo.telefono}">
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary" > Editar administrativo </button>
-                                                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                                                            </div>
                                                         </div>
-
-                                                    </div>
 
                                                     </form>
                                                 </div>
@@ -486,54 +486,54 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form method="post" th:action="@{/superAdmin/editarAdministradores}">
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="nombre4">Nombre </label>
-                                                                    <input type="text" id="nombre4" name="nombre"  th:value="${administrador.nombre}" class="form-control" >
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <label for="nombre4">Nombre </label>
+                                                                        <input type="text" id="nombre4" name="nombre"  th:value="${administrador.nombre}" class="form-control" >
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="id4">DNI </label>
+                                                                        <input type="text" class="form-control" th:value="${administrador.id}" disabled>
+                                                                        <input type="hidden" id="id4" name="id" class="form-control" th:value="${administrador.id}" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="email4">Email </label>
+                                                                        <input type="email" id="email4" name="email"   class="form-control" th:value="${administrador.email}" >
+                                                                    </div>
+
+
+
                                                                 </div>
 
-                                                                <div class="form-group">
-                                                                    <label for="id4">DNI </label>
-                                                                    <input type="text" class="form-control" th:value="${administrador.id}" disabled>
-                                                                    <input type="hidden" id="id4" name="id" class="form-control" th:value="${administrador.id}" >
+                                                                <!-- Columna 2 -->
+                                                                <div class="col-sm-6">
+
+                                                                    <div class="form-group">
+                                                                        <label for="sede4">Sede </label>
+                                                                        <input type="text" id="sede4" name="apellido"   class="form-control" th:value="${administrador.sedesIdsedes.nombre}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="estado4">Estado </label>
+                                                                        <input type="text" id="estado4" name="estado"   th:value="${administrador.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="telefono4"> Teléfono  </label>
+                                                                        <input type="text" id="telefono4" name="telefono"  class="form-control" th:value="${administrador.telefono}">
+                                                                    </div>
+
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="email4">Email </label>
-                                                                    <input type="email" id="email4" name="email"   class="form-control" th:value="${administrador.email}" >
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary" > Editar administrador </button>
+                                                                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                                                                 </div>
-
-
-
                                                             </div>
 
-                                                            <!-- Columna 2 -->
-                                                            <div class="col-sm-6">
-
-                                                                <div class="form-group">
-                                                                    <label for="sede4">Sede </label>
-                                                                    <input type="text" id="sede4" name="apellido"   class="form-control" th:value="${administrador.sedesIdsedes.nombre}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="estado4">Estado </label>
-                                                                    <input type="text" id="estado4" name="estado"   th:value="${administrador.estadosIdestado.nombreEstado}" class="form-control" disabled>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="telefono4"> Teléfono  </label>
-                                                                    <input type="text" id="telefono4" name="telefono"  class="form-control" th:value="${administrador.telefono}">
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary" > Editar administrador </button>
-                                                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                                                            </div>
                                                         </div>
-
-                                                    </div>
 
                                                     </form>
                                                 </div>
@@ -636,7 +636,7 @@
                 [10, 25, 50, -1], [10, 25, 50, "Todos"]
             ],
             buttons: [
-               ]
+            ]
         });
         $('#userList1').DataTable({
             dom: "<'d-flex justify-content-end pb-4'B>\n" +
