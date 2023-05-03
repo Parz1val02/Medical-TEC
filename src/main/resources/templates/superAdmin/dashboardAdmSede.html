@@ -161,10 +161,10 @@
             </thead>
             <tbody class="bg-white">
             <tr th:each="admS, info : ${administradoresList}">
-              <td th:text="${admS.nombre}" class="align-middle"></td>
-              <td th:text="${admS.id}" class="align-middle"></td>
-              <td th:text="${admS.sedesIdsedes.nombre}" class="align-middle"></td>
-              <td th:text="${admS.telefono}" class="align-middle"></td>
+              <td th:text="${admS.nombre}" class="align-middle"> </td>
+              <td th:text="${admS.id}" class="align-middle"> </td>
+              <td th:text="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
+              <td th:text="${admS.estadosIdestado != null ? admS.estadosIdestado.nombreEstado : 'Sin estado'}" class="align-middle"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">

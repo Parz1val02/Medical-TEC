@@ -257,7 +257,7 @@ public class SuperController {
         return "redirect:/superAdmin/dashboard/Adm";
     }
 
-    @PostMapping(value = "/Nuevo/Guardar")
+    @PostMapping(value = "/Guardar/AdmT")
     public String guardarAdmT(Model model, RedirectAttributes attr,
                                        @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                        @RequestParam("correo") String correo, @RequestParam("password") String password,

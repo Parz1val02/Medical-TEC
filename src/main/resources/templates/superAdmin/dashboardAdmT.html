@@ -161,10 +161,10 @@
             </thead>
             <tbody class="bg-white">
             <tr th:each="ad, info : ${administrativosList}">
-              <td th:text="${ad.nombre}" class="align-middle"></td>
-              <td th:text="${ad.id}" class="align-middle"></td>
-              <td th:text="${ad.sedesIdsedes.nombre}" class="align-middle"></td>
-              <td th:text="${ad.estadosIdestado.nombreEstado}" class="align-middle"></td>
+              <td th:text="${ad.nombre}" class="align-middle"> </td>
+              <td th:text="${ad.id}" class="align-middle"> </td>
+              <td th:text="${ad.sedesIdsedes != null ? ad.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
+              <td th:text="${ad.estadosIdestado != null ? ad.estadosIdestado.nombreEstado : 'Sin estado'}" class="align-middle"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -197,7 +197,7 @@
                                     <input type="email" id="email2" name="email"   class="form-control" th:value="${ad.email}" >
                                   </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <!--<div class="col-sm-6">
                                   <div class="form-group">
                                     <label for="sede2"> Sede  </label>
                                     <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${ad.sedesIdsedes.nombre}">
@@ -226,7 +226,7 @@
                   </div>
                 </div>
               </td>
-              <td class="align-middle">
+              <td class="align-middle">-->
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
