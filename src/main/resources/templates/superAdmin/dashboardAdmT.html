@@ -171,63 +171,68 @@
                   <div class="form-group" align="center">
                     <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal3">Editar</button>
-                    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <form method="post" th:action="@{/superAdmin/editarAdmT}">
-                            <div class="modal-body">
-                              <div class="row">
-                                <div class="col-sm-6">
-                                  <div class="form-group">
-                                    <label for="nombre2">Nombre </label>
-                                    <input type="text" id="nombre2" name="nombre"  th:value="${ad.nombre}" class="form-control" >
-                                  </div>
-
-                                  <div class="form-group">
-                                    <label for="id2">DNI </label>
-                                    <input type="text" class="form-control" th:value="${ad.id}" disabled>
-                                    <input type="hidden" id="id2" name="id2" class="form-control" th:value="${ad.id}" >
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="email2">Email </label>
-                                    <input type="email" id="email2" name="email"   class="form-control" th:value="${ad.email}" >
-                                  </div>
-                                </div>
-                                <!--<div class="col-sm-6">
-                                  <div class="form-group">
-                                    <label for="sede2"> Sede  </label>
-                                    <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${ad.sedesIdsedes.nombre}">
-                                  </div>
-
-                                  <div class="form-group">
-                                    <label for="estado2">Estado </label>
-                                    <input type="text" id="estado2" name="estado"   th:value="${ad.estadosIdestado.nombreEstado}" class="form-control" >
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="telefono2"> Teléfono  </label>
-                                    <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${ad.telefono}">
-                                  </div>
-                                </div>
+                  </div>
+                </div>
+                <!--   <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form method="post" th:action="@{/superAdmin/editarAdmS}">
+                        <div class="modal-body">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="nombre2">Nombre </label>
+                                <input type="text" id="nombre2" name="nombre"  th:value="${admS.nombre}" class="form-control" >
                               </div>
-                              <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" > Editar Administrativo </button>
-                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+
+                              <div class="form-group">
+                                <label for="id2">DNI </label>
+                                <input type="text" class="form-control" th:value="${admS.id}" disabled>
+                                <input type="hidden" id="id2" name="id2" class="form-control" th:value="${admS.id}" >
+                              </div>
+                              <div class="form-group">
+                                <label for="email2">Email </label>
+                                <input type="email" id="email2" name="email"   class="form-control" th:value="${admS.email}" >
                               </div>
                             </div>
+                            <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="sede2"> Sede  </label>
+                                <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${admS.sedesIdsedes.nombre}">
+                              </div>
 
-                          </form>
+                              <div class="form-group">
+                                <label for="estado2">Estado </label>
+                                <input type="text" id="estado2" name="estado"   th:value="${admS.estadosIdestado.nombreEstado}" class="form-control" >
+                              </div>
+                              <div class="form-group">
+                                <label for="telefono2"> Teléfono  </label>
+                                <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${admS.telefono}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" > Editar Administrador de Sede </button>
+                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                          </div>
                         </div>
-                      </div>
+
+                      </form>
                     </div>
                   </div>
                 </div>
-              </td>
-              <td class="align-middle">-->
+              </div>
+            </div>
+          </td>
+          <td class="align-middle">-->
                 <!-- A esto me referia con opciones-->
+
+              </td>
+              <td>
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
                     <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
@@ -235,7 +240,6 @@
                   </div>
                 </div>
               </td>
-            </tr>
             </tbody>
           </table>
         </div>
