@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.entity.Especialidade;
 import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.repository.EspecialidadeRepository;
 import com.example.medicaltec.repository.ReporteRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
@@ -86,7 +87,6 @@ public class AdministradorController {
             @RequestParam("sexo") String sexo,
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
-            @RequestParam("contrasena") String contrasena,
             @RequestParam("id") String dni,
             @RequestParam("apellido") String apellido,
             @RequestParam("especialidad") int especialidad,
@@ -108,6 +108,8 @@ public class AdministradorController {
             attr.addFlashAttribute("msgDanger","El doctor ingresado ya existe");
             return "redirect:/administrador/usuarios";
         } else {
+            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
+            String contrasena = generadorDeContrasenha.crearPassword();
             usuarioRepository.crearDoctor( email,  nombre,  apellido,  telefono,  especialidad,  dni,  sede, edad, direccion, sexo, contrasena );
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
@@ -139,7 +141,6 @@ public class AdministradorController {
             @RequestParam("sexo") String sexo,
             @RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
-            @RequestParam("contrasena") String contrasena,
             @RequestParam("id") String dni,
             @RequestParam("apellido") String apellido,
             @RequestParam("telefono") String telefono,
@@ -160,6 +161,8 @@ public class AdministradorController {
             attr.addFlashAttribute("msgDanger","El paciente ingresado ya existe");
             return "redirect:/administrador/usuarios";
         } else {
+            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
+            String contrasena = generadorDeContrasenha.crearPassword();
             usuarioRepository.crearPaciente( email,  nombre,  apellido,  telefono, dni,  sede, edad, direccion, sexo, contrasena );
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
