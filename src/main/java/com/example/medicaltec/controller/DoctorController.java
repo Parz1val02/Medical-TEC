@@ -8,10 +8,7 @@ import com.example.medicaltec.repository.SedeRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,26 +26,12 @@ public class DoctorController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
-    public String pagPrincipalDoctor(@RequestParam("email") String email,
-                                     @RequestParam("password") String password,
-                                     Model model){
-        int i=0;
-        Usuario user1 = new Usuario();
-        List<Usuario> userList = usuarioRepository.findAll();
-        for(Usuario u : userList){
-            if(u.getEmail().equals(email) && u.getContrasena().equals(password)) {
-                i=1;
-                user1 = u;
-                break;
-            }
-        }
-        if (i==1){
-            model.addAttribute("user", user1);
-            return "doctor/principal";
-        }else {
-            return "redirect:/";
-        }
+    @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
+    public String pagPrincipalDoctor(Model model){
+
+        List<Usuario> userPacienteList = usuarioRepository.listarPacientes();
+        model.addAttribute("listaPacientes",userPacienteList);
+        return "doctor/principal";
     }
 
 
@@ -66,8 +49,7 @@ public class DoctorController {
 
     @GetMapping("/pacientes")
     public String verPacientes(Model model){
-
-        List listaPacientes = usuarioRepository.obtenerPacientes();
+        List<Usuario> listaPacientes = usuarioRepository.listarPacientes();
         model.addAttribute("pacientes", listaPacientes);
         return "doctor/pacientes";
     }

@@ -9,12 +9,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+
+    @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 1", nativeQuery = true)
+    List<Usuario> listarDoctores();
+
+    @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 2", nativeQuery = true)
+    List<Usuario> listarPacientes();
+
     @Query("select u from Usuario u where u.nombre = ?1")
     List<Usuario> findByNombre(String nombre);
 
 
-    @Query(value = "select * from usuario u where u.sedes_idsedes = 1", nativeQuery = true)
-    List<Usuario> obtenerPacientes();
+
+
 
 
 
