@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,10 +10,11 @@ import lombok.Setter;
 @Table(name = "documentos")
 public class Documento {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddocumentos", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 

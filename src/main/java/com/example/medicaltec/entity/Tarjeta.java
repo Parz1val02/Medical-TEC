@@ -1,9 +1,6 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +10,8 @@ import lombok.Setter;
 @Table(name = "tarjeta")
 public class Tarjeta {
     @Id
-    @Column(name = "idTarjetas", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idtarjetas", nullable = false)
     private Integer id;
 
     @Column(name = "numero", nullable = false)
