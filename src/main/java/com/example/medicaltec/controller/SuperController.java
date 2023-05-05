@@ -249,24 +249,138 @@ public class SuperController {
     public String guardarAdmSede(Model model, RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                  @RequestParam("correo") String correo, @RequestParam("password") String password,
-                                 @RequestParam("edad") int edad, @RequestParam("telefono") String telefono,
+                                 @RequestParam(value = "edad",required = false) Integer edad, @RequestParam("telefono") String telefono,
                                  @RequestParam("address") String address, @RequestParam("sede") int sede,
                                  @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
-        usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede);
-        attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
-        return "redirect:/superAdmin/dashboard/Adm";
+        int a = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        }
+        if (correo.isEmpty()){
+            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
+            a = a+1;
+        }
+        if (password.isEmpty()){
+            attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
+            a = a+1;
+        }
+        if (edad == null){
+            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
+            a = a+1;
+        } else {
+            if (edad <0){
+                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
+                a = a+1;
+            }
+        }
+        if (telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a = a+1;
+        }
+        if (telefono.length()!=9){
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            a = a+1;
+        }
+        if(address.isEmpty()) {
+            attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
+            a = a+1;
+        }
+        if(dni.isEmpty()){
+            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            a = a+1;
+        } else if (dni.length()!=8) {
+            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
+            a = a+1;
+        } else {
+            Optional<Usuario> u = usuarioRepository.findById(dni);
+            if(u.isPresent()){
+                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                a = a+1;
+            }
+        }
+
+        if(a == 0){
+            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede);
+            attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
+            return "redirect:/superAdmin/dashboard/Adm";
+        }else {
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            return "redirect:/superAdmin/Crear/AdmSede";
+        }
     }
 
     @PostMapping(value = "/Guardar/AdmT")
     public String guardarAdmT(Model model, RedirectAttributes attr,
                                        @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                        @RequestParam("correo") String correo, @RequestParam("password") String password,
-                                       @RequestParam("edad") int edad, @RequestParam("telefono") String telefono,
+                                       @RequestParam(value = "edad", required = false) Integer edad, @RequestParam("telefono") String telefono,
                                        @RequestParam("address") String address, @RequestParam("sede") int sede,
                                         @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
-        usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede);
-        attr.addFlashAttribute("msg","Administrativo creado exitosamente");
-        return "redirect:/superAdmin/dashboard/AdmT";
+        int b = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            b = b+1;
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            b = b+1;
+        }
+        if (correo.isEmpty()){
+            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
+            b = b+1;
+        }
+        if (password.isEmpty()){
+            attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
+            b = b+1;
+        }
+        if (edad == null){
+            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
+            b = b+1;
+        } else {
+            if (edad <0){
+                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
+                b = b+1;
+            }
+        }
+        if (telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            b = b+1;
+        }
+        if (telefono.length()!=9){
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            b = b+1;
+        }
+        if(address.isEmpty()) {
+            attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
+            b = b+1;
+        }
+        if(dni.isEmpty()){
+            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            b = b+1;
+        } else if (dni.length()!=8) {
+            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
+            b = b+1;
+        } else {
+            Optional<Usuario> u = usuarioRepository.findById(dni);
+            if(u.isPresent()){
+                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                b = b+1;
+            }
+        }
+        if(b == 0){
+            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede);
+            attr.addFlashAttribute("msg","Administrativo creado exitosamente");
+            return "redirect:/superAdmin/dashboard/AdmT";
+        }else {
+            attr.addFlashAttribute("msg","Hubieron errores en el llenado de los campos");
+            return "redirect:/superAdmin/Crear/AdmT";
+        }
+
     }
     @GetMapping("/forms/delete")
     public String borrarFormulario(Model model,
