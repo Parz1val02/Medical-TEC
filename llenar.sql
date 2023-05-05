@@ -143,14 +143,14 @@ VALUES
 /* Aqui van los pacientes*/
 
 INSERT INTO `Telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes, seguros_id_seguro) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes, seguros_id_seguro,estados_idestado) 
 VALUES 
-('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1,1),
-('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2,2),
-('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3,3),
-('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2,4),
-('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St',2,1,"autoregistro",2,5), /* paciente */
-('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St',2,1,"autoregistro",2,6); /* paciente */
+('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1,1,6),
+('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2,2,2),
+('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3,3,6),
+('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2,4,1),
+('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St',2,1,"autoregistro",2,5,3), /* paciente */
+('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St',2,1,"autoregistro",2,6,4); /* paciente */
 
 
 /* Solo para doctor */
