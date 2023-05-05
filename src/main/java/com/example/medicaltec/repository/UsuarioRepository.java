@@ -1,6 +1,7 @@
 package com.example.medicaltec.repository;
 
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.Entity.Usuario;
+
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

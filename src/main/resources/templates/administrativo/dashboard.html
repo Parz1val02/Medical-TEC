@@ -68,7 +68,6 @@
                             </td>
 
 
-
                             <td class="align-middle" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente')}" th:text="${user.estadosIdestado.nombre}">
                                 Registrado
                             </td>
@@ -78,6 +77,8 @@
                             <td class="align-middle" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && !user.estadosIdestado.nombre.equalsIgnoreCase('invitado')}" >
                                 <a th:href="@{'/administrativo/form'}">form</a>
                             </td>
+
+
                             <td class="align-middle" th:if="${(user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('autoregistro')) || (user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && user.estadosIdestado.nombre.equalsIgnoreCase('invitado') )}" >
                                 -
                             </td>

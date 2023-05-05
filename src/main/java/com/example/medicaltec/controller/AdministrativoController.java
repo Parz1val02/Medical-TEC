@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.Entity.Usuario;
+
 import com.example.medicaltec.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,9 @@ public class AdministrativoController {
     public String dashboard(Model model){
         List<Usuario> listaUsuarios = usuarioRepository.findAll();
         model.addAttribute("listaUsuarios",listaUsuarios);
+
+        //System.out.println(listaUsuarios.get(0).getEstadosIdestado().getNombre());
+
         return "administrativo/dashboard";
     }
 
