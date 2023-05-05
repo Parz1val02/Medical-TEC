@@ -79,7 +79,7 @@
                             <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
                             <td th:text="${paciente.id}"></td>
                             <td th:text="${paciente.email}"></td>
-                            <td style="text-align: center" th:text="${paciente.estadosIdestado.nombreEstado}"></td>
+                            <td style="text-align: center" th:text="${paciente.estadosIdestado.nombre}"></td>
 
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
@@ -173,7 +173,7 @@
                             <td th:text="${doctor.nombre} + ' ' + ${doctor.apellido} "></td>
                             <td th:text="${doctor.email}"></td>
                             <td style="text-align: center" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
-                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombreEstado}"></td>
+                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombre}"></td>
 
 
                             <td class="align-middle" align="center">
@@ -289,7 +289,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="estado">Estado</label>
-                                                <input type="text" id="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                                <input type="text" id="estado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
                                             </div>
                                         </div>
 
@@ -425,7 +425,7 @@
 
                                 <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
                                 </div>
 
 
@@ -727,7 +727,7 @@
 
                                 <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
                                 </div>
 
                             </div>
