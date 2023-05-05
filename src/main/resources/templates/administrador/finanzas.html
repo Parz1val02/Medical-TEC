@@ -450,37 +450,39 @@
   function drawBasic() {
 
     var data = new google.visualization.DataTable();
-    data.addColumn('timeofday', 'Time of Day');
-    data.addColumn('number', 'Motivation Level');
+    data.addColumn('string', 'Mes');
+    data.addColumn('number', 'Ingreso');
 
     data.addRows([
-      [{v: [8, 0, 0], f: '8 am'}, 1],
-      [{v: [9, 0, 0], f: '9 am'}, 2],
-      [{v: [10, 0, 0], f:'10 am'}, 3],
-      [{v: [11, 0, 0], f: '11 am'}, 4],
-      [{v: [12, 0, 0], f: '12 pm'}, 5],
-      [{v: [13, 0, 0], f: '1 pm'}, 6],
-      [{v: [14, 0, 0], f: '2 pm'}, 7],
-      [{v: [15, 0, 0], f: '3 pm'}, 8],
-      [{v: [16, 0, 0], f: '4 pm'}, 9],
-      [{v: [17, 0, 0], f: '5 pm'}, 10],
+      [{v: 'Jan', f:'Jan'}, 1],
+      [{v: 'Feb', f:'Feb'}, 2],
+      [{v: 'Mar', f:'Mar'}, 3],
+      [{v: 'Apr', f:'Apr'}, 4],
+      [{v: 'May', f:'May'}, 5],
+      [{v: 'Jun', f:'Jun'}, 6],
+      [{v: 'Jul', f:'Jul'}, 7],
+      [{v: 'Aug', f:'Aug'}, 8],
+      [{v: 'Sep', f:'Sep'}, 9],
+      [{v: 'Oct', f:'Oct'}, 10],
+      [{v: 'Nov', f:'Nov'}, 11],
+      [{v: 'Dec', f:'Dec'}, 12],
+
     ]);
 
     var options = {
-      title: 'Motivation Level Throughout the Day',
+      title: 'Ingresos en soles por mes',
       hAxis: {
-        title: 'Time of Day',
-        format: 'h:mm a',
+        title: 'Mes',
         chartArea: {
-          'width': '70%'
+          'width': '100%'
         },
         viewWindow: {
-          min: [7, 30, 0],
-          max: [17, 30, 0]
+          min: 1,
+          max: 12,
         }
       },
       vAxis: {
-        title: 'Rating (scale of 1-10)'
+        title: 'Ingresos en soles'
       }
     };
 
