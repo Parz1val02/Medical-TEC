@@ -1,13 +1,12 @@
 package com.example.medicaltec.controller;
-
-import com.example.medicaltec.entity.*;
+import com.example.medicaltec.Entity.Usuario;
+import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.print.DocFlavor;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public class SuperController {
 
     final UsuarioRepository usuarioRepository;
     final FormulariosRegistroRepository formulariosRegistroRepository;
-    final ReporteRepository reporteRepository;
+    final InformeRepository informeRepository;
     final CuestionarioRepository cuestionarioRepository;
     final PreguntaRepository preguntaRepository;
     final RespuestaRepository respuestaRepository;
@@ -26,13 +25,13 @@ public class SuperController {
     final SedeRepository sedeRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
-    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, ReporteRepository reporteRepository, CuestionarioRepository cuestionarioRepository,
+    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository,InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
                            EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
-        this.reporteRepository = reporteRepository;
+        this.informeRepository = informeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.preguntaRepository = preguntaRepository;
         this.respuestaRepository = respuestaRepository;
@@ -280,23 +279,23 @@ public class SuperController {
         }
         return "redirect:/superAdmin/forms";
     }
-    @RequestMapping(value = {"/reports"},method = RequestMethod.GET)
-    public String reports(Model model){
-        List<Reporte> listaReportes = reporteRepository.findAll();
-        model.addAttribute("reporteList", listaReportes);
-        return "superAdmin/reports";
+    @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
+    public String informes(Model model){
+        List<Informe> listaInformes = informeRepository.findAll();
+        model.addAttribute("informeList", listaInformes);
+        return "superAdmin/informes";
     }
-    @GetMapping("/reports/delete")
+    @GetMapping("/informes/delete")
     public String borrarReporte(Model model,
                                    @RequestParam("id") int id,
                                    RedirectAttributes attr) {
 
-        Optional<Reporte> optionalReporte = reporteRepository.findById(id);
+        Optional<Informe> optionalInforme = informeRepository.findById(id);
 
-        if (optionalReporte.isPresent()) {
-            reporteRepository.deleteById(id);
+        if (optionalInforme.isPresent()) {
+            informeRepository.deleteById(id);
         }
-        return "redirect:/superAdmin/reports";
+        return "redirect:/superAdmin/informes";
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
     public String confSup(){
