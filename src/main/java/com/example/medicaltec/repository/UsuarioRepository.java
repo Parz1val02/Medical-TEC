@@ -1,6 +1,6 @@
 package com.example.medicaltec.repository;
 
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.Entity.Usuario;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
