@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

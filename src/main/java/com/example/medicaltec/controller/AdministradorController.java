@@ -1,6 +1,6 @@
 package com.example.medicaltec.controller;
-import com.example.medicaltec.entity.Especialidade;
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.Entity.Especialidade;
+import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.repository.EspecialidadeRepository;
 import com.example.medicaltec.repository.ReporteRepository;
