@@ -1,7 +1,9 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.entity.Usuario;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
@@ -19,11 +21,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Query("select u from Usuario u where u.nombre = ?1")
     List<Usuario> findByNombre(String nombre);
 
-
-
-
-
-
-
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?2 WHERE u.sedes_idsedes=?1", nativeQuery = true)
+    void actualizarSede(int id_actual, int id_nuevo);
 
 }

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/doctor")
@@ -66,9 +67,20 @@ public class DoctorController {
 
     @GetMapping("/config")
     public String verConfiguracion(Model model){
-        List<Sede> sedeList = sedeRepository.findAll();
+        List<Sede> sedeList = sedeRepository.sedesMenosActual();
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
+    }
+
+    @PostMapping("/cambiarSede")
+    public String cambiarSede(Model model,
+                              @RequestParam("id") int id){
+        Optional<Sede> optionalSede = sedeRepository.findById(id);
+
+        if (optionalSede.isPresent()) {
+            usuarioRepository.actualizarSede(3,id);
+        }
+        return "redirect:/doctor/config";
     }
 
 
