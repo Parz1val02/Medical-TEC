@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "receta")
 public class Receta {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idreceta", nullable = false)
     private Integer id;
 

@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class SedesHasEspecialidadeId implements Serializable {
-    private static final long serialVersionUID = 1090852459659546131L;
+    private static final long serialVersionUID = -6428263464772765520L;
     @Column(name = "especialidades_id_especialidad", nullable = false)
     private Integer especialidadesIdEspecialidad;
 

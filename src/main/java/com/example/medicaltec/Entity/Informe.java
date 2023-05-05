@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,10 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "reporte")
-public class Reporte {
+@Table(name = "informe")
+public class Informe {
     @Id
-    @Column(name = "idreporte", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idinforme", nullable = false)
     private Integer id;
 
     @Column(name = "diagnostico", nullable = false, length = 200)
@@ -19,14 +20,14 @@ public class Reporte {
     @Column(name = "firma", nullable = false)
     private byte[] firma;
 
-    @Column(name = "bitacora", length = 200)
+    @Column(name = "bitacora", length = 500)
     private String bitacora;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 

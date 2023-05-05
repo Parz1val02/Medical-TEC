@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,12 +13,12 @@ public class RecetaHasMedicamento {
     private RecetaHasMedicamentoId id;
 
     @MapsId("recetaIdreceta")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "receta_idreceta", nullable = false)
     private Receta recetaIdreceta;
 
     @MapsId("medicamentosIdmedicamentos")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "medicamentos_idmedicamentos", nullable = false)
     private Medicamento medicamentosIdmedicamentos;
 

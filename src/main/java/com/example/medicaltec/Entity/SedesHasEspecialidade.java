@@ -1,4 +1,4 @@
-package com.example.medicaltec.entity;
+package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,12 +13,12 @@ public class SedesHasEspecialidade {
     private SedesHasEspecialidadeId id;
 
     @MapsId("especialidadesIdEspecialidad")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
     private Especialidade especialidadesIdEspecialidad;
 
     @MapsId("sedesIdsedes")
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
