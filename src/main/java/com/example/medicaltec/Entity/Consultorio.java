@@ -10,10 +10,11 @@ import lombok.Setter;
 @Table(name = "consultorio")
 public class Consultorio {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idconsultorio", nullable = false, length = 5)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 

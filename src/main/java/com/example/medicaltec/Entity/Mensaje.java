@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "mensajes")
 public class Mensaje {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idmensajes", nullable = false)
     private Integer id;
 
@@ -19,7 +20,7 @@ public class Mensaje {
     @Column(name = "fecha", nullable = false, length = 45)
     private String fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "conversaciones_idconversaciones", nullable = false)
     private Conversacione conversacionesIdconversaciones;
 

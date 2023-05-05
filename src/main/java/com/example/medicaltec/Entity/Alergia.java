@@ -18,6 +18,6 @@ public class Alergia {
     private String nombre;
 
     @Column(name = "enabled", nullable = false)
-    private Boolean enabled = false;
+    private Boolean enabled;
 
 }

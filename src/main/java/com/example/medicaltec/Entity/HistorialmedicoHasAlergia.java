@@ -13,12 +13,12 @@ public class HistorialmedicoHasAlergia {
     private HistorialmedicoHasAlergiaId id;
 
     @MapsId("historialmedicoIdhistorialmedico")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 
     @MapsId("alergiasIdalergias")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "alergias_idalergias", nullable = false)
     private Alergia alergiasIdalergias;
 

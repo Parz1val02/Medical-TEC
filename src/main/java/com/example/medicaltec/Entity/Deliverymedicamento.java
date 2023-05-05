@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "deliverymedicamentos")
 public class Deliverymedicamento {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddeliverymedicamentos", nullable = false)
     private Integer id;
 
@@ -28,7 +29,7 @@ public class Deliverymedicamento {
     @Column(name = "estado", nullable = false, length = 45)
     private String estado;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "receta_idreceta", nullable = false)
     private Receta recetaIdreceta;
 

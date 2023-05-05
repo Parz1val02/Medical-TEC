@@ -37,27 +37,27 @@ public class Usuario {
     @Column(name = "direccion", nullable = false, length = 200)
     private String direccion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "sedes_idsedes")
     private Sede sedesIdsedes;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "roles_idroles", nullable = false)
     private Role rolesIdroles;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "historialmedico_idhistorialmedico")
     private Historialmedico historialmedicoIdhistorialmedico;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "especialidades_id_especialidad")
     private Especialidade especialidadesIdEspecialidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "seguros_id_seguro")
     private Seguro segurosIdSeguro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "estados_idestado")
     private Estado estadosIdestado;
 
