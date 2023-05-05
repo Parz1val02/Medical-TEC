@@ -15,8 +15,11 @@ public class Cita {
     @Column(name = "idcita", nullable = false)
     private Integer id;
 
-    @Column(name = "fechahora", nullable = false)
-    private Instant fechahora;
+    @Column(name = "fecha", nullable = false)
+    private String fecha;
+
+    @Column(name = "hora",nullable = false)
+    private String hora;
 
     @Column(name = "citacancelada")
     private Boolean citacancelada;
