@@ -143,7 +143,7 @@ public class SuperController {
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente( email,  nombre,  telefono, id, sede, estado);
+        usuarioRepository.editarPaciente( email,  nombre, sede, id, telefono, estado);
         return "redirect:/superAdmin/dashboard";
     }
     @PostMapping("/editarDoctores")
@@ -390,6 +390,7 @@ public class SuperController {
 
         if (optionalFormulariosRegistro.isPresent()) {
             formulariosRegistroRepository.deleteById(id);
+            attr.addFlashAttribute("msg","Formulario borrado exitosamente");
         }
         return "redirect:/superAdmin/forms";
     }
@@ -408,6 +409,7 @@ public class SuperController {
 
         if (optionalInforme.isPresent()) {
             informeRepository.deleteById(id);
+            attr.addFlashAttribute("msg","Informe borrado exitosamente");
         }
         return "redirect:/superAdmin/informes";
     }
@@ -446,7 +448,8 @@ public class SuperController {
         Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
 
         if (optionalCuestionario.isPresent() && active) {
-            cuestionarioRepository.updateActivoByActivo(false,true);
+            cuestionarioRepository.updateActivoByActivo(false,id);
+            attr.addFlashAttribute("msg","Cuestionario borrado exitosamente");
         }
         return "redirect:/superAdmin/cuestionarios";
     }

@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CuestionarioRepository extends JpaRepository<Cuestionario, Integer> {
     @Transactional
     @Modifying
-    @Query("update Cuestionario c set c.activo = ?1 where c.activo = ?2")
-    int updateActivoByActivo(Boolean activoOriginal, Boolean activoNuevo);
+    @Query("update Cuestionario c set c.activo = ?1 where c.id = ?2")
+    int updateActivoByActivo(Boolean activoNuevo, int id);
 }
