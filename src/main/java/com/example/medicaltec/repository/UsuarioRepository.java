@@ -15,6 +15,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = '34185296')")
     void cambiarContra(String pass);
 
+    @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
+            String passAdmv();
+
 
 
 

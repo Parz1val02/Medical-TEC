@@ -71,9 +71,22 @@ public class AdministrativoController {
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr)
     {
 
-        usuarioRepository.cambiarContra(pass3);
-        attr.addFlashAttribute("msg","su contraseña ha sido cambiada exitosamente");
-        return "redirect:/administrativo/perfil";
+        if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
+            attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
+            return "redirect:/administrativo/pass";
+        }else if(!pass1.equals(usuarioRepository.passAdmv())){
+            attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
+            return "redirect:/administrativo/pass";
+        } else if (!pass3.equals(pass2) ) {
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            return "redirect:/administrativo/pass";
+        }else {
+            usuarioRepository.cambiarContra(pass3);
+            attr.addFlashAttribute("msg","su contraseña ha sido cambiada exitosamente");
+            return "redirect:/administrativo/perfil";
+        }
+
+
     }
 
 
