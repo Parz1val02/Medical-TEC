@@ -27,8 +27,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
     void editarAdministrativo(String email, String nombre, String telefono,  String id, int sede, int estado );
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
-    void editarAdministradores(String email, String nombre, String telefono,  String id, int sede, int estado );
+    @Query(nativeQuery = true,value = "update usuario u inner join sedes s on u.sedes_idsedes = s.idsedes inner join estados e on u.estados_idestado = e.idestado set u.email= ?1, u.nombre= ?2, u.sedes_idsedes = ?3, u.telefono= ?4, u.estados_idestado = ?5 where  u.dni = ?6")
+    void editarAdministradores(String email, String nombre, String telefono,  String id, int sede, int estado);
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
     void editarDoctor(String email, String nombre, String telefono,  String id, int sede, int estado);
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")

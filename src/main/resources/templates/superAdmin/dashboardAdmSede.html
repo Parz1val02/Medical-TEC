@@ -154,7 +154,7 @@
               <th class="sort align-middle" style="width: 30%">Nombres</th>
               <th class="sort align-middle" style="width: 20%">DNI</th>
               <th class="sort align-middle" style="width: 20%">Sede</th>
-              <th class="sort align-middle" style="width: 20%">Telefono</th>
+              <th class="sort align-middle" style="width: 20%">Estado</th>
               <th class="sort align-middle" style="width: 20%">Editar</th>
               <th class="sort align-middle" style="width: 10%">Logueo</th>
             </tr>
@@ -164,7 +164,7 @@
               <td th:text="${admS.nombre}" class="align-middle"> </td>
               <td th:text="${admS.id}" class="align-middle"> </td>
               <td th:text="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
-              <td th:text="${admS.estadosIdestado != null ? admS.estadosIdestado.nombreEstado : 'Sin estado'}" class="align-middle"></td>
+              <td th:text="${admS.estadosIdestado != null ? admS.estadosIdestado.nombre : 'Sin estado'}" class="align-middle"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -185,33 +185,33 @@
                               <div class="row">
                                 <div class="col-sm-6">
                                   <div class="form-group">
-                                    <label for="nombre2">Nombre </label>
-                                    <input type="text" id="nombre2" name="nombre"  th:value="${admS.nombre}" class="form-control" >
+                                    <label for="nombre">Nombre </label>
+                                    <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" >
                                   </div>
 
                                   <div class="form-group">
-                                    <label for="id2">DNI </label>
+                                    <label for="id">DNI </label>
                                     <input type="text" class="form-control" th:value="${admS.id}" disabled>
-                                    <input type="hidden" id="id2" name="id2" class="form-control" th:value="${admS.id}" >
+                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${admS.id}" >
                                   </div>
                                   <div class="form-group">
-                                    <label for="email2">Email </label>
-                                    <input type="email" id="email2" name="email"   class="form-control" th:value="${admS.email}" >
+                                    <label for="email">Email </label>
+                                    <input type="email" id="email" name="email"   class="form-control" th:value="${admS.email}" >
                                   </div>
                                 </div>
                                 <div class="col-sm-6">
                                   <div class="form-group">
-                                    <label for="sede2"> Sede  </label>
-                                    <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${admS.sedesIdsedes.nombre}">
+                                    <label for="sede"> Sede  </label>
+                                    <input type="text" id="sede" name="sede"  class="form-control" th:value="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'sin sede'}">
                                   </div>
 
                                   <div class="form-group">
-                                    <label for="estado2">Estado </label>
-                                    <input type="text" id="estado2" name="estado"   th:value="${admS.estadosIdestado.nombreEstado}" class="form-control" >
+                                    <label for="estado">Estado </label>
+                                    <input type="text" id="estado" name="estado"   th:value="${admS.estadosIdestado != null ? admS.estadosIdestado.nombre : 'sin estado'}" class="form-control" >
                                   </div>
                                   <div class="form-group">
-                                    <label for="telefono2"> Teléfono  </label>
-                                    <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${admS.telefono}">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${admS.telefono}">
                                   </div>
                                 </div>
                               </div>
@@ -225,10 +225,6 @@
                         </div>
                       </div>
                     </div>
-              </td>
-              <td class="align-middle">-->
-                <!-- A esto me referia con opciones-->
-
               </td>
               <td>
                 <div class="dropdown font-sans-serif">
