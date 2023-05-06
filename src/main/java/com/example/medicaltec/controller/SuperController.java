@@ -438,23 +438,19 @@ public class SuperController {
         model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
     }
-    /*/@GetMapping("/cuestionarios/delete")
+    @GetMapping("/cuestionarios/delete")
     public String borrarCuestionarioLleno(Model model,
-                                          @RequestParam("id") int id,
+                                          @RequestParam("id") int id, @RequestParam("active") boolean active,
                                           RedirectAttributes attr) {
 
         Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
-        Optional<Pregunta> optionalPregunta = preguntaRepository.findById(id);
-        Optional<Respuesta> optionalRespuesta = respuestaRepository.findById(id);
 
-        if (optionalCuestionario.isPresent()) {
-            cuestionarioRepository.deleteById(id);
-            preguntaRepository.deleteById(id);
-            respuestaRepository.deleteById(id);
+        if (optionalCuestionario.isPresent() && active) {
+            cuestionarioRepository.updateActivoByActivo(false,true);
         }
         return "redirect:/superAdmin/cuestionarios";
     }
-    /*/
+
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
     public String editarPerfil(){
         return "superAdmin/editarPerfil";

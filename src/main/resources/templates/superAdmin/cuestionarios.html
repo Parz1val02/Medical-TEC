@@ -62,7 +62,7 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="cuestionario, info : ${cuestionarioList}">
+            <tr th:each="cuestionario, info : ${cuestionarioList}" th:if="${cuestionario.activo == true}">
               <td th:text="${cuestionario.id}" class="align-middle"></td>
               <td th:text="${cuestionario.nombrecuestionario}" class="align-middle"></td>
               <td class="align-middle">
@@ -92,7 +92,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/cuestionarios/delete?id=' + ${cuestionario.id}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/cuestionarios/delete?id=' + ${cuestionario.id} + '&active='+ ${cuestionario.activo}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar cuestionario</a>
                           </div>
                         </div>
