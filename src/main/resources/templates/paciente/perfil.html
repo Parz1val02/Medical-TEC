@@ -122,9 +122,9 @@
                                             Alergias
                                         </h5>
                                         <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agregue sus alergias</h6>
-                                        <form>
+                                        <form method="post" th:action="@{/paciente/guardarAlergias}">
                                             <div class="mb-3">
-                                                <input type="text" class="form-control" id="alergiasInput" aria-describedby="">
+                                                <input type="text" class="form-control" id="alergiasInput" aria-describedby="" name="nombre">
                                                 <div id="help" class="form-text">Indique sus alergias para poder agregarlas a su historial médico</div>
                                             </div>
                                             <button type="submit" class="btn btn-primary">Aceptar</button>
