@@ -2,15 +2,13 @@ package com.example.medicaltec.controller;
 
 
 import com.example.medicaltec.Entity.Alergia;
+import com.example.medicaltec.Entity.Cita;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -100,6 +98,7 @@ public class PacienteController {
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
+
 
     @RequestMapping("/notificaciones")
     public String notificaciones(Model model){
