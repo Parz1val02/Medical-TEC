@@ -1,6 +1,6 @@
 package com.example.medicaltec.repository;
 
-import com.example.medicaltec.entity.Cita;
+import com.example.medicaltec.Entity.Cita;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

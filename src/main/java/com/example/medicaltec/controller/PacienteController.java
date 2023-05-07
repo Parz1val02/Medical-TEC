@@ -2,7 +2,7 @@ package com.example.medicaltec.controller;
 
 
 import com.example.medicaltec.repository.TipoCitaRepository;
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
