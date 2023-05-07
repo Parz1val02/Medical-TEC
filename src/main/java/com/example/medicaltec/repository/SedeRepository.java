@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SedeRepository extends JpaRepository<Sede,Integer> {
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value ="update usuario set sedes_idsedes=?1 where dni=\"22647853\";" )
+    @Query(nativeQuery = true, value ="update usuario set  sedes_idsedes=?1 where dni=\"22647853\";" )
     void cambiarSede(String idSede);
 }

@@ -3,9 +3,11 @@ package com.example.medicaltec.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -17,17 +19,24 @@ public class Horasdoctor {
     @Column(name = "idhorasdoctor", nullable = false)
     private Integer id;
 
+
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(name = "horainicio", nullable = false)
-    private LocalDateTime horainicio;
+    private LocalTime horainicio;
 
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(name = "horafin", nullable = false)
-    private LocalDateTime horafin;
+    private LocalTime horafin;
 
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(name = "horalibre", nullable = false)
-    private LocalDateTime horalibre;
+    private LocalTime horalibre;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha;
     @ManyToOne
-    @JoinColumn(name = "usuario_dni", nullable = false)
-    private Usuario usuarioDni;
+    @JoinColumn(name = "doctor_dni", nullable = false)
+    private Usuario doctor_dni;
 
 }

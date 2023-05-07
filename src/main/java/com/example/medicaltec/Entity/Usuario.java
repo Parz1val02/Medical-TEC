@@ -66,13 +66,17 @@ public class Usuario {
     @Column(name = "modooscuro")
     private Boolean modooscuro;
 
-    @Column(name = "foto")
-    private byte[] foto;
-
     @Column(name = "modoregistro", length = 45)
     private String modoregistro;
 
     @Column(name = "ceduladoctor", length = 45)
     private String ceduladoctor;
 
+    @Column(name = "foto")
+    private byte[] foto;
+
+    @Column(name = "fotonombre")
+    private String fotonombre;
+    @Column(name = "fotocontenttype")
+    private String fotocontenttype;
 }

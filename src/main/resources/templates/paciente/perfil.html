@@ -45,38 +45,38 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-8">
-                            <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            <h4 class="mb-1" th:text="|${usuario.nombre} ${usuario.apellido}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
                             </h4>
                             <form>
                                 <fieldset disabled>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput1" class="form-label">Nombres</label>
-                                            <input type="text" id="disabledTextInput1" class="form-control" placeholder="Carlos Eduardo">
+                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${usuario.nombre}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                                            <input type="text" id="disabledTextInput2" class="form-control" placeholder="Pisco Tejada">
+                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${usuario.apellido}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput3" class="form-label">Correo</label>
-                                            <input type="text" id="disabledTextInput3" class="form-control" placeholder="epifanioexe@protonmail.com">
+                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${usuario.email}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput4" class="form-label">Celular</label>
-                                            <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${usuario.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput5" class="form-label">DNI</label>
-                                            <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${usuario.id}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput6" class="form-label">Sede actual</label>
-                                            <input type="text" id="disabledTextInput6" class="form-control" placeholder="Lima Centro">
+                                            <input type="text" id="disabledTextInput6" class="form-control" th:placeholder="${usuario.sedesIdsedes.nombre}">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -88,13 +88,15 @@
                                     <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                                         Seguro de salud
                                     </h5>
+                                    <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                                     <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su seguro de salud?</h6>
-                                    <form>
+                                    <form method="post" th:action="@{/paciente/cambiarSeguro}">
                                         <div class="mb-3">
-                                            <select class="form-control" >
-                                                <option th:each="seguro : ${seguros}"
-                                                        th:value="${seguro.id}"
-                                                        th:text="${seguro.nombreSeguro}"></option>
+                                            <select id="seguro" name="seguro" class="form-control">
+                                                <option  th:each="seguro : ${seguros}"
+                                                         th:value="${seguro.id}"
+                                                         th:text="${seguro.nombreSeguro}"
+                                                        th:selected="${seguro.id==usuario.segurosIdSeguro.id}"></option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Aceptar</button>
@@ -121,9 +123,12 @@
                                         <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                                             Alergias
                                         </h5>
+                                        <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
+                                        <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-success" role="alert"></div>
                                         <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agregue sus alergias</h6>
                                         <form method="post" th:action="@{/paciente/guardarAlergias}">
                                             <div class="mb-3">
+                                                <input type="hidden" th:value="${usuario.id}" class="form-control" id="" aria-describedby="" name="id">
                                                 <input type="text" class="form-control" id="alergiasInput" aria-describedby="" name="nombre">
                                                 <div id="help" class="form-text">Indique sus alergias para poder agregarlas a su historial médico</div>
                                             </div>
@@ -144,13 +149,8 @@
                                 </thead>
                                 <tbody class="bg-white">
                                 <tr th:each="alergia, info : ${alergias}">
-                                    <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center">
-                                    </td>
-                                    <td class="align-middle" align="center">
-                                        <button type="button" class="btn btn-secondary" style="text-align: center;border-radius: 15px;"
-                                         >Borrar</button>
-                                        <!-- Modal -->
-                                    </td>
+                                    <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center"></td>
+                                    <td><a class="btn btn-secondary align-middle" style="text-align: center;border-radius: 15px;" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id} + '&id2=' + ${usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
                                 </tr>
                                 </tbody>
                             </table>
@@ -263,12 +263,12 @@
                 "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                lengthMenu: "Mostrar  _MENU_  alergias",
+                zeroRecords: "No se encontraron alergias",
+                emptyTable: "No hay alergias",
+                info: "Mostrando alergias del _START_ al _END_ <br>Total _TOTAL_ alergias",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 alergias",
+                infoFiltered: "(filtrado de un total de _MAX_ alergias)",
                 loadingRecords: "Cargando...",
                 search: "Buscar:",
                 paginate: {
