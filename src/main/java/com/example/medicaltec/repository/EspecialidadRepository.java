@@ -1,7 +1,7 @@
 package com.example.medicaltec.repository;
 
-import com.example.medicaltec.entity.Especialidades;
+import com.example.medicaltec.Entity.Especialidade;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EspecialidadRepository extends JpaRepository<Especialidades,Integer> {
+public interface EspecialidadRepository extends JpaRepository<Especialidade,Integer> {
 }

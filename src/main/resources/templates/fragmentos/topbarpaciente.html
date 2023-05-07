@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<nav th:fragment="topBar" class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand">
+<nav th:fragment="topBar(validar)" class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand">
 
   <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button" data-toggle="collapse" data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
   <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
 
-    <li class="nav-item">
+    <li class="nav-item" id="arch" th:if="${validar == 'arch'}">
       <!-- Button trigger modal-->
       <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
       <!-- Modal-->
@@ -48,7 +48,11 @@
                       </div>
                       <div class="form-group">
                         <label for="modalidad">Modalidad:</label>
-                        <input type="text" id="modalidad" name="modalidad" class="form-control">
+                        <select id="modalidad" name="modalidad" class="form-control">
+                          <option selected>Elegir una opción...</option>
+                          <option value="Presencial">Presencial</option>
+                          <option value="Virtual">Virtual</option>
+                        </select>
                       </div>
                     </div>
                     <!-- Columna 2 -->
@@ -81,10 +85,6 @@
                                    th:value="${seguro.id}"
                                    th:text="${seguro.nombreSeguro}"></option>
                         </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="formapago">Forma de pago:</label>
-                        <input type="text" id="formapago" name="formapago" class="form-control">
                       </div>
                     </div>
                   </div>

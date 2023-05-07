@@ -16,7 +16,7 @@
     <div class="container" data-layout="container">
         <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
         <div class="content">
-            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
 
             <!-- ===============================================-->
             <!--    static Content-->
