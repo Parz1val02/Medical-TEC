@@ -29,4 +29,9 @@ public class FormulariosRegistro {
     @Column(name = "firma", nullable = false)
     private byte[] firma;
 
+    @Column(name = "firmanombre")
+    private String firmanombre;
+    @Column(name = "firmacontenttype")
+    private String firmacontenttype;
+
 }
