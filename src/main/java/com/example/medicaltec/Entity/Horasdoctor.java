@@ -36,7 +36,7 @@ public class Horasdoctor {
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
     @ManyToOne
-    @JoinColumn(name = "usuario_dni", nullable = false)
-    private Usuario usuarioDni;
+    @JoinColumn(name = "doctor_dni", nullable = false)
+    private Usuario doctor_dni;
 
 }
