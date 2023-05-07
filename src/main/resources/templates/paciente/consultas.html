@@ -241,8 +241,8 @@
                             <header>
                                 <h1>Receta Médica</h1>
                                 <p>Nombre del paciente: <strong th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Carlos Pisco</strong></p>
-                                <p th:each=" doc : ${doctores}">Nombre del doctor: <strong th:text="${doc.nombre} + ' ' + ${doc.apellido}">Manuel Yarleque</strong></p>
-                                <p>Fecha de emisión: <strong>21 de abril de 2023</strong></p>
+                                <p>Nombre del doctor: <strong th:text="${cita.doctorDni1.nombre} + ' ' + ${cita}">Manuel Yarleque</strong></p>
+                                <p>Fecha de emisión: <strong th:text="${cita}">21 de abril de 2023</strong></p>
                             </header>
 
                             <section>
@@ -253,12 +253,6 @@
                                     <li th:text="${med.getFrecuencia()}"><strong>Frecuencia:</strong> Cada 8 horas</li>
                                 </ul>
 
-                                <ul>
-                                    <li><strong>Nombre del Medicamento:</strong> Amoxicilina</li>
-                                    <li><strong>Dosis:</strong> 500mg</li>
-                                    <li><strong>Frecuencia:</strong> Cada 12 horas</li>
-                                    <li><strong>Duración:</strong> 10 días</li>
-                                </ul>
                             </section>
 
                             <footer>
@@ -338,6 +332,31 @@
             ]
         });
     });
+</script>
+
+
+<script>
+
+    var myCalendar = new FalconCalendar('#appCalendar');
+
+    $.ajax({
+        url: '/obtener_eventos.php',
+        dataType: 'json',
+        success: function(data) {
+            // Aquí se procesan los datos
+
+            $.each(data, function(index, event) {
+                myCalendar.addEvent({
+                    date: event.start_time,
+                    title: event.title,
+                    description: event.description
+                });
+            });
+        }
+    });
+
+
+
 </script>
 
 </body>

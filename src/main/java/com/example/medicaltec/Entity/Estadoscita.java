@@ -1,6 +1,7 @@
 package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,8 @@ public class Estadoscita {
     @Column(name = "idestados", nullable = false)
     private Integer id;
 
-    @Column(name = "tipo", nullable = false, length = 45)
+    @Size(max = 45)
+    @Column(name = "tipo")
     private String tipo;
 
 }

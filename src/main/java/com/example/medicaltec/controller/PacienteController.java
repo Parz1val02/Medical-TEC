@@ -89,11 +89,7 @@ public class PacienteController {
         Usuario usuario = usuarioRepository.findByid("22647853");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("cita",citaRepository.findAll());
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
         //List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
         //model.addAttribute("listaDoc",listaDoctores);

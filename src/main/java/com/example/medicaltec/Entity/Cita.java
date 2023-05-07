@@ -1,6 +1,7 @@
 package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,7 +45,8 @@ public class Cita {
     @Column(name = "formapago", nullable = false, length = 45)
     private String formapago;
 
-    @Column(name = "modalidad", nullable = false, length = 45)
+    @Column(name = "modalidad", nullable = false)
+    @Size(max = 45)
     private String modalidad;
 
     @ManyToOne

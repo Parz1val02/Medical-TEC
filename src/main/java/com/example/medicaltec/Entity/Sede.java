@@ -1,8 +1,12 @@
 package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Value;
 
 @Getter
 @Setter
@@ -14,9 +18,11 @@ public class Sede {
     @Column(name = "idsedes", nullable = false)
     private Integer id;
 
+    @Size(max = 45)
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
 
+    @Size(max = 45)
     @Column(name = "color", nullable = false, length = 45)
     private String color;
 
@@ -29,6 +35,9 @@ public class Sede {
     @Column(name = "torre", nullable = false, length = 45)
     private String torre;
 
+
+    @Min(value = 0)
+    @Max(value = 5)
     @Column(name = "piso", nullable = false)
     private Integer piso;
 
