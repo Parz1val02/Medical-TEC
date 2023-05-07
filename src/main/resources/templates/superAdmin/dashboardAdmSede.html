@@ -180,7 +180,7 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
-                          <form method="post" th:action="@{'/superAdmin/editarAdmS'}">
+                          <form method="post" th:action="@{/superAdmin/editarAdmS}">
                             <div class="modal-body">
                               <div class="row">
                                 <div class="col-sm-6">
@@ -202,12 +202,17 @@
                                 <div class="col-sm-6">
                                   <div class="form-group">
                                     <label for="sede"> Sede  </label>
-                                    <input type="text" id="sede" name="sede"  class="form-control" th:value="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'sin sede'}">
+                                    <select class="form-control" name="sede" id="sede">
+                                      <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
+                                              th:selected="${sede.id == admS.sedesIdsedes.id}"></option>
+                                    </select>
                                   </div>
-
                                   <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${admS.estadosIdestado != null ? admS.estadosIdestado.nombre : 'sin estado'}" class="form-control" >
+                                    <select class="form-control" name="estado" id="estado">
+                                      <option th:each="estado : ${estadosList}" th:value="${estado.id}" th:text="${estado.nombre}"
+                                              th:selected="${estado.id == admS.estadosIdestado.id}"></option>
+                                    </select>
                                   </div>
                                   <div class="form-group">
                                     <label for="telefono"> Teléfono  </label>

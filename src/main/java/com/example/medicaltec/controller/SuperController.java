@@ -118,6 +118,10 @@ public class SuperController {
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("especialidadList", listaEspecialidades);
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("sedesList", listaSedes);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("estadosList",listaEstados);
 
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         model.addAttribute("pacientesList", listaPacientes);
@@ -194,7 +198,7 @@ public class SuperController {
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         usuarioRepository.editarAdministradores( email,  nombre,  telefono,  id,  sede, estado);
-        return "redirect:/superAdmin/dashboard";
+        return "redirect:/superAdmin/dashboard/Adm";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model){
