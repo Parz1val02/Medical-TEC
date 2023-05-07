@@ -36,7 +36,7 @@
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
                     <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/img/team/avatar.png}" width="200" alt="" /></div>
                 </div>
                 <br>
                 <div class="col">
@@ -181,7 +181,7 @@
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <form class="form-group" method="post" th:action="@{/guardarFoto}" enctype="multipart/form-data">
                     <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;/img/team&quot;}]}">
                         <div class="col-md-auto">
                             <div class="dz-preview dz-preview-single">
@@ -199,12 +199,11 @@
                             </div>
                         </div>
                     </div>
-
-                </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary btn-sm" type="button">Save changes</button>
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary btn-sm" type="button">Guardar cambios</button>
             </div>
         </div>
     </div>
@@ -219,11 +218,11 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrese de que su nueva contraseña sea segura y única. No use la misma contraseña que utiliza en otros sitios web y evite usar información personal, como su nombre o fecha de nacimiento.
+                    Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrese de que su nueva contraseña sea segura y única. <br>No use la misma contraseña que utiliza en otros sitios web y evite usar información personal, como su nombre o fecha de nacimiento.
 
                     Además, nunca comparta su contraseña con nadie y no la guarde en lugares públicos como correos electrónicos o notas.<br>
 
-                    Recuerda que una contraseña segura es esencial para proteger sus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener su cuenta segura!
+                    Recuerda que una contraseña segura es esencial para proteger sus datos personales y evitar que sean robados por ciberdelincuentes. <br>¡Gracias por tomar precauciones para mantener su cuenta segura!
                 </p>
             </div>
             <div class="modal-footer">

@@ -68,79 +68,12 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr th:each="doctor, info : ${listaDoc}">
-                            <td th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
+                        <tr th:each="cita, info : ${citas}">
+                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
                             </td>
-                            <td th:text="${doctor.especialidadesIdEspecialidades}" class="align-middle">
-                                23-02-2023
+                            <td th:text="${cita.fecha}" class="align-middle">
                             </td>
-                            <td th:text="${doctor.nombre}" class="align-middle" style="text-align: center">
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Detalles</button>
-                                <!-- Modal -->
-                            </td>
-
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
-                                    border-radius: 15px">Receta</button>
-                                <!-- Modal -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Detalles</button>
-                                <!-- Modal -->
-                            </td>
-
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
-                                    border-radius: 15px">Receta</button>
-                                <!-- Modal -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Detalles</button>
-                                <!-- Modal -->
-                            </td>
-
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal" style="text-align: center;
-                                    border-radius: 15px">Receta</button>
-                                <!-- Modal -->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
+                            <td th:text="|${cita.doctorDni1.nombre} ${cita.doctorDni1.apellido}|" class="align-middle" style="text-align: center">
                             </td>
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
@@ -316,12 +249,12 @@
                 "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                lengthMenu: "Mostrar  _MENU_  citas",
+                zeroRecords: "No se encontraron citas pasadas",
+                emptyTable: "No hay citas",
+                info: "Mostrando citas del _START_ al _END_ <br>Total _TOTAL_ citas",
+                infoEmpty: "Mostrando citas del 0 al 0 <br>Total 0 citas pasadas",
+                infoFiltered: "(filtrado de un total de _MAX_ citas)",
                 loadingRecords: "Cargando...",
                 search: "Buscar:",
                 paginate: {
