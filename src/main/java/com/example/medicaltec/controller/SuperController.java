@@ -242,7 +242,11 @@ public class SuperController {
         model.addAttribute("listaSede", listaSede);
         return "superAdmin/crearAdmT";
     }
-
+    @PostMapping("/save/AdmS")
+    public String guardarAdministrador(Usuario usuario) {
+        usuarioRepository.save(usuario);
+        return "redirect:/superAdmin/dashboard";
+    }
     @PostMapping(value = "/Guardar/AdmSede")
     public String guardarAdmSede(Model model, RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
