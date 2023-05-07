@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-
-
-
+import java.util.Optional;
 
 
 @Controller
@@ -49,7 +47,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/usuarios")
-    public String pagusuarios(Model model){
+    public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario){
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
@@ -79,6 +77,22 @@ public class AdministradorController {
         return "redirect:/administrador/usuarios";
     }*/
 
+
+
+
+    @GetMapping("/editarDoctorPagina")
+    public String editarDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr){
+        Optional<Usuario> optDoctor = usuarioRepository.findById(dni);
+        if (optDoctor.isPresent()){
+            doctor = optDoctor.get();
+            model.addAttribute("doctor",doctor);
+            return "administrador/editarDoctor";
+        } else {
+            attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
+            return "redirect:/administrador/usuarios";
+        }
+
+    }
 
     @PostMapping("/editarDoctor")
     public String editarDoctor(
@@ -178,9 +192,23 @@ public class AdministradorController {
     }
     */
 
+    @GetMapping("/editarPacientePagina")
+    public String editarPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr){
+        Optional<Usuario> optPaciente = usuarioRepository.findById(dni);
+        if (optPaciente.isPresent()){
+            paciente = optPaciente.get();
+            model.addAttribute("paciente",paciente);
+            return "administrador/editarPaciente";
+        } else {
+            attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
+            return "redirect:/administrador/usuarios";
+        }
+
+    }
+
     @PostMapping("/editarPaciente")
     public String editarPaciente(
-           @ModelAttribute("usuario") Usuario paciente,
+           @ModelAttribute("paciente") Usuario paciente,
             RedirectAttributes attr
 
     ){
@@ -229,14 +257,14 @@ public class AdministradorController {
 
     @PostMapping("/crearPaciente")
     public String crearPaciente(
-            @ModelAttribute("usuario") Usuario usuario,
+            @ModelAttribute("usuario") Usuario paciente,
             RedirectAttributes attr
 
     ){
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         boolean existePaciente = false;
-        for (Usuario paciente : listaPacientes) {
-            if (usuario.getId().equalsIgnoreCase(paciente.getId()) ) {
+        for (Usuario pacienteLista : listaPacientes) {
+            if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
                 existePaciente = true;
             }
         }
@@ -248,7 +276,7 @@ public class AdministradorController {
         } else {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearPaciente( usuario.getEmail(),  usuario.getNombre(),  usuario.getApellido(),  usuario.getTelefono(), usuario.getId(),  1, usuario.getEdad(), usuario.getDireccion() , usuario.getSexo(), contrasena );
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasena );
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
