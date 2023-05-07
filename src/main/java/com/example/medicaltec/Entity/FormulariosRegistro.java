@@ -26,7 +26,7 @@ public class FormulariosRegistro {
     @Column(name = "password", nullable = false, length = 45)
     private String password;
 
-    @Column(name = "firma", nullable = false)
+    @Column(name = "firma")
     private byte[] firma;
 
     @Column(name = "firmanombre")
