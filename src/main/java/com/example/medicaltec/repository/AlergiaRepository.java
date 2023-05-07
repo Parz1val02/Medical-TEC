@@ -10,9 +10,19 @@ public interface AlergiaRepository extends JpaRepository<Alergia,Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into alergias (nombre) values (?1)", nativeQuery = true)
+    @Query(value = "insert into alergias (nombre, enabled) values (?1, 1)", nativeQuery = true)
     void guardarAlergias(String nombre);
 
+    @Query(value = "SELECT LAST_INSERT_ID();", nativeQuery = true)
+    Integer lastID();
+
+    @Query(value = "SELECT * FROM telesystem.alergias where idalergias=?1 and enabled=1;", nativeQuery = true)
+    Alergia obtenerAlergia(Integer id);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update alergias set enabled=0 where idalergias=?1")
+    void borrarAlergia(Integer id);
 
 
 
