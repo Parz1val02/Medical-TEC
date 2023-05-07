@@ -38,8 +38,10 @@ public class PacienteController {
     final MedicamentoRepository medicamentoRepository;
     final HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository;
 
+    final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
+
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
-                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository) {
+                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -50,6 +52,7 @@ public class PacienteController {
         this.citaRepository = citaRepository;
         this.medicamentoRepository = medicamentoRepository;
         this.historialMedicoHasAlergiaRepository=historialMedicoHasAlergiaRepository;
+        this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -92,7 +95,7 @@ public class PacienteController {
         Usuario usuario = usuarioRepository.findByid("22647853");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("usuario", usuario);
-        model.addAttribute("cita",citaRepository.findAll());
+        model.addAttribute("cita",citaRepository.find);
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
         //List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
         //model.addAttribute("listaDoc",listaDoctores);

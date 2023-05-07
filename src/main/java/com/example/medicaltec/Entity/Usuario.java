@@ -1,6 +1,7 @@
 package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +12,13 @@ import lombok.Setter;
 @Table(name = "usuario")
 public class Usuario {
     @Id
-    @Column(name = "dni", nullable = false, length = 8)
+    @Column(name = "dni", nullable = false)
+
+    @Size(max = 8)
     private String id;
 
-    @Size(max = 45)
+    @Size(max = 16)
+    @Size(min = 8)
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
@@ -28,6 +32,7 @@ public class Usuario {
     private String apellido;
 
     @Column(name = "edad", nullable = false)
+    @Min(value = 0)
     private Integer edad;
 
     @Column(name = "telefono", nullable = false, length = 9)
