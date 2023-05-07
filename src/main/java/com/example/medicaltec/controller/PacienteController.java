@@ -58,6 +58,7 @@ public class PacienteController {
         model.addAttribute("seguros", seguroRepository.findAll());
         model.addAttribute("especialidades", especialidadRepository.findAll());
         model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "arch");
         return "paciente/principal";
    }
 
@@ -73,19 +74,13 @@ public class PacienteController {
         model.addAttribute("seguros", seguroRepository.findAll());
         model.addAttribute("especialidades", especialidadRepository.findAll());
         model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
         return "paciente/perfil";
     }
 
     @GetMapping("/password")
     public String cambiarContra(Model model){
-        Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
         return "paciente/cambioContrasena";
     }
 
@@ -105,57 +100,29 @@ public class PacienteController {
         //model.addAttribute("roles",rolesRepository.findAll());
 
         //System.out.print(listaDoctores);
+        model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
 
     @RequestMapping("/notificaciones")
     public String notificaciones(Model model){
-        Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
        return "paciente/notificaciones";
     }
     @RequestMapping("/mensajeria")
     public String mensajeria(Model model){
-
-        Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
        return "paciente/mensajeria";
     }
 
     @RequestMapping("/pagos")
     public String pagos(Model model){
-        Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
        return "paciente/pagos";
     }
-    @RequestMapping("cuestionarios")
+    @RequestMapping("/cuestionarios")
     public String cuestionarios(Model model){
-        Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
     }
 
@@ -171,12 +138,17 @@ public class PacienteController {
                               @RequestParam("sede") String idSede,
                               @RequestParam("doctor") String idDoctor,
                               @RequestParam("seguro") String idSeguro,
-                              @RequestParam("formapago") String formaPago,
                               @RequestParam("modalidad") String modalidad,
                               @RequestParam("hora")LocalTime hora,
                               @RequestParam("fecha")LocalDate fecha,
                               RedirectAttributes attr){
-        citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora);
+        String formaPago;
+        if(modalidad.equals("Presencial")){
+            formaPago = "En caja";
+        }else{
+            formaPago = "Virtual";
+        }
+        citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora, dni, idDoctor);
         attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         return "redirect:/paciente/principal";
     }

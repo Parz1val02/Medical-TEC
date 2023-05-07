@@ -16,8 +16,9 @@
   <div class="container" data-layout="container">
     <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
     <div class="content" >
-      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
       <div class="content">
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <div class="card-deck">
           <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
             <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
@@ -176,7 +177,7 @@
                             </div>
                             <div class="form-group">
                               <label for="cedula">Cedula profesional</label>
-                              <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.cedulaDoctor}" class="form-control" disabled>
+                              <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.ceduladoctor}" class="form-control" disabled>
                             </div>
                           </div>
                           <!-- Columna 2 -->
