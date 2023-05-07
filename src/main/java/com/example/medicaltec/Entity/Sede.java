@@ -41,4 +41,10 @@ public class Sede {
     @Column(name = "logo", nullable = false)
     private byte[] logo;
 
+    @Column(name = "logonombre")
+    private String logonombre;
+
+    @Column(name = "logocontenttype")
+    private String logocontenttype;
+
 }
