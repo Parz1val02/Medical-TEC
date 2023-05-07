@@ -156,9 +156,9 @@ VALUES
 /* Solo para doctor */
 /*15*/
 INSERT INTO `Telesystem`.`horasdoctor`
-(`idhorasdoctor`,`horainicio`,`horafin`,`horalibre`,`usuario_dni`)
+(`idhorasdoctor`,`horainicio`,`horafin`,`horalibre`,`doctor_dni`,`fecha`)
 VALUES
-(1,'2023-04-20 08:00:00','2023-04-20 16:00:00','2023-04-19 18:00:00','12345678');
+(1,'08:00:00','16:00:00','12:00:00','12345678','2023-04-20');
 
 
 
