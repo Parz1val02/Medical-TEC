@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebaradministrador.html::sideBar}"></nav>
+    <div class="content" >
+      <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
+
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Editar Paciente
+              </h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+
+          <div class="row">
+            <div class="col-lg">
+
+              <form th:action="@{/administrador/editarPaciente}" th:object="${paciente}">
+                <fieldset >
+                  <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label class="form-label">Nombre</label>
+                      <input type="text" th:field="*{nombre}" class="form-control" >
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label  class="form-label">Apellido</label>
+                      <input type="text" th:field="*{apellido}" class="form-control" >
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label  class="form-label">Email</label>
+                      <input type="text" th:field="*{email}" class="form-control">
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label  class="form-label">Telefono</label>
+                      <input type="text" th:field="*{telefono}" class="form-control" >
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label  class="form-label">DNI</label>
+                      <input type="hidden" th:field="*{id}" class="form-control"  >
+                      <input type="text" th:value="${paciente.id}" class="form-control" disabled >
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label  class="form-label">Estado</label>
+                      <input type="text" th:field="*{estadosIdestado}" class="form-control" disabled>
+                    </div>
+
+                  </div>
+
+                </fieldset>
+              </form>
+            </div>
+
+          </div>
+
+
+
+        </div>
+      </div>
+
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+<!--modal-->
+<div class="modal fade" id="cambioContrasena" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModal1Label">Advertencia</h1>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrese de que su nueva contraseña sea segura y única. No use la misma contraseña que utiliza en otros sitios web y evite usar información personal, como su nombre o fecha de nacimiento.
+
+          Además, nunca comparta su contraseña con nadie y no la guarde en lugares públicos como correos electrónicos o notas.<br>
+
+          Recuerda que una contraseña segura es esencial para proteger sus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener su cuenta segura!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a type="button" class="btn btn-primary" th:href="@{/administrador/password}">Continuar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--modal-->
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+  $(document).ready(function () {
+    //Esta busacando por el ID del tah <table>
+    //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+    $('#userList').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  usuarios",
+        zeroRecords: "No se encontraron usuarios",
+        emptyTable: "No hay usuarios",
+        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      lengthMenu: [
+        [10, 25, 50, -1], [10, 25, 50, "Todos"]
+      ],
+      buttons: [
+
+      ]
+    });
+  });
+</script>
+
+
+</body>
+</html>

@@ -85,10 +85,15 @@
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalHistorial-' + ${vEstado.index + 1}">Ver historial clínico</button>
                             </td>
+
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>
+                                <a th:href="@{'/administrador/editarPacientePagina' + '?id=' + ${paciente.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
                             </td>
+<!--                            <td class="align-middle" align="center">-->
+<!--                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;-->
+<!--                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>-->
+<!--                            </td>-->
 
                             <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
                             <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
@@ -403,35 +408,35 @@
                 </div>
 
                 <form method="post" th:action="@{/administrador/editarDoctor}">
-                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre </label>
-                                    <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control"  required>
-                                </div>
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                   <div class="modal-body">
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="form-group">
+                                   <label for="nombre">Nombre </label>
+                                   <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control"  required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="email">Email </label>
-                                    <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" required>
-                                </div>
+                               <div class="form-group">
+                                   <label for="email">Email </label>
+                                   <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="id">DNI </label>
-                                    <input type="text" class="form-control" th:value="${doctor.id}" disabled>
-                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" required>
-                                </div>
+                               <div class="form-group">
+                                   <label for="id">DNI </label>
+                                   <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                   <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
-                                </div>
+                               <div class="form-group">
+                                   <label for="estado">Estado </label>
+                                   <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
+                               </div>
 
 
-                            </div>
+                           </div>
 
-                            <!-- Columna 2 -->
+                           <!-- Columna 2 -->
                             <div class="col-sm-6">
 
                                 <div class="form-group">
@@ -486,7 +491,7 @@
             </div>
 
             <form method="post" th:action="@{/administrador/crearDoctor}">
-                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
@@ -534,15 +539,15 @@
                             <div class="form-group">
                                 <label for="sexo">Sexo  </label>
                                 <select class="form-control" name="sexo" id="sexo">
-                                    <option value="masculino"> Masculino </option>
-                                    <option value="femenino"> Femenino </option>
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
                                 </select>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="direccion">Direccion </label>
-                                <input type="direccion" id="direccion" name="direccion"   class="form-control" required>
+                                <input type="text" id="direccion" name="direccion"   class="form-control" required>
                             </div>
 
 
@@ -590,65 +595,65 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <form method="post" th:action="@{/administrador/crearPaciente}">
-                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
+            <form method="post" th:action="@{/administrador/crearPaciente}" th:object="${usuario}">
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-sm-6">
 
-                            <div class="form-group">
-                                <label for="nombre">Nombre </label>
-                                <input type="text" id="nombre" name="nombre"  class="form-control" required>
-                            </div>
+                             <div class="form-group">
+                                 <label for="nombre">Nombre </label>
+                                 <input type="text" th:field="*{nombre}"  class="form-control" required>
+                             </div>
 
-                            <div class="form-group">
-                                <label for="id">DNI </label>
-                                <input type="text" id="id" name="id" class="form-control" required>
+                             <div class="form-group">
+                                 <label for="id">DNI </label>
+                                 <input type="text" th:field="*{id}" class="form-control" required>
 
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="edad">Edad </label>
-                                <input type="text" id="edad" name="edad"   class="form-control" required>
-                            </div>
+                             </div>
 
 
-
-                            <div class="form-group">
-                                <label for="email">Email </label>
-                                <input type="email" id="email" name="email"   class="form-control" required>
-                            </div>
+                             <div class="form-group">
+                                 <label for="edad">Edad </label>
+                                 <input type="text" th:field="*{edad}"   class="form-control" required>
+                             </div>
 
 
 
-                        </div>
+                             <div class="form-group">
+                                 <label for="email">Email </label>
+                                 <input type="email" th:field="*{email}"   class="form-control" required>
+                             </div>
 
-                        <!-- Columna 2 -->
+
+
+                         </div>
+
+                         <!-- Columna 2 -->
                         <div class="col-sm-6">
 
                             <div class="form-group">
                                 <label for="apellido">Apellido  </label>
-                                <input type="text" id="apellido" name="apellido"   class="form-control" required>
+                                <input type="text" th:field="*{apellido}"   class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="sexo">Sexo  </label>
-                                <select class="form-control" name="sexo" id="sexo">
-                                    <option value="masculino"> Masculino </option>
-                                    <option value="femenino"> Femenino </option>
+                                <select class="form-control" th:field="*{sexo}">
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
                                 </select>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="direccion">Direccion </label>
-                                <input type="direccion" id="direccion" name="direccion"   class="form-control" required>
+                                <input type="text" th:field="*{direccion}"   class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="telefono">Telefono </label>
-                                <input type="text" id="telefono" name="telefono"   class="form-control" required>
+                                <input type="text" th:field="*{telefono}"   class="form-control" required>
                             </div>
                             <!--
                             <div class="form-group">
@@ -686,32 +691,32 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form method="post" th:action="@{/administrador/editarPaciente}">
-                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre </label>
-                                    <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" required>
-                                </div>
+                <form method="post" th:action="@{/administrador/editarPaciente}" >
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                      <div class="modal-body">
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <label for="nombre">Nombre </label>
+                                      <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" required>
+                                  </div>
 
-                                <div class="form-group">
-                                    <label for="email">Email </label>
-                                    <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" required>
-                                </div>
+                                  <div class="form-group">
+                                      <label for="email">Email </label>
+                                      <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" required>
+                                  </div>
 
-                                <div class="form-group">
-                                    <label for="id">DNI </label>
-                                    <input type="text" class="form-control" th:value="${paciente.id}" disabled>
-                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
-                                </div>
+                                  <div class="form-group">
+                                      <label for="id">DNI </label>
+                                      <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                      <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
+                                  </div>
 
 
 
-                            </div>
+                              </div>
 
-                            <!-- Columna 2 -->
+                              <!-- Columna 2 -->
                             <div class="col-sm-6">
 
                                 <div class="form-group">
@@ -727,7 +732,7 @@
 
                                 <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
+                                    <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
                                 </div>
 
                             </div>
