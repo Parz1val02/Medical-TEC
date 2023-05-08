@@ -180,17 +180,13 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
-                          <form method="post" th:action="@{'/superAdmin/save/AdmS'}">
+                          <form method="post" th:action="@{/superAdmin/editarAdmS}">
                             <div class="modal-body">
                               <div class="row">
                                 <div class="col-sm-6">
                                   <div class="form-group">
                                     <label for="nombre">Nombre </label>
                                     <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" >
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="apellido">Apellido </label>
-                                    <input type="text" id="apellido" name="apellido"  th:value="${admS.apellido}" class="form-control" >
                                   </div>
 
                                   <div class="form-group">
@@ -205,16 +201,17 @@
                                 </div>
                                 <div class="col-sm-6">
                                   <div class="form-group">
-                                    <label for="sede">Sede</label>
+                                    <label for="sede"> Sede  </label>
                                     <select class="form-control" name="sede" id="sede">
-                                      <option th:each="sede : ${listaSede}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+                                      <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
+                                              th:selected="${sede.id == admS.sedesIdsedes.id}"></option>
                                     </select>
                                   </div>
-
                                   <div class="form-group">
-                                    <label for="estado">Estado</label>
+                                    <label for="estado">Estado </label>
                                     <select class="form-control" name="estado" id="estado">
-                                      <option th:each="estad : ${listaEstado}" th:value="${estad.id}" th:text="${estad.nombre}"></option>
+                                      <option th:each="estado : ${estadosList}" th:value="${estado.id}" th:text="${estado.nombre}"
+                                              th:selected="${estado.id == admS.estadosIdestado.id}"></option>
                                     </select>
                                   </div>
                                   <div class="form-group">
