@@ -15,9 +15,9 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 1")
-    List<Usuario> obtenerListaPacientes();
     @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2")
+    List<Usuario> obtenerListaPacientes();
+    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 1")
     List<Usuario> obtenerListaDoctores();
     @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 3")
     List<Usuario> obtenerListaAdministrativos();
