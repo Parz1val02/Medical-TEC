@@ -22,25 +22,22 @@
                   <div class="row">
                     <!-- Columna 1 -->
                     <div class="col-sm-6">
-                      <div class="form-group">
-                        <label for="dni1">DNI</label>
-                        <input type="text" id="dni1" name="id" th:placeholder="${usuario.id}" class="form-control" disabled>
-                      </div>
+                      <input type="hidden" id="pacienteDni" name="paciente.id" th:value="${usuario.id}" class="form-control">
                       <div class="form-group">
                         <label for="especialidad">Especialidad:</label>
-                        <select id="especialidad" name="especialidad" class="form-control">
+                        <select id="especialidad" name="especialidadesIdEspecialidad" class="form-control">
                           <option  th:each="especialidad : ${especialidades}"
                                    th:value="${especialidad.id}"
                                    th:text="${especialidad.nombreEspecialidad}"></option>
                         </select>
                       </div>
                       <div class="form-group">
-                        <label for="fecha">Fecha </label>
+                        <label for="fecha">Fecha:</label>
                         <input type="date" id="fecha" name="fecha" class="form-control" required>
                       </div>
                       <div class="form-group">
                         <label for="tipocita">Tipo de cita: </label>
-                        <select id="tipocita" name="tipocita" class="form-control">
+                        <select id="tipocita" name="tipocitaIdtipocita" class="form-control">
                           <option  th:each="tipo : ${tipos}"
                                    th:value="${tipo.id}"
                                    th:text="${tipo.tipoCita}"></option>
@@ -58,8 +55,8 @@
                     <!-- Columna 2 -->
                     <div class="col-sm-6">
                       <div class="form-group">
-                        <label for="sede">Sede de atencion:  </label>
-                        <select id="sede" name="sede" class="form-control">
+                        <label for="sede">Sede de atencion:</label>
+                        <select id="sede" name="sedesIdsedes" class="form-control">
                           <option  th:each="sede : ${sedes}"
                                    th:value="${sede.id}"
                                    th:text="${sede.nombre}"></option>
@@ -67,7 +64,7 @@
                       </div>
                       <div class="form-group">
                         <label for="doctor">Doctor:  </label>
-                        <select id="doctor" name="doctor" class="form-control">
+                        <select id="doctor" name="doctor.id" class="form-control">
                           <option  th:each="doctor : ${doctores}"
                                    th:value="${doctor.id}"
                                    th:text="|${doctor.nombre} ${doctor.apellido}|"></option>
@@ -78,18 +75,7 @@
                         <label for="hora">Hora</label>
                         <input type="time" id="hora" name="hora" class="form-control" required>
                       </div>
-                      <div class="form-group">
-                        <label for="seguro">Seguro de salud:  </label>
-                        <select id="seguro" name="seguro" class="form-control">
-                          <option  th:each="seguro : ${seguros}"
-                                   th:value="${seguro.id}"
-                                   th:text="${seguro.nombreSeguro}"></option>
-                        </select>
-                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <input type="hidden" id="dni" name="id" th:value="${usuario.id}" class="form-control">
                   </div>
                   <!-- Botón de envío -->
                   <button class="btn btn-primary submit">Registrar cita</button>

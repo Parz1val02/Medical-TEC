@@ -15,7 +15,6 @@ public class Alergia {
     @Column(name = "idalergias", nullable = false)
     private Integer id;
 
-
     @Size(max = 100)
     @Column(name = "nombre", length = 100)
     private String nombre;

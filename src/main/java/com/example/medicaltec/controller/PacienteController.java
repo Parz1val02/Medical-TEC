@@ -128,23 +128,18 @@ public class PacienteController {
         return "redirect:/paciente/principal";
     }
     @PostMapping("/guardarCita")
-    public String guardarCita(@RequestParam("id") String dni,
-                              @RequestParam("especialidad") String idEspecialidad,
-                              @RequestParam("tipocita") String idTipoCita,
-                              @RequestParam("sede") String idSede,
-                              @RequestParam("doctor") String idDoctor,
-                              @RequestParam("seguro") String idSeguro,
-                              @RequestParam("modalidad") String modalidad,
-                              @RequestParam("hora")LocalTime hora,
-                              @RequestParam("fecha")LocalDate fecha,
+    public String guardarCita(Cita cita,
                               RedirectAttributes attr){
-        String formaPago;
-        if(modalidad.equals("Presencial")){
-            formaPago = "En caja";
-        }else{
-            formaPago = "Virtual";
+        if(cita.getModalidad().equals("Presencial")){
+            cita.setFormapago("En caja");
+        }else if(cita.getModalidad().equals("Virtual")){
+            cita.setFormapago("Virtual");
         }
-        citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora, dni, idDoctor);
+        cita.setCitacancelada(false);
+        cita.setPaciente(usuarioRepository.findByid(cita.getPaciente().getId()));
+        cita.setDoctor(usuarioRepository.findByid(cita.getDoctor().getId()));
+        citaRepository.save(cita);
+        //citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora, dni, idDoctor);
         attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         return "redirect:/paciente/principal";
     }

@@ -12,11 +12,11 @@ import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
-   @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where fecha < current_date() and citacancelada=0 and paciente_dni=?1")
+   @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where citacancelada=0 and paciente_dni=?1")
    List<Cita> historialCitas(String dniPaciente);
 
 
-   @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where fecha >= current_date() and citacancelada=1 and paciente_dni=?1")
+   @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where fecha >= current_date() and citacancelada=0 and paciente_dni=?1")
    List<Cita> historialCitasAgendadas(String dniPaciente);
 
 

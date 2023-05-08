@@ -13,7 +13,6 @@ import lombok.Setter;
 public class Usuario {
     @Id
     @Column(name = "dni", nullable = false)
-
     @Size(max = 8)
     private String id;
 
