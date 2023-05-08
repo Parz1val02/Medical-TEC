@@ -186,9 +186,13 @@
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
                             </td>
                             <td class="align-middle" align="center">
+                                <a th:href="@{'/administrador/editarDoctorPagina' + '?id=' + ${doctor.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
+                            </td>
+                           <!-- <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfilEditar-' + ${vEstado.index + 1}">Editar</button>
-                            </td>
+                            </td> -->
 
                             <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
                             <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->

@@ -85,6 +85,8 @@ public class AdministradorController {
         Optional<Usuario> optDoctor = usuarioRepository.findById(dni);
         if (optDoctor.isPresent()){
             doctor = optDoctor.get();
+            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            model.addAttribute("listaEspecialidades",listaEspecialidades);
             model.addAttribute("doctor",doctor);
             return "administrador/editarDoctor";
         } else {
@@ -96,7 +98,7 @@ public class AdministradorController {
 
     @PostMapping("/editarDoctor")
     public String editarDoctor(
-            @ModelAttribute("usuario") Usuario doctor,
+            @ModelAttribute("doctor") Usuario doctor,
             RedirectAttributes attr
 
     ){
