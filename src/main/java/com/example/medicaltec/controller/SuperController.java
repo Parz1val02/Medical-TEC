@@ -243,6 +243,14 @@ public class SuperController {
         return "superAdmin/forms";
     }
 
+    @RequestMapping(value = {"/edit/CAntecedentes"},method = RequestMethod.POST)
+    public String cuestionarioAntecedente(Model model, @RequestParam("num") int num){
+        //List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
+        //model.addAttribute("formularioList", listaFormularios);
+        String vista = "superAdmin/cuestionario" + num; // Concatenar el valor de num con el nombre de la vista
+        return vista; // Retornar el nombre de la vista concatenado
+    }
+
     @RequestMapping(value = {"/Crear/AdmSede"},method = RequestMethod.GET)
     public String crearAdmSEDE(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
@@ -480,7 +488,7 @@ public class SuperController {
     }
     @RequestMapping(value = {"/cuestionario"},method = RequestMethod.GET)
     public String cuestionario(){
-        return "superAdmin/cuestionario";
+        return "cuestionario1";
     }
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
     public String cuestionarios(Model model){
