@@ -2,7 +2,7 @@ package com.example.medicaltec.controller;
 
 
 import com.example.medicaltec.Entity.Alergia;
-import com.example.medicaltec.Entity.Cita;
+import com.example.medicaltec.Entity.Cuestionario;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.*;
@@ -34,12 +34,19 @@ public class PacienteController {
     final CitaRepository citaRepository;
 
     final MedicamentoRepository medicamentoRepository;
+
+    final PreguntaRepository preguntaRepository;
+
+    final CuestionarioRepository cuestionarioRepository;
+    final RptaRepository rptaRepository;
     final HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository;
 
     final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
 
+
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
-                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository) {
+                              TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
+                              CuestionarioRepository cuestionarioRepository) {
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -49,8 +56,11 @@ public class PacienteController {
         this.tipoCitaRepository = tipoCitaRepository;
         this.citaRepository = citaRepository;
         this.medicamentoRepository = medicamentoRepository;
+        this.preguntaRepository = preguntaRepository;
+        this.rptaRepository = rptaRepository;
         this.historialMedicoHasAlergiaRepository=historialMedicoHasAlergiaRepository;
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
+        this.cuestionarioRepository = cuestionarioRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -117,7 +127,11 @@ public class PacienteController {
        return "paciente/pagos";
     }
     @RequestMapping("/cuestionarios")
-    public String cuestionarios(Model model){
+    public String cuestionarios(Model model, @RequestParam("id") int id){
+
+        //Cuestionario cues = cuestionarioRepository.findById(id);
+
+        model.addAttribute("preguntas",preguntaRepository.obtenerPreg(id));
         model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
     }
@@ -167,6 +181,19 @@ public class PacienteController {
         attr.addFlashAttribute("msg2", "Se agregó la alergia exitosamente");
         return "redirect:/paciente/perfil";
     }
+
+
+
+    @PostMapping("/guardarRespuestas")
+    public String guardarRptas( @RequestParam("respuesta")String respuesta ,RedirectAttributes attr){
+
+        attr.addFlashAttribute("msg2", "Se agregó la alergia exitosamente");
+        return "redirect:/paciente/cuestionarios";
+    }
+
+
+
+
 
     @GetMapping("/borrarAlergia")
     public String borrarAlergia(@RequestParam("id")Integer id,

@@ -44,70 +44,40 @@
                 <div class="card-body" style="margin-top: -70px">
                     <br>
                     <div class="row">
-                        <div class="col-lg-12">
-                            <form>
+                        <div class="col-lg-12" >
+                            <form method="post" th:action="@{/paciente/guardarRespuestas}">
                                 <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput1" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
-                                        <input type="text" id="disabledTextInput1" class="form-control" placeholder="Enfermedades previas/actuales">
+                                    <div class="col mb-3" th:each=" preg: ${preguntas}">
+
+                                        <label for="disabledTextInput1" th:text="${preg.pregunta}" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
+                                        <input type="text" id="disabledTextInput1" class="form-control" name="respuesta">
                                     </div>
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput2" class="form-label">¿Qué alergías tienes?</label>
-                                        <input type="text" id="disabledTextInput2" class="form-control" placeholder="Alergias">
-                                    </div>
+
                                 </div>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput3" class="form-label">¿Qué medicamentos estás tomando actualmente?</label>
-                                        <input type="text" id="disabledTextInput3" class="form-control" placeholder="Medicamentos">
-                                    </div>
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput4" class="form-label">¿Hay antecedentes de enfermedades como cáncer o diabetes en tu familia??</label>
-                                        <input type="text" id="disabledTextInput4" class="form-control" placeholder="Enfermedades graves">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput5">¿Sufre de alguna enfermedad psiquiátrica?</label>
-                                        <input type="text" id="disabledTextInput6" class="form-control" placeholder="Drogas">
-                                    </div>
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput6" class="form-label">¿Hay antecedentes de enfermedades psiquiatricas en tu familia??</label>
-                                        <input type="text" id="disabledTextInput5" class="form-control" placeholder="Enfermedades psiquiátricas">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput7" class="form-label">¿Consumes drogas o algún tipo de estupefaciente?</label>
-                                        <input type="text" id="disabledTextInput7" class="form-control" placeholder="Drogas">
-                                    </div>
-                                    <div class="col mb-3">
-                                        <label for="disabledTextInput8" class="form-label">¿Fumas?¿Con qué frecuencia??</label>
-                                        <input type="text" id="disabledTextInput8" class="form-control" placeholder="Drogas">
-                                    </div>
-                                </div>
-                                <br>
+
                                 <button type="button" class="btn btn-secondary">Cancelar</button>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Enviar cuestionario</button>
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ...
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
+
+                            </form>
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
