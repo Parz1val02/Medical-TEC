@@ -23,7 +23,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?2 WHERE u.sedes_idsedes=?1", nativeQuery = true)
-    void actualizarSede(int id_actual, int id_nuevo);
+    @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
+    void actualizarSede(int id_nuevo);
 
 }

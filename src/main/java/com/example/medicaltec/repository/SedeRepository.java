@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface SedeRepository extends JpaRepository<Sede, Integer> {
 
-    @Query(value="SELECT * FROM telesystem.sedes s WHERE NOT s.idsedes=3", nativeQuery = true)
-    List<Sede> sedesMenosActual();
+    @Query(value="SELECT * FROM telesystem.sedes s WHERE NOT s.idsedes=?1", nativeQuery = true)
+    List<Sede> sedesMenosActual(int sede_actual);
 
 
 }

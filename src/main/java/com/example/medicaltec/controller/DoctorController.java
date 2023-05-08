@@ -5,6 +5,7 @@ import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class DoctorController {
         }
         model.addAttribute("listaAlergias",listaAlergias);
 
+        /*
         List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
         List<Informe> informeList = new ArrayList<>();
         for (Cita cita : listaCitasPorUsuario) {
@@ -67,6 +69,10 @@ public class DoctorController {
         }
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
         model.addAttribute("listaInformes",informeList);
+        */
+
+        List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+        model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
 
         return "doctor/historial";
     }
@@ -101,19 +107,19 @@ public class DoctorController {
 
     @GetMapping("/config")
     public String verConfiguracion(Model model){
-        List<Sede> sedeList = sedeRepository.sedesMenosActual();
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById("12345678");
+        Usuario usuario = optionalUsuario.get();
+        model.addAttribute("usuario",usuario);
+        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
     }
 
     @PostMapping("/cambiarSede")
-    public String cambiarSede(Model model,
+    public String cambiarSede(Model model, RedirectAttributes attr,
                               @RequestParam("id") int id){
-        Optional<Sede> optionalSede = sedeRepository.findById(id);
-
-        if (optionalSede.isPresent()) {
-            usuarioRepository.actualizarSede(3,id);
-        }
+        usuarioRepository.actualizarSede(id);
+        attr.addFlashAttribute("msg", "Se actualizó la sede del usuario");
         return "redirect:/doctor/config";
     }
 

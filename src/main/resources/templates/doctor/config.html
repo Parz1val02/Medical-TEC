@@ -42,29 +42,16 @@
                     </h3>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">Nombres: <span style="font-weight: normal">Dana Paola</span></p>
+                            <p style="font-weight: bold; margin: 2px">Nombres: <span style="font-weight: normal" th:text="${usuario.nombre}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Email: <span style="font-weight: normal" th:text="${usuario.email}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Edad:  <span style="font-weight: normal" th:text="${usuario.edad}"></span>, Sexo: <span style="font-weight: normal" th:text="${usuario.sexo}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Especialidad: <span style="font-weight: normal" th:text="${usuario.especialidadesIdEspecialidad.nombreEspecialidad}"></span></p>
                         </div>
                         <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">Apellidos: <span style="font-weight: normal">Nolasco Vallejos</span></p>
-                        </div>
-                    </div>
-                    <div style="height: 10px"></div>
-                    <div class="row justify-content-between align-items-center" style="">
-                        <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">Email: <span style="font-weight: normal">dnolasco@pucp.edu.pe</span></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">Celular: <span style="font-weight: normal">951899507</span></p>
-                        </div>
-                    </div>
-                    <div style="height: 10px"></div>
-                    <div class="row justify-content-between align-items-center" style="">
-                        <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">CMP:  <span style="font-weight: normal">30111</span>, RNE: <span style="font-weight: normal">13308</span></p>
-
-                        </div>
-                        <div class="col-md-6">
-                            <p style="font-weight: bold; margin: 0px">Idiomas: <span style="font-weight: normal">Español, Inglés</span></p>
+                            <p style="font-weight: bold; margin: 2px">Apellidos: <span style="font-weight: normal" th:text="${usuario.apellido}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Celular: <span style="font-weight: normal" th:text="${usuario.telefono}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Dirección: <span style="font-weight: normal" th:text="${usuario.direccion}"></span></p>
+                            <p style="font-weight: bold; margin: 2px">Estado: <span style="font-weight: normal" th:text="${usuario.estadosIdestado.nombre}"></span></p>
                         </div>
                     </div>
                 </div>
@@ -79,7 +66,7 @@
                             </h3>
                             <div class="form-group">
                                     <p style="font-weight: bold; margin: 0px" >Sede Actual</p>
-                                    <p type="text"> Lima Centro</p>
+                                    <p type="text" th:text="${usuario.sedesIdsedes.nombre}"></p>
                             </div>
                             <form th:action="@{/doctor/cambiarSede}" method="post">
                                 <div class="form-group">
@@ -95,6 +82,7 @@
                                     <a th:href="@{/doctor/config}" style="text-decoration: underline; padding-left: 15px; color: #3d4858"> Cancelar</a>
                                 </div>
                             </form>
+                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
                         </div>
                     </div>
                 </div>
