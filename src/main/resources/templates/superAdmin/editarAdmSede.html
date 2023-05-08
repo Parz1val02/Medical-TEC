@@ -48,53 +48,53 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-8">
-                            <form method="post" th:action="@{'/superAdmin/actualizarAdmS'}" class="mt-2" th:object="${admS}">
+                            <form method="post" th:action="@{/superAdmin/actualizarAdmS}" class="mt-2" th:object="${admS}">
+                                <fieldset>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="nombre">Nombres </label>
-                                                <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" required>
+                                                <label class="form-label">Nombres </label>
+                                                <input type="text" th:field="*{nombre}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="apellido">Apellidos </label>
-                                                <input type="text" id="apellido" name="apellido"  th:value="${admS.apellido}" class="form-control" required>
+                                                <label class="form-label">Apellidos </label>
+                                                <input type="text" th:value="*{apellido}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="id">DNI </label>
-                                                <input type="text" class="form-control" th:value="${admS.id}" disabled>
-                                                <input type="hidden" id="id" name="id" class="form-control" th:value="${admS.id}" >
+                                                <label class="form-label">DNI </label>
+                                                <input type="text" th:value="*{id}" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
-                                                <label for="email">Email </label>
-                                                <input type="email" id="email" name="email"   class="form-control" th:value="${admS.email}" >
+                                                <label class="form-label">Email </label>
+                                                <input type="email" th:value="*{email}" class="form-control"  >
                                             </div>
                                         </div>
 
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="sede"> Sede  </label>
-                                                <select class="form-control" name="sede" id="sede">
+                                                <label for="sedesIdsedes"> Sede  </label>
+                                                <select class="form-control" name="sedesIdsedes" id="sedesIdsedes">
                                                     <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
                                                             th:selected="${sede.id == admS.sedesIdsedes.id}"></option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="estado">Estado </label>
-                                                <select class="form-control" name="estado" id="estado">
+                                                <label for="estadosIdestado">Estado </label>
+                                                <select class="form-control" name="estadosIdestado" id="estadosIdestado">
                                                     <option th:each="estado : ${estadosList}" th:value="${estado.id}" th:text="${estado.nombre}"
                                                             th:selected="${estado.id == admS.estadosIdestado.id}"></option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="telefono"> Teléfono  </label>
-                                                <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${admS.telefono}">
+                                                <label class="form-label"> Teléfono  </label>
+                                                <input type="text" th:value="*{telefono}"  class="form-control" >
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary" > Editar Administrador de Sede </button>
-                                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" > Editar Administrador de Sede </button>
+                                    <a th:href="@{/superAdmin/dashboardAdmSede}" class="btn btn-falcon-default" >Volver a página de administradores</a>
+                                </fieldset>
                             </form>
                         </div>
                     </div>
