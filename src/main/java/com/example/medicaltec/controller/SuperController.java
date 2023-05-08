@@ -46,6 +46,10 @@ public class SuperController {
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("especialidadList", listaEspecialidades);
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("sedesList", listaSedes);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("estadosList",listaEstados);
 
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         model.addAttribute("pacientesList", listaPacientes);
@@ -64,6 +68,10 @@ public class SuperController {
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("especialidadList", listaEspecialidades);
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("sedesList", listaSedes);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("estadosList",listaEstados);
 
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         model.addAttribute("pacientesList", listaPacientes);
@@ -86,6 +94,10 @@ public class SuperController {
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("especialidadList", listaEspecialidades);
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("sedesList", listaSedes);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("estadosList",listaEstados);
 
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         model.addAttribute("pacientesList", listaPacientes);
@@ -108,6 +120,10 @@ public class SuperController {
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("especialidadList", listaEspecialidades);
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("sedesList", listaSedes);
+        List<Estado> listaEstados = estadoRepository.findAll();
+        model.addAttribute("estadosList",listaEstados);
 
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         model.addAttribute("pacientesList", listaPacientes);
@@ -164,48 +180,52 @@ public class SuperController {
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
         usuarioRepository.editarPaciente( email,  nombre, sede, id, telefono, estado);
-        return "redirect:/superAdmin/dashboard";
+        return "redirect:/superAdmin/dashboard/Paciente";
     }
     @PostMapping("/editarDoctores")
     public String editarDoctor(
             @RequestParam("sede") int sede,
             @RequestParam("nombre") String nombre,
+            @RequestParam("apellido") String apellido,
             @RequestParam("email") String email,
-            @RequestParam("id") String id,
-
+            @RequestParam("id") String dni,
             @RequestParam("telefono") String telefono,
+            @RequestParam("especialidad") int especialidad,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
+
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( email,  nombre,   telefono,   id,  sede, estado );
-        return "redirect:/superAdmin/dashboard";
+        usuarioRepository.editarDoctor( email, nombre, apellido, sede, telefono, estado, especialidad, dni);
+        return "redirect:/superAdmin/dashboard/Doctor";
     }
     @PostMapping("/editarAdministrativos")
     public String editarAdministrativo(
             @RequestParam("sede") int sede,
             @RequestParam("nombre") String nombre,
+            @RequestParam("apellido") String apellido,
             @RequestParam("email") String email,
-            @RequestParam("id") String id,
-
+            @RequestParam("id") String dni,
             @RequestParam("telefono") String telefono,
+            @RequestParam("especialidad") int especialidad,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
 
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Administrativo actualizado exitosamente");
-        usuarioRepository.editarAdministrativo( email,  nombre,  telefono,  id,  sede, estado );
-        return "redirect:/superAdmin/dashboard";
+        usuarioRepository.editarAdministrativo( email, nombre, apellido, sede, telefono, estado, especialidad, dni);
+        return "redirect:/superAdmin/dashboard/AdmT";
     }
     @PostMapping("/editarAdmS")
     public String editarAdministrador(
             @RequestParam("sede") int sede,
             @RequestParam("nombre") String nombre,
+            @RequestParam("apellido") String apellido,
             @RequestParam("email") String email,
-            @RequestParam("id") String id,
+            @RequestParam("id") String dni,
             @RequestParam("telefono") String telefono,
             @RequestParam("estado") int estado,
             RedirectAttributes attr
@@ -213,7 +233,7 @@ public class SuperController {
     ){
         System.out.println(nombre);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
-        usuarioRepository.editarAdministradores( email,  nombre,  telefono,  id,  sede, estado);
+        usuarioRepository.editarAdministradores( email, nombre, apellido, sede, telefono, estado, dni);
         return "redirect:/superAdmin/dashboard/Adm";
     }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)

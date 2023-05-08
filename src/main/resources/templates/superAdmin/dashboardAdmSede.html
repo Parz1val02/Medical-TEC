@@ -185,10 +185,13 @@
                               <div class="row">
                                 <div class="col-sm-6">
                                   <div class="form-group">
-                                    <label for="nombre">Nombre </label>
-                                    <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" >
+                                    <label for="nombre">Nombres </label>
+                                    <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" required>
                                   </div>
-
+                                  <div class="form-group">
+                                    <label for="apellido">Apellidos </label>
+                                    <input type="text" id="apellido" name="apellido"  th:value="${admS.apellido}" class="form-control" required>
+                                  </div>
                                   <div class="form-group">
                                     <label for="id">DNI </label>
                                     <input type="text" class="form-control" th:value="${admS.id}" disabled>
@@ -199,6 +202,7 @@
                                     <input type="email" id="email" name="email"   class="form-control" th:value="${admS.email}" >
                                   </div>
                                 </div>
+
                                 <div class="col-sm-6">
                                   <div class="form-group">
                                     <label for="sede"> Sede  </label>

@@ -15,9 +15,9 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 1")
-    List<Usuario> obtenerListaPacientes();
     @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2")
+    List<Usuario> obtenerListaPacientes();
+    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 1")
     List<Usuario> obtenerListaDoctores();
     @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 3")
     List<Usuario> obtenerListaAdministrativos();
@@ -26,16 +26,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
-    void editarAdministrativo(String email, String nombre, String telefono,  String id, int sede, int estado );
+    @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")
+    void editarAdministrativo(String email, String nombre, String apellido, int sede, String telefono,  int estado, int especialidad, String dni);
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "update usuario u  set u.email= ?1, u.nombre= ?2, u.sedes_idsedes = ?3, u.telefono= ?4, u.estados_idestado = ?5 where  u.dni = ?6")
-    void editarAdministradores(String email, String nombre, String telefono,  String id, int sede, int estado);
+    @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6 where  u.dni = ?7")
+    void editarAdministradores(String email, String nombre, String apellido, int sede, String telefono,  int estado,  String dni);
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
-    void editarDoctor(String email, String nombre, String telefono,  String id, int sede, int estado);
+    @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")
+    void editarDoctor(String email, String nombre, String apellido, int sede, String telefono,  int estado, int especialidad, String dni);
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
