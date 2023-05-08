@@ -1,11 +1,11 @@
 package com.example.medicaltec.controller;
-import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +73,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardDoctor";
     }
 
@@ -91,6 +95,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardPaciente";
     }
 
@@ -109,6 +117,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardAdmT";
     }
 
@@ -127,6 +139,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardAdmSede";
     }
     @PostMapping("/editarPacientes")
@@ -243,8 +259,13 @@ public class SuperController {
         return "superAdmin/crearAdmT";
     }
     @PostMapping("/save/AdmS")
-    public String guardarAdministrador(Usuario usuario) {
-        usuarioRepository.save(usuario);
+    public String guardarAdministrador(@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                       @RequestParam("email") String email,
+                                        @RequestParam("telefono") String telefono,
+                                       @RequestParam("sede") int sede,
+                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr) {
+       usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
+        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
     }
     @PostMapping(value = "/Guardar/AdmSede")

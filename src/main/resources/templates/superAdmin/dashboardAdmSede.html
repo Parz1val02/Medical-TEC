@@ -188,6 +188,10 @@
                                     <label for="nombre">Nombre </label>
                                     <input type="text" id="nombre" name="nombre"  th:value="${admS.nombre}" class="form-control" >
                                   </div>
+                                  <div class="form-group">
+                                    <label for="apellido">Apellido </label>
+                                    <input type="text" id="apellido" name="apellido"  th:value="${admS.apellido}" class="form-control" >
+                                  </div>
 
                                   <div class="form-group">
                                     <label for="id">DNI </label>
@@ -201,13 +205,17 @@
                                 </div>
                                 <div class="col-sm-6">
                                   <div class="form-group">
-                                    <label for="sede"> Sede  </label>
-                                    <input type="text" id="sede" name="sede"  class="form-control" th:value="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'sin sede'}">
+                                    <label for="sede">Sede</label>
+                                    <select class="form-control" name="sede" id="sede">
+                                      <option th:each="sede : ${listaSede}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+                                    </select>
                                   </div>
 
                                   <div class="form-group">
-                                    <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${admS.estadosIdestado != null ? admS.estadosIdestado.nombre : 'sin estado'}" class="form-control" >
+                                    <label for="estado">Estado</label>
+                                    <select class="form-control" name="estado" id="estado">
+                                      <option th:each="estad : ${listaEstado}" th:value="${estad.id}" th:text="${estad.nombre}"></option>
+                                    </select>
                                   </div>
                                   <div class="form-group">
                                     <label for="telefono"> Teléfono  </label>

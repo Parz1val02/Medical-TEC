@@ -47,4 +47,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     void crearAdmT(String dni, String password,String email,String nombre,String apellido, int edad, String telefono, String sexo, String direccion, int sede);
 
 
+    @Transactional
+    @Modifying
+    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, sedes_idsedes =?5, estados_idestado=?6 where dni = ?7",nativeQuery = true)
+    void editAdmS(String nombre, String apellido,String email,String telefono, int sede, int estado, String dni);
+
+
 }
