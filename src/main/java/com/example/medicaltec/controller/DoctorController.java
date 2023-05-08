@@ -3,9 +3,7 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.entity.Cuestionario;
 import com.example.medicaltec.entity.Sede;
 import com.example.medicaltec.entity.Usuario;
-import com.example.medicaltec.repository.CuestionarioRepository;
-import com.example.medicaltec.repository.SedeRepository;
-import com.example.medicaltec.repository.UsuarioRepository;
+import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +18,36 @@ public class DoctorController {
     final SedeRepository sedeRepository;
     final CuestionarioRepository cuestionarioRepository;
     final UsuarioRepository usuarioRepository;
+    final MensajeRepository mensajeRepository;
+    final NotificacioneRepository notificacioneRepository;
+    final CitaRepository citaRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
+        this.mensajeRepository = mensajeRepository;
+        this.notificacioneRepository = notificacioneRepository;
+        this.citaRepository = citaRepository;
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model){
 
-        List<Usuario> userPacienteList = usuarioRepository.listarPacientes();
-        model.addAttribute("listaPacientes",userPacienteList);
+        model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
+        model.addAttribute("listaMensajes",mensajeRepository.listarMensajesMasActuales());
+        model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotificacionesMasActuales());
         return "doctor/principal";
     }
 
 
     @GetMapping("/historial")
-    public String verHistorial(){return "doctor/historial";}
+    public String verHistorial(Model model, @RequestParam("id") String id){
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        Usuario usuario = optionalUsuario.get();
+        model.addAttribute("paciente",usuario);
+        return "doctor/historial";
+    }
 
     @GetMapping("/notificaciones")
     public String verNotificaciones(){return "doctor/notificaciones";}
@@ -50,8 +60,7 @@ public class DoctorController {
 
     @GetMapping("/pacientes")
     public String verPacientes(Model model){
-        List<Usuario> listaPacientes = usuarioRepository.listarPacientes();
-        model.addAttribute("pacientes", listaPacientes);
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         return "doctor/pacientes";
     }
 
@@ -63,7 +72,10 @@ public class DoctorController {
     }
 
     @GetMapping("/boletas")
-    public String verBoletas(){return "doctor/boletas";}
+    public String verBoletas(Model model){
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+        return "doctor/boletas";
+    }
 
     @GetMapping("/config")
     public String verConfiguracion(Model model){

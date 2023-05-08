@@ -42,15 +42,15 @@
                     </h5>
                     <br>
                     <div class="" style="font-weight: bold">
-                        <p style="margin-bottom: 0px"> Nombre: <span style="font-weight: normal">Dana Paola</span></p>
-                        <p style="margin-bottom: 0px"> Apellidos: <span style="font-weight: normal">Nolasco Vallejos</span></p>
-                        <p style="margin-bottom: 0px"> Edad: <span style="font-weight: normal">19</span></p>
-                        <p style="margin-bottom: 0px"> DNI: <span style="font-weight: normal">75749568</span></p>
-                        <p style="margin-bottom: 0px"> Sexo: <span style="font-weight: normal">Femenino</span></p>
-                        <p style="margin-bottom: 0px"> Seguro: <span style="font-weight: normal">Rimac EPS</span></p>
-                        <p style="margin-bottom: 0px"> Residencia: <span style="font-weight: normal">Pontificia Universidad Católica del Perú</span></p>
-                        <p style="margin-bottom: 0px"> Alergia: <span style="font-weight: normal"> Alergia al polen, a ls cosmeticos e intelorencia al gluten </span></p>
-                        <p style="margin-bottom: 0px"> Tratamiento: <span style="font-weight: normal"> Uso de suero para limpieza</span> </p>
+                        <p style="margin-bottom: 0px"> Nombre: <span style="font-weight: normal" th:text="${paciente.nombre}"></span></p>
+                        <p style="margin-bottom: 0px"> Apellidos: <span style="font-weight: normal" th:text="${paciente.apellido}"></span></p>
+                        <p style="margin-bottom: 0px"> Edad: <span style="font-weight: normal" th:text="${paciente.edad}"></span></p>
+                        <p style="margin-bottom: 0px"> DNI: <span style="font-weight: normal" th:text="${paciente.id}"></span></p>
+                        <p style="margin-bottom: 0px"> Sexo: <span style="font-weight: normal" th:text="${paciente.sexo}"></span></p>
+                        <p style="margin-bottom: 0px"> Seguro: <span style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></span></p>
+                        <p style="margin-bottom: 0px"> Residencia: <span style="font-weight: normal" th:text="${paciente.direccion}"></span></p>
+                        <p style="margin-bottom: 0px"> Alergia: <span style="font-weight: normal"></span></p>
+                        <p style="margin-bottom: 0px"> Tratamiento: <span style="font-weight: normal" th:text="${paciente.historialmedicoIdhistorialmedico.tratamiento}"></span> </p>
                     </div>
                     <br>
                     <button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;

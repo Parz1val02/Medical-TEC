@@ -41,43 +41,50 @@
             Información más reciente:
           </h3>
           <div class="row justify-content-between align-items-center">
-            <div class="col-sm-3">
-              <div class="card">
-                <div class="card-body">
+            <div class="col-sm-8">
+              <div class="card mb-3">
+                <div class="card-body" style="max-height: 650px">
                   <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                     Calendario
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
                 </div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                <div class="card-body" style="padding: 25px !important;">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
                     Notificaciones
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div style="height: 200px;">
+                    <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                         th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                         margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                      <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                        <b th:text="${noti.usuarioDni.nombre}"></b>
+                        <div th:text="${noti.contenido}"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-3">
+              <div style="height: 20px;"></div>
               <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                <div class="card-body" style="padding: 25px !important;">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
                     Mensajería
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
-                    Cuestionario
-                  </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div style="height: 200px;">
+                    <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                         th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                      margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                      <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                        <b th:text="${mensaje.fecha}"></b>
+                        <div th:text="${mensaje.contenido}"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -130,7 +137,7 @@
               </td>
               <td class="align-middle" align="center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
+                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${paciente.id}}">Ver historial clínico</a>
               </td>
             </tr>
 
