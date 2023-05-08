@@ -149,6 +149,7 @@ public class SuperController {
         model.addAttribute("administradoresList", listaAdministradores);
         return "superAdmin/dashboardAdmSede";
     }
+    /*
     @PostMapping("/editarPacientes")
     public String editarPaciente(
             @RequestParam("sede") int sede,
@@ -220,6 +221,26 @@ public class SuperController {
         usuarioRepository.editarAdministradores( email, nombre, apellido, sede, telefono, estado, dni);
         return "redirect:/superAdmin/dashboard/Adm";
     }
+     */
+    @GetMapping("/editarAdmS")
+    public String editarAdministrador(Model model, @RequestParam("id") String id) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        if (optionalUsuario.isPresent()) {
+            Usuario administrador = optionalUsuario.get();
+            model.addAttribute("admS", administrador);
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            return "superAdmin/editarAdmSede";
+        } else {
+            return "redirect:/superAdmin/dashboardAdmSede";
+        }
+    }
+    @PostMapping("/actualizarAdmS")
+    public String actualizarAdministrador(Usuario admS, RedirectAttributes attr) {
+        attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
+        usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
+        return "redirect:/superAdmin/dashboardAdmSede";
+    }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model){
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
@@ -266,11 +287,7 @@ public class SuperController {
         model.addAttribute("listaSede", listaSede);
         return "superAdmin/crearAdmT";
     }
-    @PostMapping("/save/AdmS")
-    public String guardarAdministrador(Usuario usuario) {
-        usuarioRepository.save(usuario);
-        return "redirect:/superAdmin/dashboard";
-    }
+
     @PostMapping(value = "/Guardar/AdmSede")
     public String guardarAdmSede(Model model, RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
