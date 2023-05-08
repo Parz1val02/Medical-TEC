@@ -35,6 +35,7 @@
                 </div>
             </div>
             <br>
+            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
             <div class="card mb-3">
                 <div class="card-header position-relative min-vh-25 mb-7">
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
@@ -47,37 +48,24 @@
                         <div class="col-lg-12" >
                             <form method="post" th:action="@{/paciente/guardarRespuestas}">
                                 <div class="row">
-                                    <div class="col mb-3" th:each=" preg: ${preguntas}">
+                                    <!--<div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
 
                                         <label for="disabledTextInput1" th:text="${preg.pregunta}" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
+                                        <input type="text" class="form-control" name="preguntasIdpreguntas" th:value="${preg.id}" hidden>
                                         <input type="text" id="disabledTextInput1" class="form-control" name="respuesta">
-                                    </div>
+                                    </div>-->
+                                    <div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
 
+                                        <label for="disabledTextInput1" th:text="${preg.pregunta}" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
+                                        <input type="text" id="disabledTextInput1" class="form-control" th:name="'respuesta' + ${vEstado.index}">
+                                        <input type="text" class="form-control" th:name="${preg.cuestionarioIdcuestionario}">
+                                    </div>
                                 </div>
 
-                                <button type="button" class="btn btn-secondary">Cancelar</button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Enviar cuestionario</button>
+                                <button type="submit" class="btn btn-primary" >Enviar cuestionario</button>
                                 <!-- Modal -->
 
                             </form>
-
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
                 </div>

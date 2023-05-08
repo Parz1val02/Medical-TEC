@@ -10,7 +10,7 @@ public interface RptaRepository extends JpaRepository<Respuesta, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into respuestas (respuesta, preguntas_idpreguntas, historialmedico_idhistorialmedico) values (?1, ?2, 1)", nativeQuery = true)
-    void guardarRptas(String pregunta, int id);
+    @Query(value = "insert into respuestas (respuesta, preguntas_idpreguntas, historialmedico_idhistorialmedico) values (?1, 1, 1)", nativeQuery = true)
+    void guardarRptas(String respuesta);
 
 }

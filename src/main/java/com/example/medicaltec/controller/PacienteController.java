@@ -1,10 +1,8 @@
 package com.example.medicaltec.controller;
 
 
-import com.example.medicaltec.Entity.Alergia;
-import com.example.medicaltec.Entity.Cuestionario;
+import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.TipoCitaRepository;
-import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -180,14 +178,16 @@ public class PacienteController {
 
 
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @RequestParam("respuesta")String respuesta ,RedirectAttributes attr){
+    public String guardarRptas( @RequestParam("respuesta0")String respuesta, RedirectAttributes attr){
 
-        attr.addFlashAttribute("msg2", "Se agregó la alergia exitosamente");
-        return "redirect:/paciente/cuestionarios";
+        //Cuestionario cues = cuestionarioRepository.findById(id);
+        //List<Pregunta> preguntas = preguntaRepository.obtenerPreg(id);
+        rptaRepository.guardarRptas(respuesta);
+
+
+        attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
+        return "redirect:/paciente/cuestionarios?id=1";
     }
-
-
-
 
 
     @GetMapping("/borrarAlergia")
