@@ -1,0 +1,8 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-hidden {
+    display: none;
+}

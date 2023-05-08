@@ -1,9 +1,6 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.entity.Alergia;
-import com.example.medicaltec.entity.Cuestionario;
-import com.example.medicaltec.entity.Sede;
-import com.example.medicaltec.entity.Usuario;
+import com.example.medicaltec.entity.*;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +22,9 @@ public class DoctorController {
     final CitaRepository citaRepository;
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final AlergiaRepository alergiaRepository;
+    final InformeRepository informeRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -35,6 +33,7 @@ public class DoctorController {
         this.citaRepository = citaRepository;
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.alergiaRepository = alergiaRepository;
+        this.informeRepository = informeRepository;
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
@@ -56,11 +55,19 @@ public class DoctorController {
 
         List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> listaAlergias = new ArrayList<>();
-        for(int i=0; i<idAlergias.size(); i++){
-            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
+        for (Integer idAlergia : idAlergias) {
+            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
         }
         model.addAttribute("listaAlergias",listaAlergias);
-        model.addAttribute("listaCitasPorUsuario",citaRepository.citasPorUsuario(id));
+
+        List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+        List<Informe> informeList = new ArrayList<>();
+        for (Cita cita : listaCitasPorUsuario) {
+            informeList.add(informeRepository.listarInformePorCita(cita.getId()));
+        }
+        model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+        model.addAttribute("listaInformes",informeList);
+
         return "doctor/historial";
     }
 
