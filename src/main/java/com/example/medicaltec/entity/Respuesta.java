@@ -10,17 +10,18 @@ import lombok.Setter;
 @Table(name = "respuestas")
 public class Respuesta {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idrespuestas", nullable = false)
     private Integer id;
 
     @Column(name = "respuesta", nullable = false, length = 200)
     private String respuesta;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "preguntas_idpreguntas", nullable = false)
     private Pregunta preguntasIdpreguntas;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 

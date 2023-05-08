@@ -46,6 +46,9 @@
                     </h5>
                     <br>
                     <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                        <div th:if="${#lists.size(cuestionariosList)==0}">
+                            Lo sentimos, no hay cuestionarios
+                        </div>
                         <div class="row">
                             <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionariosList}">
                                 <div class="card" style>

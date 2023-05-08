@@ -10,15 +10,15 @@ import lombok.Setter;
 @Table(name = "examen_medico_has_cita")
 public class ExamenMedicoHasCita {
     @EmbeddedId
-    private ExamenMedicoHasCitaId examenMedicoHasCitaId;
+    private ExamenMedicoHasCitaId id;
 
-    @MapsId("exMedicoId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("examenMedicoIdexamen")
+    @ManyToOne
     @JoinColumn(name = "examen_medico_idexamen", nullable = false)
     private ExamenMedico examenMedicoIdexamen;
 
-    @MapsId("citaMedicaId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("citaIdcita")
+    @ManyToOne
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 
