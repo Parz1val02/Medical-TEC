@@ -40,7 +40,7 @@ public class SuperController {
         this.sedeRepository = sedeRepository;
     }
 
-    @GetMapping(value = {"/dashboard"})
+    @GetMapping(value = {"/dashboard", ""})
     public String dashboard(Model model){
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);

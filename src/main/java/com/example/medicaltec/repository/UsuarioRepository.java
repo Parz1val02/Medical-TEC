@@ -32,8 +32,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u  set u.email= ?1, u.nombre= ?2, u.sedes_idsedes = ?3, u.telefono= ?4, u.estados_idestado = ?5 where  u.dni = ?6")
     void editarAdministradores(String email, String nombre, String telefono,  String id, int sede, int estado);
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
     void editarDoctor(String email, String nombre, String telefono,  String id, int sede, int estado);
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.sedes_idsedes=?3, u.telefono=?4, u.estados_idestado=?5 where  u.dni = ?6 ")
     void editarPaciente(String email, String nombre, int sede, String telefono, String id, int estado);
 
