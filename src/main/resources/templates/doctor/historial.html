@@ -42,14 +42,17 @@
                     </h5>
                     <br>
                     <div class="" style="font-weight: bold">
-                        <p style="margin-bottom: 0px"> Nombre: <span style="font-weight: normal" th:text="${paciente.nombre}"></span></p>
-                        <p style="margin-bottom: 0px"> Apellidos: <span style="font-weight: normal" th:text="${paciente.apellido}"></span></p>
+                        <p style="margin-bottom: 0px"> Nombre Completo: <span style="font-weight: normal" th:text="|${paciente.nombre} ${paciente.apellido}|"></span></p>
                         <p style="margin-bottom: 0px"> Edad: <span style="font-weight: normal" th:text="${paciente.edad}"></span></p>
                         <p style="margin-bottom: 0px"> DNI: <span style="font-weight: normal" th:text="${paciente.id}"></span></p>
                         <p style="margin-bottom: 0px"> Sexo: <span style="font-weight: normal" th:text="${paciente.sexo}"></span></p>
                         <p style="margin-bottom: 0px"> Seguro: <span style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></span></p>
                         <p style="margin-bottom: 0px"> Residencia: <span style="font-weight: normal" th:text="${paciente.direccion}"></span></p>
-                        <p style="margin-bottom: 0px"> Alergia: <span style="font-weight: normal"></span></p>
+                        <p style="margin-bottom: 0px">
+                            Alergias:
+                            <span style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${alergia.nombre}">
+                            </span>
+                        </p>
                         <p style="margin-bottom: 0px"> Tratamiento: <span style="font-weight: normal" th:text="${paciente.historialmedicoIdhistorialmedico.tratamiento}"></span> </p>
                     </div>
                     <br>
@@ -65,12 +68,18 @@
                             Citas/consultas pasadas y bitácora de notas:
                         </h5>
                         <br>
-                        <div class="row no-gutters">
+                        <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
+                            <div class="card-body">
+                                <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
+                            </div>
+                        </div>
+                        <div class="row no-gutters" th:each="cita : ${listaCitasPorUsuario}">
                             <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
+                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 10px;margin-bottom: 10px;">
                                     <div class="row">
                                         <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
+                                            <b th:text="|${cita.fecha} - ${cita.hora}: ${cita.tipocitaIdtipocita.tipoCita}|"></b>
+                                            <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
                                         </div>
                                         <div class="col-sm-2" th:align="right">
                                             <i class="fa fa-file"></i>
@@ -82,92 +91,6 @@
                                 <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
                             </div>
                         </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>

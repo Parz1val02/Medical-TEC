@@ -1,5 +1,6 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.entity.Alergia;
 import com.example.medicaltec.entity.Cuestionario;
 import com.example.medicaltec.entity.Sede;
 import com.example.medicaltec.entity.Usuario;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,14 +23,18 @@ public class DoctorController {
     final MensajeRepository mensajeRepository;
     final NotificacioneRepository notificacioneRepository;
     final CitaRepository citaRepository;
+    final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
+    final AlergiaRepository alergiaRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
         this.mensajeRepository = mensajeRepository;
         this.notificacioneRepository = notificacioneRepository;
         this.citaRepository = citaRepository;
+        this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
+        this.alergiaRepository = alergiaRepository;
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
@@ -37,6 +43,7 @@ public class DoctorController {
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesMasActuales());
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotificacionesMasActuales());
+        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
         return "doctor/principal";
     }
 
@@ -46,6 +53,14 @@ public class DoctorController {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         Usuario usuario = optionalUsuario.get();
         model.addAttribute("paciente",usuario);
+
+        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+        ArrayList<Alergia> listaAlergias = new ArrayList<>();
+        for(int i=0; i<idAlergias.size(); i++){
+            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
+        }
+        model.addAttribute("listaAlergias",listaAlergias);
+        model.addAttribute("listaCitasPorUsuario",citaRepository.citasPorUsuario(id));
         return "doctor/historial";
     }
 
