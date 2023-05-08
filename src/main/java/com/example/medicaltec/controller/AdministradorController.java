@@ -5,9 +5,11 @@ import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.repository.EspecialidadeRepository;
 import com.example.medicaltec.repository.ReporteRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -98,14 +100,24 @@ public class AdministradorController {
 
     @PostMapping("/editarDoctor")
     public String editarDoctor(
-            @ModelAttribute("doctor") Usuario doctor,
-            RedirectAttributes attr
+            @ModelAttribute("doctor") @Valid Usuario doctor,
+            BindingResult bindingResult,
+            RedirectAttributes attr,
+            Model model
 
     ){
-        attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  1 );
+        System.out.println(bindingResult.getAllErrors());
+        if(bindingResult.hasErrors()){
+            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            model.addAttribute("listaEspecialidades",listaEspecialidades);
+            return "administrador/editarDoctor";
+        } else {
+            attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
+            usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  1 );
+            return "redirect:/administrador/usuarios";
+        }
 
-        return "redirect:/administrador/usuarios";
+
     }
 
     /*
@@ -206,18 +218,22 @@ public class AdministradorController {
             attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
             return "redirect:/administrador/usuarios";
         }
-
     }
 
     @PostMapping("/editarPaciente")
     public String editarPaciente(
-           @ModelAttribute("paciente") Usuario paciente,
-            RedirectAttributes attr
-
+           @ModelAttribute("paciente") @Valid Usuario paciente,
+            BindingResult bindingResult,
+            RedirectAttributes attr,
+            Model model
     ){
-        attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), 1 );
-        return "redirect:/administrador/usuarios";
+        if(bindingResult.hasErrors()){
+            return "administrador/editarPaciente";
+        } else {
+            attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
+            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), 1 );
+            return "redirect:/administrador/usuarios";
+        }
     }
 
     /*

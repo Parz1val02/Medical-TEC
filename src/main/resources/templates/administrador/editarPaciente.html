@@ -44,7 +44,8 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label class="form-label">Nombre</label>
-                      <input type="text" th:field="*{nombre}" class="form-control" >
+                      <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
                     </div>
 
                   </div>
@@ -52,7 +53,8 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label  class="form-label">Apellido</label>
-                      <input type="text" th:field="*{apellido}" class="form-control" >
+                      <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${#fields.hasErrors('apellido')?'is-invalid':''}">
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
                     </div>
 
                   </div>
@@ -60,7 +62,8 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label  class="form-label">Email</label>
-                      <input type="text" th:field="*{email}" class="form-control">
+                      <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}">
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                     </div>
 
                   </div>
@@ -68,7 +71,8 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label  class="form-label">Telefono</label>
-                      <input type="text" th:field="*{telefono}" class="form-control" >
+                      <input type="text" th:field="*{telefono}" class="form-control" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
+                      <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
                     </div>
 
                   </div>
@@ -85,6 +89,7 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label  class="form-label">Estado</label>
+                      <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
                       <input type="text"  th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
                     </div>
 
