@@ -61,12 +61,12 @@ public class Cita {
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
 
-    @ManyToOne
-    @JoinColumn(name = "paciente_dni", nullable = false)
-    private Usuario pacienteDni;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "paciente_dni", referencedColumnName = "dni", nullable = false)
+    private Usuario paciente;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_dni1", nullable = false)
-    private Usuario doctorDni1;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doctor_dni1", referencedColumnName = "dni", nullable = false)
+    private Usuario doctor;
 
 }

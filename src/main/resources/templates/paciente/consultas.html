@@ -73,17 +73,17 @@
                             </td>
                             <td th:text="${cita.fecha}" class="align-middle">
                             </td>
-                            <td th:text="|${cita.doctorDni1.nombre} ${cita.doctorDni1.apellido}|" class="align-middle" style="text-align: center">
+                            <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
                             </td>
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Detalles</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Detalles' + ${info.index+1}">Detalles</button>
                                 <!-- Modal -->
                             </td>
 
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" style="text-align: center;
-                                    border-radius: 15px" th:data-target="'#PerfilDoctor' + ${info.index+1}">Receta</button>
+                                    border-radius: 15px" th:data-target="'#Receta' + ${info.index+1}">Receta</button>
                                 <!-- Modal -->
                             </td>
                         </tr>
@@ -92,79 +92,69 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="exampleModal2">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Aquí puedes agregar el contenido del modal -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Historial de la cita</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="nombre">nombre del paciente </label>
-                                        <input type="text" id="nombre" name="nombre"  placeholder="Carlos Pisco" class="form-control" disabled>
+            <div th:each="cita, info : ${citas}">
+                <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detalles de la cita</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre del paciente:</label>
+                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${usuario.nombre} ${usuario.apellido}|" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="especialidad">Especialidad:</label>
+                                            <input type="text" id="especialidad" name="especialidad" th:placeholder="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fecha">Fecha:</label>
+                                            <input type="text" id="fecha" name="fecha" th:placeholder="${cita.fecha}" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tipocita">Tipo de cita:</label>
+                                            <input type="text" id="tipocita" name="tipocita"  th:placeholder="${cita.tipocitaIdtipocita.tipoCita}" class="form-control" disabled>
+                                        </div>
                                     </div>
+                                    <!-- Columna 2 -->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="sede">Sede:</label>
+                                            <input type="text" id="sede" name="sede" th:placeholder="${cita.sedesIdsedes.nombre}" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="doctor">Doctor:</label>
+                                            <input type="text" id="doctor" name="doctor" th:placeholder="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hora">Hora:</label>
+                                            <input type="text" id="hora" name="hora" th:placeholder="${cita.hora}" class="form-control" disabled>
+                                        </div>
 
-                                    <div class="form-group">
-                                        <label for="especialidad">especialidad:</label>
-                                        <input type="text" id="especialidad" name="especialidad" placeholder="cardiologia" class="form-control" disabled>
+                                        <div class="form-group">
+                                            <label for="seguro">Seguro de salud:</label>
+                                            <input type="text" id="seguro" name="seguro" th:placeholder="${usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="fecha">fecha </label>
-                                        <input type="date" id="fecha" name="nombre" class="form-control" disabled>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="tipocita">tipo de cita: </label>
-                                        <input type="text" id="tipocita" name="tipocita"  placeholder="Presencial" class="form-control" disabled>
-                                    </div>
-
-
-                                </div>
-
-                                <!-- Columna 2 -->
-                                <div class="col-sm-6">
-
-                                    <div class="form-group">
-                                        <label for="sede">sede de atencion:  </label>
-                                        <input type="text" id="sede" name="sede"  placeholder="Lima Centro" class="form-control" disabled>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="doctor">doctor:  </label>
-                                        <input type="text" id="doctor" name="doctor"  placeholder="Don Lucho" class="form-control" disabled>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label for="hora">hora</label>
-                                        <input type="text" id="hora" name="apellido"  placeholder="15:00 h" class="form-control" disabled>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="seguro">seguro de salud:  </label>
-                                        <input type="text" id="seguro" name="seguro"  placeholder="Rimac EPS" class="form-control" disabled>
-                                    </div>
-
-
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
             <div th:each="cita, info : ${citas}">
-                <div class="modal fade" th:id="'PerfilDoctor' + ${info.index + 1}">
+                <div class="modal fade" th:id="'Receta' + ${info.index + 1}">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <!-- Aquí puedes agregar el contenido del modal -->
@@ -176,7 +166,7 @@
                                 <header>
                                     <h1>Receta Médica</h1>
                                     <p>Nombre del paciente: <strong th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Carlos Pisco</strong></p>
-                                    <p>Nombre del doctor: <strong th:text="${cita.doctorDni1.nombre} + ' ' + ${cita.doctorDni1.apellido}">Manuel Yarleque</strong></p>
+                                    <p>Nombre del doctor: <strong th:text="${cita.getDoctor.nombre} + ' ' + ${cita.getDoctor.apellido}">Manuel Yarleque</strong></p>
                                     <p>Fecha de emisión: <strong th:text="${cita.fecha}">21 de abril de 2023</strong></p>
                                 </header>
 
