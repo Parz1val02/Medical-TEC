@@ -61,7 +61,8 @@
                             <td class="align-middle" align="center">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal" data-info="${cita.pacienteDNI.id}">
+                                border-radius: 15px" data-toggle="modal"
+                                        data-target="#exampleModal" th:data-target="'#Boleta' + ${cita}">
                                     Ver boleta
                                 </button>
                             </td>
@@ -70,97 +71,99 @@
                     </table>
                 </div>
             </div>
-            <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Aquí puedes agregar el contenido del modal -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Boleta de cita</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí iría el logo de la empresa -->
-                                        <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleador -->
-                                        <b>Doctor: </b>
-                                        <p>Dr. Manuel Yarleque</p>
-                                        <b>CMP: </b>
-                                        <p>64656268</p>
-                                        <b>Especialidad:</b>
-                                        <p>Cardiologia</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleado -->
-                                        <b> Paciente: </b>
-                                        <p>Carlos Pisco</p>
-                                        <b> DNI: </b>
-                                        <p>36448457</p>
-                                        <b> Fecha de la Cita:</b>
-                                        <p> 00/00/00 - 00:00hrs</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <!-- aquí iría la tabla con los detalles del pago -->
-                                        <table style="margin-right: 0px;height: 100px;width: 435px;">
-                                            <thead style="background: #cdeffc">
-                                            <tr>
-                                                <th class="sort align-middle" style="width: 40%">Detalles</th>
-                                                <th class="sort align-middle" style="width: 30%">Valor Unitario</th>
-                                                <th class="sort align-middle" style="width: 30%; text-align: center">Valor total</th>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody class="bg-white">
-                                            <tr>
-                                                <td class="align-middle">Consulta Médica</td>
-                                                <td class="align-middle" style="text-align: center">$ 60</td>
-                                                <td class="align-middle" style="text-align: center">$ 60
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"> Consulta Médica </td>
-                                                <td class="align-middle" style="text-align: center"> $ 60</td>
-                                                <td class="align-middle" style="text-align: center"> $ 60</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"></td>
-                                                <td class="align-middle"></td>
-                                                <td class="align-middle"></td>
-                                            </tr>
-
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="border" style="padding: 10px">
+            <div th:each="cita1 : ${listaCitas}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Boleta' + ${cita1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Boleta de cita</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
                                     <div class="row">
-                                        <div class="col-sm-7" align="right"><b> TOTAL A PAGAR:</b></div>
-                                        <div class="col-sm-5" align="left">
-                                            <p style="margin: 0px"> $ 120 </p>
+                                        <div class="col-md-6">
+                                            <!-- aquí iría el logo de la empresa -->
+                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
                                         </div>
                                     </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- aquí irían los detalles del empleador -->
+                                            <b>Doctor: </b>
+                                            <p th:text="|${cita1.doctorDni1.nombre} ${cita1.doctorDni1.apellido}|"></p>
+                                            <b>CMP: </b>
+                                            <p>64656268</p>
+                                            <b>Especialidad:</b>
+                                            <p>Cardiologia</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!-- aquí irían los detalles del empleado -->
+                                            <b> Paciente: </b>
+                                            <p>Carlos Pisco</p>
+                                            <b> DNI: </b>
+                                            <p>36448457</p>
+                                            <b> Fecha de la Cita:</b>
+                                            <p> 00/00/00 - 00:00hrs</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- aquí iría la tabla con los detalles del pago -->
+                                            <table style="margin-right: 0px;height: 100px;width: 435px;">
+                                                <thead style="background: #cdeffc">
+                                                <tr>
+                                                    <th class="sort align-middle" style="width: 40%">Detalles</th>
+                                                    <th class="sort align-middle" style="width: 30%">Valor Unitario</th>
+                                                    <th class="sort align-middle" style="width: 30%; text-align: center">Valor total</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody class="bg-white">
+                                                <tr>
+                                                    <td class="align-middle">Consulta Médica</td>
+                                                    <td class="align-middle" style="text-align: center">$ 60</td>
+                                                    <td class="align-middle" style="text-align: center">$ 60
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="align-middle"> Consulta Médica </td>
+                                                    <td class="align-middle" style="text-align: center"> $ 60</td>
+                                                    <td class="align-middle" style="text-align: center"> $ 60</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="align-middle"></td>
+                                                    <td class="align-middle"></td>
+                                                    <td class="align-middle"></td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="border" style="padding: 10px">
+                                        <div class="row">
+                                            <div class="col-sm-7" align="right"><b> TOTAL A PAGAR:</b></div>
+                                            <div class="col-sm-5" align="left">
+                                                <p style="margin: 0px"> $ 120 </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="border-top border-bottom" style="padding: 10px">
+                                        <!-- aquí iría cualquier otro detalle o nota -->
+                                        <label>FIRMA DEL DOCTOR</label>
+                                    </div>
                                 </div>
-                                <br>
-                                <div class="border-top border-bottom" style="padding: 10px">
-                                    <!-- aquí iría cualquier otro detalle o nota -->
-                                    <label>FIRMA DEL DOCTOR</label>
-                                </div>
+
+
                             </div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
