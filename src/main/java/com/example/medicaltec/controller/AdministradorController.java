@@ -90,7 +90,7 @@ public class AdministradorController {
             model.addAttribute("doctor",doctor);
             return "administrador/editarDoctor";
         } else {
-            attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
+            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
             return "redirect:/administrador/usuarios";
         }
 
@@ -103,7 +103,8 @@ public class AdministradorController {
 
     ){
         attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEdad(),  doctor.getId(),  1 );
+        usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  1 );
+
         return "redirect:/administrador/usuarios";
     }
 

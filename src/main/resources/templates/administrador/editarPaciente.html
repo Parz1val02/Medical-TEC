@@ -38,7 +38,7 @@
           <div class="row">
             <div class="col-lg">
 
-              <form th:action="@{/administrador/editarPaciente}" th:object="${paciente}">
+              <form method="post" th:action="@{/administrador/editarPaciente}" th:object="${paciente}">
                 <fieldset >
                   <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
                   <div class="row">

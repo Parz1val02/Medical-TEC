@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-lg">
 
-                            <form th:action="@{/administrador/editarDoctor}" th:object="${doctor}">
+                            <form method="post" th:action="@{/administrador/editarDoctor}" th:object="${doctor}">
                                 <fieldset >
                                     <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
                                     <div class="row">
@@ -68,8 +68,8 @@
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
-                                            <label for="especialidad">Especialidad</label>
-                                            <select class="form-control" name="especialidad" id="especialidad">
+                                            <label for="especialidadesIdEspecialidad">Especialidad</label>
+                                            <select class="form-control" name="especialidadesIdEspecialidad" id="especialidadesIdEspecialidad">
                                                 <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
                                                         th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
                                             </select>
