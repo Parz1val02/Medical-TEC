@@ -49,7 +49,7 @@ public class ExampController {
                 case "administrador":
                     return "redirect:/administrador/principal";
                 case "superadmin":
-                    return "redirect:/superadmin/dashboard";
+                    return "redirect:/superAdmin/dashboard";
                 default:
                     return "redirect:/doctor/principal";
             }

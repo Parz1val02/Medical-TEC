@@ -44,7 +44,7 @@ public class AdministradorController {
 
     @GetMapping("/principal")
     public String pagprincipal(Model model){
-        List listaPacientes = usuarioRepository.obtenerListaPacientes();
+        List listaPacientes = usuarioRepository.obtenerListaPacientes2();
         List listaDoctores = usuarioRepository.obtenerlistaDoctores();
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
@@ -55,7 +55,7 @@ public class AdministradorController {
     public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario){
         //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2();
         List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         model.addAttribute("listaPacientes",listaPacientes);
@@ -478,7 +478,7 @@ public class AdministradorController {
         }
 
 
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2();
         boolean existePaciente = false;
         for (Usuario pacienteLista : listaPacientes) {
             if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
