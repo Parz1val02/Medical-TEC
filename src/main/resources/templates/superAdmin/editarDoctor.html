@@ -48,7 +48,7 @@
                 <div class="card-body" style="margin-top: -80px">
                     <div class="row">
                         <div class="col-lg-8">
-                            <form method="post" th:action="@{/superAdmin/actualizarAdmT}" class="mt-2" th:object="${doctor}">
+                            <form method="post" th:action="@{/superAdmin/actualizarDoctor}" class="mt-2" th:object="${doctor}">
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-sm-10">
@@ -83,7 +83,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="sedesIdsedes"> Especialidad  </label>
+                                                <label for="sedesIdsedes"> Sede  </label>
                                                 <select class="form-control" name="sedesIdsedes" id="sedesIdsedes">
                                                     <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
                                                             th:selected="${sede.id == doctor.sedesIdsedes.id}"></option>

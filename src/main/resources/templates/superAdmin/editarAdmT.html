@@ -83,7 +83,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="sedesIdsedes"> Especialidad  </label>
+                                                <label for="sedesIdsedes"> Sede  </label>
                                                 <select class="form-control" name="sedesIdsedes" id="sedesIdsedes">
                                                     <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
                                                             th:selected="${sede.id == admT.sedesIdsedes.id}"></option>
