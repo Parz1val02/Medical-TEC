@@ -68,7 +68,6 @@
                             </td>
 
 
-
                             <td class="align-middle" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente')}" th:text="${user.estadosIdestado.nombre}">
                                 Registrado
                             </td>
@@ -78,6 +77,8 @@
                             <td class="align-middle" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && !user.estadosIdestado.nombre.equalsIgnoreCase('invitado')}" >
                                 <a th:href="@{'/administrativo/form'}">form</a>
                             </td>
+
+
                             <td class="align-middle" th:if="${(user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('autoregistro')) || (user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && user.estadosIdestado.nombre.equalsIgnoreCase('invitado') )}" >
                                 -
                             </td>
@@ -148,7 +149,7 @@
                                 - Este se registrara en la sede que se encuentra dicho administrativo. <br>
                                 - El form prellenado registrará los datos a través del DNI del usurario.</p>
                             <div class="d-flex justify-content-end">
-                                <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Invitar Paciente</button>
+                                <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 10px">Invitar Paciente</button>
 
 
                                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
