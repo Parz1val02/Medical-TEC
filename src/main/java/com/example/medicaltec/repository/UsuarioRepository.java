@@ -24,6 +24,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 4")
     List<Usuario> obtenerListaAdministradores();
 
+    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 5")
+    Usuario obtenerSuperAdmin();
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")
