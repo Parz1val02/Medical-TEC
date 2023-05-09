@@ -185,6 +185,27 @@ public class SuperController {
         usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
         return "redirect:/superAdmin/dashboard/Adm";
     }
+    @GetMapping("/editarAdmT")
+    public String editarAdministrativo(Model model, @ModelAttribute("admT") Usuario admT, @RequestParam("id") String dni, RedirectAttributes attr) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
+        if (optionalUsuario.isPresent()) {
+            admT = optionalUsuario.get();
+            model.addAttribute("admT", admT);
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            return "superAdmin/editarAdmT";
+        } else {
+            attr.addFlashAttribute("msgDanger","El administrativo a editar no existe");
+            return "redirect:/superAdmin/dashboardAdmT";
+        }
+    }
+    @PostMapping("/actualizarAdmT")
+    public String actualizarAdministrativo(@ModelAttribute("admT") Usuario admT, RedirectAttributes attr) {
+        attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
+        usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
+        return "redirect:/superAdmin/dashboard/AdmT";
+    }
    /* @PostMapping("/editarPacientes")
     public String editarPaciente(
             @RequestParam("sede") int sede,
