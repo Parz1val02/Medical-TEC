@@ -1,12 +1,15 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import javax.script.Bindings;
 import java.util.List;
 import java.util.Optional;
 
@@ -180,7 +183,15 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") Usuario admS, RedirectAttributes attr) {
+    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, RedirectAttributes attr, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            return "superAdmin/editarAdmSede";
+        }
+        else{
+            usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
+            attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
+            return "redirect:/superAdmin/dashboard/Adm";
+        }
         /*
         int a = 0;
         if(admS.getNombre().isEmpty()){
@@ -211,9 +222,7 @@ public class SuperController {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
             return "redirect:/superAdmin/editarAdmS";
         } */
-        usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
-        attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
-        return "redirect:/superAdmin/dashboard/Adm";
+
     }
     @GetMapping("/editarAdmT")
     public String editarAdministrativo(Model model, @ModelAttribute("admT") Usuario admT, @RequestParam("id") String dni, RedirectAttributes attr) {
@@ -231,7 +240,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmT")
-    public String actualizarAdministrativo(@ModelAttribute("admT") Usuario admT, RedirectAttributes attr) {
+    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT, RedirectAttributes attr) {
         attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
         usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
         return "redirect:/superAdmin/dashboard/AdmT";
@@ -252,7 +261,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarDoctor")
-    public String actualizarDoctor(@ModelAttribute("doctor") Usuario doctor, RedirectAttributes attr) {
+    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, RedirectAttributes attr) {
         attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
         usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
         return "redirect:/superAdmin/dashboard/Doctor";
@@ -274,7 +283,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarPaciente")
-    public String actualizarPaciente(@ModelAttribute("paciente") Usuario paciente, RedirectAttributes attr) {
+    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, RedirectAttributes attr) {
         attr.addFlashAttribute("msg", "Paciente actualizado exitosamente");
         usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
         return "redirect:/superAdmin/dashboard/Paciente";
