@@ -624,7 +624,9 @@ public class SuperController {
         return "superAdmin/confSup";
     }
     @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
-    public String superPass(){
+    public String superPass(Model model){
+        Usuario user = usuarioRepository.obtenerSuperAdmin();
+        model.addAttribute("usuario",user);
         return "superAdmin/superPass";
     }
     @RequestMapping(value = {"/formulario"},method = RequestMethod.GET)
