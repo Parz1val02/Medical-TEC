@@ -15,7 +15,6 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "sedes")
-@JsonIgnoreProperties({"hibernateLazyInitializer","logo"})
 public class Sede implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

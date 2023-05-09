@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface SedeRepository extends JpaRepository<Sede,Integer> {
+    @Query(nativeQuery = true, value = "SELECT idsedes FROM telesystem.sedes where idsedes=?1")
+    String verificaridSede(String id);
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set  sedes_idsedes=?1 where dni=\"22647853\";" )

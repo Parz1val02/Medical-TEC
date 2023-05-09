@@ -17,7 +17,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set seguros_id_seguro=?1 where dni=\"22647853\";" )
-    void cambiarSeguro(String idSede);
+    Boolean cambiarSeguro(String idSede);
 
 
 }

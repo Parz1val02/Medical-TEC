@@ -15,11 +15,8 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
     @Id
     @Column(name = "dni", nullable = false)
-    @Size(max = 8)
     private String id;
 
-    @Size(max = 16)
-    @Size(min = 8)
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
