@@ -183,7 +183,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, RedirectAttributes attr, BindingResult bindingResult, Model model) {
+    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, BindingResult bindingResult, RedirectAttributes attr, Model model) {
         if(bindingResult.hasErrors()){
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
@@ -242,10 +242,18 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmT")
-    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT, RedirectAttributes attr) {
-        attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
-        usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
-        return "redirect:/superAdmin/dashboard/AdmT";
+    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT,BindingResult bindingResult, Model model, RedirectAttributes attr) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            return "superAdmin/editarAdmT";
+        }
+        else {
+            attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
+            usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
+            return "redirect:/superAdmin/dashboard/AdmT";
+        }
     }
     @GetMapping("/editarDoctor")
     public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr) {
@@ -263,10 +271,18 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarDoctor")
-    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, RedirectAttributes attr) {
-        attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
-        return "redirect:/superAdmin/dashboard/Doctor";
+    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            return "superAdmin/editarDoctor";
+        }
+        else {
+            attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
+            usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
+            return "redirect:/superAdmin/dashboard/Doctor";
+        }
     }
 
     @GetMapping("/editarPaciente")
@@ -285,7 +301,13 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarPaciente")
-    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, RedirectAttributes attr) {
+    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            return "superAdmin/editarPaciente";
+        }
         attr.addFlashAttribute("msg", "Paciente actualizado exitosamente");
         usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
         return "redirect:/superAdmin/dashboard/Paciente";

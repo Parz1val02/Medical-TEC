@@ -97,14 +97,17 @@
                                                 <label class="form-label"> Teléfono  </label>
                                                 <input type="text" th:field="*{telefono}"  class="form-control" >
                                             </div>
-                                            <input type="hidden" th:field="*{edad}" class="form-control"  >
-                                            <input type="hidden" th:field="*{sexo}" class="form-control"  >
-                                            <input type="hidden" th:field="*{direccion}" class="form-control"  >
+                                            <div class="form-group">
+                                                <input type="hidden" th:field="*{edad}" class="form-control"  >
+                                                <input type="hidden" th:field="*{sexo}" class="form-control"  >
+                                                <input type="hidden" th:field="*{direccion}" class="form-control"  >
+                                                <input type="hidden" th:field="*{contrasena}" class="form-control"  >
+                                            </div>
                                         </div>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-primary" style="margin-bottom: 10px"> Editar Doctor </button>
-                                        <a th:href="@{/superAdmin/dashboardDoctor}" class="btn btn-falcon-default">Volver a página de doctores</a>
+                                        <a th:href="@{/superAdmin/dashboard/Doctor}" class="btn btn-falcon-default">Volver a página de doctores</a>
                                     </div>
                                 </fieldset>
                             </form>

@@ -97,14 +97,17 @@
                                                 <label class="form-label"> Teléfono  </label>
                                                 <input type="text" th:field="*{telefono}"  class="form-control" >
                                             </div>
+                                            <div class="form-group">
                                                 <input type="hidden" th:field="*{edad}" class="form-control"  >
                                                 <input type="hidden" th:field="*{sexo}" class="form-control"  >
                                                 <input type="hidden" th:field="*{direccion}" class="form-control"  >
+                                                <input type="hidden" th:field="*{contrasena}" class="form-control"  >
+                                            </div>
                                         </div>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-primary" style="margin-bottom: 10px"> Editar Administrativo </button>
-                                        <a th:href="@{/superAdmin/dashboardAdmT}" class="btn btn-falcon-default">Volver a página de administrativos</a>
+                                        <a th:href="@{/superAdmin/dashboard/AdmT}" class="btn btn-falcon-default">Volver a página de administrativos</a>
                                     </div>
                                 </fieldset>
                             </form>
