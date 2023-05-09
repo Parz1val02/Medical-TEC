@@ -24,9 +24,9 @@ public class RestController {
     }
 
     @GetMapping(value = "/citas")
-    public Usuario returnCitas(Model model){
+    public List<Cita> returnCitas(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
         List<Cita> citas = citaRepository.historialCitasAgendadas(usuario.getId());
-        return usuario;
+        return citas;
     }
 }

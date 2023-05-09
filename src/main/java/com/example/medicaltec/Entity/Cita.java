@@ -1,11 +1,13 @@
 package com.example.medicaltec.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,7 +15,8 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(name = "cita")
-public class Cita {
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+public class Cita implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idcita", nullable = false)

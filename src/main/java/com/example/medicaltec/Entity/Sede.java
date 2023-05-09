@@ -1,5 +1,6 @@
 package com.example.medicaltec.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,11 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Value;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "sedes")
-public class Sede {
+@JsonIgnoreProperties({"hibernateLazyInitializer","logo"})
+public class Sede implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idsedes", nullable = false)
