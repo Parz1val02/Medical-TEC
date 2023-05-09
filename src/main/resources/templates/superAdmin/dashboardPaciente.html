@@ -163,13 +163,13 @@
                             <td th:text="${paciente.nombre}" class="align-middle"> </td>
                             <td th:text="${paciente.id}" class="align-middle"> </td>
                             <td th:text="${paciente.sedesIdsedes != null ? paciente.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
-                            <td th:text="${paciente.estadosIdestado != null ? paciente.estadosIdestado.nombreEstado : 'Sin estado'}" class="align-middle"></td>
+                            <td th:text="${paciente.estadosIdestado != null ? paciente.estadosIdestado.nombre : 'Sin estado'}" class="align-middle"></td>
                             <td class="align-middle">
                                 <!-- A esto me referia con opciones-->
                                 <div class="dropdown font-sans-serif">
                                     <div class="form-group" align="center">
-                                        <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal3">Editar</button>
+                                        <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarPaciente' + '?id=' + ${paciente.id}}" >Editar</a>
                                     </div>
                                 </div>
                                 <!--   <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">

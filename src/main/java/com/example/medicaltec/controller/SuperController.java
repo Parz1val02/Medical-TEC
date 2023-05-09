@@ -206,6 +206,49 @@ public class SuperController {
         usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
         return "redirect:/superAdmin/dashboard/AdmT";
     }
+    @GetMapping("/editarDoctor")
+    public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
+        if (optionalUsuario.isPresent()) {
+            doctor = optionalUsuario.get();
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            return "superAdmin/editarDoctor";
+        } else {
+            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
+            return "redirect:/superAdmin/dashboardDoctor";
+        }
+    }
+    @PostMapping("/actualizarDoctor")
+    public String actualizarDoctor(@ModelAttribute("doctor") Usuario doctor, RedirectAttributes attr) {
+        attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
+        usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
+        return "redirect:/superAdmin/dashboard/Doctor";
+    }
+
+    @GetMapping("/editarPaciente")
+    public String editarPaciente(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
+        if (optionalUsuario.isPresent()) {
+            paciente = optionalUsuario.get();
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            return "superAdmin/editarPaciente";
+        } else {
+            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
+            return "redirect:/superAdmin/dashboardPaciente";
+        }
+    }
+    @PostMapping("/actualizarPaciente")
+    public String actualizarPaciente(@ModelAttribute("paciente") Usuario paciente, RedirectAttributes attr) {
+        attr.addFlashAttribute("msg", "Paciente actualizado exitosamente");
+        usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
+        return "redirect:/superAdmin/dashboard/Paciente";
+    }
    /* @PostMapping("/editarPacientes")
     public String editarPaciente(
             @RequestParam("sede") int sede,
