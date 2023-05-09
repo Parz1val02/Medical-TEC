@@ -1,11 +1,11 @@
 package com.example.medicaltec.controller;
-import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -81,6 +81,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardDoctor";
     }
 
@@ -103,6 +107,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardPaciente";
     }
 
@@ -125,6 +133,10 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardAdmT";
     }
 
@@ -147,9 +159,12 @@ public class SuperController {
         model.addAttribute("administrativosList", listaAdministrativos);
         List<Usuario> listaAdministradores = usuarioRepository.obtenerListaAdministradores();
         model.addAttribute("administradoresList", listaAdministradores);
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        List<Estado> listaEstado = estadoRepository.findAll();
+        model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardAdmSede";
     }
-    /*
     @PostMapping("/editarPacientes")
     public String editarPaciente(
             @RequestParam("sede") int sede,
@@ -221,32 +236,19 @@ public class SuperController {
         usuarioRepository.editarAdministradores( email, nombre, apellido, sede, telefono, estado, dni);
         return "redirect:/superAdmin/dashboard/Adm";
     }
-     */
-    @GetMapping("/editarAdmS")
-    public String editarAdministrador(Model model, @ModelAttribute("admS") Usuario admS, @RequestParam("id") String dni, RedirectAttributes attr) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
-        if (optionalUsuario.isPresent()) {
-            admS = optionalUsuario.get();
-            model.addAttribute("admS", admS);
-            model.addAttribute("sedesList", sedeRepository.findAll());
-            model.addAttribute("estadosList", estadoRepository.findAll());
-            return "superAdmin/editarAdmSede";
-        } else {
-            attr.addFlashAttribute("msgDanger","El administrador a editar no existe");
-            return "redirect:/superAdmin/dashboardAdmSede";
-        }
-    }
-    @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") Usuario admS, RedirectAttributes attr) {
-        attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
-        usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
-        return "redirect:/superAdmin/dashboard/Adm";
-    }
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model){
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
         model.addAttribute("formularioList", listaFormularios);
         return "superAdmin/forms";
+    }
+
+    @RequestMapping(value = {"/edit/CAntecedentes"},method = RequestMethod.POST)
+    public String cuestionarioAntecedente(Model model, @RequestParam("num") int num){
+        //List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
+        //model.addAttribute("formularioList", listaFormularios);
+        String vista = "superAdmin/cuestionario" + num; // Concatenar el valor de num con el nombre de la vista
+        return vista; // Retornar el nombre de la vista concatenado
     }
 
     @RequestMapping(value = {"/Crear/AdmSede"},method = RequestMethod.GET)
@@ -288,7 +290,16 @@ public class SuperController {
         model.addAttribute("listaSede", listaSede);
         return "superAdmin/crearAdmT";
     }
-
+    @PostMapping("/save/AdmS")
+    public String guardarAdministrador(@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                       @RequestParam("email") String email,
+                                        @RequestParam("telefono") String telefono,
+                                       @RequestParam("sede") int sede,
+                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr) {
+       usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
+        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
+        return "redirect:/superAdmin/dashboard";
+    }
     @PostMapping(value = "/Guardar/AdmSede")
     public String guardarAdmSede(Model model, RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
@@ -477,7 +488,7 @@ public class SuperController {
     }
     @RequestMapping(value = {"/cuestionario"},method = RequestMethod.GET)
     public String cuestionario(){
-        return "superAdmin/cuestionario";
+        return "cuestionario1";
     }
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
     public String cuestionarios(Model model){

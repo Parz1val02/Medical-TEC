@@ -68,10 +68,12 @@
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #2F96B4;
+                  <form th:action="@{edit/CAntecedentes}" method="post">
+                    <input type="hidden" th:name="num" th:value="${cuestionario.id}"/>
+                    <button type="submit" class="btn btn-secondary" style="text-align: center;background: #2F96B4;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px">Editar</button>
-                  </div>
+                  </form>
+
                 </div>
               </td>
               <td class="align-middle">
