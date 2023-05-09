@@ -600,4 +600,16 @@ public class SuperController {
         return "superAdmin/editarPerfil";
     }
 
+    @PostMapping(value = "/editSave/Perfil")
+    public String editSuperAdmin(Model model, RedirectAttributes attr,
+                              @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                              @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
+                              @RequestParam("dni") String dni) {
+            usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni);
+            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
+            return "redirect:/superAdmin/confSup";
+
+    }
+
+
 }

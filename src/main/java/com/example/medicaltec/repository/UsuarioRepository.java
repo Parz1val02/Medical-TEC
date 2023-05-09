@@ -59,5 +59,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, sedes_idsedes =?5, estados_idestado=?6 where dni = ?7",nativeQuery = true)
     void editAdmS(String nombre, String apellido,String email,String telefono, int sede, int estado, String dni);
 
+    @Transactional
+    @Modifying
+    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where roles_idroles = 5",nativeQuery = true)
+    void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni);
+
 
 }

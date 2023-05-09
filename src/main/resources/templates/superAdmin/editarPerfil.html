@@ -52,58 +52,37 @@
             <div class="col-lg-8">
               <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
               </h4>
-              <form>
-                <fieldset>
+              <form th:href="@{/editSave/Perfil}">
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="disabledTextInput1" class="form-label">Nombres</label>
-                      <input type="text" id="disabledTextInput1" class="form-control" placeholder="Carlos Eduardo">
+                      <label for="nombre" class="form-label">Nombres</label>
+                      <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Carlos Eduardo">
                     </div>
                     <div class="col mb-3">
-                      <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                      <input type="text" id="disabledTextInput2" class="form-control" placeholder="Pisco Tejada">
+                      <label for="apellido" class="form-label">Apellidos</label>
+                      <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Pisco Tejada">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="disabledTextInput3" class="form-label">Correo</label>
-                      <input type="text" id="disabledTextInput3" class="form-control" placeholder="epifanioexe@protonmail.com">
+                      <label for="correo" class="form-label">Correo</label>
+                      <input type="text" id="correo" name="correo" class="form-control" placeholder="epifanioexe@protonmail.com">
                     </div>
                     <div class="col mb-3">
-                      <label for="disabledTextInput4" class="form-label">Celular</label>
-                      <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                      <label for="celular" class="form-label">Celular</label>
+                      <input type="text" id="celular" name="celular" class="form-control" placeholder="966420420">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="disabledTextInput5" class="form-label">DNI</label>
-                      <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                      <label for="dni" class="form-label">DNI</label>
+                      <input type="text" id="dni" name="dni" class="form-control" placeholder="12345678">
                     </div>
                   </div>
-                </fieldset>
                 <br>
                 <a th:href="@{/superAdmin/confSup}" class="btn btn-secondary" style="text-align: center;background: #748194;
           border-radius: 15px; border-color: #FFFFFF">Cancelar</a>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Guardar cambios</button>
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cambios de Perfil</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        ¿Está seguro de querer modificar su perfil?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a th:href="@{/superAdmin/confSup}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
-          border-radius: 15px; border-color: #FFFFFF">Guardar cambios</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
               </form>
             </div>
           </div>
