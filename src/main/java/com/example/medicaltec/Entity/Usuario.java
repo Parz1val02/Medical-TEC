@@ -36,14 +36,15 @@ public class Usuario {
     private String apellido;
 
     @Column(name = "edad", nullable = false)
-    @Digits(integer= 3, fraction= 0)
-    @Max(value = 120)
-    @Min(value = 0)
+    @NotNull(message = "Es un campo obligatorio")
+    @Digits(integer= 3, fraction= 0, message = "La edad debe ser un numero entero positivo")
+    @Max(value = 120,message = "La edad debe ser un numero entero positivo")
+    @Min(value = 0, message = "La edad debe ser un numero entero positivo")
     private Integer edad;
 
     @Column(name = "telefono", nullable = false, length = 9)
     @NotBlank(message = "Es un campo obligatorio")
-    @Size(min = 7,max = 9, message = "El telefono debe ser de 7 o 9 digitos")
+    @Size(min = 7,max = 9, message = "El telefono debe ser un numero entero de máximo 9 digitos")
     private String telefono;
 
 
@@ -92,5 +93,11 @@ public class Usuario {
 
     @Column(name = "ceduladoctor", length = 45)
     private String ceduladoctor;
+
+
+    @Column(name = "fotonombre")
+    private String fotonombre;
+    @Column(name = "fotocontenttype")
+    private String fotocontenttype;
 
 }
