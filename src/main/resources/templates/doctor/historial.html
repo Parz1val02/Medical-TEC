@@ -43,19 +43,27 @@
                         Información del paciente
                     </h5>
                     <br>
-                    <div class="" style="font-weight: bold">
-                        <p style="margin-bottom: 0px"> Nombre Completo: <span style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></span></p>
-                        <p style="margin-bottom: 0px"> Edad: <span style="font-weight: normal" th:text="${paciente.edad}"></span></p>
-                        <p style="margin-bottom: 0px"> DNI: <span style="font-weight: normal" th:text="${paciente.id}"></span></p>
-                        <p style="margin-bottom: 0px"> Sexo: <span style="font-weight: normal" th:text="${paciente.sexo}"></span></p>
-                        <p style="margin-bottom: 0px"> Seguro: <span style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></span></p>
-                        <p style="margin-bottom: 0px"> Residencia: <span style="font-weight: normal" th:text="${paciente.direccion}"></span></p>
-                        <p style="margin-bottom: 0px">
-                            Alergias:
-                            <span style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}">
-                            </span>
-                        </p>
-                        <p style="margin-bottom: 0px"> Tratamiento: <span style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></span> </p>
+                    <div class="row" style="width: 60%;">
+                        <div class="col-md-6">
+                            <p style="font-weight: bold">Nombre: </p>
+                            <p style="font-weight: bold">Edad: </p>
+                            <p style="font-weight: bold">DNI: </p>
+                            <p style="font-weight: bold">Sexo: </p>
+                            <p style="font-weight: bold">Seguro: </p>
+                            <p style="font-weight: bold">Dirección: </p>
+                            <p style="font-weight: bold">Alergias: </p>
+                            <p style="font-weight: bold">Tratamiento: </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
+                            <p style="font-weight: normal" th:text="${paciente.edad}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.id}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.sexo}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
+                            <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
+                            <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
+                        </div>
                     </div>
                     <br>
                     <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
