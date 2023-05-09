@@ -2,6 +2,7 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.Especialidade;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
+import com.example.medicaltec.repository.CitaRepository;
 import com.example.medicaltec.repository.EspecialidadeRepository;
 import com.example.medicaltec.repository.ReporteRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
@@ -31,10 +32,12 @@ public class AdministradorController {
     final EspecialidadeRepository especialidadeRepository;
     final UsuarioRepository usuarioRepository;
     final ReporteRepository reporteRepository;
-    public AdministradorController (UsuarioRepository usuarioRepository, ReporteRepository reporteRepository,EspecialidadeRepository especialidadeRepository) {
+    final CitaRepository citaRepository;
+    public AdministradorController (CitaRepository citaRepository,UsuarioRepository usuarioRepository, ReporteRepository reporteRepository,EspecialidadeRepository especialidadeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.reporteRepository = reporteRepository;
         this.especialidadeRepository = especialidadeRepository;
+        this.citaRepository = citaRepository;
     }
 
 
@@ -50,6 +53,7 @@ public class AdministradorController {
 
     @GetMapping("/usuarios")
     public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario){
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
         List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
