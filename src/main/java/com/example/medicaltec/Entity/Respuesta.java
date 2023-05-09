@@ -1,6 +1,7 @@
 package com.example.medicaltec.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,8 @@ public class Respuesta {
     @Column(name = "idrespuestas", nullable = false)
     private Integer id;
 
-    @Column(name = "respuesta", nullable = false, length = 200)
+    @Size(max = 200, message = "por favor, la respuesta debe ser menos de 200 caracteres")
+    @Column(name = "respuesta", nullable = false)
     private String respuesta;
 
     @ManyToOne
