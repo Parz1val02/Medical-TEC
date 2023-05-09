@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+<body class="">
+
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Dashboard
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Maneja y edita la información de los usuarios
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background: #bd93f9; border-radius: 5px;">
+                        Cambiar UX/UI
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/Crear/AdmSede}">
+                        <button type="submit" class="btn btn-primary" style="background: #f1c40f; border-radius: 5px;">
+                            Registrar Administrador
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/Crear/AdmT}">
+                        <button type="button" class="btn btn-primary" style="background: #f1c40f; border-radius: 5px;">
+                            Registrar Administrativo
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/dashboard/Adm}">
+                        <button type="submit" class="btn btn-primary" style="background: lawngreen; border-radius: 5px;">
+                            Ver Administradores
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/dashboard/AdmT}">
+                        <button type="submit" class="btn btn-primary" style="background: lawngreen; border-radius: 5px;">
+                            Ver Administrativos
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/dashboard/Paciente}">
+                        <button type="submit" class="btn btn-primary" style="background: lawngreen; border-radius: 5px;">
+                            Ver Pacientes
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a th:href="@{/superAdmin/dashboard/Doctor}">
+                        <button type="button" class="btn btn-primary" style="background: lawngreen; border-radius: 5px;">
+                            Ver Doctores
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1>Cambio de interfaz</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Seleccione la sede: </p>
+                            <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
+                                <option selected value>------</option>
+                                <option value="1">San Miguel</option>
+                                <option value="2">Jesús María</option>
+                                <option value="3">Lince</option>
+                            </select>
+                            <p>Escoja el color de la interfaz: </p>
+                            <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color" style="width:70px; margin-bottom: 20px">
+                            <p>Escoja el logo: </p>
+                            <img th:src="@{/img/logos/apple.png}" style="width:20%; margin-bottom: 20px; border-radius: 50%"/>
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="formFile" style="height:40px; width: 400px">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <!--<span>Seleccione la sede </span>
+                <select class="form-select" aria-label="Default select example" style="margin-left: 15px">
+                    <option selected value>------</option>
+                    <option value="1">San Miguel</option>
+                    <option value="2">Jesús María</option>
+                    <option value="3">Lince</option>
+                </select>
+                <br>
+                <span>Seleccione el tipo de usuario</span>
+                <select class="form-select" aria-label="Default select example" style="margin: 15px">
+                    <option selected value>------</option>
+                    <option value="1">Paciente</option>
+                    <option value="2">Doctor</option>
+                    <option value="3">Administrativo</option>
+                    <option value="4">Administrador</option>
+                </select>//
+                <br>      -->
+            <div class="card mb-3">
+                <div class="card-body border-top">
+                    <table class="table table-striped" id="userList">
+                        <h2>Pacientes</h2>
+                        <thead class="bg-200">
+                        <tr>
+                            <th class="sort align-middle" style="width: 30%">Nombres</th>
+                            <th class="sort align-middle" style="width: 20%">DNI</th>
+                            <th class="sort align-middle" style="width: 20%">Sede</th>
+                            <th class="sort align-middle" style="width: 20%">Estado</th>
+                            <th class="sort align-middle" style="width: 20%">Editar</th>
+                            <th class="sort align-middle" style="width: 10%">Logueo</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="paciente, info : ${pacientesList}">
+                            <td th:text="${paciente.nombre}" class="align-middle"> </td>
+                            <td th:text="${paciente.id}" class="align-middle"> </td>
+                            <td th:text="${paciente.sedesIdsedes != null ? paciente.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
+                            <td th:text="${paciente.estadosIdestado != null ? paciente.estadosIdestado.nombre : 'Sin estado'}" class="align-middle"></td>
+                            <td class="align-middle">
+                                <!-- A esto me referia con opciones-->
+                                <div class="dropdown font-sans-serif">
+                                    <div class="form-group" align="center">
+                                        <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarPaciente' + '?id=' + ${paciente.id}}" >Editar</a>
+                                    </div>
+                                </div>
+                                <!--   <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <form method="post" th:action="@{/superAdmin/editarAdmS}">
+                                        <div class="modal-body">
+                                          <div class="row">
+                                            <div class="col-sm-6">
+                                              <div class="form-group">
+                                                <label for="nombre2">Nombre </label>
+                                                <input type="text" id="nombre2" name="nombre"  th:value="${admS.nombre}" class="form-control" >
+                                              </div>
+
+                                              <div class="form-group">
+                                                <label for="id2">DNI </label>
+                                                <input type="text" class="form-control" th:value="${admS.id}" disabled>
+                                                <input type="hidden" id="id2" name="id2" class="form-control" th:value="${admS.id}" >
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="email2">Email </label>
+                                                <input type="email" id="email2" name="email"   class="form-control" th:value="${admS.email}" >
+                                              </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                              <div class="form-group">
+                                                <label for="sede2"> Sede  </label>
+                                                <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${admS.sedesIdsedes.nombre}">
+                                              </div>
+
+                                              <div class="form-group">
+                                                <label for="estado2">Estado </label>
+                                                <input type="text" id="estado2" name="estado"   th:value="${admS.estadosIdestado.nombreEstado}" class="form-control" >
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="telefono2"> Teléfono  </label>
+                                                <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${admS.telefono}">
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" > Editar Administrador de Sede </button>
+                                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                                          </div>
+                                        </div>
+
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="align-middle">-->
+                                <!-- A esto me referia con opciones-->
+
+                            </td>
+                            <td>
+                                <div class="dropdown font-sans-serif">
+                                    <div class="form-group" align="center">
+                                        <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
+                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        const exampleModal = document.getElementById('exampleModal')
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                const recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+
+                // Update the modal's content.
+                const modalTitle = exampleModal.querySelector('.modal-title')
+                const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+                modalTitle.textContent = `New message to ${recipient}`
+                modalBodyInput.value = recipient
+            })
+        }
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList1').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList2').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList3').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+    });
+</script>
+
+
+</body>
+
+</html>
