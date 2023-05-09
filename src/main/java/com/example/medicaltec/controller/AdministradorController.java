@@ -531,9 +531,17 @@ public class AdministradorController {
     }
 
     @GetMapping("/settings")
-    public String settings(){
+    public String settings(Model model){
+        String dni = "48764321";
+        Optional<Usuario> administrador = usuarioRepository.findById(dni);
+        if (administrador.isPresent()){
+            Usuario admin = administrador.get();
+            model.addAttribute("admin",admin);
+            return "administrador/settings";
+        } else {
+            return "redirect:/administrador/principal";
+        }
 
-        return "administrador/settings";
     }
 
     @GetMapping("/password")
