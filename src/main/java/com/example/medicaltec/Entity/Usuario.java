@@ -94,8 +94,6 @@ public class Usuario {
     @Column(name = "ceduladoctor", length = 45)
     private String ceduladoctor;
 
-  @Column(name = "foto")
-  private byte[] foto;
 
   @Column(name = "fotonombre")
   private String fotonombre;
