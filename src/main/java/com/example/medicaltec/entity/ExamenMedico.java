@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "examen_medico")
 public class ExamenMedico {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idexamen", nullable = false)
     private Integer id;
 

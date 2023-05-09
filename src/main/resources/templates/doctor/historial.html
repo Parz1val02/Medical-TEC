@@ -12,7 +12,6 @@
 <!-- ===============================================-->
 <main class="main" id="top">
 
-
     <div class="container" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
@@ -28,7 +27,10 @@
                         </div>
                         <div style="padding-left: 15px">
                             <a type="button" class="btn btn-primary" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" th:href="@{principal}">Volver a la Página Principal</a>
+                            <a type="button" class="btn btn-primary" style="text-align: center;background: #b38df7;
                                     border-radius: 15px" th:href="@{pacientes}">Volver a la Sección de pacientes</a>
+
                         </div>
                     </div>
                 </div>
@@ -41,20 +43,31 @@
                         Información del paciente
                     </h5>
                     <br>
-                    <div class="" style="font-weight: bold">
-                        <p style="margin-bottom: 0px"> Nombre: <span style="font-weight: normal">Dana Paola</span></p>
-                        <p style="margin-bottom: 0px"> Apellidos: <span style="font-weight: normal">Nolasco Vallejos</span></p>
-                        <p style="margin-bottom: 0px"> Edad: <span style="font-weight: normal">19</span></p>
-                        <p style="margin-bottom: 0px"> DNI: <span style="font-weight: normal">75749568</span></p>
-                        <p style="margin-bottom: 0px"> Sexo: <span style="font-weight: normal">Femenino</span></p>
-                        <p style="margin-bottom: 0px"> Seguro: <span style="font-weight: normal">Rimac EPS</span></p>
-                        <p style="margin-bottom: 0px"> Residencia: <span style="font-weight: normal">Pontificia Universidad Católica del Perú</span></p>
-                        <p style="margin-bottom: 0px"> Alergia: <span style="font-weight: normal"> Alergia al polen, a ls cosmeticos e intelorencia al gluten </span></p>
-                        <p style="margin-bottom: 0px"> Tratamiento: <span style="font-weight: normal"> Uso de suero para limpieza</span> </p>
+                    <div class="row" style="width: 60%;">
+                        <div class="col-md-6">
+                            <p style="font-weight: bold">Nombre: </p>
+                            <p style="font-weight: bold">Edad: </p>
+                            <p style="font-weight: bold">DNI: </p>
+                            <p style="font-weight: bold">Sexo: </p>
+                            <p style="font-weight: bold">Seguro: </p>
+                            <p style="font-weight: bold">Dirección: </p>
+                            <p style="font-weight: bold">Alergias: </p>
+                            <p style="font-weight: bold">Tratamiento: </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
+                            <p style="font-weight: normal" th:text="${paciente.edad}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.id}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.sexo}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+                            <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
+                            <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
+                            <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
+                        </div>
                     </div>
                     <br>
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button>
+                    <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->
                 </div>
             </div>
 
@@ -65,109 +78,90 @@
                             Citas/consultas pasadas y bitácora de notas:
                         </h5>
                         <br>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
+                        <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
+                            <div class="card-body">
+                                <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
+                            </div>
+                        </div>
+                        <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
+                            <div class="col-md-10">
+                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
                                     <div class="row">
                                         <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
+                                            <b th:text="|${cita.fecha} - ${cita.hora}: ${cita.tipocitaIdtipocita.tipoCita}|"></b>
+                                            <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
                                         </div>
                                         <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
+                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
+                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans';" data-toggle="modal"
+                                                    data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
+                                                <i class="fa fa-file"></i> Ver Reporte
+                                            </button>
                                         </div>
+                                    </div>
+                                    <div class="input-hidden" id="input-container">
+                                        <input type="text" style="font-family: 'Open Sans';
+                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" placeholder="Agregue notas o comentarios personales">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
+                                        margin-top: 10px; background: #b38df7; border-color: white; color: white" >Guardar</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
-                        <div class="row no-gutters">
-                            <div class="col-md-11">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; text-align: left; padding: 10px">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            Consulta 1: Información Información Información
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="padding: 10px">
-                                <a th:href="@{principal}"><i class="fa fa-comment"></i></a>
-                            </div>
-                        </div>
 
+                            <div class="col-md-2" style="padding: 10px">
+                                <button onclick="toggleInput()" style="font-family: 'Open Sans';border: 1px solid #748194;
+                                border-radius: 0.375rem;background: white; width: 80%;">
+                                    <i class="fa fa-comment"></i> Dejar comentarios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleInput() {
+                    var inputContainer = document.getElementById("input-container");
+                    if (inputContainer.style.display === "none") {
+                        inputContainer.style.display = "block";
+                    } else {
+                        inputContainer.style.display = "none";
+                    }
+                }
+            </script>
+
+            <div th:each="informe, i : ${listaInformes}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Informe' + ${i.index+1}">
+                    <div class="modal-dialog" style="max-width: 1100px !important;">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Informe médico</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- aquí iría el logo de la empresa -->
+                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <p></p>
+                                    <br>
+                                    <div class="border-top border-bottom" style="padding: 10px">
+                                        <!-- aquí iría cualquier otro detalle o nota -->
+                                        <label>FIRMA DEL DOCTOR</label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

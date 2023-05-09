@@ -3,8 +3,10 @@ package com.example.medicaltec.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -12,33 +14,31 @@ import java.time.Instant;
 @Table(name = "cita")
 public class Cita {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idcita", nullable = false)
     private Integer id;
-
-    @Column(name = "fechahora", nullable = false)
-    private Instant fechahora;
 
     @Column(name = "citacancelada")
     private Boolean citacancelada;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
     private Especialidade especialidadesIdEspecialidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "estadoscita_idestados")
     private Estadoscita estadoscitaIdestados;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "receta_idreceta")
     private Receta recetaIdreceta;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tarjeta_idTarjetas")
+    @ManyToOne
+    @JoinColumn(name = "tarjeta_idtarjetas")
     private Tarjeta tarjetaIdtarjetas;
 
     @Column(name = "formapago", nullable = false, length = 45)
@@ -46,5 +46,25 @@ public class Cita {
 
     @Column(name = "modalidad", nullable = false, length = 45)
     private String modalidad;
+
+    @ManyToOne
+    @JoinColumn(name = "tipocita_idtipocita", nullable = false)
+    private Tipocita tipocitaIdtipocita;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "fecha", nullable = false)
+    private LocalDate fecha;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "hora", nullable = false)
+    private LocalTime hora;
+
+    @ManyToOne
+    @JoinColumn(name = "paciente_dni", nullable = false)
+    private Usuario pacienteDni;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_dni1", nullable = false)
+    private Usuario doctorDni1;
 
 }

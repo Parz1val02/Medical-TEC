@@ -23,7 +23,7 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
               <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Bienvenido Dr./Dra. Dana Nolasco
+                Bienvenido Dr./Dra. Hiroshi Giotoku
               </h1>
             </div>
             <div class="col-md-11">
@@ -41,43 +41,50 @@
             Información más reciente:
           </h3>
           <div class="row justify-content-between align-items-center">
-            <div class="col-sm-3">
-              <div class="card">
-                <div class="card-body">
+            <div class="col-sm-8">
+              <div class="card mb-3">
+                <div class="card-body" style="max-height: 650px">
                   <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                     Calendario
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
                 </div>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                <div class="card-body" style="padding: 25px !important;">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
                     Notificaciones
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div style="height: 200px;">
+                    <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                         th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                         margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                      <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                        <b th:text="${noti.usuarioDni.nombre}"></b>
+                        <div th:text="${noti.contenido}"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-sm-3">
+              <div style="height: 20px;"></div>
               <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                <div class="card-body" style="padding: 25px !important;">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
                     Mensajería
                   </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
-                    Cuestionario
-                  </h4>
-                  <div style="background: #d8e2ef;height: 200px;"></div>
+                  <div style="height: 200px;">
+                    <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                         th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                      margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                      <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                        <b th:text="${mensaje.fecha}"></b>
+                        <div th:text="${mensaje.contenido}"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,446 +120,33 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
+            <tr th:each="cita : ${listaProximasCitas}">
+              <td class="align-middle" th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|">
+                Nombre Completo
               </td>
-              <td class="align-middle">
+              <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
                 00/00/00 - 00:00hrs
               </td>
-              <td class="align-middle" style="text-align: center">
+              <td class="align-middle" style="text-align: center" th:text="${cita.modalidad}">
                 Presencial
               </td>
-              <td class="align-middle" style="text-align: center">
+              <td class="align-middle" style="text-align: center" th:text="${cita.estadoscitaIdestados.tipo}">
                 Próxima cita
               </td>
-              <td class="align-middle" align="center">
+              <td class="align-middle" style="text-align: center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
+                                    border-radius: 15px">Iniciar Video</a>
               </td>
+              <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
+                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Iniciar Video</a>
+              </td-->
               <td class="align-middle" align="center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
+                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.pacienteDni.id}}">Ver historial clínico</a>
               </td>
             </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="align-middle">
-                Nombre Paciente
-              </td>
-              <td class="align-middle">
-                00/00/00 - 00:00hrs
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Presencial
-              </td>
-              <td class="align-middle" style="text-align: center">
-                Próxima cita
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
-              </td>
-              <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{historial}">Ver historial clínico</a>
-              </td>
-            </tr>
+
             </tbody>
           </table>
         </div>

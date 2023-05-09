@@ -45,254 +45,24 @@
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr>
-                            <td class="align-middle">
+                        <tr th:each="cita, i : ${listaCitas}">
+                            <td class="align-middle" th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|">
                                 Nombre Personas
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
                                 00/00/00 - 00:00hrs
                             </td>
-                            <td class="align-middle" style="text-align: center">
+                            <td class="align-middle" style="text-align: center" th:text="|${cita.modalidad}|">
                                 Presencial
                             </td>
-                            <td class="align-middle" style="text-align: center">
+                            <td class="align-middle" style="text-align: center" th:text="|${cita.pacienteDni.segurosIdSeguro.nombreSeguro}|">
                                 Nombre Seguro
                             </td>
                             <td class="align-middle" align="center">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
-                                    Ver boleta
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                Nombre Personas
-                            </td>
-                            <td class="align-middle">
-                                00/00/00 - 00:00hrs
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Nombre Seguro
-                            </td>
-                            <td class="align-middle" align="center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">
+                                border-radius: 15px" data-toggle="modal"
+                                        data-target="#exampleModal" th:data-target="'#Boletas' + ${i.index+1}">
                                     Ver boleta
                                 </button>
                             </td>
@@ -301,97 +71,132 @@
                     </table>
                 </div>
             </div>
-            <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Aquí puedes agregar el contenido del modal -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Boleta de cita</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí iría el logo de la empresa -->
-                                        <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleador -->
-                                        <b>Doctor: </b>
-                                        <p>Dr. Manuel Yarleque</p>
-                                        <b>CMP: </b>
-                                        <p>64656268</p>
-                                        <b>Especialidad:</b>
-                                        <p>Cardiologia</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleado -->
-                                        <b> Paciente: </b>
-                                        <p>Carlos Pisco</p>
-                                        <b> DNI: </b>
-                                        <p>36448457</p>
-                                        <b> Fecha de la Cita:</b>
-                                        <p> 00/00/00 - 00:00hrs</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <!-- aquí iría la tabla con los detalles del pago -->
-                                        <table style="margin-right: 0px;height: 100px;width: 435px;">
-                                            <thead style="background: #cdeffc">
-                                            <tr>
-                                                <th class="sort align-middle" style="width: 40%">Detalles</th>
-                                                <th class="sort align-middle" style="width: 30%">Valor Unitario</th>
-                                                <th class="sort align-middle" style="width: 30%; text-align: center">Valor total</th>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody class="bg-white">
-                                            <tr>
-                                                <td class="align-middle">Consulta Médica</td>
-                                                <td class="align-middle" style="text-align: center">$ 60</td>
-                                                <td class="align-middle" style="text-align: center">$ 60
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"> Consulta Médica </td>
-                                                <td class="align-middle" style="text-align: center"> $ 60</td>
-                                                <td class="align-middle" style="text-align: center"> $ 60</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"></td>
-                                                <td class="align-middle"></td>
-                                                <td class="align-middle"></td>
-                                            </tr>
-
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="border" style="padding: 10px">
+            <div th:each="cita, i : ${listaCitas}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Boletas' + ${i.index+1}">
+                    <div class="modal-dialog" style="max-width: 1100px !important;">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Boleta de cita</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
                                     <div class="row">
-                                        <div class="col-sm-7" align="right"><b> TOTAL A PAGAR:</b></div>
-                                        <div class="col-sm-5" align="left">
-                                            <p style="margin: 0px"> $ 120 </p>
+                                        <div class="col-md-6">
+                                            <!-- aquí iría el logo de la empresa -->
+                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
                                         </div>
                                     </div>
+                                    <br>
+                                    <div class="row no-gutters">
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <div class="col-sm-12" style="padding: 0">
+                                                    <h4 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">Información de los Participantes</h4>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>Doctor: </b>
+                                                    <p th:text="|${cita.doctorDni1.nombre} ${cita.doctorDni1.apellido}|"></p>
+                                                    <b>DNI Doctor:</b>
+                                                    <p th:text="${cita.doctorDni1.id}"></p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>Paciente: </b>
+                                                    <p th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|"></p>
+                                                    <b>DNI Paciente:</b>
+                                                    <p th:text="${cita.pacienteDni.id}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12" style="padding: 0">
+                                                    <h4 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">Información de Cita:</h4>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>Tipo de Cita: </b>
+                                                    <p th:text="${cita.tipocitaIdtipocita.tipoCita}"></p>
+                                                    <b>Sede:</b>
+                                                    <p th:text="${cita.doctorDni1.sedesIdsedes.nombre}"></p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <b>Fecha: </b>
+                                                    <p th:text="|${cita.fecha} - ${cita.hora}hrs|"></p>
+                                                    <b>Especialidad:</b>
+                                                    <p th:text="${cita.doctorDni1.especialidadesIdEspecialidad.nombreEspecialidad}"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <div class="col-sm-12" style="padding: 0">
+                                                    <h4 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">Información de Pago:</h4>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <b>Seguro: </b>
+                                                    <p th:text="${cita.pacienteDni.segurosIdSeguro.nombreSeguro}"></p>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <b>Porcentaje del Doctor: </b>
+                                                    <p th:text="${cita.pacienteDni.segurosIdSeguro.porcDoctor}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <!-- aquí iría la tabla con los detalles del pago -->
+                                                    <table style="margin-right: 0px;height: 100px;width: 435px;">
+                                                        <thead style="background: #cdeffc">
+                                                        <tr>
+                                                            <th class="sort align-middle" style="width: 40%">Detalles</th>
+                                                            <th class="sort align-middle" style="width: 30%">Valor Unitario</th>
+                                                            <th class="sort align-middle" style="width: 30%; text-align: center">Valor total</th>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody class="bg-white">
+                                                        <tr>
+                                                            <td class="align-middle">Consulta Médica</td>
+                                                            <td class="align-middle" style="text-align: center">$ 60</td>
+                                                            <td class="align-middle" style="text-align: center">$ 60
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="align-middle"> Consulta Médica </td>
+                                                            <td class="align-middle" style="text-align: center"> $ 60</td>
+                                                            <td class="align-middle" style="text-align: center"> $ 60</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="align-middle"></td>
+                                                            <td class="align-middle"></td>
+                                                            <td class="align-middle"></td>
+                                                        </tr>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="border" style="padding: 10px">
+                                                <div class="row">
+                                                    <div class="col-sm-7" align="right"><b> TOTAL A PAGAR:</b></div>
+                                                    <div class="col-sm-5" align="left">
+                                                        <p style="margin: 0px"> $ 120 </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="border-top border-bottom" style="padding: 10px">
+                                        <!-- aquí iría cualquier otro detalle o nota -->
+                                        <label>FIRMA DEL DOCTOR</label>
+                                    </div>
                                 </div>
-                                <br>
-                                <div class="border-top border-bottom" style="padding: 10px">
-                                    <!-- aquí iría cualquier otro detalle o nota -->
-                                    <label>FIRMA DEL DOCTOR</label>
-                                </div>
+
+
                             </div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>

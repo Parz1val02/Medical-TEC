@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class RecetaHasMedicamentoId implements Serializable {
-    private static final long serialVersionUID = -3456704243933895327L;
+    private static final long serialVersionUID = 7364726641003743565L;
     @Column(name = "receta_idreceta", nullable = false)
     private Integer recetaIdreceta;
 

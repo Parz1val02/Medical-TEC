@@ -46,186 +46,24 @@
                     </h5>
                     <br>
                     <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                        <div class="row">
+                        <div th:if="${#lists.size(cuestionariosList)==0}">
+                            Lo sentimos, no hay cuestionarios
+                        </div>
+                        <div class="row" style="align-items: stretch">
                             <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionariosList}">
-                                <div class="card" style="min-height: 15rem">
+                                <div class="card" style="height: 100%">
                                     <div class="card-body">
-                                        <h5 class="card-title" th:text="|Cuestionario ${i.index+1}|">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                        / Información de Cuestionario</p>
                                         <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
+                                            <div class="col-md-6 align-content-center"  style="align-items: center">
+                                                <div style="height: 15px"></div>
+                                                <h6 class="card-subtitle" th:text="|Cuestionario ${i.index+1}|">Cuestionario #</h6>
+                                                <div style="height: 10px"></div>
+                                                <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                            </div>
+                                            <div class="col-md-6" align="center" style="align-items: center">
                                                 <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
                                                 border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <div class="card" style="min-height: 15rem">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Cuestionario #</h5>
-                                        <h6 class="card-subtitle mb-2 text-muted">Título de Cuestionario</h6>
-                                        <p class="card-text">Información de Cuestionario / Información de Cuestionario / Información de Cuestionario
-                                            / Información de Cuestionario</p>
-                                        <div class="row">
-                                            <div class="col-sm-6" align="center" style="align-items: center">
-                                                <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
-                                            </div>
-                                            <div class="col-sm-6" align="center" style="align-items: center">
+                                                <div style="height: 15px"></div>
                                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                                     border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
                                             </div>
