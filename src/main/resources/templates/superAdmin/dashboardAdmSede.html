@@ -149,6 +149,7 @@
           <table class="table table-striped" id="userList">
             <h2>Administradores de Sede</h2>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
             <thead class="bg-200">
             <tr>
               <th class="sort align-middle" style="width: 30%">Nombres</th>

@@ -165,7 +165,27 @@ public class SuperController {
         model.addAttribute("listaEstado", listaEstado);
         return "superAdmin/dashboardAdmSede";
     }
-    @PostMapping("/editarPacientes")
+    @GetMapping("/editarAdmS")
+    public String editarAdministrador(Model model, @ModelAttribute("admS") Usuario admS, @RequestParam("id") String dni, RedirectAttributes attr) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
+        if (optionalUsuario.isPresent()) {
+            admS = optionalUsuario.get();
+            model.addAttribute("admS", admS);
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
+            return "superAdmin/editarAdmSede";
+        } else {
+            attr.addFlashAttribute("msgDanger","El administrador a editar no existe");
+            return "redirect:/superAdmin/dashboardAdmSede";
+        }
+    }
+    @PostMapping("/actualizarAdmS")
+    public String actualizarAdministrador(@ModelAttribute("admS") Usuario admS, RedirectAttributes attr) {
+        attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
+        usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
+        return "redirect:/superAdmin/dashboard/Adm";
+    }
+   /* @PostMapping("/editarPacientes")
     public String editarPaciente(
             @RequestParam("sede") int sede,
             @RequestParam("nombre") String nombre,
@@ -236,6 +256,7 @@ public class SuperController {
         usuarioRepository.editarAdministradores( email, nombre, apellido, sede, telefono, estado, dni);
         return "redirect:/superAdmin/dashboard/Adm";
     }
+    */
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model){
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
