@@ -70,7 +70,6 @@ public class DoctorController {
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
         model.addAttribute("listaInformes",informeList);
         */
-
         List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
 

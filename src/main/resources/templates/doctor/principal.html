@@ -133,10 +133,14 @@
               <td class="align-middle" style="text-align: center" th:text="${cita.estadoscitaIdestados.tipo}">
                 Próxima cita
               </td>
-              <td class="align-middle" align="center">
+              <td class="align-middle" style="text-align: center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{principal}">Iniciar Video</a>
+                                    border-radius: 15px">Iniciar Video</a>
               </td>
+              <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
+                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px">Iniciar Video</a>
+              </td-->
               <td class="align-middle" align="center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                     border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.pacienteDni.id}}">Ver historial clínico</a>
