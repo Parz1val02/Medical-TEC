@@ -48,18 +48,18 @@
                             </thead>
                             <tbody class="bg-white">
                             <tr th:each="cita : ${listaCitas}">
-                                <td th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|" class="align-middle">
+                                <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
                                     Nombre Paciente
                                 </td>
                                 <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
                                     00/00/00 - 00:00hrs
                                 </td>
-                                <td th:text="${cita.pacienteDni.email}" class="align-middle" style="text-align: center">
+                                <td th:text="${cita.paciente.email}" class="align-middle" style="text-align: center">
                                     correoelectronico@hotmail.com
                                 </td>
                                 <td class="align-middle" align="center">
                                     <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.pacienteDni.id}}">Ver historial clínico</a>
+                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
                                 </td>
                             </tr>
 

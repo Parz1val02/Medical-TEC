@@ -46,7 +46,7 @@
                         </thead>
                         <tbody class="bg-white">
                         <tr th:each="cita, i : ${listaCitas}">
-                            <td class="align-middle" th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|">
+                            <td class="align-middle" th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|">
                                 Nombre Personas
                             </td>
                             <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
@@ -55,7 +55,7 @@
                             <td class="align-middle" style="text-align: center" th:text="|${cita.modalidad}|">
                                 Presencial
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="|${cita.pacienteDni.segurosIdSeguro.nombreSeguro}|">
+                            <td class="align-middle" style="text-align: center" th:text="|${cita.paciente.segurosIdSeguro.nombreSeguro}|">
                                 Nombre Seguro
                             </td>
                             <td class="align-middle" align="center">
@@ -97,15 +97,15 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <b>Doctor: </b>
-                                                    <p th:text="|${cita.doctorDni1.nombre} ${cita.doctorDni1.apellido}|"></p>
+                                                    <p th:text="|${cita.doctor.nombre} ${cita.doctor.apellido}|"></p>
                                                     <b>DNI Doctor:</b>
-                                                    <p th:text="${cita.doctorDni1.id}"></p>
+                                                    <p th:text="${cita.doctor.id}"></p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <b>Paciente: </b>
-                                                    <p th:text="|${cita.pacienteDni.nombre} ${cita.pacienteDni.apellido}|"></p>
+                                                    <p th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|"></p>
                                                     <b>DNI Paciente:</b>
-                                                    <p th:text="${cita.pacienteDni.id}"></p>
+                                                    <p th:text="${cita.paciente.id}"></p>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -116,13 +116,13 @@
                                                     <b>Tipo de Cita: </b>
                                                     <p th:text="${cita.tipocitaIdtipocita.tipoCita}"></p>
                                                     <b>Sede:</b>
-                                                    <p th:text="${cita.doctorDni1.sedesIdsedes.nombre}"></p>
+                                                    <p th:text="${cita.doctor.sedesIdsedes.nombre}"></p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <b>Fecha: </b>
                                                     <p th:text="|${cita.fecha} - ${cita.hora}hrs|"></p>
                                                     <b>Especialidad:</b>
-                                                    <p th:text="${cita.doctorDni1.especialidadesIdEspecialidad.nombreEspecialidad}"></p>
+                                                    <p th:text="${cita.doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -133,11 +133,11 @@
                                                 </div>
                                                 <div class="col-md-5">
                                                     <b>Seguro: </b>
-                                                    <p th:text="${cita.pacienteDni.segurosIdSeguro.nombreSeguro}"></p>
+                                                    <p th:text="${cita.paciente.segurosIdSeguro.nombreSeguro}"></p>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <b>Porcentaje del Doctor: </b>
-                                                    <p th:text="${cita.pacienteDni.segurosIdSeguro.porcDoctor}"></p>
+                                                    <p th:text="${cita.paciente.segurosIdSeguro.porcDoctor}"></p>
                                                 </div>
                                             </div>
                                             <div class="row">
