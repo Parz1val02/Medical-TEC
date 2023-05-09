@@ -10,6 +10,13 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = '34185296')")
+    void cambiarContra(String pass);
+
+    @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
+    String passAdmv();
     Usuario findByid(String id);
     @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1")
     List<Usuario> obtenerlistaDoctores(Integer idSede);
