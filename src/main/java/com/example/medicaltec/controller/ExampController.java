@@ -8,6 +8,7 @@ package com.example.medicaltec.controller;
         import org.springframework.web.bind.annotation.RequestMapping;
         import org.springframework.web.bind.annotation.RequestMethod;
         import org.springframework.web.bind.annotation.RequestParam;
+        import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
         import java.util.List;
 
@@ -27,7 +28,8 @@ public class ExampController {
     @PostMapping(value = "/login")
     public String pagPrincipalDoctor(@RequestParam("email") String email,
                                      @RequestParam("password") String password,
-                                     Model model){
+                                     Model model,
+                                     RedirectAttributes attr){
         boolean i=false;
         Usuario user1 = new Usuario();
         List<Usuario> userList = usuarioRepository.findAll();
@@ -53,6 +55,7 @@ public class ExampController {
                     return "doctor/principal";
             }
         }else {
+            attr.addFlashAttribute("errorLogin","Usuario y/o contraseña incorrectos");
             return "redirect:/";
         }
     }
