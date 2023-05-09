@@ -185,6 +185,8 @@ public class SuperController {
     @PostMapping("/actualizarAdmS")
     public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, RedirectAttributes attr, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()){
+            model.addAttribute("sedesList", sedeRepository.findAll());
+            model.addAttribute("estadosList", estadoRepository.findAll());
             return "superAdmin/editarAdmSede";
         }
         else{
