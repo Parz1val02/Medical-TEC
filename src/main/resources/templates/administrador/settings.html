@@ -41,38 +41,38 @@
 
           <div class="row">
             <div class="col-lg-8">
-              <h4 class="mb-1">Nombre completo administrador<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              <h4 class="mb-1"><span th:text="${admin.nombre} + ' ' +  ${admin.apellido}"></span><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
               </h4>
               <form>
                 <fieldset disabled>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput1" class="form-label">Nombres</label>
-                      <input type="text" id="disabledTextInput1" class="form-control" placeholder="Nombre administrador">
+                      <input type="text" id="disabledTextInput1" class="form-control" th:value="${admin.nombre}">
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                      <input type="text" id="disabledTextInput2" class="form-control" placeholder="Apellidos administrador">
+                      <input type="text" id="disabledTextInput2" class="form-control" th:value="${admin.apellido}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput3" class="form-label">Correo</label>
-                      <input type="text" id="disabledTextInput3" class="form-control" placeholder="admin@correo.com">
+                      <input type="text" id="disabledTextInput3" class="form-control" th:value="${admin.email}">
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput4" class="form-label">Celular</label>
-                      <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                      <input type="text" id="disabledTextInput4" class="form-control" th:value="${admin.telefono}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput5" class="form-label">DNI</label>
-                      <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                      <input type="text" id="disabledTextInput5" class="form-control" th:value="${admin.id}">
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput6" class="form-label">Sede actual</label>
-                      <input type="text" id="disabledTextInput6" class="form-control" placeholder="Lima Centro">
+                      <input type="text" id="disabledTextInput6" class="form-control" th:value="${admin.sedesIdsedes.nombre}">
                     </div>
                   </div>
                 </fieldset>
@@ -125,6 +125,42 @@
 
         </div>
       </div>
+
+
+      <br>
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+
+          <div class="row">
+            <div class="col-lg">
+              <h4 class="mb-1">Configuracion de sede
+              </h4>
+              <form>
+
+                  <div class="row">
+                    <div class="col-6 mb-3 form-group">
+                      <label for="disabledTextInput1" class="form-label"> Direccion de sede </label>
+                      <input type="text" id="disabledTextInput1" class="form-control" name="lugar" value="LugarSede">
+                    </div>
+                    <div class="form-group col-6">
+                      <label for="estadoSede">Estado de sede</label>
+                      <select class="form-control" name="estadoSede" id="estadoSede">
+                        <option value="1"> Activa </option>
+                        <option value="2"> No activa </option>
+                      </select>
+                    </div>
+                  </div>
+                <div align="end">
+                  <button type="submit" class="btn btn-primary" > Guardar </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
 
 
 

@@ -58,10 +58,11 @@
             <div class="card mb-3">
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                    <button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearPaciente" style="text-align: center;background: #02b0fb;
+                    <!--<button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearPaciente" style="text-align: center;background: #02b0fb;
                         border-color: #FFFFFF">Crear paciente
-                    </button>
-
+                    </button>-->
+                    <a th:href="@{/administrador/crearPacientePagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                        border-color: #FFFFFF"> Crear paciente </a>
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
                         <tr>
@@ -79,16 +80,23 @@
                             <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
                             <td th:text="${paciente.id}"></td>
                             <td th:text="${paciente.email}"></td>
-                            <td style="text-align: center" th:text="${paciente.estadosIdestado.nombreEstado}"></td>
+                            <td style="text-align: center" th:text="${paciente.estadosIdestado.nombre}"></td>
 
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalHistorial-' + ${vEstado.index + 1}">Ver historial clínico</button>
+                                <!-- <a class="btn btn-primary btn-sm"  style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.pacienteDni.id}}"> </a>-->
                             </td>
+
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
-                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>
+                                <a th:href="@{'/administrador/editarPacientePagina' + '?id=' + ${paciente.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
                             </td>
+<!--                            <td class="align-middle" align="center">-->
+<!--                                <button type="button" class="btn btn-danger btn-sm" style="text-align: center;-->
+<!--                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalEditarPaciente-' + ${vEstado.index + 1}">Editar</button>-->
+<!--                            </td>-->
 
                             <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
                             <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
@@ -152,9 +160,11 @@
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Doctor </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
 
-                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearDoctor" style="text-align: center;background: #02b0fb;
+                    <!--<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalCrearDoctor" style="text-align: center;background: #02b0fb;
                          border-color: #FFFFFF">Crear doctor
-                    </button>
+                    </button>-->
+                    <a th:href="@{/administrador/crearDoctorPagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                        border-color: #FFFFFF"> Crear doctor </a>
 
                     <table class="table table-striped" id="userList2">
                         <thead style="background: #cdeffc">
@@ -173,7 +183,7 @@
                             <td th:text="${doctor.nombre} + ' ' + ${doctor.apellido} "></td>
                             <td th:text="${doctor.email}"></td>
                             <td style="text-align: center" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
-                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombreEstado}"></td>
+                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombre}"></td>
 
 
                             <td class="align-middle" align="center">
@@ -181,9 +191,13 @@
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
                             </td>
                             <td class="align-middle" align="center">
+                                <a th:href="@{'/administrador/editarDoctorPagina' + '?id=' + ${doctor.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
+                            </td>
+                           <!-- <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-danger btn-sm" style="text-align: center;
                                     border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfilEditar-' + ${vEstado.index + 1}">Editar</button>
-                            </td>
+                            </td> -->
 
                             <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
                             <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
@@ -236,7 +250,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Perfil de Doctor <span th:text="' ' + ${vEstado.index + 1}"></span></h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Perfil de Dr. <span th:text="' ' + ${doctor.nombre} + ' ' + ${doctor.apellido}"></span></h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -289,7 +303,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="estado">Estado</label>
-                                                <input type="text" id="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                                <input type="text" id="estado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
                                             </div>
                                         </div>
 
@@ -403,40 +417,40 @@
                 </div>
 
                 <form method="post" th:action="@{/administrador/editarDoctor}">
-                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre </label>
-                                    <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control" >
-                                </div>
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                   <div class="modal-body">
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="form-group">
+                                   <label for="nombre">Nombre </label>
+                                   <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control"  required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="email">Email </label>
-                                    <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" >
-                                </div>
+                               <div class="form-group">
+                                   <label for="email">Email </label>
+                                   <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="id">DNI </label>
-                                    <input type="text" class="form-control" th:value="${doctor.id}" disabled>
-                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" >
-                                </div>
+                               <div class="form-group">
+                                   <label for="id">DNI </label>
+                                   <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                   <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" required>
+                               </div>
 
-                                <div class="form-group">
-                                    <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${doctor.estadosIdestado.nombreEstado}" class="form-control" disabled>
-                                </div>
+                               <div class="form-group">
+                                   <label for="estado">Estado </label>
+                                   <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
+                               </div>
 
 
-                            </div>
+                           </div>
 
-                            <!-- Columna 2 -->
+                           <!-- Columna 2 -->
                             <div class="col-sm-6">
 
                                 <div class="form-group">
                                     <label for="apellido">Apellido  </label>
-                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${doctor.apellido}">
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${doctor.apellido}" required>
                                 </div>
 
                                 <div class="form-group">
@@ -445,13 +459,11 @@
                                         <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
                                                 th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
                                     </select>
-
-
                                 </div>
 
                                 <div class="form-group">
                                     <label for="telefono"> Teléfono  </label>
-                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${doctor.telefono}">
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${doctor.telefono}" required>
                                 </div>
 
                             </div>
@@ -488,37 +500,37 @@
             </div>
 
             <form method="post" th:action="@{/administrador/crearDoctor}">
-                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
 
                             <div class="form-group">
                                 <label for="nombre">Nombre </label>
-                                <input type="text" id="nombre" name="nombre"  class="form-control" >
+                                <input type="text" id="nombre" name="nombre"  class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="id">DNI </label>
-                                <input type="text" id="id" name="id" class="form-control" >
+                                <input type="text" id="id" name="id" class="form-control" required>
 
                             </div>
 
 
                             <div class="form-group">
                                 <label for="edad">Edad </label>
-                                <input type="text" id="edad" name="edad"   class="form-control" >
+                                <input type="text" id="edad" name="edad"   class="form-control" required>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="telefono">Telefono </label>
-                                <input type="text" id="telefono" name="telefono"   class="form-control" >
+                                <input type="text" id="telefono" name="telefono"   class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="email">Email </label>
-                                <input type="email" id="email" name="email"   class="form-control" >
+                                <input type="email" id="email" name="email"   class="form-control" required>
                             </div>
 
 
@@ -530,21 +542,21 @@
 
                             <div class="form-group">
                                 <label for="apellido">Apellido  </label>
-                                <input type="text" id="apellido" name="apellido"   class="form-control" >
+                                <input type="text" id="apellido" name="apellido"   class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="sexo">Sexo  </label>
                                 <select class="form-control" name="sexo" id="sexo">
-                                    <option value="masculino"> Masculino </option>
-                                    <option value="femenino"> Femenino </option>
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
                                 </select>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="direccion">Direccion </label>
-                                <input type="direccion" id="direccion" name="direccion"   class="form-control" >
+                                <input type="text" id="direccion" name="direccion"   class="form-control" required>
                             </div>
 
 
@@ -556,11 +568,12 @@
                                 </select>
                             </div>
 
+                            <!--
                             <div class="form-group">
                                 <label for="contrasena">Contrasena </label>
                                 <input type="text" id="contrasena" name="contrasena"    class="form-control" >
                             </div>
-
+                            -->
                         </div>
                     </div>
 
@@ -591,79 +604,79 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <form method="post" th:action="@{/administrador/crearPaciente}">
-                <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
+            <form method="post" th:action="@{/administrador/crearPaciente}" th:object="${usuario}">
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-sm-6">
 
-                            <div class="form-group">
-                                <label for="nombre">Nombre </label>
-                                <input type="text" id="nombre" name="nombre"  class="form-control" >
-                            </div>
+                             <div class="form-group">
+                                 <label for="nombre">Nombre </label>
+                                 <input type="text" th:field="*{nombre}"  class="form-control" required>
+                             </div>
 
-                            <div class="form-group">
-                                <label for="id">DNI </label>
-                                <input type="text" id="id" name="id" class="form-control" >
+                             <div class="form-group">
+                                 <label for="id">DNI </label>
+                                 <input type="text" th:field="*{id}" class="form-control" required>
 
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="edad">Edad </label>
-                                <input type="text" id="edad" name="edad"   class="form-control" >
-                            </div>
+                             </div>
 
 
-                            <div class="form-group">
-                                <label for="telefono">Telefono </label>
-                                <input type="text" id="telefono" name="telefono"   class="form-control" >
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email">Email </label>
-                                <input type="email" id="email" name="email"   class="form-control" >
-                            </div>
+                             <div class="form-group">
+                                 <label for="edad">Edad </label>
+                                 <input type="text" th:field="*{edad}"   class="form-control" required>
+                             </div>
 
 
 
-                        </div>
+                             <div class="form-group">
+                                 <label for="email">Email </label>
+                                 <input type="email" th:field="*{email}"   class="form-control" required>
+                             </div>
 
-                        <!-- Columna 2 -->
+
+
+                         </div>
+
+                         <!-- Columna 2 -->
                         <div class="col-sm-6">
 
                             <div class="form-group">
                                 <label for="apellido">Apellido  </label>
-                                <input type="text" id="apellido" name="apellido"   class="form-control" >
+                                <input type="text" th:field="*{apellido}"   class="form-control" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="sexo">Sexo  </label>
-                                <select class="form-control" name="sexo" id="sexo">
-                                    <option value="masculino"> Masculino </option>
-                                    <option value="femenino"> Femenino </option>
+                                <select class="form-control" th:field="*{sexo}">
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
                                 </select>
                             </div>
 
 
                             <div class="form-group">
                                 <label for="direccion">Direccion </label>
-                                <input type="direccion" id="direccion" name="direccion"   class="form-control" >
+                                <input type="text" th:field="*{direccion}"   class="form-control" required>
                             </div>
 
-
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" th:field="*{telefono}"   class="form-control" required>
+                            </div>
+                            <!--
                             <div class="form-group">
                                 <label for="contrasena">Contrasena </label>
                                 <input type="text" id="contrasena" name="contrasena"    class="form-control" >
                             </div>
-
+                            -->
                         </div>
                     </div>
 
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" > Crear paciente </button>
+                    <button type="submit" class="btn btn-primary" > Crear e invitar paciente </button>
                     <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </form>
@@ -687,48 +700,48 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form method="post" th:action="@{/administrador/editarPaciente}">
-                    <input type="hidden" id="sede" name="sede"  value="1" class="form-control" >
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="nombre">Nombre </label>
-                                    <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" >
-                                </div>
+                <form method="post" th:action="@{/administrador/editarPaciente}" >
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                      <div class="modal-body">
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <label for="nombre">Nombre </label>
+                                      <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" required>
+                                  </div>
 
-                                <div class="form-group">
-                                    <label for="email">Email </label>
-                                    <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" >
-                                </div>
+                                  <div class="form-group">
+                                      <label for="email">Email </label>
+                                      <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" required>
+                                  </div>
 
-                                <div class="form-group">
-                                    <label for="id">DNI </label>
-                                    <input type="text" class="form-control" th:value="${paciente.id}" disabled>
-                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
-                                </div>
+                                  <div class="form-group">
+                                      <label for="id">DNI </label>
+                                      <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                      <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
+                                  </div>
 
 
 
-                            </div>
+                              </div>
 
-                            <!-- Columna 2 -->
+                              <!-- Columna 2 -->
                             <div class="col-sm-6">
 
                                 <div class="form-group">
                                     <label for="apellido">Apellido  </label>
-                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${paciente.apellido}">
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${paciente.apellido}" required>
                                 </div>
 
 
                                 <div class="form-group">
                                     <label for="telefono"> Teléfono  </label>
-                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${paciente.telefono}">
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${paciente.telefono}" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="estado">Estado </label>
-                                    <input type="text" id="estado" name="estado"   th:value="${paciente.estadosIdestado.nombreEstado}" class="form-control" disabled>
+                                    <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
                                 </div>
 
                             </div>
