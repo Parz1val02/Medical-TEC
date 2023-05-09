@@ -50,33 +50,43 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-8">
-              <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              <h4 class="mb-1" th:text="${superadmin.nombre}+${superadmin.apellido}"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
               </h4>
-              <form th:href="@{/editSave/Perfil}">
+              <form method="post"  th:action="@{/superAdmin/editSave/Perfil}">
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="nombre" class="form-label">Nombres</label>
-                      <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Carlos Eduardo">
+                      <div class="form-group">
+                        <label for="nombre" class="form-label">Nombres</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" th:placeholder="${superadmin.nombre}">
+                      </div>
                     </div>
                     <div class="col mb-3">
-                      <label for="apellido" class="form-label">Apellidos</label>
-                      <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Pisco Tejada">
+                      <div class="form-group">
+                        <label for="apellido" class="form-label">Apellidos</label>
+                        <input type="text" id="apellido" name="apellido" class="form-control" th:placeholder="${superadmin.apellido}">
+                      </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="correo" class="form-label">Correo</label>
-                      <input type="text" id="correo" name="correo" class="form-control" placeholder="epifanioexe@protonmail.com">
+                      <div class="form-group">
+                        <label for="correo" class="form-label">Correo</label>
+                        <input type="text" id="correo" name="correo" class="form-control" th:placeholder="${superadmin.email}">
+                      </div>
                     </div>
                     <div class="col mb-3">
-                      <label for="celular" class="form-label">Celular</label>
-                      <input type="text" id="celular" name="celular" class="form-control" placeholder="966420420">
+                      <div class="form-group">
+                        <label for="telefono" class="form-label">Celular</label>
+                        <input type="text" id="telefono" name="telefono" class="form-control" th:placeholder="${superadmin.telefono}">
+                      </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
-                      <label for="dni" class="form-label">DNI</label>
-                      <input type="text" id="dni" name="dni" class="form-control" placeholder="12345678">
+                      <div class="form-group">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" id="dni" name="dni" class="form-control" th:placeholder="${superadmin.id}">
+                      </div>
                     </div>
                   </div>
                 <br>

@@ -49,35 +49,36 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4 class="mb-1">Carlos Pisco<small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            <h4 class="mb-1" th:text="${superadmin.nombre}+${superadmin.apellido}"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
                             </h4>
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+                            <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger" role="alert"></div>
                             <form>
                                 <fieldset disabled>
                                     <div class="row">
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput1" class="form-label">Nombres</label>
-                                            <input type="text" id="disabledTextInput1" class="form-control" placeholder="Carlos Eduardo">
+                                            <label for="disabledTextInput1" class="form-label">Nombre</label>
+                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${superadmin.nombre}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                                            <input type="text" id="disabledTextInput2" class="form-control" placeholder="Pisco Tejada">
+                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${superadmin.apellido}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput3" class="form-label">Correo</label>
-                                            <input type="text" id="disabledTextInput3" class="form-control" placeholder="epifanioexe@protonmail.com">
+                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${superadmin.email}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput4" class="form-label">Celular</label>
-                                            <input type="text" id="disabledTextInput4" class="form-control" placeholder="966420420">
+                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${superadmin.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput5" class="form-label">DNI</label>
-                                            <input type="text" id="disabledTextInput5" class="form-control" placeholder="12345678">
+                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${superadmin.id}">
                                         </div>
                                     </div>
                                 </fieldset>

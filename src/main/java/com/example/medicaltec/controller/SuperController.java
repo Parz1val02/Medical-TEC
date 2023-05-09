@@ -183,7 +183,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, RedirectAttributes attr, BindingResult bindingResult) {
+    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, BindingResult bindingResult, RedirectAttributes attr) {
         if(bindingResult.hasErrors()){
             return "superAdmin/editarAdmSede";
         }
@@ -594,7 +594,9 @@ public class SuperController {
         return "redirect:/superAdmin/informes";
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
-    public String confSup(){
+    public String confSup(Model model, RedirectAttributes attr){
+        Usuario user = usuarioRepository.obtenerSuperAdmin();
+        model.addAttribute("superadmin",user);
         return "superAdmin/confSup";
     }
     @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
@@ -635,7 +637,9 @@ public class SuperController {
     }
 
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
-    public String editarPerfil(){
+    public String editarPerfil(Model model){
+        Usuario user = usuarioRepository.obtenerSuperAdmin();
+        model.addAttribute("superadmin",user);
         return "superAdmin/editarPerfil";
     }
 
@@ -644,9 +648,58 @@ public class SuperController {
                               @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                               @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
                               @RequestParam("dni") String dni) {
+        Usuario user = usuarioRepository.obtenerSuperAdmin();
+        int c = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            c = c+1;
+            nombre = user.getNombre();
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            c = c+1;
+            apellido = user.getApellido();
+        }
+        if (correo.isEmpty()){
+            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
+            c = c+1;
+            correo = user.getEmail();
+        }
+        if (telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            c = c+1;
+            telefono = user.getTelefono();
+        }
+        if (telefono.length()!=9){
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            c = c+1;
+            telefono = user.getTelefono();
+        }
+        if(dni.isEmpty()){
+            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            c = c+1;
+            dni = user.getId();
+        } else if (dni.length()!=8) {
+            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
+            c = c+1;
+            dni = user.getId();
+        } else {
+            Optional<Usuario> u = usuarioRepository.findById(dni);
+            if(u.isPresent()){
+                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                c = c+1;
+                dni = user.getId();
+            }
+        }
+        if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni);
             attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
             return "redirect:/superAdmin/confSup";
+        }else {
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            return "redirect:/superAdmin/confSup";
+        }
+
 
     }
 
