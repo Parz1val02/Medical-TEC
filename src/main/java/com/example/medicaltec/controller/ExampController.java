@@ -51,8 +51,7 @@ public class ExampController {
                 case "superadmin":
                     return "redirect:/superadmin/dashboard";
                 default:
-                    model.addAttribute("user", user1);
-                    return "doctor/principal";
+                    return "redirect:/doctor/principal";
             }
         }else {
             attr.addFlashAttribute("errorLogin","Usuario y/o contraseña incorrectos");

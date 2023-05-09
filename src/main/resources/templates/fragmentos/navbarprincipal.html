@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<nav th:fragment="navbarprincipal" class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand" style="
+    padding-left: 100px;
+    padding-right: 100px;
+">
+
+  <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button" data-toggle="collapse"
+          data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation">
+    <span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+  <a class="navbar-brand" th:href="@{/}">
+    <div class="d-flex align-items-center py-3">
+      <img class="mr-2" th:src="@{/img/illustrations/shield.png}"  alt="" width="30" />
+      <span class="text-sans-serif" style="font-size: x-large" >MedicalTec</span>
+    </div>
+  </a>
+  <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
+    <li class="nav-item">
+      <a class="nav-link active" th:href="@{/}">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-icon" style="margin-right: 7px"><i class="fa fa-home"></i></span>
+          <span class="nav-link-text"> Página Principal</span>
+        </div>
+      </a>
+    </li>
+    <div style="height: 10px;"></div>
+    <li class="nav-item">
+      <a class="nav-link active" th:href="@{/}">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-icon" style="margin-right: 7px"><i class="fa fa-list-alt"></i></span>
+          <span class="nav-link-text"> Servicios </span>
+        </div>
+      </a>
+    </li>
+    <div style="height: 10px;"></div>
+    <li class="nav-item">
+      <a class="nav-link active" th:href="@{/}">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-icon" style="margin-right: 7px"><i class="fa fa-user-md"></i></span>
+          <span class="nav-link-text"> Staff Médico</span>
+        </div>
+      </a>
+    </li>
+    <div style="height: 10px;"></div>
+    <li class="nav-item">
+      <a class="nav-link active" th:href="@{/register}">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-icon" style="margin-right: 7px">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+          </span>
+          <span class="nav-link-text"> Registrarse </span>
+        </div>
+      </a>
+    </li>
+    <div style="height: 10px;"></div>
+    <li class="nav-item">
+      <a class="nav-link active" th:href="@{/login}">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-icon" style="margin-right: 7px"><i class="fa fa-user"></i></span>
+          <span class="nav-link-text"> Iniciar Sesión</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</nav>
