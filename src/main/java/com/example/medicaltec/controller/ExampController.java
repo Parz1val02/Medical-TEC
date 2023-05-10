@@ -1,6 +1,10 @@
 package com.example.medicaltec.controller;
 
+        import com.example.medicaltec.Entity.Especialidade;
+        import com.example.medicaltec.Entity.Sede;
         import com.example.medicaltec.Entity.Usuario;
+        import com.example.medicaltec.repository.EspecialidadeRepository;
+        import com.example.medicaltec.repository.SedeRepository;
         import com.example.medicaltec.repository.UsuarioRepository;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
@@ -15,12 +19,25 @@ package com.example.medicaltec.controller;
 @Controller
 public class ExampController {
     final UsuarioRepository usuarioRepository;
-
-    public ExampController(UsuarioRepository usuarioRepository) {
+    final SedeRepository sedeRepository;
+    final EspecialidadeRepository especialidadeRepository;
+    public ExampController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, EspecialidadeRepository especialidadeRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.especialidadeRepository=especialidadeRepository;
+        this.sedeRepository=sedeRepository;
     }
 
     @RequestMapping(value = {"/"},method = RequestMethod.GET)
+    public String paginaPrincipal(Model model){
+        List<Usuario> usuarioList = usuarioRepository.listarDoctores();
+        List<Especialidade> especialidadeList = especialidadeRepository.findAll();
+        List<Sede> sedeList = sedeRepository.findAll();
+        model.addAttribute("usuarioList",usuarioList);
+        model.addAttribute("especialidadesList",especialidadeList);
+        model.addAttribute("sedeList",sedeList);
+        return "auth/principalpage";
+    }
+    @RequestMapping(value = {"/loginA"},method = RequestMethod.GET)
     public String login(){
         return "auth/login";
     }
