@@ -21,8 +21,6 @@
 </head>
 
 <body class="">
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
@@ -131,7 +129,7 @@
                     </h3>
                     <div class="row justify-content-between align-items-center" style="padding-left: 15px;">
 
-                        <button  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" href="/pass">Cambiar Contraseña</button>
+                        <button  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >Cambiar Contraseña</button>
 
 
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -139,7 +137,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Advertencia</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     </div>
                                     <div class="modal-body">
                                         Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrate de que tu nueva contraseña sea segura y única. No uses la misma contraseña que utilizas en otros sitios web y evita usar información personal, como tu nombre o fecha de nacimiento.
@@ -149,7 +147,7 @@
                                         Recuerda que una contraseña segura es esencial para proteger tus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener tu cuenta segura!
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                         <a type="button" class="btn btn-primary" th:href="@{/administrativo/pass}">Continuar</a>
                                     </div>
                                 </div>

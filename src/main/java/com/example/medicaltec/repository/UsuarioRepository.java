@@ -57,6 +57,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
 
 
+    @Transactional
     @Modifying
     @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = '34185296')")
     void cambiarContra(String pass);
@@ -70,7 +71,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set seguros_id_seguro=?1 where dni=\"22647853\";" )
-    Boolean cambiarSeguro(String idSede);
+    void cambiarSeguro(String idSede);
 
 
     @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 1", nativeQuery = true)
