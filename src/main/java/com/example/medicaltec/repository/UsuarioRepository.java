@@ -18,7 +18,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
             String passAdmv();
 
-
+    @Query(nativeQuery = true,value="select * from usuario where dni = \"34185296\"")
+    Usuario obtenerUsuario();
 
 
 }

@@ -37,9 +37,10 @@ public class AdministrativoController {
     }
 
     @RequestMapping(value = {"/perfil"},method = RequestMethod.GET)
-    public String VerPerfil(){
+    public String VerPerfil(Model model){
+        model.addAttribute("usuario",usuarioRepository.obtenerUsuario());
 
-        return "administrativo/Perfil";
+        return "administrativo/miperfil";
     }
     @RequestMapping(value = {"/pass"},method = RequestMethod.GET)
     public String CambiarPassword(){
