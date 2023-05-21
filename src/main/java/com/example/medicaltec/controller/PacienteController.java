@@ -11,17 +11,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/paciente")
 public class PacienteController {
 
-    final HistorialMedicoRepository historialMedicoRepository;
+    final HistorialmedicoRepository historialMedicoRepository;
     final SedeRepository sedeRepository;
     final SeguroRepository seguroRepository;
 
@@ -48,8 +45,8 @@ public class PacienteController {
 
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository, HistorialMedicoRepository historialMedicoRepository) {
-        this.historialMedicoRepository = historialMedicoRepository;
+                              CuestionarioRepository cuestionarioRepository, HistorialmedicoRepository historialmedicoRepository, HistorialmedicoRepository historialMedicoRepository) {
+
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -64,6 +61,7 @@ public class PacienteController {
         this.historialMedicoHasAlergiaRepository=historialMedicoHasAlergiaRepository;
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
         this.cuestionarioRepository = cuestionarioRepository;
+        this.historialMedicoRepository = historialMedicoRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -101,9 +99,28 @@ public class PacienteController {
     @RequestMapping("/consultas")
     public String citas(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
+
+        List<Cita> citas = citaRepository.historialCitas(usuario.getId());
+        //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
+        ;
+        List<Medicamento> medicamentos = new ArrayList<>();
+        for (int i = 0; i < citas.size(); i++) {
+
+            if (citas.get(i).getRecetaIdreceta().getId() != null){
+                List<Integer> ids = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
+                for (Integer id : ids) {
+                    medicamentos.add(medicamentoRepository.obtenerMedicamento(id));
+                }
+            }
+
+
+
+
+        }
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("citas", citaRepository.historialCitas(usuario.getId()));
-        model.addAttribute("medicamentos", medicamentoRepository.findAll());
+        model.addAttribute("medicamentos", medicamentos);
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }

@@ -27,8 +27,7 @@ public class Informe {
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 
-    @ManyToOne
-    @JoinColumn(name = "cita_idcita", nullable = false)
-    private Cita citaIdcita;
+
+
 
 }

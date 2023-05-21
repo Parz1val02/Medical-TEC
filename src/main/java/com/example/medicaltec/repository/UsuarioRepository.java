@@ -16,10 +16,10 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
 
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1")
     List<Usuario> obtenerListaPacientes2();
 
-    @Query(nativeQuery = true,value = "select * from Usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1")
+    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1")
     List<Usuario> obtenerlistaDoctores();
 
     @Transactional
@@ -34,16 +34,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 2")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2")
     List<Usuario> obtenerListaPacientes();
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 1")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 1")
     List<Usuario> obtenerListaDoctores();
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 3")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 3")
     List<Usuario> obtenerListaAdministrativos();
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 4")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 4")
     List<Usuario> obtenerListaAdministradores();
 
-    @Query(nativeQuery = true, value = "select * from Usuario u where u.roles_idroles = 5")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5")
     Usuario obtenerSuperAdmin();
 
     @Transactional

@@ -78,4 +78,8 @@ public class Cita implements Serializable {
     @JoinColumn(name = "doctor_dni1", referencedColumnName = "dni", nullable = false)
     private Usuario doctor;
 
+    @ManyToOne
+    @JoinColumn(name = "informe_idinforme")
+    private Receta informeIdinforme;
+
 }
