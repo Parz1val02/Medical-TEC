@@ -2,6 +2,7 @@ package com.example.medicaltec.controller;
 
 
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("/paciente")
 public class PacienteController {
 
-    final HistorialmedicoRepository historialMedicoRepository;
+    final HistorialMedicoRepository historialMedicoRepository;
     final SedeRepository sedeRepository;
     final SeguroRepository seguroRepository;
 
@@ -43,9 +44,11 @@ public class PacienteController {
     final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
 
 
-    public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
+    public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository, HistorialmedicoRepository historialmedicoRepository, HistorialmedicoRepository historialMedicoRepository) {
+
+                              CuestionarioRepository cuestionarioRepository) {
+        this.historialMedicoRepository = historialMedicoRepository;
 
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
@@ -61,7 +64,7 @@ public class PacienteController {
         this.historialMedicoHasAlergiaRepository=historialMedicoHasAlergiaRepository;
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
         this.cuestionarioRepository = cuestionarioRepository;
-        this.historialMedicoRepository = historialMedicoRepository;
+
     }
 
     @RequestMapping(value = "/principal")
