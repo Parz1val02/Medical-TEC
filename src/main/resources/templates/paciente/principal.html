@@ -71,6 +71,8 @@
               <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
                 <div class="row">
                   <div class="form-group" style="text-align: center">
+                    <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
                     <label for="" style="font-size: medium">Sede Actual</label>
                     <input th:each="sede : ${sedes}" th:if="${sede.id == usuario.sedesIdsedes.id}" class="form-control col text-black" id="" type="text" th:placeholder="${sede.nombre}" readonly="" style="text-align: center">
                     <hr style="height: 1px; background-color: #FFFFFF; border: none">

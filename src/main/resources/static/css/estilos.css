@@ -1,0 +1,12 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-hidden {
+    display: none;
+}
+
+.margin-cinco {
+    margin-bottom: 5px;
+}

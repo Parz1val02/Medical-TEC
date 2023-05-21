@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Pagos')}">
 </head>
 
 
@@ -49,81 +49,22 @@
                             <th class="sort align-middle" style="width: 22%">Tipo</th>
                             <th class="sort align-middle" style="width: 22%">Especialidad</th>
                             <th class="sort align-middle" style="width: 13%">Fecha</th>
-                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
                             <th class="no-sort" style="width: 15%;" ></th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr>
-                            <td class="align-middle">
-                                Consulta
+
+                        <tr th:each="cita, info : ${citas}">
+                            <td th:text="${cita.tipocitaIdtipocita.tipoCita}" class="align-middle" style="text-align: center">
                             </td>
-                            <td class="align-middle">
-                                Dermatología
+                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
                             </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
+                            <td th:text="${cita.fecha}" class="align-middle">
                             </td>
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle" >
-                                Prueba de laboratorio
-                            </td>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle" >
-                                Prueba de laboratorio
-                            </td>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle" >
-                                Prueba de laboratorio
-                            </td>
-                            <td class="align-middle">
-                                Dermatología
-                            </td>
-                            <td class="align-middle">
-                                23-02-2023
-                            </td>
-                            <td class="align-middle" style="text-align: center">
-                                Gregory House
-                            </td>
-                            <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2" style="text-align: center;
-                                    border-radius: 15px">Ver más</button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Boleta' + ${info.index+1}">Ver más</button>
+                                <!-- Modal -->
                             </td>
                         </tr>
                         </tbody>
@@ -131,91 +72,94 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="exampleModal2">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Aquí puedes agregar el contenido del modal -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Boleta de cita</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí iría el logo de la empresa -->
 
-                                        <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                    </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleador -->
-                                        <p>Dr. Manuel Yarleque</p>
-                                        <p>CMP: 64656268</p>
-                                        <p>Cardiologia</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <!-- aquí irían los detalles del empleado -->
-                                        <p>Paciente Carlos Pisco</p>
-                                        <p>DNI: 36448457</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <!-- aquí iría la tabla con los detalles del pago -->
-
-                                        <table>
-                                            <thead style="background: #cdeffc">
-                                            <tr>
-                                                <th class="sort align-middle" style="width: 22%">Detalles</th>
-                                                <th class="sort align-middle" style="width: 13%">Valor Unitario</th>
-                                                <th class="sort align-middle" style="width: 15%; text-align: center">Valor total</th>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody class="bg-white">
-                                            <tr>
-                                                <td class="align-middle">
-                                                    consulta medica
-                                                </td>
-                                                <td class="align-middle">
-                                                    $60
-                                                </td>
-                                                <td class="align-middle" style="text-align: center">
-                                                    $60
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="align-middle"></td>
-                                            </tr>
-
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <!-- aquí iría cualquier otro detalle o nota -->
-                                        <hr>
-                                        &nbsp;
-                                        <img src="/static/img/illustrations/ejemplofirma.png" alt="">
-                                        <label>FIRMA DEL DOCTOR</label>
-                                    </div>
-                                </div>
+            <div th:each="cita, info : ${citas}">
+                <div class="modal fade" th:id="'Boleta' + ${info.index + 1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Boleta de cita</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- aquí iría el logo de la empresa -->
+                                            <img class="mr-2" th:src="@{/img/illustrations/shield.png}" alt="" width="50">
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- aquí irían los detalles del empleador -->
+                                            <p th:text="|Doctor: ${cita.doctor.nombre} ${cita.doctor.apellido}|"></p>
+                                            <p th:text="|Cédula: ${cita.doctor.ceduladoctor}|"></p>
+                                            <p th:text="|Especialidad: ${cita.especialidadesIdEspecialidad.nombreEspecialidad}|"></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!-- aquí irían los detalles del empleado -->
+                                            <p th:text="|Paciente: ${cita.paciente.nombre} ${cita.paciente.apellido}|"></p>
+                                            <p th:text="|DNI: ${cita.paciente.id}|"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- aquí iría la tabla con los detalles del pago -->
+
+                                            <table>
+                                                <thead style="background: #cdeffc">
+                                                <tr>
+                                                    <th class="sort align-middle" style="width: 22%">Detalles</th>
+                                                    <th class="sort align-middle" style="width: 13%">Valor Unitario</th>
+                                                    <th class="sort align-middle" style="width: 15%; text-align: center">Valor total</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody class="bg-white">
+                                                <tr>
+                                                    <td class="align-middle">
+                                                        consulta medica
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        $60
+                                                    </td>
+                                                    <td class="align-middle" style="text-align: center">
+                                                        $60
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="align-middle"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="align-middle"></td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <!-- aquí iría cualquier otro detalle o nota -->
+                                            <hr>
+                                            &nbsp;
+                                            <label>Firma del doctor</label>
+                                            <img th:src="@{/img/illustrations/ejemplofirma.png}" alt="" height="50">
+                                        </div>
+                                    </div>
+                                </div>
 
 
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
+
+            </div>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
@@ -272,7 +216,7 @@
             },
             autoWidth: false,
             lengthMenu: [
-                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+                [5, 10, 15, -1], [5, 10, 15, "Todos"]
             ],
             buttons: [
 

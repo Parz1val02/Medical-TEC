@@ -9,62 +9,62 @@
             <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Opciones"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
 
         </div>
-        <a class="navbar-brand" href="#">
-        <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/shield.png}" alt="" width="40" /><span class="text-sans-serif">MedicalTec</span>
-        </div>
+        <a class="navbar-brand" th:href="@{/administrativo/dashboard}">
+            <div class="d-flex align-items-center py-3"><img class="mr-2" th:src="@{/img/illustrations/shield.png}" alt="" width="30" /><span class="text-sans-serif" style="font-size: x-large">MedicalTec</span>
+            </div>
         </a>
     </div>
     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
         <div class="navbar-vertical-content perfect-scrollbar scrollbar">
             <ul class="navbar-nav flex-column">
+
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link active" th:href="@{/administrativo/dashboard}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="fas fa-chart-pie">
-                    </span></span><span class="nav-link-text">Dashboard</span>
+                    </span></span><span class="nav-link-text">Home</span>
                         </div>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link active" th:href="@{/administrativo/perfil}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                class="fas fa-address-book">
-                    </span></span><span class="nav-link-text"> Formularios</span>
+                                class="fas fa-user">
+                    </span></span><span class="nav-link-text">Perfil</span>
                         </div>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/administrativo/notificaciones}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                class="fas fa-book-open">
-                    </span></span><span class="nav-link-text"> Reportes</span>
+                                class="fas fa-bell">
+                    </span></span><span class="nav-link-text">Notificaciones</span>
                         </div>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/administrativo/mensajeria}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                class="fas fa-comments">
-                    </span></span><span class="nav-link-text"> UX/UI</span>
+                                class="fab fa-facebook-messenger">
+                    </span></span><span class="nav-link-text">Mensajería</span>
                         </div>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
-                                class="fas fa-lock">
-                    </span></span><span class="nav-link-text"> Privacidad de cuenta</span>
-                        </div>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/loginA}">
                         <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                 class="fas fa-sign-out-alt">
                     </span></span><span class="nav-link-text"> Cerrar Sesión</span>
                         </div>
                     </a>
                 </li>
+
+
+
+
             </ul>
             <div class="navbar-vertical-divider">
                 <hr class="navbar-vertical-hr my-2"/>

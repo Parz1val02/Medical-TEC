@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Agendar Cita')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
+            <div class="content">
+                <div class="card mb-3 bg-card-gradient">
+                    <div class="card-body" style="background: white;">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-md-11">
+                                <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                    Agendar cita
+                                </h1>
+                            </div>
+                            <div class="col-md-11">
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                    Agenda tus futuras consultas médicas.
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+            <div class="card mb-3 bg-card-gradient">
+               <div class="card-body" style="background-color: white">
+                   <div class="container">
+                       <form th:action="@{/paciente/guardarCita}" method="post" th:object="${cita}">
+                           <div class="row">
+                               <!-- columna 1 -->
+                               <div class="col-sm-6">
+                                   <div class="form-group">
+                                       <input type="hidden" name="paciente.id" th:value="${usuario.id}" class="form-control">
+                                       <label for="especialidadesIdEspecialidad">Especialidad:</label>
+                                       <select th:field="*{especialidadesIdEspecialidad}" class="form-control" >
+                                           <option  th:each="especialidad : ${especialidades}"
+                                                    th:value="${especialidad.id}"
+                                                    th:text="${especialidad.nombreEspecialidad}"></option>
+                                       </select>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="fecha">Fecha:</label>
+                                       <input type="date" th:field="*{fecha}" class="form-control" th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}">
+                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="tipocitaIdtipocita">Tipo de cita: </label>
+                                       <select th:field="*{tipocitaIdtipocita}" class="form-control">
+                                           <option  th:each="tipo : ${tipos}"
+                                                    th:value="${tipo.id}"
+                                                    th:text="${tipo.tipoCita}"></option>
+                                       </select>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="modalidad">Modalidad:</label>
+                                       <select th:field="*{modalidad}" class="form-control" th:classappend="${#fields.hasErrors('modalidad')?'is-invalid':''}">
+                                           <option th:each="arch : ${modalidades}"
+                                                   th:value="${arch}"
+                                                   th:text="${arch}"></option>
+                                       </select>
+                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></div>
+                                   </div>
+                               </div>
+                               <!-- columna 2 -->
+                               <div class="col-sm-6">
+                                   <div class="form-group">
+                                       <label for="doctor.id">Doctor:</label>
+                                       <select th:field="*{doctor.id}" class="form-control" th:classappend="${errorUsuario != null?'is-invalid':''}">>
+                                           <option  th:each="Doctor : ${doctores}"
+                                                    th:value="${Doctor.id}"
+                                                    th:text="|${Doctor.nombre} ${Doctor.apellido}|"></option>
+                                       </select>
+                                       <div class="invalid-feedback" th:if="${errorUsuario}" th:text="${errorUsuario}"></div>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="hora">Hora</label>
+                                       <input type="time" th:field="*{hora}" class="form-control" th:classappend="${#fields.hasErrors('hora')?'is-invalid':''}">
+                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('hora')}" th:errors="*{hora}"></div>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="sedesIdsedes">Sede de atencion:</label>
+                                       <select th:field="*{sedesIdsedes}" class="form-control">
+                                           <option  th:each="sede : ${sedes}"
+                                                    th:value="${sede.id}"
+                                                    th:text="${sede.nombre}"></option>
+                                       </select>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="formapago">Forma de pago:</label>
+                                       <select th:field="*{formapago}" class="form-control" th:classappend="${#fields.hasErrors('formapago')?'is-invalid':''}">
+                                           <option th:each="arch : ${pagos}"
+                                                   th:value="${arch}"
+                                                   th:text="${arch}"></option>
+                                       </select>
+                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('formapago')}" th:errors="*{formapago}"></div>
+                                   </div>
+                               </div>
+                           </div>
+                           <!-- botón de envío -->
+                           <button class="btn btn-primary submit">Registrar cita</button>
+                           <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/principal}">Cancelar</a>
+                       </form>
+                   </div>
+               </div>
+            </div>
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+</body>
+
+</html>>
+
+

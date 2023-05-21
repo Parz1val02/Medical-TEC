@@ -15,13 +15,24 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
    @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where citacancelada=0 and paciente_dni=?1")
    List<Cita> historialCitas(String dniPaciente);
 
+   @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where fecha < current_date() and citacancelada=0 and paciente_dni=?1")
+   List<Cita> historialCitas2(String dniPaciente);
 
    @Query(nativeQuery = true, value = "SELECT * FROM telesystem.cita where fecha >= current_date() and citacancelada=0 and paciente_dni=?1")
    List<Cita> historialCitasAgendadas(String dniPaciente);
 
+    @Query(value = "SELECT * FROM telesystem.cita WHERE doctor_dni1=\"12345678\" " +
+                    "AND estadoscita_idestados=3 ORDER BY fecha DESC, hora DESC;",
+                    nativeQuery = true)
+    List<Cita> pacientesAtendidos();
 
-   @Transactional
-   @Modifying
-   @Query(nativeQuery = true, value = "insert into cita (citacancelada,sedes_idsedes,especialidades_id_especialidad,estadoscita_idestados,formapago,modalidad,tipocita_idtipocita,fecha,hora, paciente_dni, doctor_dni1) values (0,?1,?2,1,?3,?4,?5,?6,?7,?8,?9)")
-   void guardarCita(String idSede, String idEspecialidad, String formaPago, String modadlidad, String idTipoCita, LocalDate fecha, LocalTime hora, String pacienteDNI, String doctorDNI);
+    @Query(value = "SELECT * FROM telesystem.cita WHERE doctor_dni1=\"12345678\" " +
+                    "AND estadoscita_idestados=1 ORDER BY fecha DESC, hora DESC;",
+                    nativeQuery = true)
+    List<Cita> proximasCitasAgendadas();
+
+    @Query(value = "SELECT * FROM telesystem.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
+                    nativeQuery = true)
+    List<Cita> citasPorUsuario(String id_paciente);
+
 }

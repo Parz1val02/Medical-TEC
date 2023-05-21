@@ -118,39 +118,39 @@ values
 /* Un doctores*/
 /*14*/
 INSERT INTO `telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles, sedes_idsedes,especialidades_id_especialidad, ceduladoctor) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles, sedes_idsedes,especialidades_id_especialidad, ceduladoctor, enabled) 
 VALUES 
-('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1,1,1, "AE32423"), /* doctor */
-('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1,1,2,"AE32423"), /* doctor */
-('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1,1,3,"AE32423"); /* doctor */
+('12345678', 'hiroshi', 'hiroshi@example.com', 'hiroshi', 'Doe', 30, '123456789', 'M', '123 Main St', 1,1,1, "AE32423",1), /* doctor*/
+('14578934', 'manuel', 'manuel@example.com', 'manuel', 'Yarleque', 40, '123456789', 'M', '321 Main St', 1,1,2,"AE32423",1), /* doctor */
+('17845767', 'luigi', 'luigi@example.com', 'luigi', 'Doe', 30, '123456789', 'M', '567 Main St', 1,1,3,"AE32423",1); /* doctor */
 
 /*un administrador, un superadmin*/
 
 INSERT INTO `telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles, enabled) 
 VALUES 
-('48764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4),/* administrador */
-('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5);/* superadmin */
+('48764321', 'jose', 'jose@example.com', 'jose', 'perez', 28, '987654321', 'M', '456 Oak St', 4, 1),/* administrador */
+('54567890', 'mario', 'mario@example.com', 'mario', 'Smith', 40, '555555555', 'M', '789 Maple Ave', 5, 1);/* superadmin */
 
 
 /* Aqui van los administrativos*/
 
 INSERT INTO `telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,especialidades_id_especialidad) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,especialidades_id_especialidad, enabled) 
 VALUES 
-('34185296', 'lucho', 'lucho@example.com', 'lucho', 'Ramos', 22, '775555566', 'M', '234 Main Ave', 3,1);
+('34185296', 'lucho', 'lucho@example.com', 'lucho', 'Ramos', 22, '775555566', 'M', '234 Main Ave', 3,1,1);
 
 /* Aqui van los pacientes*/
 
 INSERT INTO `telesystem`.`usuario`
-(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes, seguros_id_seguro) 
+(dni, contrasena, email, nombre, apellido, edad, telefono, sexo, direccion, roles_idroles,historialmedico_idhistorialmedico,modoregistro, sedes_idsedes, seguros_id_seguro, enabled) 
 VALUES 
-('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1,1),
-('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2,2),
-('22647853', 'Julio', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3,3),
-('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2,4),
-('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St',2,1,"autoregistro",2,5), /* paciente */
-('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St',2,1,"autoregistro",2,6); /* paciente */
+('23766788', 'Alfonso', 'alfonso@example.com', 'leonardo', 'abanto', 25, '987654321', 'M', '890 ABC St', 2,1,"invitado",1,1,1),
+('23456789', 'leonardo', 'leonardo@example.com', 'leonardo', 'abanto', 70, '912332176', 'M', '456 Oak St', 2,1,"invitado",2,2,1),
+('22647853', '$2a$10$f15cLQLhYu98NIvGgWiObew44qWKdFgwSNw0yrDsw0zZU5pwxSrS2', 'mionks@example.com', 'julio', 'perez', 15, '909574324', 'M', '123 CBA St', 2,1,"autoregistro",3,3,1), /*contra=Julio*/
+('28573467', 'Mario', 'mario@example.com', 'mario', 'verastegui', 30, '907473653', 'M', '678 XYZ St', 2,1,"autoregistro",2,4,1),
+('71231035','jesus','jesus@example.com','augusto','gonsales','25','945202825','M','789 Main St',2,1,"autoregistro",2,5,1), /* paciente */
+('75749561','dana','dana@example.com','dana','nolasco','19','951899507','F','789 Main St',2,1,"autoregistro",2,6,1); /* paciente */
 
 
 /* Solo para doctor */

@@ -4,8 +4,10 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -13,11 +15,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/paciente")
 public class PacienteController {
 
+    final HistorialMedicoRepository historialMedicoRepository;
     final SedeRepository sedeRepository;
     final SeguroRepository seguroRepository;
 
@@ -44,7 +48,8 @@ public class PacienteController {
 
     public PacienteController(SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository) {
+                              CuestionarioRepository cuestionarioRepository, HistorialMedicoRepository historialMedicoRepository) {
+        this.historialMedicoRepository = historialMedicoRepository;
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -68,15 +73,12 @@ public class PacienteController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
-        model.addAttribute("seguros", seguroRepository.findAll());
-        model.addAttribute("especialidades", especialidadRepository.findAll());
-        model.addAttribute("tipos", tipoCitaRepository.findAll());
         model.addAttribute("arch", "arch");
         return "paciente/principal";
    }
 
     @RequestMapping("/perfil")
-    public String perfilpaciente(Model model){
+    public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
         List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> alergias = new ArrayList<>();
@@ -99,7 +101,6 @@ public class PacienteController {
     @RequestMapping("/consultas")
     public String citas(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("usuario", usuario);
         model.addAttribute("citas", citaRepository.historialCitas(usuario.getId()));
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
@@ -121,6 +122,10 @@ public class PacienteController {
 
     @RequestMapping("/pagos")
     public String pagos(Model model){
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("citas", citaRepository.historialCitas2(usuario.getId()));
+        model.addAttribute("medicamentos", medicamentoRepository.findAll());
         model.addAttribute("arch", "windowzzz");
        return "paciente/pagos";
     }
@@ -135,47 +140,127 @@ public class PacienteController {
     }
 
     @GetMapping("/sede")
-    public String cambiarSede(@RequestParam("id")String idSede){
-        sedeRepository.cambiarSede(idSede);
+    public String cambiarSede(@RequestParam("id")String idSede, RedirectAttributes attr){
+        String id = sedeRepository.verificaridSede(idSede);
+        if(id!=null){
+            sedeRepository.cambiarSede(idSede);
+            attr.addFlashAttribute("msg1", "Se cambió la sede exitosamente");
+        }else{
+            attr.addFlashAttribute("msg3", "Error al intentar cambiar la sede");
+        }
         return "redirect:/paciente/principal";
     }
+    @GetMapping("/agendarCita")
+    public String agendarCita(@ModelAttribute("cita")Cita cita,Model model){
+        Usuario usuario = usuarioRepository.findByid("22647853");
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        ArrayList<String> modalidad = new ArrayList<>();
+        modalidad.add("Presencial");
+        modalidad.add("Virtual");
+        ArrayList<String> formapago = new ArrayList<>();
+        formapago.add("En caja");
+        formapago.add("Virtual");
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("doctores", doctores);
+        model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("tipos", tipoCitaRepository.findAll());
+        model.addAttribute("modalidades", modalidad);
+        model.addAttribute("pagos", formapago);
+        model.addAttribute("arch", "windowzzz");
+       return "paciente/agendar";
+    }
     @PostMapping("/guardarCita")
-    public String guardarCita(Cita cita,
-                              RedirectAttributes attr){
-        if(cita.getModalidad().equals("Presencial")){
-            cita.setFormapago("En caja");
-        }else if(cita.getModalidad().equals("Virtual")){
-            cita.setFormapago("Virtual");
+    public String guardarCita(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult,
+                              Model model, RedirectAttributes attr){
+        if(bindingResult.hasErrors()){
+            Usuario usuario = usuarioRepository.findByid("22647853");
+            List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+            ArrayList<String> modalidad = new ArrayList<>();
+            modalidad.add("Presencial");
+            modalidad.add("Virtual");
+            ArrayList<String> formapago = new ArrayList<>();
+            formapago.add("En caja");
+            formapago.add("Virtual");
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("doctores", doctores);
+            model.addAttribute("sedes", sedeRepository.findAll());
+            model.addAttribute("especialidades", especialidadRepository.findAll());
+            model.addAttribute("tipos", tipoCitaRepository.findAll());
+            model.addAttribute("modalidades", modalidad);
+            model.addAttribute("pagos", formapago);
+            model.addAttribute("arch", "windowzzz");
+            return "paciente/agendar";
+        }else{
+            Usuario paciente = usuarioRepository.findByid(cita.getPaciente().getId());
+            Usuario doctor = usuarioRepository.findByid(cita.getDoctor().getId());
+            if(paciente == null || doctor == null) {
+                Usuario usuario = usuarioRepository.findByid("22647853");
+                List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+                ArrayList<String> modalidad = new ArrayList<>();
+                modalidad.add("Presencial");
+                modalidad.add("Virtual");
+                ArrayList<String> formapago = new ArrayList<>();
+                formapago.add("En caja");
+                formapago.add("Virtual");
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("doctores", doctores);
+                model.addAttribute("sedes", sedeRepository.findAll());
+                model.addAttribute("especialidades", especialidadRepository.findAll());
+                model.addAttribute("tipos", tipoCitaRepository.findAll());
+                model.addAttribute("modalidades", modalidad);
+                model.addAttribute("pagos", formapago);
+                model.addAttribute("errorUsuario","Input ingresado no válido");
+                model.addAttribute("arch", "windowzzz");
+                return "paciente/agendar";
+            }
+            cita.setCitacancelada(false);
+            cita.setPaciente(paciente);
+            cita.setDoctor(doctor);
+            citaRepository.save(cita);
+            attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         }
-        cita.setCitacancelada(false);
-        cita.setPaciente(usuarioRepository.findByid(cita.getPaciente().getId()));
-        cita.setDoctor(usuarioRepository.findByid(cita.getDoctor().getId()));
-        citaRepository.save(cita);
-        //citaRepository.guardarCita(idSede, idEspecialidad, formaPago, modalidad, idTipoCita, fecha, hora, dni, idDoctor);
-        attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         return "redirect:/paciente/principal";
     }
 
     @PostMapping("/cambiarSeguro")
     public String cambiarSeguro(@RequestParam("seguro") String seguro, RedirectAttributes attr){
-        usuarioRepository.cambiarSeguro(seguro);
-        attr.addFlashAttribute("msg1", "Se cambió el seguro exitosamente");
+        String id = seguroRepository.verificaridSeguro(seguro);
+        if(id!=null){
+            usuarioRepository.cambiarSeguro(id);
+            attr.addFlashAttribute("msg1", "Se cambió el seguro exitosamente");
+        }else{
+            attr.addFlashAttribute("msg3", "Error al intentar cambiar el seguro");
+        }
         return "redirect:/paciente/perfil";
     }
 
     @PostMapping("/guardarAlergias")
-    public String guardarAlergias(@RequestParam("nombre") String nombre,
+    public String guardarAlergias(@ModelAttribute("alergia") @Valid Alergia alergia, BindingResult bindingResult,
                                   @RequestParam("id") String id,
-                                  RedirectAttributes attr){
-        Usuario usuario = usuarioRepository.findByid(id);
-        alergiaRepository.guardarAlergias(nombre);
-        Integer key = alergiaRepository.lastID();
-        historialMedicoHasAlergiaRepository.aea(usuario.getHistorialmedicoIdhistorialmedico().getId(), key);
-        attr.addFlashAttribute("msg2", "Se agregó la alergia exitosamente");
-        return "redirect:/paciente/perfil";
+                                  RedirectAttributes attr, Model model) {
+        if (bindingResult.hasErrors()) {
+            Usuario usuario = usuarioRepository.findByid("22647853");
+            List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+            ArrayList<Alergia> alergias = new ArrayList<>();
+            for(int i=0; i<idAlergias.size(); i++){
+                alergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
+            }
+            model.addAttribute("alergias", alergias);
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("seguros", seguroRepository.findAll());
+            model.addAttribute("arch", "windowzzz");
+            return "paciente/perfil";
+        }else{
+            Usuario usuario = usuarioRepository.findByid(id);
+            alergia.setEnabled(true);
+            alergiaRepository.save(alergia);
+            Integer key = alergiaRepository.lastID();
+            historialMedicoHasAlergiaRepository.aea(usuario.getHistorialmedicoIdhistorialmedico().getId(), key);
+            attr.addFlashAttribute("msg2", "Se agregó la alergia exitosamente");
+            return "redirect:/paciente/perfil";
+        }
     }
-
-
 
     @PostMapping("/guardarRespuestas")
     public String guardarRptas( @RequestParam("respuesta0")String respuesta, RedirectAttributes attr){
@@ -191,12 +276,18 @@ public class PacienteController {
 
 
     @GetMapping("/borrarAlergia")
-    public String borrarAlergia(@RequestParam("id")Integer id,
-                                @RequestParam("id2")Integer id2,
+    public String borrarAlergia(@RequestParam("id")String id,
+                                @RequestParam("id2")String id2,
                                 RedirectAttributes attr){
-        alergiaRepository.borrarAlergia(id);
-        historialMedicoHasAlergiaRepository.borrarweas(id2, id);
-        attr.addFlashAttribute("msg3", "Se borró la alergia exitosamente");
+        String idAlergia = alergiaRepository.verificaridAlergia(id);
+        String idHistorialMedico = historialMedicoRepository.verificaridHistorialMedico(id2);
+        if(idAlergia!=null && idHistorialMedico!=null){
+            alergiaRepository.borrarAlergia(idAlergia);
+            historialMedicoHasAlergiaRepository.borrarweas(idHistorialMedico, idAlergia);
+            attr.addFlashAttribute("msg4", "Se borró la alergia exitosamente");
+        }else{
+            attr.addFlashAttribute("msg5", "Error al intentar borrar la alergia");
+        }
         return "redirect:/paciente/perfil";
     }
 }

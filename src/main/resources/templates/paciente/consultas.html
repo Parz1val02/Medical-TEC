@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
 </head>
 
 
@@ -18,7 +18,7 @@
         <div class="content" >
             <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
 
-            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
@@ -173,8 +173,8 @@
                                 <body>
                                     <h2>Medicamentos Recetados</h2>
                                     <ul th:each="med : ${medicamentos}">
-                                        <li >Nombre del Medicamento: <strong th:text="${med.getNombre()}"></strong> Ibuprofeno</li>
-                                        <li >Frecuencia: <strong th:text="${med.getFrecuencia()}"></strong> Cada 8 horas</li>
+                                        <li >Nombre del Medicamento: <strong th:text="${med.getNombre()}"></strong> </li>
+                                        <li >Frecuencia: <strong th:text="${med.getFrecuencia()}"></strong></li>
                                     </ul>
 
                                 </body>
@@ -212,6 +212,7 @@
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->
@@ -252,7 +253,7 @@
             },
             autoWidth: false,
             lengthMenu: [
-                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+                [5, 10, 15, -1], [5, 10, 15, "Todos"]
             ],
             buttons: [
 

@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface AlergiaRepository extends JpaRepository<Alergia,Integer> {
 
-    @Transactional
-    @Modifying
-    @Query(value = "insert into alergias (nombre, enabled) values (?1, 1)", nativeQuery = true)
-    void guardarAlergias(String nombre);
+    @Query(nativeQuery = true, value = "SELECT idalergias FROM telesystem.alergias where idalergias=?1")
+    String verificaridAlergia(String id);
 
     @Query(value = "SELECT LAST_INSERT_ID();", nativeQuery = true)
     Integer lastID();
@@ -22,7 +20,7 @@ public interface AlergiaRepository extends JpaRepository<Alergia,Integer> {
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "update alergias set enabled=0 where idalergias=?1")
-    void borrarAlergia(Integer id);
+    void borrarAlergia(String id);
 
 
 

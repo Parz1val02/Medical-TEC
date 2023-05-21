@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+  <title>Formulario</title>
+</head>
+
+<body>
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+    <div class="content" >
+      <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Reporte
+              </h1>
+            </div>
+            <div class="col-md-11">
+              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                Completa los campos de abajo con los datos obtenidos de la cita
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="card mb-3">
+        <div class="card-header position-relative min-vh-25 mb-7">
+          <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
+          </div>
+          <!--/.bg-holder-->
+        </div>
+        <div class="card-body" style="margin-top: -70px">
+          <label for="disabledTextInput1" class="form-label">Nombres y apellidos</label>
+          <input type="text" id="disabledTextInput1" class="form-control" placeholder="Nombres y apellidos">
+          <br>
+          <div class="row">
+            <div class="col-lg-8">
+              <form>
+                <div class="row">
+                  <div class="col mb-3">
+                    <p>Diagnóstico </p>
+                    <select class="form-select" aria-label="Default select example">
+                      <option selected value>------</option>
+                      <option value="1">Gripe</option>
+                      <option value="2">Covid</option>
+                      <option value="3">Ser alumno PUCP</option>
+                    </select>
+                  </div>
+                  <div class="col mb-3">
+                    <label for="disabledTextInput13">Cita</label>
+                    <input type="date" id="disabledTextInput13" class="form-control" placeholder="00000000">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="exampleFormControlTextarea1">Bitácora</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="disabledTextInput7" class="form-label">Teléfono</label>
+                    <input type="text" id="disabledTextInput7" class="form-control" placeholder="992505184">
+                  </div>
+                  <div class="col mb-3">
+                    <p>Donante de orgános </p>
+                    <select class="form-select" aria-label="Default select example">
+                      <option selected value>------</option>
+                      <option value="1">Sí</option>
+                      <option value="2">No</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="disabledTextInput14">Fecha</label>
+                    <input type="date" id="disabledTextInput14" class="form-control" placeholder="00000000">
+                  </div>
+                  <div class="col mb-3">
+                    <label for="disabledTextInput15" class="form-label">Firma</label>
+                    <input type="text" id="disabledTextInput15" class="form-control" placeholder="Firma">
+                  </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary">Cancelar</button>
+                <button type="button" class="btn btn-primary">Enviar reporte</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===============================================-->
+      <!--    static Content-->
+      <!-- ===============================================-->
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+  $(document).ready(function () {
+    //Esta busacando por el ID del tah <table>
+    //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+    $('#userList').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  usuarios",
+        zeroRecords: "No se encontraron usuarios",
+        emptyTable: "No hay usuarios",
+        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      lengthMenu: [
+        [10, 25, 50, -1], [10, 25, 50, "Todos"]
+      ],
+      buttons: [
+        {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+        {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+      ]
+    });
+  });
+</script>
+
+
+</body>
+</html>
