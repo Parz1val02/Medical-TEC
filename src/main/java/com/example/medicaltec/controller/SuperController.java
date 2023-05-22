@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-import javax.script.Bindings;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +23,15 @@ public class SuperController {
     final PreguntaRepository preguntaRepository;
     final RespuestaRepository respuestaRepository;
     final EstadoRepository estadoRepository;
+    final CitaRepository citaRepository;
 
     final SedeRepository sedeRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
-    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository,InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
+    public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -39,6 +39,7 @@ public class SuperController {
         this.preguntaRepository = preguntaRepository;
         this.respuestaRepository = respuestaRepository;
         this.estadoRepository = estadoRepository;
+        this.citaRepository = citaRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
     }
@@ -600,8 +601,8 @@ public class SuperController {
     }
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model){
-        List<Informe> listaInformes = informeRepository.findAll();
-        model.addAttribute("informeList", listaInformes);
+        List<Cita> listaCitas = citaRepository.findAll();
+        model.addAttribute("citasList", listaCitas);
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")

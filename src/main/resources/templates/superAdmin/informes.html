@@ -52,8 +52,6 @@
 
       <div class="card mb-3">
         <div class="card-body border-top">
-          <a th:href="@{/superAdmin/informes}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
-          border-radius: 15px; border-color: #FFFFFF">Crear Informe</a>
           <table class="table table-striped" id="userList">
             <thead class="bg-200">
             <tr>
@@ -64,9 +62,9 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="informe, info : ${informeList}">
-              <td th:text="${informe.id}"></td>
-              <td th:text="${informe.citaIdcita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
+            <tr th:each="cita, info : ${citasList}">
+              <td th:text="${cita.informeIdinforme.id}"></td>
+              <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -94,7 +92,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${informe.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${cita.informeIdinforme.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar informe</a>
                           </div>
                         </div>
