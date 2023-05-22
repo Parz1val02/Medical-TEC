@@ -129,7 +129,6 @@ public class PacienteController {
             //recetaHasMedicamentoRepository.findAllById(ids);
 
         }*/
-
         model.addAttribute("usuario", usuario);
         model.addAttribute("citas", citas);
         model.addAttribute("citas1", citas1);
