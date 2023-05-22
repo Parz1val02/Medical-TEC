@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
@@ -18,7 +20,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
             String passAdmv();
 
+    @Query(nativeQuery = true,value="select * from usuario where dni = \"34185296\"")
+    Usuario obtenerUsuario();
 
+    @Query(nativeQuery = true, value="select dni from usuario ")
+    List<String> obtenerdnis();
 
+    @Query(nativeQuery = true, value="select * from usuario where dni = ?")
+    Usuario usuarioForm(String dni);
 
 }
