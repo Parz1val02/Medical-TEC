@@ -12,6 +12,7 @@
     <li class="nav-item">
       <div class="col-md">
         <h5 class="mb-0" id="top_navbar_name" style="font-size: 1rem">Paciente</h5>
+        <span th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|"></span>
       </div>
     </li>
     <li class="nav-item">
@@ -98,8 +99,11 @@
           <a class="dropdown-item" th:href="@{/paciente/perfil}">Perfil</a>
         </div>
         <div class="bg-white rounded-soft py-2">
-          <a class="dropdown-item" th:href="@{/loginA}">Cerrar  Sesión</a>
+          <form th:action="@{/logout}" method="post">
+            <input class="dropdown-item" type="submit" value="Cerrar Sesión">
+          </form>
         </div>
+
       </div>
     </li>
   </ul>

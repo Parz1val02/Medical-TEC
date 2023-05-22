@@ -111,31 +111,20 @@
                                             <table>
                                                 <thead style="background: #cdeffc">
                                                 <tr>
-                                                    <th class="sort align-middle" style="width: 22%">Detalles</th>
-                                                    <th class="sort align-middle" style="width: 13%">Valor Unitario</th>
+                                                    <th class="sort align-middle" style="width: 22%">Tipo de servicio</th>
+                                                    <th class="sort align-middle" style="width: 22%">Descripcion</th>
                                                     <th class="sort align-middle" style="width: 15%; text-align: center">Valor total</th>
                                                 </tr>
                                                 </thead>
 
                                                 <tbody class="bg-white">
                                                 <tr>
-                                                    <td class="align-middle">
-                                                        consulta medica
+                                                    <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
                                                     </td>
-                                                    <td class="align-middle">
-                                                        $60
+                                                    <td th:text="${boleta.getConceptopago()}" class="align-middle">
                                                     </td>
-                                                    <td class="align-middle" style="text-align: center">
-                                                        $60
+                                                    <td th:text="${boleta.getMonto()}" class="align-middle" style="text-align: center">
                                                     </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="align-middle"></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="align-middle"></td>
                                                 </tr>
 
                                             </table>

@@ -2,6 +2,7 @@ package com.example.medicaltec.controller;
 
 
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
@@ -27,6 +28,8 @@ public class PacienteController {
 
     final AlergiaRepository alergiaRepository;
 
+    final BoletaRepository boletaRepository;
+
     final UsuarioRepository usuarioRepository;
 
     final RolesRepository rolesRepository;
@@ -42,18 +45,21 @@ public class PacienteController {
     final HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository;
 
     final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
+    private final RecetaRepository recetaRepository;
 
 
-    public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
+    public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
 
-                              CuestionarioRepository cuestionarioRepository) {
+                              CuestionarioRepository cuestionarioRepository,
+                              RecetaRepository recetaRepository) {
         this.historialMedicoRepository = historialMedicoRepository;
 
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
         this.alergiaRepository = alergiaRepository;
+        this.boletaRepository = boletaRepository;
         this.usuarioRepository = usuarioRepository;
         this.rolesRepository = rolesRepository;
         this.tipoCitaRepository = tipoCitaRepository;
@@ -65,6 +71,7 @@ public class PacienteController {
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
         this.cuestionarioRepository = cuestionarioRepository;
 
+        this.recetaRepository = recetaRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -103,27 +110,28 @@ public class PacienteController {
     public String citas(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
 
-        List<Cita> citas = citaRepository.historialCitas(usuario.getId());
+        List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
         ;
-        List<Medicamento> medicamentos = new ArrayList<>();
+
         for (int i = 0; i < citas.size(); i++) {
 
-            if (citas.get(i).getRecetaIdreceta().getId() != null){
-                List<Integer> ids = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
-                for (Integer id : ids) {
-                    medicamentos.add(medicamentoRepository.obtenerMedicamento(id));
-                }
-            }
-
-
-
+            List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
+            model.addAttribute("medicamentos", recetaMedicamentoDtoList);
 
         }
 
+
+        /*for (int i = 0; i < citas.size(); i++) {
+            List<RecetaHasMedicamentoId> ids = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
+            model.addAttribute("medicamentos",recetaHasMedicamentoRepository.findAllById(ids));
+            //recetaHasMedicamentoRepository.findAllById(ids);
+
+        }*/
+
         model.addAttribute("usuario", usuario);
-        model.addAttribute("citas", citaRepository.historialCitas(usuario.getId()));
-        model.addAttribute("medicamentos", medicamentos);
+        model.addAttribute("citas", citas);
+
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
@@ -144,7 +152,17 @@ public class PacienteController {
     public String pagos(Model model){
         Usuario usuario = usuarioRepository.findByid("22647853");
         model.addAttribute("usuario", usuario);
+
+        List<Cita> citaspas =  citaRepository.historialCitas2(usuario.getId());
+
+        for (int i = 0; i < citaspas.size(); i++) {
+            Boleta boleta = boletaRepository.obtenerRecetaxBoleta(citaspas.get(i).getRecetaIdreceta().getId());
+            model.addAttribute("boleta", boleta);
+
+        }
         model.addAttribute("citas", citaRepository.historialCitas2(usuario.getId()));
+
+
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
         model.addAttribute("arch", "windowzzz");
        return "paciente/pagos";

@@ -12,8 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+
+    Usuario findByEmail(String email);
 
 
     @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1")

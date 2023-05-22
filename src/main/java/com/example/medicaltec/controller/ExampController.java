@@ -42,37 +42,37 @@ public class ExampController {
         return "auth/login";
     }
 
-    @PostMapping(value = "/login")
-    public String pagPrincipalDoctor(@RequestParam("email") String email,
-                                     @RequestParam("password") String password,
-                                     Model model,
-                                     RedirectAttributes attr){
-        boolean i=false;
-        Usuario user1 = new Usuario();
-        List<Usuario> userList = usuarioRepository.findAll();
-        for(Usuario u : userList){
-            if(u.getEmail().equals(email) && u.getContrasena().equals(password)) {
-                i=true;
-                user1 = u;
-                break;
-            }
-        }
-        if(i){
-            switch(user1.getRolesIdroles().getNombreRol()){
-                case "paciente":
-                    return "redirect:/paciente/principal";
-                case "administrativo":
-                    return "redirect:/administrativo/dashboard";
-                case "administrador":
-                    return "redirect:/administrador/principal";
-                case "superadmin":
-                    return "redirect:/superAdmin/dashboard";
-                default:
-                    return "redirect:/doctor/principal";
-            }
-        }else {
-            attr.addFlashAttribute("errorLogin","Usuario y/o contraseña incorrectos");
-            return "redirect:/";
-        }
-    }
+    //@PostMapping(value = "/login")
+    //public String pagPrincipalDoctor(@RequestParam("email") String email,
+    //                                 @RequestParam("password") String password,
+    //                                 Model model,
+    //                                 RedirectAttributes attr){
+    //    boolean i=false;
+    //    Usuario user1 = new Usuario();
+    //    List<Usuario> userList = usuarioRepository.findAll();
+    //    for(Usuario u : userList){
+    //        if(u.getEmail().equals(email) && u.getContrasena().equals(password)) {
+    //            i=true;
+    //            user1 = u;
+    //            break;
+    //        }
+    //    }
+    //    if(i){
+    //        switch(user1.getRolesIdroles().getNombreRol()){
+    //            case "paciente":
+    //                return "redirect:/paciente/principal";
+    //            case "administrativo":
+    //                return "redirect:/administrativo/dashboard";
+    //            case "administrador":
+    //                return "redirect:/administrador/principal";
+    //            case "superadmin":
+    //                return "redirect:/superAdmin/dashboard";
+    //            default:
+    //                return "redirect:/doctor/principal";
+    //        }
+    //    }else {
+    //        attr.addFlashAttribute("errorLogin","Usuario y/o contraseña incorrectos");
+    //        return "redirect:/";
+    //    }
+    //}
 }

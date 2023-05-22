@@ -21,7 +21,9 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="navbarDropdownUser">
                 <div class="bg-white rounded-soft py-2">
-                    <a class="dropdown-item" href="#">Cerrar Sesión</a>
+                    <form th:action="@{/logout}" method="post">
+                        <input class="dropdown-item" type="submit" value="Cerrar Sesión">
+                    </form>
                 </div>
             </div>
         </li>

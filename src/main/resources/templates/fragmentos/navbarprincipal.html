@@ -55,11 +55,28 @@
       </a>
     </li>
     <div style="height: 10px;"></div>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="isAnonymous()">
       <a class="nav-link active" th:href="@{/loginA}">
         <div class="d-flex align-items-center" style="color: #9da9bb">
           <span class="nav-link-icon" style="margin-right: 7px"><i class="fa fa-user"></i></span>
           <span class="nav-link-text"> Iniciar Sesión</span>
+        </div>
+      </a>
+    </li>
+    <li class="nav-item" sec:authorize="isAuthenticated()">
+      <form th:action="@{/logout}" method="post">
+        <a class="nav-link active btn btn-link" type="submit">
+          <div class="d-flex align-items-center" style="color: #9da9bb">
+            <span class="nav-link-icon" style="margin-right: 7px"><i class="fas fa-sign-out-alt"></i></span>
+            <span class="nav-link-text">Cerrar Sesión</span>
+          </div>
+        </a>
+      </form>
+    </li>
+    <li class="nav-item" sec:authorize="isAuthenticated()">
+      <a class="nav-link active">
+        <div class="d-flex align-items-center" style="color: #9da9bb">
+          <span class="nav-link-text" th:text="|Bienvenido ${#authentication.name}|"></span>
         </div>
       </a>
     </li>

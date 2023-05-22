@@ -3,6 +3,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Pagina Principal')}">
 
+    <!--<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" ></script>-->
+    <!--<script defer src="/static/js/app.js"></script>-->
+<!--</head>-->
 <body>
     <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
@@ -18,6 +21,8 @@
                     <div style="height: 10px;"></div-->
                     <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
                         <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
+
+                            <!--<div id="contenedorQR" ></div>-->
                             <img class="img-fluid" th:src="@{/img/QR.png}" alt="..." width="200">
                         </div>
                         <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
