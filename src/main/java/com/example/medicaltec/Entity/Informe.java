@@ -27,6 +27,8 @@ public class Informe {
     @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
     private Historialmedico historialmedicoIdhistorialmedico;
 
+    @Column(name = "activo")
+    private Boolean activo;
 
 
 

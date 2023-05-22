@@ -606,14 +606,14 @@ public class SuperController {
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
-    public String borrarReporte(Model model,
-                                   @RequestParam("id") int id,
-                                   RedirectAttributes attr) {
+    public String borrarInforme(Model model,
+                                          @RequestParam("id") int id, @RequestParam("active") boolean active,
+                                          RedirectAttributes attr) {
 
         Optional<Informe> optionalInforme = informeRepository.findById(id);
 
-        if (optionalInforme.isPresent()) {
-            informeRepository.deleteById(id);
+        if (optionalInforme.isPresent() && active) {
+            informeRepository.updateActivoByActivo(false,id);
             attr.addFlashAttribute("msg","Informe borrado exitosamente");
         }
         return "redirect:/superAdmin/informes";
