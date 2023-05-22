@@ -172,7 +172,7 @@
                             <th class="sort align-middle" style="width: 22%">Nombre Completo</th>
                             <th class="sort align-middle" style="width: 18%; text-align: center">Correo</th>
                             <th class="sort align-middle" style="width: 15%; text-align: center">Especialidad</th>
-                            <th class="sort align-middle" style="width: 15%; text-align: center">Estado</th>
+
                             <th class="no-sort" style="width: 15%;" ></th> <!--style="width: 35%"-->
                             <th class="no-sort" style="width: 15%;" ></th>
                         </tr>
@@ -183,7 +183,7 @@
                             <td th:text="${doctor.nombre} + ' ' + ${doctor.apellido} "></td>
                             <td th:text="${doctor.email}"></td>
                             <td style="text-align: center" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
-                            <td style="text-align: center" th:text="${doctor.estadosIdestado.nombre}"></td>
+
 
 
                             <td class="align-middle" align="center">
