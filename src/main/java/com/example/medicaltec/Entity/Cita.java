@@ -80,6 +80,6 @@ public class Cita implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "informe_idinforme")
-    private Receta informeIdinforme;
+    private Informe informeIdinforme;
 
 }
