@@ -45,7 +45,9 @@
             • Que la contraseña contenga al menos un carácter especial.<br>
 
             • Que la contraseña contenga al menos una mayúscula. </p>
-          <form>
+          <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger"
+               role="alert"></div>
+          <form method="POST" th:action="@{'/paciente/change'}">
             <div class="row">
               <div class="col mb-3">
                 <label for="actual" class="form-label" style="font-weight: bold">Contraseña actual:</label>
@@ -64,8 +66,8 @@
                 <input type="text" id="confirmar" class="form-control" placeholder="Contraseña nueva" name="confirmar">
               </div>
             </div>
-            <a type="button" class="btn btn-secondary" style="text-align: center;border-radius: 15px;" th:href="@{/paciente/principal}">Cancelar</a>
-            <button type="submit" class="btn btn-primary" href="#">Guardar cambios</button>
+            <a type="button" class="btn btn-secondary" style="text-align: center;border-radius: 15px;" th:href="@{/paciente/perfil}">Cancelar</a>
+            <button type="submit" class="btn btn-primary" >Guardar </button>
           </form>
         </div>
       </div>

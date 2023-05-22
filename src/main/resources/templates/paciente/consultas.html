@@ -91,7 +91,29 @@
                     </table>
                 </div>
             </div>
-
+            <div class="card mb-3">
+                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                    <table class="table table-striped" id="listaHistorial1">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 22%">Especialidad</th>
+                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="cita, info : ${citas1}">
+                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
+                            </td>
+                            <td th:text="${cita.fecha}" class="align-middle">
+                            </td>
+                            <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div th:each="cita, info : ${citas}">
                 <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
                     <div class="modal-dialog">
