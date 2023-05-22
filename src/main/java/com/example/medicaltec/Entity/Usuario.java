@@ -18,7 +18,7 @@ public class Usuario implements Serializable {
     @Size(max = 8, message = "Deber se un numero de DNI valido de maximo 8 digitos")
     private String id;
 
-    @Column(name = "contrasena", nullable = false, length = 45)
+    @Column(name = "contrasena", nullable = false, length = 100)
     private String contrasena;
 
    @Column(name = "email", nullable = false, length = 100)

@@ -30,7 +30,7 @@
                   <h3>Inicio de Sesión</h3>
                   <p class="mb-0 fs--1"><span class="font-weight-semi-bold">¿Nuevo usuario? </span><a href="#">Crear una cuenta</a></p>
                 </div>
-                <div th:if="${param.error != null}" th:text="${param.error}" class="alert alert-warning" role="alert"></div>
+                <div th:if="${param.error != null}"  class="alert alert-warning" role="alert">Usuario y/o contrasena incorrectos</div>
                 <form th:action="@{/login}" method="post">
                   <div class="form-group">
                     <label for="split-login-email">Correo Electrónico</label>

@@ -7,6 +7,7 @@ import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -112,7 +113,7 @@ public class PacienteController {
 
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
-        ;
+        List<Cita> citas1 = citaRepository.historialCitasAgendadas(usuario.getId());
 
         for (int i = 0; i < citas.size(); i++) {
 
@@ -131,7 +132,7 @@ public class PacienteController {
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("citas", citas);
-
+        model.addAttribute("citas1", citas1);
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
@@ -327,5 +328,27 @@ public class PacienteController {
             attr.addFlashAttribute("msg5", "Error al intentar borrar la alergia");
         }
         return "redirect:/paciente/perfil";
+    }
+    @PostMapping("/change")
+    public String changePassword(@RequestParam("pass1") String pass1,
+                                 @RequestParam("pass2") String pass2,
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr)
+    {
+
+        if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
+            attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
+            return "redirect:/paciente/password";
+        }else if(!pass1.equals(usuarioRepository.passAdmv())){
+            attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
+            return "redirect:/paciente/password";
+        } else if (!pass3.equals(pass2) ) {
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            return "redirect:/paciente/password";
+        }else {
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3));
+            attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
+            return "redirect:/paciente/perfil";
+        }
+
     }
 }
