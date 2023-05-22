@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "seguros")
-public class Seguro {
+public class Seguro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_seguro", nullable = false)
