@@ -775,54 +775,90 @@ public class SuperController {
         return "superAdmin/editarPerfil";
     }
 
+    public boolean esNumeroEntero(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
+
     @PostMapping(value = "/editSave/Perfil")
     public String editSuperAdmin(Model model, RedirectAttributes attr,
                               @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                               @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
                               @RequestParam("dni") String dni, HttpServletRequest httpServletRequest){
-        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        Usuario user = usuarioRepository.obtenerSuperAdmin();
+    /*public String editSuperAdmin(@ModelAttribute("sA") @Valid Usuario sA,BindingResult bindingResult,
+                                 Model model, RedirectAttributes attr,
+                                 HttpServletRequest httpServletRequest){
+        */Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario user = usuarioRepository.obtenerSuperAdmin();/*
+        if(bindingResult.hasErrors()){
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            return "redirect:/superAdmin/confSup";
+        }
+        else {
+            usuarioRepository.editSuperAdmin(sA.getNombre(),sA.getApellido(),sA.getEmail(),sA.getTelefono(),sA.getId(),superadmin.getId());
+            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
+            return "redirect:/superAdmin/confSup";
+        }
+        }*/
         int c = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
             c = c+1;
-            nombre = user.getNombre();
+            nombre = superadmin.getNombre();
         }
         if(apellido.isEmpty()){
             attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
             c = c+1;
-            apellido = user.getApellido();
+            apellido = superadmin.getApellido();
         }
         if (correo.isEmpty()){
             attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
             c = c+1;
-            correo = user.getEmail();
+            correo = superadmin.getEmail();
         }
         if (telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             c = c+1;
-            telefono = user.getTelefono();
+            telefono = superadmin.getTelefono();
         }
-        if (telefono.length()!=9){
-            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
-            c = c+1;
-            telefono = user.getTelefono();
+        if (esNumeroEntero(telefono)){
+            if (telefono.length()!=9){
+                attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+                c = c+1;
+                telefono = superadmin.getTelefono();
+            }
+        }else {
+            c=c+1;
+            attr.addFlashAttribute("telefonomsg","El número de teléfono debe ser un número entero");
+            telefono = superadmin.getTelefono();
         }
         if(dni.isEmpty()){
             attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
             c = c+1;
-            dni = user.getId();
-        } else if (dni.length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
-            c = c+1;
-            dni = user.getId();
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(dni);
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+            dni = superadmin.getId();
+        } else if (esNumeroEntero(dni)) {
+            if (dni.length()!=8) {
+                attr.addFlashAttribute("dnimsg","El DNI debe tener una longitud de 8 dígitos");
                 c = c+1;
-                dni = user.getId();
+                dni = superadmin.getId();
+            } else {
+                Optional<Usuario> u = usuarioRepository.findById(dni);
+                if(u.isPresent()){
+                    attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                    c = c+1;
+                    dni = superadmin.getId();
+                }
             }
+        } else {
+            c=c+1;
+            attr.addFlashAttribute("dnimsg","El número de DNI debe ser un número entero");
+            dni = superadmin.getId();
         }
         if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
@@ -830,7 +866,7 @@ public class SuperController {
             return "redirect:/superAdmin/confSup";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/confSup";
+            return "redirect:/superAdmin/editarPerfil";
         }
 
 

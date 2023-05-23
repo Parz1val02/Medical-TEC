@@ -57,26 +57,31 @@
                                 <fieldset disabled>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput1" class="form-label">Nombre</label>
                                             <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${superadmin.nombre}">
                                         </div>
                                         <div class="col mb-3">
+                                            <div th:if="${apellidomsg != null}" th:text="${apellidomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput2" class="form-label">Apellidos</label>
                                             <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${superadmin.apellido}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${correomsg != null}" th:text="${correomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput3" class="form-label">Correo</label>
                                             <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${superadmin.email}">
                                         </div>
                                         <div class="col mb-3">
+                                            <div th:if="${telefonomsg != null}" th:text="${telefonomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput4" class="form-label">Celular</label>
                                             <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${superadmin.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput5" class="form-label">DNI</label>
                                             <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${superadmin.id}">
                                         </div>
