@@ -65,6 +65,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
 
     Usuario findByid(String id);
+
     @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1")
     List<Usuario> obtenerlistaDoctores(Integer idSede);
 
@@ -79,9 +80,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 2", nativeQuery = true)
     List<Usuario> listarPacientes();
-
-    @Query("select u from Usuario u where u.nombre = ?1")
-    List<Usuario> findByNombre(String nombre);
     @Modifying
     @Transactional
     @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)

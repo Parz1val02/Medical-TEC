@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <br>
+
             <div class="row" style="display: flex; align-items: stretch;">
                 <div class="col-6">
                     <div class="card mb-3 bg-card-gradient" style="height: 100%; background: #FFFFFF">
@@ -114,15 +114,19 @@
                                 ¿Deseas cambiar de contraseña?
                             </button>
                             <div style="height: 10px"></div>
-                            <form th:action="@{/doctor/cambiarContraseña}" method="post" class="input-hidden" id="formscontainercontra"
+                            <div th:if="${contrasena_correcta != null}" th:text="${contrasena_correcta}" class="alert alert-success" role="alert"
+                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                            <div th:if="${contrasenas_diferentes != null}" th:text="${contrasenas_diferentes}" class="alert alert-danger" role="alert"
+                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                            <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
                             style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group" style="font-family: 'Open Sans',serif">
-                                    <label for="id_contrasena" style="font-weight: bold !important; margin: 0;
+                                    <label for="contrasena" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba su nueva contraseña:</label>
-                                    <input class="form-control" id="id_contrasena">
-                                    <label for="id_contrasena_repetida" style="font-weight: bold !important; margin: 0;
+                                    <input type="password" class="form-control" id="contrasena" name="contrasena">
+                                    <label for="contrasena_repetida" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba nuevamente su nueva contraseña:</label>
-                                    <input class="form-control" id="id_contrasena_repetida">
+                                    <input type="password" class="form-control" id="contrasena_repetida" name="contrasena_repetida">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
