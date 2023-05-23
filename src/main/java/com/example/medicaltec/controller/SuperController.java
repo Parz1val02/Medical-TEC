@@ -529,7 +529,8 @@ public class SuperController {
         }
 
         if(a == 0){
-            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede);
+            int estado=1;
+            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede, estado);
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard/Adm";
         }else {
@@ -543,8 +544,8 @@ public class SuperController {
                                        @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                        @RequestParam("correo") String correo, @RequestParam("password") String password,
                                        @RequestParam(value = "edad", required = false) Integer edad, @RequestParam("telefono") String telefono,
-                                       @RequestParam("address") String address, @RequestParam("sede") int sede,
-                                        @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpServletRequest httpServletRequest){
+                                       @RequestParam("address") String address, @RequestParam("sede") int sede, @RequestParam("especialidad") int especialidad,
+                                       @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int b = 0;
         if(nombre.isEmpty()){
@@ -598,7 +599,8 @@ public class SuperController {
             }
         }
         if(b == 0){
-            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede);
+            int estado=1;
+            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede, estado, especialidad);
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard/AdmT";
         }else {
