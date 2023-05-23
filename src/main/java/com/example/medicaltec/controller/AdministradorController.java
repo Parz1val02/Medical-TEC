@@ -6,6 +6,7 @@ import com.example.medicaltec.repository.CitaRepository;
 import com.example.medicaltec.repository.EspecialidadeRepository;
 import com.example.medicaltec.repository.ReporteRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
+import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,7 @@ public class AdministradorController {
 
 
     @GetMapping("/principal")
-    public String pagprincipal(Model model){
+    public String pagprincipal(Model model, HttpServletRequest httpServletRequest){
         List listaPacientes = usuarioRepository.obtenerListaPacientes2();
         List listaDoctores = usuarioRepository.obtenerlistaDoctores();
         model.addAttribute("listaPacientes",listaPacientes);
@@ -52,7 +53,7 @@ public class AdministradorController {
     }
 
     @GetMapping("/usuarios")
-    public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario){
+    public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario, HttpServletRequest httpServletRequest){
         //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2();
@@ -87,7 +88,7 @@ public class AdministradorController {
 
 
     @GetMapping("/editarDoctorPagina")
-    public String editarDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr){
+    public String editarDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
         Optional<Usuario> optDoctor = usuarioRepository.findById(dni);
         if (optDoctor.isPresent()){
             doctor = optDoctor.get();
@@ -107,7 +108,8 @@ public class AdministradorController {
             @ModelAttribute("doctor") @Valid Usuario doctor,
             BindingResult bindingResult,
             RedirectAttributes attr,
-            Model model
+            Model model,
+            HttpServletRequest httpServletRequest
 
     ){
         System.out.println(bindingResult.getAllErrors());
@@ -164,7 +166,7 @@ public class AdministradorController {
 
 
     @GetMapping("/crearDoctorPagina")
-    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, RedirectAttributes attr){
+    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, RedirectAttributes attr, HttpServletRequest httpServletRequest){
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         return "administrador/crearDoctor";
@@ -175,7 +177,8 @@ public class AdministradorController {
             @ModelAttribute("doctor") @Valid Usuario doctor,
             BindingResult bindingResult,
             RedirectAttributes attr,
-            Model model
+            Model model,
+            HttpServletRequest httpServletRequest
 
     ){
 
@@ -315,7 +318,7 @@ public class AdministradorController {
     */
 
     @GetMapping("/editarPacientePagina")
-    public String editarPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr){
+    public String editarPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
         Optional<Usuario> optPaciente = usuarioRepository.findById(dni);
         if (optPaciente.isPresent()){
             paciente = optPaciente.get();
@@ -332,7 +335,8 @@ public class AdministradorController {
            @ModelAttribute("paciente") @Valid Usuario paciente,
             BindingResult bindingResult,
             RedirectAttributes attr,
-            Model model
+            Model model,
+            HttpServletRequest httpServletRequest
     ){
         if(bindingResult.hasErrors()){
             return "administrador/editarPaciente";
@@ -391,7 +395,8 @@ public class AdministradorController {
             @ModelAttribute("paciente") @Valid Usuario paciente,
             BindingResult bindingResult,
             RedirectAttributes attr,
-            Model model
+            Model model,
+            HttpServletRequest httpServletRequest
 
     ){
         /*
@@ -535,8 +540,11 @@ public class AdministradorController {
     }
 
     @GetMapping("/settings")
-    public String settings(Model model){
-        String dni = "48764321";
+    public String settings(Model model, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+
+        /*
+        String dni = "71448628";
         Optional<Usuario> administrador = usuarioRepository.findById(dni);
         if (administrador.isPresent()){
             Usuario admin = administrador.get();
@@ -545,6 +553,9 @@ public class AdministradorController {
         } else {
             return "redirect:/administrador/principal";
         }
+        */
+        model.addAttribute("admin",usuarioSession);
+        return "administrador/settings";
 
     }
 
