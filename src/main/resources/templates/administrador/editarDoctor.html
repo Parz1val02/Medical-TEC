@@ -106,7 +106,7 @@
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Estado</label>
                                             <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
-                                            <input type="text" th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
+                                            <input type="text" th:value="${#strings.capitalize(doctor.estadosIdestado.nombre)}" class="form-control" disabled>
                                         </div>
 
                                     </div>
