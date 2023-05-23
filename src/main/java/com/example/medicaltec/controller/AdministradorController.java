@@ -9,6 +9,7 @@ import com.example.medicaltec.repository.UsuarioRepository;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -561,8 +562,30 @@ public class AdministradorController {
 
     @GetMapping("/password")
     public String changePassword(){
-
         return "administrador/password";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestParam("pass1") String pass1,
+                                 @RequestParam("pass2") String pass2,
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
+    {
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
+            attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
+            return "redirect:/administrador/password";
+            //}else if(!pass1.equals(usuarioRepository.passAdmv())){
+            //    attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
+            //    return "redirect:/paciente/password";
+        } else if (!pass3.equals(pass2) ) {
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            return "redirect:/administrador/password";
+        }else {
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuario.getId());
+            attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
+            return "redirect:/administrador/settings";
+        }
+
     }
 
 
