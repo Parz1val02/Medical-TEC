@@ -84,7 +84,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor")
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
                 .anyRequest().permitAll();
-        System.out.println(new BCryptPasswordEncoder().encode("Julio"));
+        //System.out.println(new BCryptPasswordEncoder().encode("gilzanzun"));
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }

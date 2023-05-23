@@ -6,6 +6,7 @@ import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -107,9 +108,10 @@ public class PacienteController {
     }
 
     @RequestMapping("/consultas")
-    public String citas(Model model){
+    public String citas(Model model, HttpSession session){
         Usuario usuario = usuarioRepository.findByid("22647853");
-
+        Usuario usuario1 = (Usuario) session.getAttribute("usuario");
+        System.out.println(usuario1.getApellido());
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
         ;
