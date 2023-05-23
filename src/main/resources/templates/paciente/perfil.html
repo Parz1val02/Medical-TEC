@@ -26,7 +26,7 @@
                 <div class="card-body ">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md">
-                            <h5 class="mb-2 mb-md-0 text-white">Perfil de paciente</h5>
+                            <h5 class="mb-2 mb-md-0 text-white">Perfil</h5>
                         </div>
                     </div>
                 </div>
@@ -45,38 +45,38 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-8">
-                            <h4 class="mb-1" th:text="|${usuario.nombre} ${usuario.apellido}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            <h4 class="mb-1" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
                             </h4>
                             <form>
                                 <fieldset disabled>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput1" class="form-label">Nombres</label>
-                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${usuario.nombre}">
+                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${session.usuario.nombre}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${usuario.apellido}">
+                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${session.usuario.apellido}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput3" class="form-label">Correo</label>
-                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${usuario.email}">
+                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${session.usuario.email}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput4" class="form-label">Celular</label>
-                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${usuario.telefono}">
+                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${session.usuario.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
                                             <label for="disabledTextInput5" class="form-label">DNI</label>
-                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${usuario.id}">
+                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${session.usuario.id}">
                                         </div>
                                         <div class="col mb-3">
                                             <label for="disabledTextInput6" class="form-label">Sede actual</label>
-                                            <input type="text" id="disabledTextInput6" class="form-control" th:placeholder="${usuario.sedesIdsedes.nombre}">
+                                            <input type="text" id="disabledTextInput6" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -97,7 +97,7 @@
                                                 <option  th:each="seguro : ${seguros}"
                                                          th:value="${seguro.id}"
                                                          th:text="${seguro.nombreSeguro}"
-                                                        th:selected="${seguro.id==usuario.segurosIdSeguro.id}"></option>
+                                                        th:selected="${seguro.id==session.usuario.segurosIdSeguro.id}"></option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Aceptar</button>
@@ -106,7 +106,7 @@
                                     <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                                         Cambio de contraseña
                                     </h5>
-                                    <div th:if="${msgContrasenia != null}" th:text="${msgContraasenia}" class="alert alert-success" role="alert"></div>
+                                    <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"></div>
                                     <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su contraseña?</h6>
                                     <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" th:href="@{/paciente/password}">Cambiar Contraseña</button>
                                 </div>
@@ -131,7 +131,6 @@
                                         <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agregue sus alergias</h6>
                                         <form method="post" th:action="@{/paciente/guardarAlergias}" th:object="${alergia}">
                                             <div class="mb-3">
-                                                <input type="hidden" th:value="${usuario.id}" class="form-control" id="" aria-describedby="" name="id">
                                                 <input type="text" class="form-control" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}">
                                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
                                                 <div id="help" class="form-text">Indique sus alergias para poder agregarlas a su historial médico</div>
@@ -154,7 +153,7 @@
                                 <tbody class="bg-white">
                                 <tr th:each="alergia, info : ${alergias}">
                                     <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center"></td>
-                                    <td><a class="btn btn-secondary align-middle" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id} + '&id2=' + ${usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
+                                    <td><a class="btn btn-secondary align-middle" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id}  + '&id2=' +${session.usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
                                 </tr>
                                 </tbody>
                             </table>

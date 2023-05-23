@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BoletaRepository extends JpaRepository<Boleta,Integer> {
 
-    @Query(value = "select * from boletas where receta_idreceta=?1", nativeQuery = true)
-    Boleta obtenerRecetaxBoleta(Integer idRec);
+    @Query(value = "select * from boletas where cita_idcita=?1", nativeQuery = true)
+    Boleta obtenerCitaxBoleta(Integer id);
 }
