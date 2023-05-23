@@ -127,10 +127,10 @@
                             <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
                                 00/00/00 - 00:00hrs
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="${cita.modalidad}">
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.modalidad)}">
                                 Presencial
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="${cita.estadoscitaIdestados.tipo}">
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}">
                                 Próxima cita
                             </td>
                             <td class="align-middle" style="text-align: center">

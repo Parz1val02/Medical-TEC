@@ -80,9 +80,10 @@
                                     font-size: 15px; color: white">
                                 ¿Deseas cambiar de sede?
                             </button>
+
                             <div style="height: 10px"></div>
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"
-                                 style="margin: 0; font-family: 'Open Sans',serif"></div>
+                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
 
                             <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
                                   style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
