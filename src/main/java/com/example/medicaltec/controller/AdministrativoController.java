@@ -93,6 +93,10 @@ public class AdministrativoController {
 
 
     }
+    @GetMapping("/form1")
+    public String preview(){
+        return "administrativo/formpre";
+    }
 
 
 
