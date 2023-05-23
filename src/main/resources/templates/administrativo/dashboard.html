@@ -17,8 +17,8 @@
         <nav th:replace="~{fragmentos/sidebaradministrativo.html::sideBar}"></nav>
         <div class="content">
         <nav th:replace="~{fragmentos/topbaradministrativo.html::topBar}"></nav>
-            <div class="alert alert-danger" role="alert" th:if="${errorenvio != null}" th:text="${errorenvio}">
-
+            <div class="alert alert-danger" role="alert" th:if="${errorenvio != null}" th:text="${errorenvio}"></div>
+                <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
             </div>
             <div class="row">
 
@@ -211,7 +211,7 @@
                                 <div class="row justify-content-between align-items-center">
 
                                     <div class="col-md-11">
-                                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px" th:text="${session.usuario.sedesIdsedes.nombre}">
                                             Sede Actual: Sede C
                                         </h2>
                                     </div>
