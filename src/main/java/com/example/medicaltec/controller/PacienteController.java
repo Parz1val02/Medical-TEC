@@ -81,6 +81,8 @@ public class PacienteController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
+        List<Sede> listaSedes = sedeRepository.findAll();
+        model.addAttribute("listaSedes",listaSedes);
         model.addAttribute("arch", "arch");
         return "paciente/principal";
    }
