@@ -62,7 +62,7 @@
                                             </div>
                                             <div class="col-md-6" align="center" style="align-items: center">
                                                 <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal">Ver más</button>
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>
                                                 <div style="height: 15px"></div>
                                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                                     border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
@@ -76,52 +76,54 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Aquí puedes agregar el contenido del modal -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Información del Cuestionario #</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <!-- aquí iría el logo de la empresa -->
-                                        <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                    </div>
-                                </div>
-                                <br>
-                                <b>Nombre:  </b>
-                                <p>Título del Cuestionario</p>
-
-                                <b>Pregunta 1</b>
-                                <p style="margin: 0px"> Información de Pregunta</p>
-                                <input disabled>
-                                <div style="width: 10px;height: 20px;"></div>
-                                <b>Pregunta 2</b>
-                                <p style="margin: 0px"> Información de Pregunta</p>
-                                <input disabled>
-                                <div style="width: 10px;height: 20px;"></div>
-                                <b>Pregunta 3</b>
-                                <p style="margin: 0px"> Información de Pregunta</p>
-                                <input disabled>
-                                <div style="width: 10px;height: 20px;"></div>
-                                <b>Pregunta 4</b>
-                                <p style="margin: 0px"> Información de Pregunta</p>
-                                <input disabled>
-                                <div style="width: 10px;height: 20px;"></div>
-                                <b>Pregunta 5</b>
-                                <p style="margin: 0px"> Información de Pregunta</p>
-                                <input disabled>
-                                <div style="width: 10px;height: 20px;"></div>
+            <div th:each="cuestionario, i : ${cuestionariosList}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Cuestionario' + ${i.index+1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Información del Cuestionario #</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <!-- aquí iría el logo de la empresa -->
+                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <b>Nombre:  </b>
+                                    <p th:text="|${cuestionario.nombrecuestionario}|">Título del Cuestionario</p>
+
+                                    <b>Pregunta 1</b>
+                                    <p style="margin: 0px"> Información de Pregunta</p>
+                                    <input disabled>
+                                    <div style="width: 10px;height: 20px;"></div>
+                                    <b>Pregunta 2</b>
+                                    <p style="margin: 0px"> Información de Pregunta</p>
+                                    <input disabled>
+                                    <div style="width: 10px;height: 20px;"></div>
+                                    <b>Pregunta 3</b>
+                                    <p style="margin: 0px"> Información de Pregunta</p>
+                                    <input disabled>
+                                    <div style="width: 10px;height: 20px;"></div>
+                                    <b>Pregunta 4</b>
+                                    <p style="margin: 0px"> Información de Pregunta</p>
+                                    <input disabled>
+                                    <div style="width: 10px;height: 20px;"></div>
+                                    <b>Pregunta 5</b>
+                                    <p style="margin: 0px"> Información de Pregunta</p>
+                                    <input disabled>
+                                    <div style="width: 10px;height: 20px;"></div>
+                                </div>
 
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,47 +138,46 @@
                     </div>
                 </div>
                 <br>
+                <div th:if="${cuestionario_correcto != null}" th:text="${cuestionario_correcto}" class="alert alert-success" role="alert"
+                     style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                <div th:if="${no_existe_correo != null}" th:text="${no_existe_correo}" class="alert alert-danger" role="alert"
+                     style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                 <form action="#" method="post" style="padding-left: 15px; padding-right: 15px">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-2">
-                                <p class="mb-2 mb-md-0" style="; font-weight: bold; padding-left: 15px"
-                                   for="para"> Para: </p>
-
+                                <label for="pacientecorreo" class="mb-2 mb-md-0" style="; font-weight: bold; padding-left: 15px">Para:</label>
                             </div>
                             <div class="col-sm-9">
-                                <input type="email" id="para" name="para" placeholder="Ingresar correo electrónico"
-                                       style="width: 80%" required>
+                                <input type="text" class="form-control" id="pacientecorreo" name="pacientecorreo" style="width: 80%; font-family: 'Open Sans',serif;">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <div class="row">
                             <div class="col-sm-2">
-                                <p class="mb-2 mb-md-0" style="font-weight: bold; padding-left: 15px"
-                                   for="asunto"> Asunto: </p>
+                                <p class="mb-2 mb-md-0" style="font-weight: bold; padding-left: 15px"> Asunto: </p>
 
                             </div>
                             <div class="col-sm-9">
-                                <input type="text" id="asunto" name="asunto" style="width: 80%" required>
+                                <input type="text" id="asunto" name="asunto" value="asunto" style="width: 80%">
                             </div>
                         </div>
-                    </div>
+                    </div-->
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-2">
-                                <p class="mb-2 mb-md-0" style="font-weight: bold; padding-left: 15px"
-                                   for="mensaje">Mensaje: </p>
+                                <label for="mensaje" class="mb-2 mb-md-0" style="font-weight: bold; padding-left: 15px">Mensaje:</label>
                             </div>
                             <div class="col-sm-9">
-                                <textarea id="mensaje" name="mensaje" style="width: 80%" required></textarea>
+                                <label for="mensaje"></label>
+                                <input type="text" class="form-control" id="mensaje" name="mensaje" style="width: 80%; font-family: 'Open Sans',serif;">
                             </div>
                         </div>
                     </div>
                     <div class="form-group" align="center">
                         <!-- Button trigger modal -->
-                        <a th:href="@{principal}" type="button" class="btn btn-primary"
-                           style="text-align: center;background:  #3d8af7;
+                        <a th:href="@{enviarCuest}" type="submit" class="btn btn-primary" style="text-align: center;background:  #3d8af7;
                                 border-radius: 15px; border-color: #FFFFFF">Enviar</a>
                         <a type="button" th:href="@{cuestionarios}" style="text-decoration: underline; padding-left: 15px;
                            color: #3d4858"> Cancelar</a>

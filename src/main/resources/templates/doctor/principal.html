@@ -22,14 +22,14 @@
                 <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
-                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                            <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
                                 Bienvenido Dr./Dra. Hiroshi Giotoku
-                            </h1>
+                            </h2>
                         </div>
                         <div class="col-md-11">
-                            <h4 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: 600; padding-left: 15px">
                                 Lleva a cabo la gestión de citas médicas, historial médico y citas en telemedicina.
-                            </h4>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -37,14 +37,14 @@
 
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
-                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-left: 15px; padding-bottom: 5px">
                         Información más reciente:
                     </h3>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-sm-8">
                             <div class="card mb-3">
                                 <div class="card-body" style="max-height: 650px">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Calendario
                                     </h4>
                                     <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
@@ -54,7 +54,7 @@
                         <div class="col-sm-4">
                             <div class="card">
                                 <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
                                         Notificaciones
                                     </h4>
                                     <div style="height: 200px;">
@@ -72,7 +72,7 @@
                             <div style="height: 20px;"></div>
                             <div class="card">
                                 <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
                                         Mensajería
                                     </h4>
                                     <div style="height: 200px;">
@@ -101,7 +101,7 @@
                             </h2>
                         </div>
                         <div class="col-md-11">
-                            <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: bold;">
+                            <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: 600;">
                                 Visualiza información de tus próximas citas
                             </h6>
                         </div>
@@ -127,10 +127,10 @@
                             <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
                                 00/00/00 - 00:00hrs
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="${cita.modalidad}">
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.modalidad)}">
                                 Presencial
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="${cita.estadoscitaIdestados.tipo}">
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}">
                                 Próxima cita
                             </td>
                             <td class="align-middle" style="text-align: center">
@@ -141,9 +141,9 @@
                               <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
-                            <td class="align-middle" align="center">
-                                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
+                            <td class="align-middle">
+                                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                border-radius: 15px; border-color: #b38df7" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
                             </td>
                         </tr>
 
@@ -183,8 +183,8 @@
 <!-- Initialize DataTable in JavaScript -->
 <script>
     $(document).ready(function () {
-        //Esta busacando por el ID del tah <table>
-        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        //Esta buscando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
         $('#userList').DataTable({
             dom: "<'d-flex justify-content-end pb-4'B>\n" +
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +

@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
 </head>
 
 
@@ -88,13 +90,13 @@
                                 <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
                                     <div class="row">
                                         <div class="col-sm-10">
-                                            <b th:text="|${cita.fecha} - ${cita.hora}: ${cita.tipocitaIdtipocita.tipoCita}|"></b>
+                                            <b th:text="|${cita.fecha} - ${cita.hora}hrs: ${#strings.capitalize(cita.tipocitaIdtipocita.tipoCita)}|"></b>
                                             <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
                                         </div>
                                         <div class="col-sm-2" th:align="right">
                                             <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
                                             background: #3d8af7; border-radius: 15px; font-family: 'Open Sans';" data-toggle="modal"
-                                                    data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
+                                                    data-target="#exampleModal" th:data-target="'#Reporte' + ${i.index+1}">
                                                 <i class="fa fa-file"></i> Ver Reporte
                                             </button>
                                         </div>
@@ -130,32 +132,27 @@
                 }
             </script>
 
-            <div th:each="informe, i : ${listaInformes}">
-                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Informe' + ${i.index+1}">
-                    <div class="modal-dialog" style="max-width: 1100px !important;">
+            <div th:each="cita, i : ${listaCitasPorUsuario}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Reporte' + ${i.index+1}">
+                    <div class="modal-dialog" style="max-width: 800px !important;">
                         <div class="modal-content">
                             <!-- Aquí puedes agregar el contenido del modal -->
                             <div class="modal-header">
-                                <h5 class="modal-title">Informe médico</h5>
+                                <h5 class="modal-title">Boleta de cita</h5>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <!-- aquí iría el logo de la empresa -->
-                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                        </div>
+
+                                <div class="row">
+                                    <div class="col-md-4" >
+                                        <p style="font-weight: bold">Diagnóstico: </p>
+                                        <p style="font-weight: bold">Bitácora: </p>
                                     </div>
-                                    <br>
-                                    <p></p>
-                                    <br>
-                                    <div class="border-top border-bottom" style="padding: 10px">
-                                        <!-- aquí iría cualquier otro detalle o nota -->
-                                        <label>FIRMA DEL DOCTOR</label>
+                                    <div class="col-md-8">
+                                        <p style="font-weight: normal" th:text="|${#strings.capitalize(cita.informeIdinforme.diagnostico)}|"></p>
+                                        <p style="font-weight: normal" th:text="${cita.informeIdinforme.bitacora}"></p>
                                     </div>
                                 </div>
-
 
                             </div>
                             <div class="modal-footer">
@@ -197,7 +194,7 @@
 <script>
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
-        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
         $('#userList').DataTable({
             dom: "<'d-flex justify-content-end pb-4'B>\n" +
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
