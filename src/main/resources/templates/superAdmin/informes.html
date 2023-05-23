@@ -62,7 +62,7 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="cita, info : ${citasList}">
+            <tr th:each="cita, info : ${citasList} "th:if="${cita.informeIdinforme.id != null && cita.informeIdinforme.activo == true}">
               <td th:text="${cita.informeIdinforme.id}"></td>
               <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
               <td class="align-middle">
@@ -84,15 +84,15 @@
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cambios de Perfil</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Borrar informe</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
-                            ¿Está seguro de querer borrar este reporte?
+                            ¿Está seguro de querer borrar este informe?
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${cita.informeIdinforme.id}}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${cita.informeIdinforme.id} + '&active='+ ${cita.informeIdinforme.activo}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar informe</a>
                           </div>
                         </div>

@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,7 +46,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard", ""})
-    public String dashboard(Model model){
+    public String dashboard(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -606,14 +608,14 @@ public class SuperController {
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
-    public String borrarReporte(Model model,
-                                   @RequestParam("id") int id,
-                                   RedirectAttributes attr) {
+    public String borrarInforme(Model model,
+                                          @RequestParam("id") int id, @RequestParam("active") boolean active,
+                                          RedirectAttributes attr) {
 
         Optional<Informe> optionalInforme = informeRepository.findById(id);
 
-        if (optionalInforme.isPresent()) {
-            informeRepository.deleteById(id);
+        if (optionalInforme.isPresent() && active) {
+            informeRepository.updateActivoByActivo(false,id);
             attr.addFlashAttribute("msg","Informe borrado exitosamente");
         }
         return "redirect:/superAdmin/informes";

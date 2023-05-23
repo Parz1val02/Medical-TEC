@@ -106,6 +106,7 @@
                                     <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                                         Cambio de contraseña
                                     </h5>
+                                    <div th:if="${msgContrasenia != null}" th:text="${msgContraasenia}" class="alert alert-success" role="alert"></div>
                                     <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su contraseña?</h6>
                                     <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" th:href="@{/paciente/password}">Cambiar Contraseña</button>
                                 </div>
