@@ -57,14 +57,16 @@
             <tr>
               <th class="sort align-middle" style="width: 30%">N° Informe</th>
               <th class="sort align-middle" style="width: 20%">Especialidad</th>
+              <th class="sort align-middle" style="width: 20%">Diagnóstico</th>
               <th class="sort align-middle" style="width: 20%">Descargar</th>
               <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
             <tr th:each="cita, info : ${citasList} "th:if="${cita.informeIdinforme.id != null && cita.informeIdinforme.activo == true}">
-              <td th:text="${cita.informeIdinforme.id}"></td>
+              <td th:text="${info.index+1}"></td>
               <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
+              <td th:text="${cita.informeIdinforme.diagnostico}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -79,8 +81,8 @@
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
                     <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-toggle="modal" th:data-target="'#modalBorrar-' + ${info.index + 1}">Borrar</button>
+                    <div class="modal fade" th:id="'modalBorrar-' + ${info.index + 1}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
