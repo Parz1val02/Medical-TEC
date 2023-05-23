@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -45,7 +46,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard", ""})
-    public String dashboard(Model model){
+    public String dashboard(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
