@@ -57,14 +57,16 @@
             <tr>
               <th class="sort align-middle" style="width: 30%">N° Informe</th>
               <th class="sort align-middle" style="width: 20%">Especialidad</th>
+              <th class="sort align-middle" style="width: 20%">Diagnóstico</th>
               <th class="sort align-middle" style="width: 20%">Descargar</th>
               <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
             <tr th:each="cita, info : ${citasList} "th:if="${cita.informeIdinforme.id != null && cita.informeIdinforme.activo == true}">
-              <td th:text="${cita.informeIdinforme.id}"></td>
+              <td th:text="${info.index+1}"></td>
               <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
+              <td th:text="${cita.informeIdinforme.diagnostico}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
