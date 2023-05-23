@@ -62,7 +62,7 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="cita, info : ${citasList} "th:if="${cita.informeIdinforme.id != null && cita.informeIdinforme.activo == true}">
+            <tr th:each="cita, info : ${citasList} "th:if="${cita.informeIdinforme.id!= null  && cita.informeIdinforme.activo== true}">
               <td th:text="${cita.informeIdinforme.id}"></td>
               <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}"></td>
               <td class="align-middle">
