@@ -3,6 +3,7 @@ import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -659,30 +660,70 @@ public class SuperController {
         return "superAdmin/superPass";
     }
 
+    public boolean verificarRequisitos(String password) {
+        // Verificar al menos un número
+        if (!password.matches(".*\\d.*")) {
+            return false;
+        }
+
+        // Verificar al menos un carácter especial
+        if (!password.matches(".*[!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?].*")) {
+            return false;
+        }
+
+        // Verificar al menos una mayúscula
+        if (!password.matches(".*[A-Z].*")) {
+            return false;
+        }
+
+        // Si la contraseña cumple con todos los requisitos, retornar true
+        return true;
+    }
+
+
+
     @PostMapping(value = "/NewPassword")
     public String newPassword(Model model, RedirectAttributes attr, @RequestParam("actual") String actual,
                               @RequestParam("nueva1") String nueva1, @RequestParam("nueva2") String nueva2,
                               HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String pastpassw = superadmin.getContrasena();
-        if (pastpassw.equals(actual)){
-            if(pastpassw.equals(nueva1)){
-                attr.addFlashAttribute("msg2","La nueva contraseña debe ser diferente a la actual");
-                return "redirect:superAdmin/superPass";
-            }else {
-                if(nueva2.equals(nueva1)){
-                    attr.addFlashAttribute("msg1","Repita su nueva contraseña correctamente");
-                    return "redirect:superAdmin/superPass";
-                }else {
-                    attr.addFlashAttribute("msg3","Contraseña cambiada con éxito");
-                    usuarioRepository.cambiarPasswSA(nueva1,superadmin.getId());
-                    return "redirect:superAdmin/superPass";
-                }
-            }
-
+        boolean requi = verificarRequisitos(nueva1);
+        if (actual.equals("") || nueva1.equals("") || nueva2.equals("")){
+            attr.addFlashAttribute("vac", "Los campos no pueden estar vacios");
+            return "redirect:/superAdmin/superPass";
         }else {
-            attr.addFlashAttribute("msg0","Ingrese correctamente la contraseña actual");
-            return "redirect:superAdmin/superPass";
+            if (requi){
+                BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+                System.out.println(superadmin.getContrasena());
+                System.out.println(actual);
+                actual =  enc.encode(actual);
+                System.out.println(actual);
+                nueva1 = enc.encode(nueva1);
+                nueva2 = enc.encode(nueva2);
+                if (pastpassw.equals(actual)){
+                    if(pastpassw.equals(nueva1)){
+                        attr.addFlashAttribute("msg2","La nueva contraseña debe ser diferente a la actual");
+                        return "redirect:/superAdmin/superPass";
+                    }else {
+                        if(nueva2.equals(nueva1)){
+                            attr.addFlashAttribute("msg1","Repita su nueva contraseña correctamente");
+                            return "redirect:/superAdmin/superPass";
+                        }else {
+                            attr.addFlashAttribute("msg3","Contraseña cambiada con éxito");
+                            usuarioRepository.cambiarPasswSA(nueva1,superadmin.getId());
+                            return "redirect:/superAdmin/superPass";
+                        }
+                    }
+
+                }else {
+                    attr.addFlashAttribute("msg0","Ingrese correctamente la contraseña actual");
+                    return "redirect:/superAdmin/superPass";
+                }
+            }else {
+                attr.addFlashAttribute("req", "La nueva contraseña no cumple con las restricciones estipuladas");
+                return "redirect:/superAdmin/superPass";
+            }
         }
     }
 
