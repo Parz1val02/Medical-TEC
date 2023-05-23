@@ -46,7 +46,7 @@ public class WebSecurityConfig {
         String sql2 = "select u.email, r.nombre_rol from usuario u inner join roles r on (u.roles_idroles=r.idroles) where u.email=? and u.enabled=1";
         users.setUsersByUsernameQuery(sql1);
         users.setAuthoritiesByUsernameQuery(sql2);
-        System.out.println(new BCryptPasswordEncoder().encode("luchorato"));
+        //System.out.println(new BCryptPasswordEncoder().encode("luchorato"));
         return users;
     }
     @Bean

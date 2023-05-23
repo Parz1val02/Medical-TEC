@@ -45,7 +45,7 @@
                                <!-- columna 1 -->
                                <div class="col-sm-6">
                                    <div class="form-group">
-                                       <input type="hidden" name="paciente.id" th:value="${usuario.id}" class="form-control">
+                                       <input type="hidden" name="paciente.id" th:value="${session.usuario.id}" class="form-control">
                                        <label for="especialidadesIdEspecialidad">Especialidad:</label>
                                        <select th:field="*{especialidadesIdEspecialidad}" class="form-control" >
                                            <option  th:each="especialidad : ${especialidades}"

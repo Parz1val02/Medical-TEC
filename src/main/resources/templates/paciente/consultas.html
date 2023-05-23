@@ -128,7 +128,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="nombre">Nombre del paciente:</label>
-                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${usuario.nombre} ${usuario.apellido}|" class="form-control" disabled>
+                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${session.usuario.nombre} ${session.usuario.apellido}|" class="form-control" disabled>
                                         </div>
 
                                         <div class="form-group">
@@ -162,7 +162,7 @@
 
                                         <div class="form-group">
                                             <label for="seguro">Seguro de salud:</label>
-                                            <input type="text" id="seguro" name="seguro" th:placeholder="${usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
+                                            <input type="text" id="seguro" name="seguro" th:placeholder="${session.usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@
                             <div class="modal-body">
                                 <header>
                                     <h1>Receta Médica</h1>
-                                    <p>Nombre del paciente: <strong th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Carlos Pisco</strong></p>
+                                    <p>Nombre del paciente: <strong th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellido}">Carlos Pisco</strong></p>
                                     <p>Nombre del doctor: <strong th:text="${cita.getDoctor.nombre} + ' ' + ${cita.getDoctor.apellido}">Manuel Yarleque</strong></p>
                                     <p>Fecha de emisión: <strong th:text="${cita.fecha}">21 de abril de 2023</strong></p>
                                 </header>
