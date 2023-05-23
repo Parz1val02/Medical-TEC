@@ -59,7 +59,7 @@
 
         <div class="card-body d-flex justify-content-center"  style="background: #FFFFFF ">
 
-          <form style=" width: 35% " method="POST" th:action="@{superAdmin/NewPassword}"> <!--falta el action con th-->
+          <form style="width: 35%" method="post" th:action="@{superAdmin/NewPassword}">
             <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-success" role="alert"></div>
             <div class="mb-3">
               <div th:if="${msg0 != null}" th:text="${msg0}" class="alert alert-danger" role="alert"></div>
@@ -78,7 +78,8 @@
             </div>
 
             <a class="btn btn-light" th:href="@{/superAdmin/dashboard}">Cancelar</a>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Cambiar contraseña</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Cambiar contraseña</button>
+
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -91,13 +92,14 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a th:href="@{/superAdmin/editarPerfil}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
+                    <button type="submit" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                        border-radius: 15px; border-color: #FFFFFF">Cambiar contraseña</button>
                   </div>
                 </div>
               </div>
             </div>
           </form>
+
 
         </div>
 
