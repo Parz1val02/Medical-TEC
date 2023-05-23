@@ -872,5 +872,15 @@ public class SuperController {
 
     }
 
-
+    @PostMapping("/editCuest")
+    public String editCuest(@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("telefono") String telefono,
+                                       @RequestParam("sede") int sede,
+                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
+        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
+        return "redirect:/superAdmin/dashboard";
+    }
 }
