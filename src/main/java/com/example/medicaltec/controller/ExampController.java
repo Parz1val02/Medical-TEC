@@ -42,13 +42,23 @@ public class ExampController {
     public String login(HttpSession session){
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        //validar
+        //validando por rol para evitar que se escriba la ruta y se vaya manualmente estando autenticado a otra
         if (usuario ==null){
 
             return "auth/login";
         } else {
-
-            return "redirect:/paciente/principal";
+            switch(usuario.getRolesIdroles().getNombreRol()) {
+                case "paciente":
+                    return "redirect:/paciente/principal";
+                case "administrativo":
+                    return "redirect:/administrativo/dashboard";
+                case "administrador":
+                    return "redirect:/administrador/principal";
+                case "superadmin":
+                    return "redirect:/superAdmin/dashboard";
+                default:
+                    return "redirect:/doctor/principal";
+            }//return "redirect:/paciente/principal";
         }
         //System.out.printf(usuario.getId());
 

@@ -113,19 +113,20 @@ public class PacienteController {
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
         List<Cita> citas1 = citaRepository.historialCitasAgendadas(usuario.getId());
+        ArrayList<Medicamento> medicamentos = new ArrayList<>();
+
 
         for (int i = 0; i < citas.size(); i++) {
-            List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
-            model.addAttribute("medicamentos", recetaMedicamentoDtoList);
+            //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
+            List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
+
+            for (int j = 0; j < idmed.size(); j++) {
+                medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(j)));
+            }
+
         }
+        model.addAttribute("medicamentos", medicamentos);
 
-
-        /*for (int i = 0; i < citas.size(); i++) {
-            List<RecetaHasMedicamentoId> ids = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
-            model.addAttribute("medicamentos",recetaHasMedicamentoRepository.findAllById(ids));
-            //recetaHasMedicamentoRepository.findAllById(ids);
-
-        }*/
         model.addAttribute("citas", citas);
         model.addAttribute("citas1", citas1);
         model.addAttribute("arch", "windowzzz");

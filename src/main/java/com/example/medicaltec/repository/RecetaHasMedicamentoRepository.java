@@ -11,6 +11,6 @@ public interface RecetaHasMedicamentoRepository extends JpaRepository<RecetaHasM
 
 
     @Query(nativeQuery = true, value = "SELECT medicamentos_idmedicamentos FROM telesystem.receta_has_medicamentos where receta_idreceta=?1")
-    List<RecetaHasMedicamentoId> listarMedxId(Integer id);
+    List<Integer> listarMedxId(Integer id);
 
 }
