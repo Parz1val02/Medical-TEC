@@ -2,6 +2,7 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.medicaltec.controller.ExampController;
 
 
 import java.util.List;
@@ -882,5 +884,38 @@ public class SuperController {
         usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
+    }
+
+    @GetMapping("/loginFromSA")
+    public String editarPaciente(Model model, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
+        Usuario user;
+        if (optionalUsuario.isPresent()) {
+            user = optionalUsuario.get();
+            HttpSession session = httpServletRequest.getSession();
+            session.setAttribute("usuario", user);
+            Usuario log = (Usuario) session.getAttribute("usuario");
+            if (log ==null){
+
+                return "auth/login";
+            } else {
+                switch(log.getRolesIdroles().getNombreRol()) {
+                    case "paciente":
+                        return "redirect:/paciente/principal";
+                    case "administrativo":
+                        return "redirect:/administrativo/dashboard";
+                    case "administrador":
+                        return "redirect:/administrador/principal";
+                    case "superadmin":
+                        return "redirect:/superAdmin/dashboard";
+                    default:
+                        return "redirect:/doctor/principal";
+                }//return "redirect:/paciente/principal";
+            }
+        } else {
+            attr.addFlashAttribute("msgDanger","El usuario no existe");
+            return "redirect:/superAdmin/dashboard";
+        }
     }
 }
