@@ -34,7 +34,7 @@
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                   Sección de Pagos
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h6>
                 <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
               </div>
             </div>
@@ -47,7 +47,7 @@
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                   Consultas Médicas
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revise información sobre sus consultas médicas</h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revise información sobre sus consultas médicas</h6>
                 <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/consultas}">Ingresar</a>
               </div>
             </div>
@@ -60,7 +60,7 @@
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
                   Cuestionarios
                 </h4>
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario, aparecerá en esta sección</h5>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario, aparecerá en esta sección</h6>
                 <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
               </div>
             </div>
@@ -80,7 +80,7 @@
                     <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                     <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
                     <label for="" style="font-size: medium">Sede Actual</label>
-                    <input th:each="sede : ${sedes}" th:if="${sede.id == usuario.sedesIdsedes.id}" class="form-control col text-black" id="" type="text" th:placeholder="${sede.nombre}" readonly="" style="text-align: center">
+                    <input th:each="sede : ${sedes}" th:if="${sede.id == session.usuario.sedesIdsedes.id}" class="form-control col text-black" id="" type="text" th:placeholder="${sede.nombre}" readonly="" style="text-align: center">
                     <hr style="height: 1px; background-color: #FFFFFF; border: none">
                     <div class="dropdown">
                       <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>

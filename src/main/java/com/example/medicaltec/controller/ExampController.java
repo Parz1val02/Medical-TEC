@@ -6,6 +6,7 @@ package com.example.medicaltec.controller;
         import com.example.medicaltec.repository.EspecialidadeRepository;
         import com.example.medicaltec.repository.SedeRepository;
         import com.example.medicaltec.repository.UsuarioRepository;
+        import jakarta.servlet.http.HttpSession;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
         import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +39,30 @@ public class ExampController {
         return "auth/principalpage";
     }
     @RequestMapping(value = {"/loginA"},method = RequestMethod.GET)
-    public String login(){
-        return "auth/login";
+    public String login(HttpSession session){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        //validando por rol para evitar que se escriba la ruta y se vaya manualmente estando autenticado a otra
+        if (usuario ==null){
+
+            return "auth/login";
+        } else {
+            switch(usuario.getRolesIdroles().getNombreRol()) {
+                case "paciente":
+                    return "redirect:/paciente/principal";
+                case "administrativo":
+                    return "redirect:/administrativo/dashboard";
+                case "administrador":
+                    return "redirect:/administrador/principal";
+                case "superadmin":
+                    return "redirect:/superAdmin/dashboard";
+                default:
+                    return "redirect:/doctor/principal";
+            }//return "redirect:/paciente/principal";
+        }
+        //System.out.printf(usuario.getId());
+
+
     }
 
     //@PostMapping(value = "/login")

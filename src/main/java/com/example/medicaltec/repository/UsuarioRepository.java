@@ -1,20 +1,16 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Usuario;
-import jakarta.transaction.Transactional;
+
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-@Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
+public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     Usuario findByEmail(String email);
 
 
@@ -59,21 +55,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
 
 
-    @Transactional
-    @Modifying
-    @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = '34185296')")
-    void cambiarContra(String pass);
-
-    @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
-    String passAdmv();
     Usuario findByid(String id);
     @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1")
     List<Usuario> obtenerlistaDoctores(Integer idSede);
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value ="update usuario set seguros_id_seguro=?1 where dni=\"22647853\";" )
-    void cambiarSeguro(String idSede);
+    @Query(nativeQuery = true, value ="update usuario set seguros_id_seguro=?1 where dni=?2" )
+    void cambiarSeguro(String idSeguro, String dni);
 
 
     @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 1", nativeQuery = true)
@@ -125,8 +114,28 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
     @Transactional
     @Modifying
-    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where roles_idroles = 5",nativeQuery = true)
-    void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni);
+    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where dni=?6",nativeQuery = true)
+    void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni, String dnipast);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = ?2)")
+    void cambiarContra(String pass, String dni);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update usuario set 'contrasena' =?1 where dni=?2")
+    void cambiarPasswSA(String password, String dni);
+
+    @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
+            String passAdmv();
+
+    @Query(nativeQuery = true,value="select * from usuario where dni = \"34185296\"")
+    Usuario obtenerUsuario();
+
+    @Query(nativeQuery = true, value="select dni from usuario ")
+    List<String> obtenerdnis();
+
+    @Query(nativeQuery = true, value="select * from usuario where dni = ?")
+    Usuario usuarioForm(String dni);
 
 }

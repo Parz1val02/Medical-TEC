@@ -116,14 +116,13 @@
                                                     <th class="sort align-middle" style="width: 15%; text-align: center">Valor total</th>
                                                 </tr>
                                                 </thead>
-
                                                 <tbody class="bg-white">
                                                 <tr>
                                                     <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
                                                     </td>
-                                                    <td th:text="${boleta.getConceptopago()}" class="align-middle">
+                                                    <td th:text="${boletas[info.index].conceptopago}" class="align-middle">
                                                     </td>
-                                                    <td th:text="${boleta.getMonto()}" class="align-middle" style="text-align: center">
+                                                    <td th:text="${boletas[info.index].monto}" class="align-middle" >
                                                     </td>
                                                 </tr>
 

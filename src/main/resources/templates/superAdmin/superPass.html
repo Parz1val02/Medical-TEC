@@ -59,16 +59,20 @@
 
         <div class="card-body d-flex justify-content-center"  style="background: #FFFFFF ">
 
-          <form style=" width: 35% " method="POST" action=""> <!--falta el action con th-->
+          <form style=" width: 35% " method="POST" th:action="@{superAdmin/NewPassword}"> <!--falta el action con th-->
+            <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-success" role="alert"></div>
             <div class="mb-3">
+              <div th:if="${msg0 != null}" th:text="${msg0}" class="alert alert-danger" role="alert"></div>
               <label for="actual" class="form-label">Contraseña actual</label>
               <input type="password" class="form-control" id="actual">
             </div>
             <div class="mb-3">
+              <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
               <label for="nueva1" class="form-label">Contraseña nueva</label>
               <input type="password" class="form-control" id="nueva1">
             </div>
             <div class="mb-3">
+              <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger" role="alert"></div>
               <label for="nueva2" class="form-label">Confirmar contraseña nueva</label>
               <input type="password" class="form-control" id="nueva2">
             </div>

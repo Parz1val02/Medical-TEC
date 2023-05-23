@@ -91,7 +91,29 @@
                     </table>
                 </div>
             </div>
-
+            <div class="card mb-3">
+                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                    <table class="table table-striped" id="listaHistorial1">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 22%">Especialidad</th>
+                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="cita, info : ${citas1}">
+                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
+                            </td>
+                            <td th:text="${cita.fecha}" class="align-middle">
+                            </td>
+                            <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div th:each="cita, info : ${citas}">
                 <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
                     <div class="modal-dialog">
@@ -106,7 +128,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="nombre">Nombre del paciente:</label>
-                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${usuario.nombre} ${usuario.apellido}|" class="form-control" disabled>
+                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${session.usuario.nombre} ${session.usuario.apellido}|" class="form-control" disabled>
                                         </div>
 
                                         <div class="form-group">
@@ -140,7 +162,7 @@
 
                                         <div class="form-group">
                                             <label for="seguro">Seguro de salud:</label>
-                                            <input type="text" id="seguro" name="seguro" th:placeholder="${usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
+                                            <input type="text" id="seguro" name="seguro" th:placeholder="${session.usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +187,7 @@
                             <div class="modal-body">
                                 <header>
                                     <h1>Receta Médica</h1>
-                                    <p>Nombre del paciente: <strong th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Carlos Pisco</strong></p>
+                                    <p>Nombre del paciente: <strong th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellido}">Carlos Pisco</strong></p>
                                     <p>Nombre del doctor: <strong th:text="${cita.getDoctor.nombre} + ' ' + ${cita.getDoctor.apellido}">Manuel Yarleque</strong></p>
                                     <p>Fecha de emisión: <strong th:text="${cita.fecha}">21 de abril de 2023</strong></p>
                                 </header>
