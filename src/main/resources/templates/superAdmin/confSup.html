@@ -49,7 +49,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4 class="mb-1" th:text="${superadmin.nombre}+${superadmin.apellido}"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            <h4 class="mb-1" th:text="${superadmin.nombre + ' '+superadmin.apellido}"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
                             </h4>
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
                             <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger" role="alert"></div>
@@ -57,26 +57,31 @@
                                 <fieldset disabled>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput1" class="form-label">Nombre</label>
                                             <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${superadmin.nombre}">
                                         </div>
                                         <div class="col mb-3">
+                                            <div th:if="${apellidomsg != null}" th:text="${apellidomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput2" class="form-label">Apellidos</label>
                                             <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${superadmin.apellido}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${correomsg != null}" th:text="${correomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput3" class="form-label">Correo</label>
                                             <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${superadmin.email}">
                                         </div>
                                         <div class="col mb-3">
+                                            <div th:if="${telefonomsg != null}" th:text="${telefonomsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput4" class="form-label">Celular</label>
                                             <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${superadmin.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
+                                            <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
                                             <label for="disabledTextInput5" class="form-label">DNI</label>
                                             <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${superadmin.id}">
                                         </div>
@@ -85,33 +90,8 @@
                                 <br>
                                 <a th:href="@{/superAdmin/editarPerfil}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
           border-radius: 15px; border-color: #FFFFFF">Editar</a>
-                                <!--<a th:href="@{/superAdmin/superPass}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Cambiar contraseña</a>-->
-                                <button  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="border-radius: 15px">Cambiar Contraseña</button>
-
-
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Advertencia</h1>
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Estás a punto de cambiar tu contraseña. <br>Por favor, asegúrate de que tu nueva contraseña sea segura y única. No uses la misma contraseña que utilizas en otros sitios web y evita usar información personal, como tu nombre o fecha de nacimiento.
-
-                                                Además, nunca compartas tu contraseña con nadie y no la guardes en lugares públicos como correos electrónicos o notas.<br>
-
-                                                Recuerda que una contraseña segura es esencial para proteger tus datos personales y evitar que sean robados por ciberdelincuentes. ¡Gracias por tomar precauciones para mantener tu cuenta segura!
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                <a type="button" class="btn btn-primary" th:href="@{/superAdmin/superPass}">Continuar</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <a th:href="@{/superAdmin/superPass}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+          border-radius: 15px; border-color: #FFFFFF">Cambiar contraseña</a>
                             </form>
                         </div>
                     </div>

@@ -14,21 +14,39 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     Usuario findByEmail(String email);
 
 
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1")
+    /*QUERYS USADOOS POR ADMINISTRADOR*/
+
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1 and u.enabled = 1")
     List<Usuario> obtenerListaPacientes2();
 
-    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1")
+    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1 and u.enabled = 1")
     List<Usuario> obtenerlistaDoctores();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado, modoregistro, enabled) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1,'invitado',1)")
+    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
+    void editarPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede );
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, especialidades_id_especialidad, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado,enabled) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,1,1,1)")
+    void crearDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6 and u.sedes_idsedes = ?7")
     void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede );
 
-    @Transactional
-    @Modifying
-    @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede );
+
+    /*FIN QUERYS USADOOS POR ADMINISTRADOR*/
+    /* ************************************ */
+    /* ************************************ */
+
 
     @Transactional
     @Modifying
@@ -44,18 +62,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5")
     Usuario obtenerSuperAdmin();
 
-    @Transactional
-    @Modifying
-    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, especialidades_id_especialidad, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,1,1)")
-    void crearDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
-
-    @Transactional
-    @Modifying
-    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1)")
-    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
 
 
     Usuario findByid(String id);
+
     @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1")
     List<Usuario> obtenerlistaDoctores(Integer idSede);
 
@@ -70,15 +80,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 2", nativeQuery = true)
     List<Usuario> listarPacientes();
-
-    @Query("select u from Usuario u where u.nombre = ?1")
-    List<Usuario> findByNombre(String nombre);
     @Modifying
     @Transactional
     @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
     void actualizarSede(int id_nuevo);
-
-
+    @Modifying
+    @Transactional
     @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")
     void editarAdministrativo(String email, String nombre, String apellido, int sede, String telefono,  int estado, int especialidad, String dni);
     @Transactional
@@ -96,15 +103,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `roles_idroles`) " +
-            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, 4);",nativeQuery = true)
-    void crearAdmSede(String dni, String password,String email,String nombre, String apellido,int edad, String telefono, String sexo, String direccion, int sede);
+    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `roles_idroles`) " +
+            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 4);",nativeQuery = true)
+    void crearAdmSede(String dni, String password,String email,String nombre, String apellido,int edad, String telefono, String sexo, String direccion, int sede, int estado);
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `roles_idroles`) " +
-            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, 3);",nativeQuery = true)
-    void crearAdmT(String dni, String password,String email,String nombre,String apellido, int edad, String telefono, String sexo, String direccion, int sede);
+    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `especialidades_id_especialidad`,`roles_idroles`) " +
+            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, 3);",nativeQuery = true)
+    void crearAdmT(String dni, String password,String email,String nombre,String apellido, int edad, String telefono, String sexo, String direccion, int sede, int estado, int especialidad);
 
 
     @Transactional
@@ -114,12 +121,17 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where roles_idroles = 5",nativeQuery = true)
-    void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni);
+    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where dni=?6",nativeQuery = true)
+    void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni, String dnipast);
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value="UPDATE usuario SET `contrasena` = ?1 WHERE (`dni` = ?2)")
     void cambiarContra(String pass, String dni);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update usuario set 'contrasena' =?1 where dni=?2")
+    void cambiarPasswSA(String password, String dni);
 
     @Query(value="select contrasena from usuario where dni=\"34185296\"",nativeQuery = true)
             String passAdmv();

@@ -4,9 +4,11 @@ import com.example.medicaltec.Entity.*;
 
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -72,12 +74,28 @@ public class AdministrativoController {
     }
     //save changes
     @PostMapping(value="/editForm")
-    public String editarForm(@ModelAttribute("FormInvitacion") FormInvitacion formInvitacion,Model model, RedirectAttributes attr){
+    public String editarForm(@ModelAttribute("FormInvitacion") @Valid FormInvitacion formInvitacion, BindingResult bindingResult, Model model, RedirectAttributes attr){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("usuario",formInvitacion);
+            model.addAttribute("listaseguros",seguroRepository.findAll());
+            model.addAttribute("listasedes",sedeRepository.findAll());
 
 
 
-        formInvitationRepository.save(formInvitacion);
-        return"redirect:/administrativo/dashboard";
+
+            return "administrativo/formListos";
+        }else{
+            attr.addFlashAttribute("msg","Formulario editado correctamente");
+            formInvitationRepository.save(formInvitacion);
+            return"redirect:/administrativo/dashboard";
+        }
+
+
+    }
+    @GetMapping("/form1")
+    public String preview(){
+        return "administrativo/formpre";
     }
 
 

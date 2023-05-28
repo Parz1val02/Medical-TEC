@@ -1,0 +1,48 @@
+<!--<div>
+<script th:inline="javascript">
+  $(document).ready(function () {
+
+    $('#zona').on('change', function () {
+      set_map($(this).val());
+    });
+    var map = L.map('map')
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    ;
+    var marker;
+
+    function set_map(value){
+      /*<![CDATA[*/
+      var listaSedes = /*/*[[${listaSedes}]]*/*/ [];
+
+      // Iterar sobre la lista de zonas
+      listaSedes.forEach(function(zona) {
+        if(value === /*/*[[${zona.id}]]*/*/ ) {
+          var latitud = /*/*[[${zona.latitud}]]*/*/;
+          var longitud = /*/*[[${zona.longitud}]]*/*/;
+          var nombre = /*/*[[${zona.nombre}]]*/*/;
+        }
+        // Realizar otras operaciones con los atributos de la zona
+        console.log("Latitud: " + latitud + ", Longitud: " + longitud + ", Nombre: " + nombre);
+      });
+
+      map.setView([latitud, longitud], 30);
+
+      if (marker) {
+        marker.setLatLng([latitud, longitud])
+                .bindPopup(nombre)
+                .openPopup();
+      } else {
+        marker = L.marker([latitud, longitud]).addTo(map)
+                .bindPopup(nombre)
+                .openPopup();
+      }
+    }
+    /*]]>*/
+    set_map($('#zona').val())
+  });
+</script>
+
+</div> -->

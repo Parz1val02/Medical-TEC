@@ -102,4 +102,7 @@ public class Usuario implements Serializable {
   @Column(name = "fotocontenttype")
   private String fotocontenttype;
 
+
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

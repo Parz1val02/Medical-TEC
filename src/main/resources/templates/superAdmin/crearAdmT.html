@@ -95,6 +95,12 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="sede">Especialidad</label>
+              <select class="form-control" name="especialidad" id="especialidad">
+                <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"></option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="sexo">Sexo</label>
               <select class="form-control" name="sexo" id="sexo">
                 <option  th:value="${'M'}" th:text="'Masculino'"></option>

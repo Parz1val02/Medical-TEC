@@ -59,44 +59,30 @@
 
         <div class="card-body d-flex justify-content-center"  style="background: #FFFFFF ">
 
-          <form style=" width: 35% " method="POST" action=""> <!--falta el action con th-->
+          <form style="width: 35%" method="post" th:action="@{/superAdmin/NewPassword}">
+            <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-success" role="alert"></div>
+            <div th:if="${vac != null}" th:text="${vac}" class="alert alert-danger" role="alert"></div>
             <div class="mb-3">
+              <div th:if="${msg0 != null}" th:text="${msg0}" class="alert alert-danger" role="alert"></div>
               <label for="actual" class="form-label">Contraseña actual</label>
-              <input type="password" class="form-control" id="actual">
+              <input type="password" class="form-control" id="actual" name="actual">
             </div>
             <div class="mb-3">
+              <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
+              <div th:if="${req != null}" th:text="${req}" class="alert alert-danger" role="alert"></div>
               <label for="nueva1" class="form-label">Contraseña nueva</label>
-              <input type="password" class="form-control" id="nueva1">
+              <input type="password" class="form-control" id="nueva1" name="nueva1">
             </div>
             <div class="mb-3">
+              <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger" role="alert"></div>
               <label for="nueva2" class="form-label">Confirmar contraseña nueva</label>
-              <input type="password" class="form-control" id="nueva2">
+              <input type="password" class="form-control" id="nueva2" name="nueva2">
             </div>
 
             <a class="btn btn-light" th:href="@{/superAdmin/dashboard}">Cancelar</a>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Cambiar contraseña</button>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel3">Cambio de contraseña</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    ¿Está seguro de querer cambiar su contraseña?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a th:href="@{/superAdmin/editarPerfil}" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar formulario</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
           </form>
-
         </div>
-
       </div>
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>

@@ -26,48 +26,30 @@
 
       <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
         <div class="card-body" style="background: #FFFFFF">
-          <div class="row justify-content-between align-items-center">
-            <div class="col-md-11">
-              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Forms
-              </h1>
-            </div>
-            <div class="col-md-11">
-              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Maneja la tabla de formularios
-              </h5>
-            </div>
+          <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+            Formularios
+          </h1>
+          <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+            Revisa los formularios registrados por los administradores y administrativos de nuestra clínica.
+          </h5>
+          <div style="display: flex; justify-content: right">
+            <a th:href="@{/superAdmin/formulario}" class="btn btn-secondary" style="text-align: center;background: #0032aa;
+          border: 5px solid #0032aa; padding: 1px">Crear formulario</a>
           </div>
-        </div>
-      </div>
-      <br>
-      <!--
-      <span>Seleccione la sede </span>
-      <select class="form-select" aria-label="Default select example">
-        <option selected value>------</option>
-        <option value="1">San Miguel</option>
-        <option value="2">Jesús María</option>
-        <option value="3">Lince</option>
-      </select>
-      <br></br>
--->
-      <div class="card mb-3">
-        <div class="card-body border-top">
-          <a th:href="@{/superAdmin/formulario}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
-          border-radius: 15px; border-color: #FFFFFF">Crear formulario</a>
+
           <table class="table table-striped" id="userList">
             <thead class="bg-200">
             <tr>
-              <th class="sort align-middle" style="width: 30%">N° Formulario</th>
-              <th class="sort align-middle" style="width: 20%">Nombre</th>
-              <th class="sort align-middle" style="width: 10%">Borrar</th>
+              <th class="sort align-middle" style="width: 10%">N° Formulario</th>
+              <th class="sort align-middle" style="width: 60%; text-align: center;">Nombre</th>
+              <th class="sort align-middle" style="width: 30%; text-align: center;">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
             <tr th:each="formulario, info : ${formularioList}">
               <td th:text="${formulario.id}"></td>
               <td th:text="${formulario.nombrecompleto}"></td>
-              <td class="align-middle">
+              <td class="align-middle" style="text-align: center;">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
@@ -97,6 +79,23 @@
             </tr>
             </tbody>
           </table>
+
+        </div>
+      </div>
+      <br>
+      <!--
+      <span>Seleccione la sede </span>
+      <select class="form-select" aria-label="Default select example">
+        <option selected value>------</option>
+        <option value="1">San Miguel</option>
+        <option value="2">Jesús María</option>
+        <option value="3">Lince</option>
+      </select>
+      <br></br>
+-->
+      <div class="card mb-3">
+        <div class="card-body border-top">
+
         </div>
       </div>
 

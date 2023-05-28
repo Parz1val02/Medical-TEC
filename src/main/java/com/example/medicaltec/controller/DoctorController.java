@@ -60,16 +60,6 @@ public class DoctorController {
             listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
         }
         model.addAttribute("listaAlergias",listaAlergias);
-
-        /*
-        List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-        List<Informe> informeList = new ArrayList<>();
-        for (Cita cita : listaCitasPorUsuario) {
-            informeList.add(informeRepository.listarInformePorCita(cita.getId()));
-        }
-        model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
-        model.addAttribute("listaInformes",informeList);
-        */
         List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
 
@@ -115,14 +105,40 @@ public class DoctorController {
     }
 
     @PostMapping("/cambiarSede")
-    public String cambiarSede(Model model, RedirectAttributes attr,
+    public String cambiarSede(RedirectAttributes attr,
                               @RequestParam("id") int id){
         usuarioRepository.actualizarSede(id);
         attr.addFlashAttribute("msg", "Se actualizó la sede del usuario");
         return "redirect:/doctor/config";
     }
 
+    @PostMapping("/cambiarContrasena")
+    public String cambiarContrasena(RedirectAttributes attr,
+                                    @RequestParam("contrasena") String password,
+                                    @RequestParam("contrasena_repetida") String password_repetida){
 
+        if(password.equals(password_repetida)){
+            attr.addFlashAttribute("contrasena_correcta", "Se actualizó la contraseña del usuario");
+        }else {
+            attr.addFlashAttribute("contrasenas_diferentes", "Ambas contraseñas deben ser iguales");
+        }
 
+        return "redirect:/doctor/config";
+    }
+
+    @PostMapping("/enviarCuest")
+    public String enviarCuest(RedirectAttributes attr,
+                              @RequestParam("pacientecorreo") String correo,
+                              @RequestParam("mensaje") String mensaje){
+
+        Usuario usuario = usuarioRepository.findByEmail(correo);
+        if(usuario.getId()!=null){
+            attr.addFlashAttribute("cuestionario_correcto", "Se envió el cuestionario.");
+        }else {
+            attr.addFlashAttribute("no_existe_correo", "No existe el correo indicado");
+        }
+
+        return "redirect:/doctor/cuestionarios";
+    }
 
 }

@@ -3,6 +3,7 @@ import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +70,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard/Doctor"})
-    public String dashboardDoctor(Model model){
+    public String dashboardDoctor(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -95,7 +97,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard/Paciente"})
-    public String dashboardPaciente(Model model){
+    public String dashboardPaciente(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -121,7 +124,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard/AdmT"})
-    public String dashboardAdmT(Model model){
+    public String dashboardAdmT(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -147,7 +151,8 @@ public class SuperController {
     }
 
     @GetMapping(value = {"/dashboard/Adm"})
-    public String dashboardAdm(Model model){
+    public String dashboardAdm(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -172,7 +177,8 @@ public class SuperController {
         return "superAdmin/dashboardAdmSede";
     }
     @GetMapping("/editarAdmS")
-    public String editarAdministrador(Model model, @ModelAttribute("admS") Usuario admS, @RequestParam("id") String dni, RedirectAttributes attr) {
+    public String editarAdministrador(Model model, @ModelAttribute("admS") Usuario admS, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
         if (optionalUsuario.isPresent()) {
             admS = optionalUsuario.get();
@@ -181,12 +187,13 @@ public class SuperController {
             model.addAttribute("estadosList", estadoRepository.findAll());
             return "superAdmin/editarAdmSede";
         } else {
-            attr.addFlashAttribute("msgDanger","El administrador a editar no existe");
-            return "redirect:/superAdmin/dashboardAdmSede";
+            attr.addFlashAttribute("administrador_noexiste","El administrador a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, BindingResult bindingResult, RedirectAttributes attr, Model model) {
+    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
@@ -194,8 +201,8 @@ public class SuperController {
         }
         else{
             usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
-            attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
-            return "redirect:/superAdmin/dashboard/Adm";
+            attr.addFlashAttribute("administrador_actualizado", "Administrador actualizado exitosamente");
+            return "redirect:/superAdmin/dashboard";
         }
         /*
         int a = 0;
@@ -230,7 +237,8 @@ public class SuperController {
 
     }
     @GetMapping("/editarAdmT")
-    public String editarAdministrativo(Model model, @ModelAttribute("admT") Usuario admT, @RequestParam("id") String dni, RedirectAttributes attr) {
+    public String editarAdministrativo(Model model, @ModelAttribute("admT") Usuario admT, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
         if (optionalUsuario.isPresent()) {
             admT = optionalUsuario.get();
@@ -240,12 +248,13 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarAdmT";
         } else {
-            attr.addFlashAttribute("msgDanger","El administrativo a editar no existe");
-            return "redirect:/superAdmin/dashboardAdmT";
+            attr.addFlashAttribute("administrativo_noexiste","El administrativo a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarAdmT")
-    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT,BindingResult bindingResult, Model model, RedirectAttributes attr) {
+    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT,BindingResult bindingResult, Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             model.addAttribute("sedesList", sedeRepository.findAll());
@@ -253,13 +262,14 @@ public class SuperController {
             return "superAdmin/editarAdmT";
         }
         else {
-            attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
+            attr.addFlashAttribute("administrativo_actualizado", "Administrativo actualizado exitosamente");
             usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
-            return "redirect:/superAdmin/dashboard/AdmT";
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @GetMapping("/editarDoctor")
-    public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr) {
+    public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
         if (optionalUsuario.isPresent()) {
             doctor = optionalUsuario.get();
@@ -269,12 +279,13 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarDoctor";
         } else {
-            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
-            return "redirect:/superAdmin/dashboardDoctor";
+            attr.addFlashAttribute("doctor_noexiste","El doctor a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarDoctor")
-    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, BindingResult bindingResult, Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
@@ -282,14 +293,15 @@ public class SuperController {
             return "superAdmin/editarDoctor";
         }
         else {
-            attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
+            attr.addFlashAttribute("doctor_actualizado", "Doctor actualizado exitosamente");
             usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
-            return "redirect:/superAdmin/dashboard/Doctor";
+            return "redirect:/superAdmin/dashboard";
         }
     }
 
     @GetMapping("/editarPaciente")
-    public String editarPaciente(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr) {
+    public String editarPaciente(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
         if (optionalUsuario.isPresent()) {
             paciente = optionalUsuario.get();
@@ -299,21 +311,22 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarPaciente";
         } else {
-            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
-            return "redirect:/superAdmin/dashboardPaciente";
+            attr.addFlashAttribute("paciente_noexiste","El paciente a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarPaciente")
-    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, BindingResult bindingResult, Model model, RedirectAttributes attr) {
+    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, BindingResult bindingResult, Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarPaciente";
         }
-        attr.addFlashAttribute("msg", "Paciente actualizado exitosamente");
+        attr.addFlashAttribute("paciente_actualizado", "Paciente actualizado exitosamente");
         usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
-        return "redirect:/superAdmin/dashboard/Paciente";
+        return "redirect:/superAdmin/dashboard";
     }
    /* @PostMapping("/editarPacientes")
     public String editarPaciente(
@@ -388,14 +401,16 @@ public class SuperController {
     }
     */
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
-    public String forms(Model model){
+    public String forms(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
         model.addAttribute("formularioList", listaFormularios);
         return "superAdmin/forms";
     }
 
     @RequestMapping(value = {"/edit/CAntecedentes"},method = RequestMethod.POST)
-    public String cuestionarioAntecedente(Model model, @RequestParam("num") int num){
+    public String cuestionarioAntecedente(Model model, @RequestParam("num") int num, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         //List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
         //model.addAttribute("formularioList", listaFormularios);
         String vista = "superAdmin/cuestionario" + num; // Concatenar el valor de num con el nombre de la vista
@@ -403,7 +418,8 @@ public class SuperController {
     }
 
     @RequestMapping(value = {"/Crear/AdmSede"},method = RequestMethod.GET)
-    public String crearAdmSEDE(Model model){
+    public String crearAdmSEDE(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -423,7 +439,8 @@ public class SuperController {
     }
 
     @RequestMapping(value = {"/Crear/AdmT"},method = RequestMethod.GET)
-    public String crearAdmT(Model model){
+    public String crearAdmT(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> lista = usuarioRepository.findAll();
         model.addAttribute("usuarioList", lista);
         List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
@@ -446,7 +463,8 @@ public class SuperController {
                                        @RequestParam("email") String email,
                                         @RequestParam("telefono") String telefono,
                                        @RequestParam("sede") int sede,
-                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr) {
+                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
        usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
@@ -457,7 +475,8 @@ public class SuperController {
                                  @RequestParam("correo") String correo, @RequestParam("password") String password,
                                  @RequestParam(value = "edad",required = false) Integer edad, @RequestParam("telefono") String telefono,
                                  @RequestParam("address") String address, @RequestParam("sede") int sede,
-                                 @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
+                                 @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int a = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -511,7 +530,8 @@ public class SuperController {
         }
 
         if(a == 0){
-            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede);
+            int estado=1;
+            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede, estado);
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard/Adm";
         }else {
@@ -525,8 +545,9 @@ public class SuperController {
                                        @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                        @RequestParam("correo") String correo, @RequestParam("password") String password,
                                        @RequestParam(value = "edad", required = false) Integer edad, @RequestParam("telefono") String telefono,
-                                       @RequestParam("address") String address, @RequestParam("sede") int sede,
-                                        @RequestParam("dni") String dni, @RequestParam("sexo") String sexo) {
+                                       @RequestParam("address") String address, @RequestParam("sede") int sede, @RequestParam("especialidad") int especialidad,
+                                       @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int b = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -579,7 +600,8 @@ public class SuperController {
             }
         }
         if(b == 0){
-            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede);
+            int estado=1;
+            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede, estado, especialidad);
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard/AdmT";
         }else {
@@ -591,7 +613,8 @@ public class SuperController {
     @GetMapping("/forms/delete")
     public String borrarFormulario(Model model,
                                    @RequestParam("id") int id,
-                                   RedirectAttributes attr) {
+                                   RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
 
         Optional<FormulariosRegistro> optionalFormulariosRegistro = formulariosRegistroRepository.findById(id);
 
@@ -602,7 +625,8 @@ public class SuperController {
         return "redirect:/superAdmin/forms";
     }
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
-    public String informes(Model model){
+    public String informes(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> listaCitas = citaRepository.findAll();
         model.addAttribute("citasList", listaCitas);
         return "superAdmin/informes";
@@ -610,7 +634,8 @@ public class SuperController {
     @GetMapping("/informes/delete")
     public String borrarInforme(Model model,
                                           @RequestParam("id") int id, @RequestParam("active") boolean active,
-                                          RedirectAttributes attr) {
+                                          RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
 
         Optional<Informe> optionalInforme = informeRepository.findById(id);
 
@@ -621,32 +646,108 @@ public class SuperController {
         return "redirect:/superAdmin/informes";
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
-    public String confSup(Model model, RedirectAttributes attr){
+    public String confSup(Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Usuario user = usuarioRepository.obtenerSuperAdmin();
-        model.addAttribute("superadmin",user);
+        model.addAttribute("superadmin",superadmin);
         return "superAdmin/confSup";
     }
     @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)
-    public String superPass(Model model){
+    public String superPass(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Usuario user = usuarioRepository.obtenerSuperAdmin();
-        model.addAttribute("usuario",user);
+        model.addAttribute("usuario",superadmin);
         return "superAdmin/superPass";
     }
+
+    public boolean verificarRequisitos(String password) {
+        // Verificar al menos un número
+        if (!password.matches(".*\\d.*")) {
+            return false;
+        }
+
+        // Verificar al menos un carácter especial
+        if (!password.matches(".*[!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?].*")) {
+            return false;
+        }
+
+        // Verificar al menos una mayúscula
+        if (!password.matches(".*[A-Z].*")) {
+            return false;
+        }
+
+        // Si la contraseña cumple con todos los requisitos, retornar true
+        return true;
+    }
+
+
+
+    @PostMapping(value = "/NewPassword")
+    public String newPassword(Model model, RedirectAttributes attr, @RequestParam("actual") String actual,
+                              @RequestParam("nueva1") String nueva1, @RequestParam("nueva2") String nueva2,
+                              HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String pastpassw = superadmin.getContrasena();
+        boolean requi = verificarRequisitos(nueva1);
+        if (actual.equals("") || nueva1.equals("") || nueva2.equals("")){
+            attr.addFlashAttribute("vac", "Los campos no pueden estar vacios");
+            return "redirect:/superAdmin/superPass";
+        }else {
+            if (requi){
+                BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
+                System.out.println(superadmin.getContrasena());
+                System.out.println(actual);
+                actual =  enc.encode(actual);
+                System.out.println(actual);
+                nueva1 = enc.encode(nueva1);
+                nueva2 = enc.encode(nueva2);
+                if (pastpassw.equals(actual)){
+                    if(pastpassw.equals(nueva1)){
+                        attr.addFlashAttribute("msg2","La nueva contraseña debe ser diferente a la actual");
+                        return "redirect:/superAdmin/superPass";
+                    }else {
+                        if(nueva2.equals(nueva1)){
+                            attr.addFlashAttribute("msg1","Repita su nueva contraseña correctamente");
+                            return "redirect:/superAdmin/superPass";
+                        }else {
+                            attr.addFlashAttribute("msg3","Contraseña cambiada con éxito");
+                            usuarioRepository.cambiarPasswSA(nueva1,superadmin.getId());
+                            return "redirect:/superAdmin/superPass";
+                        }
+                    }
+
+                }else {
+                    attr.addFlashAttribute("msg0","Ingrese correctamente la contraseña actual");
+                    return "redirect:/superAdmin/superPass";
+                }
+            }else {
+                attr.addFlashAttribute("req", "La nueva contraseña no cumple con las restricciones estipuladas");
+                return "redirect:/superAdmin/superPass";
+            }
+        }
+    }
+
+
+
     @RequestMapping(value = {"/formulario"},method = RequestMethod.GET)
-    public String formulario(){
+    public String formulario( HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "superAdmin/formulario";
     }
 
     @RequestMapping(value = {"/reporte"},method = RequestMethod.GET)
-    public String reporte(){
+    public String reporte( HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "superAdmin/reporte";
     }
     @RequestMapping(value = {"/cuestionario"},method = RequestMethod.GET)
-    public String cuestionario(){
+    public String cuestionario( HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "cuestionario1";
     }
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
-    public String cuestionarios(Model model){
+    public String cuestionarios(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cuestionario> listaCuestionarios = cuestionarioRepository.findAll();
         model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
@@ -654,7 +755,8 @@ public class SuperController {
     @GetMapping("/cuestionarios/delete")
     public String borrarCuestionarioLleno(Model model,
                                           @RequestParam("id") int id, @RequestParam("active") boolean active,
-                                          RedirectAttributes attr) {
+                                          RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
 
         Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
 
@@ -666,71 +768,119 @@ public class SuperController {
     }
 
     @RequestMapping(value = {"/editarPerfil"},method = RequestMethod.GET)
-    public String editarPerfil(Model model){
+    public String editarPerfil(Model model, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Usuario user = usuarioRepository.obtenerSuperAdmin();
-        model.addAttribute("superadmin",user);
+        model.addAttribute("superadmin",superadmin);
         return "superAdmin/editarPerfil";
     }
+
+    public boolean esNumeroEntero(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+
 
     @PostMapping(value = "/editSave/Perfil")
     public String editSuperAdmin(Model model, RedirectAttributes attr,
                               @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                               @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
-                              @RequestParam("dni") String dni) {
-        Usuario user = usuarioRepository.obtenerSuperAdmin();
+                              @RequestParam("dni") String dni, HttpServletRequest httpServletRequest){
+    /*public String editSuperAdmin(@ModelAttribute("sA") @Valid Usuario sA,BindingResult bindingResult,
+                                 Model model, RedirectAttributes attr,
+                                 HttpServletRequest httpServletRequest){
+        */Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario user = usuarioRepository.obtenerSuperAdmin();/*
+        if(bindingResult.hasErrors()){
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            return "redirect:/superAdmin/confSup";
+        }
+        else {
+            usuarioRepository.editSuperAdmin(sA.getNombre(),sA.getApellido(),sA.getEmail(),sA.getTelefono(),sA.getId(),superadmin.getId());
+            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
+            return "redirect:/superAdmin/confSup";
+        }
+        }*/
         int c = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
             c = c+1;
-            nombre = user.getNombre();
+            nombre = superadmin.getNombre();
         }
         if(apellido.isEmpty()){
             attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
             c = c+1;
-            apellido = user.getApellido();
+            apellido = superadmin.getApellido();
         }
         if (correo.isEmpty()){
             attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
             c = c+1;
-            correo = user.getEmail();
+            correo = superadmin.getEmail();
         }
         if (telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             c = c+1;
-            telefono = user.getTelefono();
+            telefono = superadmin.getTelefono();
         }
-        if (telefono.length()!=9){
-            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
-            c = c+1;
-            telefono = user.getTelefono();
+        if (esNumeroEntero(telefono)){
+            if (telefono.length()!=9){
+                attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+                c = c+1;
+                telefono = superadmin.getTelefono();
+            }
+        }else {
+            c=c+1;
+            attr.addFlashAttribute("telefonomsg","El número de teléfono debe ser un número entero");
+            telefono = superadmin.getTelefono();
         }
         if(dni.isEmpty()){
             attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
             c = c+1;
-            dni = user.getId();
-        } else if (dni.length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
-            c = c+1;
-            dni = user.getId();
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(dni);
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+            dni = superadmin.getId();
+        } else if (esNumeroEntero(dni)) {
+            if (dni.length()!=8) {
+                attr.addFlashAttribute("dnimsg","El DNI debe tener una longitud de 8 dígitos");
                 c = c+1;
-                dni = user.getId();
+                dni = superadmin.getId();
+            } else {
+                Optional<Usuario> u = usuarioRepository.findById(dni);
+                if(u.isPresent()){
+                    attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                    c = c+1;
+                    dni = superadmin.getId();
+                }
             }
+        } else {
+            c=c+1;
+            attr.addFlashAttribute("dnimsg","El número de DNI debe ser un número entero");
+            dni = superadmin.getId();
         }
         if(c == 0){
-            usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni);
-            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
+            usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
+            attr.addFlashAttribute("msg","Usuario(SuperAdmin) editado exitosamente; por favor, vuelva a iniciar sesión para ver los cambios");
             return "redirect:/superAdmin/confSup";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/confSup";
+            return "redirect:/superAdmin/editarPerfil";
         }
 
 
     }
 
-
+    @PostMapping("/editCuest")
+    public String editCuest(@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("telefono") String telefono,
+                                       @RequestParam("sede") int sede,
+                                       @RequestParam("id") String dni, @RequestParam("sede") int estado, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
+        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
+        return "redirect:/superAdmin/dashboard";
+    }
 }
