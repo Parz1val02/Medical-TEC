@@ -27,128 +27,112 @@
                 </div>
             </div>
             <br>
-
             <div class="row">
-
                 <div class="col-md-12">
-
                     <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                         <div class="card-body" style="background: #FFFFFF">
-                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px; text-align: center; text-decoration: underline">
                                 Datos del paciente
                             </h3>
+                            <br>
                             <form method="POST" th:action="@{'/administrativo/editForm'}" th:object="${usuario}">
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-
-                                <input th:value="${usuario.getId()}" name="id" type="hidden"/>
-                                <input  class="form-control"  th:field="*{nombres}" type="hidden"/>
-                                <input   class="form-control"  th:field="*{apellidos}" type="hidden"/>
-                                <input   class="form-control"  th:field="*{dni}" type="hidden"/>
-                                <input   class="form-control"  th:field="*{edad}"  type="hidden"/>
-
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Nombres: </p>
-
-                                    <input  type="text" class="form-control"  th:field="*{nombres}"  disabled>
-
-
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <input th:value="${usuario.getId()}" name="id" type="hidden"/>
+                                    <input  class="form-control"  th:field="*{nombres}" type="hidden"/>
+                                    <input   class="form-control"  th:field="*{apellidos}" type="hidden"/>
+                                    <input   class="form-control"  th:field="*{dni}" type="hidden"/>
+                                    <input   class="form-control"  th:field="*{edad}"  type="hidden"/>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Nombres: </p>
+                                        <input type="text" class="form-control" th:field="*{nombres}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Apellidos: </p>
+                                        <input type="text" class="form-control"  th:field="*{apellidos}" style="color: #9da9bb;" disabled>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Apellidos: </p>
-                                    <input  type="text" class="form-control"  th:field="*{apellidos}"  disabled>
-
-                                </div>
-                            </div>
-
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Sede: </p>
-                                    <select class="form-select" th:field="*{idSede}">
-                                        <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
-                                                th:text="${sede.nombre}"
-                                                th:selected="${usuario.idSede==sede.id}"></option>
-                                    </select>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                    <input  type="text" class="form-control"  th:field="*{dni}"  disabled>
-
-                                </div>
-                            </div>
-                            <div style="height: 10px"></div>
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Edad: </p>
-                                        <input  type="text" class="form-control"  th:field="*{edad}"  disabled>
+                                        <input type="text" class="form-control"  th:field="*{edad}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">DNI: </p>
+                                        <input type="text" class="form-control"  th:field="*{dni}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sede: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <select class="form-select" th:field="*{idSede}" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
+                                                    th:text="${sede.nombre}"
+                                                    th:selected="${usuario.idSede==sede.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sexo: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <select  th:field="*{sexo}" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option value="M" th:selected="${usuario.getSexo().equalsIgnoreCase('M')}">Masculino</option>
+                                            <option value="F" th:selected="${usuario.getSexo().equalsIgnoreCase('F')}">Femenino</option>
+                                        </select>
 
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Domicilio: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <input  type="text" class="form-control"  th:field="*{domicilio}"  >
+                                        <div class ="invalid-feedback" th:if="${#fields.hasErrors('domicilio')}" th:errors="*{domicilio}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Correo: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <input  type="text" class="form-control"  th:field="*{correo}"  >
+                                        <div class ="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Seguro: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <select class="form-select" th:field="*{idSeguro}" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="seguro : ${listaseguros}"
+                                            th:value="${seguro.id}"
+                                            th:text="${seguro.nombreSeguro}"
+                                            th:selected="${usuario.idSeguro==seguro.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px" for="celular">Telefono celular: <span style="color: #3d8af7; font-size: small">(editable)</span> </p>
+                                        <input  type="text" class="form-control"  th:field="*{celular}"  >
+                                        <div class ="invalid-feedback" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></div>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{medicamentos}"></textarea>
+                                        <div class ="invalid-feedback" th:if="${#fields.hasErrors('medicamentos')}" th:errors="*{medicamentos}"></div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Alergias: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{alergias}"></textarea>
+                                        <div class ="invalid-feedback" th:if="${#fields.hasErrors('alergias')}" th:errors="*{alergias}"></div>
                                     </div>
 
 
                                 </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Sexo: </p>
-                                    <select  th:field="*{sexo}">
-                                        <option value="M" th:selected="${usuario.getSexo().equalsIgnoreCase('M')}">Masculino</option>
-                                        <option value="F" th:selected="${usuario.getSexo().equalsIgnoreCase('F')}">Femenino</option>
-                                    </select>
-
+                                <div style="height: 20px"></div>
+                                <div style="text-align: center">
+                                    <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Guardar Cambios</button>
+                                    <button type="button" class="btn btn-secondary" th:href="${'/administrativo/dashboard'}" style="margin-left: 15px;
+                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</button>
                                 </div>
-                            </div>
-
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Domicilio: </p>
-                                    <input  type="text" class="form-control"  th:field="*{domicilio}"  >
-                                    <div class ="invalid-feedback" th:if="${#fields.hasErrors('domicilio')}" th:errors="*{domicilio}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Correo: </p>
-                                    <input  type="text" class="form-control"  th:field="*{correo}"  >
-                                    <div class ="invalid-feedback" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Seguro: </p>
-
-
-                                    <select class="form-select" th:field="*{idSeguro}">
-                                        <option th:each="seguro : ${listaseguros}"
-                                        th:value="${seguro.id}"
-                                        th:text="${seguro.nombreSeguro}"
-                                        th:selected="${usuario.idSeguro==seguro.id}"></option>
-
-                                    </select>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px" for="celular">Telefono celular: </p>
-                                    <input  type="text" class="form-control"  th:field="*{celular}"  >
-                                    <div class ="invalid-feedback" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></div>
-                                </div>
-                            </div>
-
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
-                                    <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{medicamentos}"></textarea>
-                                    <div class ="invalid-feedback" th:if="${#fields.hasErrors('medicamentos')}" th:errors="*{medicamentos}"></div>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Alergias: </p>
-                                    <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{alergias}"></textarea>
-                                    <div class ="invalid-feedback" th:if="${#fields.hasErrors('alergias')}" th:errors="*{alergias}"></div>
-                                </div>
-
-
-                            </div>
-                            <button type="submit" class="btn btn-outline-twitter" >Guardar Cambios</button>
-                            <a type="button" class="btn btn-danger" th:href="${'/administrativo/dashboard'}">Cancelar</a>
                             </form>
                         </div>
                     </div>
