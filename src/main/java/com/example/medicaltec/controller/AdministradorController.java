@@ -1,11 +1,10 @@
 package com.example.medicaltec.controller;
+import com.example.medicaltec.Entity.Alergia;
+import com.example.medicaltec.Entity.Cita;
 import com.example.medicaltec.Entity.Especialidade;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
-import com.example.medicaltec.repository.CitaRepository;
-import com.example.medicaltec.repository.EspecialidadeRepository;
-import com.example.medicaltec.repository.ReporteRepository;
-import com.example.medicaltec.repository.UsuarioRepository;
+import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.jmx.export.annotation.ManagedOperation;
@@ -16,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,11 +35,23 @@ public class AdministradorController {
     final UsuarioRepository usuarioRepository;
     final ReporteRepository reporteRepository;
     final CitaRepository citaRepository;
-    public AdministradorController (CitaRepository citaRepository,UsuarioRepository usuarioRepository, ReporteRepository reporteRepository,EspecialidadeRepository especialidadeRepository) {
+
+    final AlergiaRepository alergiaRepository;
+    final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
+    public AdministradorController (
+            CitaRepository citaRepository,
+            UsuarioRepository usuarioRepository,
+            ReporteRepository reporteRepository,
+            EspecialidadeRepository especialidadeRepository,
+            AlergiaRepository alergiaRepository,
+            HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2
+            ) {
         this.usuarioRepository = usuarioRepository;
         this.reporteRepository = reporteRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.citaRepository = citaRepository;
+        this.alergiaRepository = alergiaRepository;
+        this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
     }
 
 
@@ -503,6 +515,34 @@ public class AdministradorController {
             usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasena );
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
+        }
+
+    }
+
+    @GetMapping("/historialPaciente")
+    public String verHistorial(Model model, @RequestParam("id") String id){
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        Usuario usuario = optionalUsuario.get();
+        model.addAttribute("paciente",usuario);
+
+
+        if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
+            List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+            ArrayList<Alergia> listaAlergias = new ArrayList<>();
+            for (Integer idAlergia : idAlergias) {
+                listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+            }
+            model.addAttribute("listaAlergias",listaAlergias);
+            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+            return "administrador/historial";
+
+        } else {
+            model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
+            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+            return "administrador/historial";
         }
 
     }

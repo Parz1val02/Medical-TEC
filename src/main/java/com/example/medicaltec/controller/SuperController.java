@@ -189,8 +189,8 @@ public class SuperController {
             model.addAttribute("estadosList", estadoRepository.findAll());
             return "superAdmin/editarAdmSede";
         } else {
-            attr.addFlashAttribute("msgDanger","El administrador a editar no existe");
-            return "redirect:/superAdmin/dashboardAdmSede";
+            attr.addFlashAttribute("administrador_noexiste","El administrador a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarAdmS")
@@ -203,8 +203,8 @@ public class SuperController {
         }
         else{
             usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
-            attr.addFlashAttribute("msg", "Administrador actualizado exitosamente");
-            return "redirect:/superAdmin/dashboard/Adm";
+            attr.addFlashAttribute("administrador_actualizado", "Administrador actualizado exitosamente");
+            return "redirect:/superAdmin/dashboard";
         }
         /*
         int a = 0;
@@ -250,8 +250,8 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarAdmT";
         } else {
-            attr.addFlashAttribute("msgDanger","El administrativo a editar no existe");
-            return "redirect:/superAdmin/dashboardAdmT";
+            attr.addFlashAttribute("administrativo_noexiste","El administrativo a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarAdmT")
@@ -264,9 +264,9 @@ public class SuperController {
             return "superAdmin/editarAdmT";
         }
         else {
-            attr.addFlashAttribute("msg", "Administrativo actualizado exitosamente");
+            attr.addFlashAttribute("administrativo_actualizado", "Administrativo actualizado exitosamente");
             usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
-            return "redirect:/superAdmin/dashboard/AdmT";
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @GetMapping("/editarDoctor")
@@ -281,8 +281,8 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarDoctor";
         } else {
-            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
-            return "redirect:/superAdmin/dashboardDoctor";
+            attr.addFlashAttribute("doctor_noexiste","El doctor a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarDoctor")
@@ -295,9 +295,9 @@ public class SuperController {
             return "superAdmin/editarDoctor";
         }
         else {
-            attr.addFlashAttribute("msg", "Doctor actualizado exitosamente");
+            attr.addFlashAttribute("doctor_actualizado", "Doctor actualizado exitosamente");
             usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
-            return "redirect:/superAdmin/dashboard/Doctor";
+            return "redirect:/superAdmin/dashboard";
         }
     }
 
@@ -313,8 +313,8 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarPaciente";
         } else {
-            attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
-            return "redirect:/superAdmin/dashboardPaciente";
+            attr.addFlashAttribute("paciente_noexiste","El paciente a editar no existe");
+            return "redirect:/superAdmin/dashboard";
         }
     }
     @PostMapping("/actualizarPaciente")
@@ -326,9 +326,9 @@ public class SuperController {
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
             return "superAdmin/editarPaciente";
         }
-        attr.addFlashAttribute("msg", "Paciente actualizado exitosamente");
+        attr.addFlashAttribute("paciente_actualizado", "Paciente actualizado exitosamente");
         usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
-        return "redirect:/superAdmin/dashboard/Paciente";
+        return "redirect:/superAdmin/dashboard";
     }
    /* @PostMapping("/editarPacientes")
     public String editarPaciente(
@@ -864,7 +864,7 @@ public class SuperController {
         }
         if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
-            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
+            attr.addFlashAttribute("msg","Usuario(SuperAdmin) editado exitosamente; por favor, vuelva a iniciar sesión para ver los cambios");
             return "redirect:/superAdmin/confSup";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");

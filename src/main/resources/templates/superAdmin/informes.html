@@ -81,8 +81,8 @@
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
                     <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-bs-toggle="modal" data-bs-target="#exampleModal">Borrar</button>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-toggle="modal" th:data-target="'#modalBorrar-' + ${info.index + 1}">Borrar</button>
+                    <div class="modal fade" th:id="'modalBorrar-' + ${info.index + 1}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">

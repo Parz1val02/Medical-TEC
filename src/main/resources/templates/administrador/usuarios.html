@@ -63,10 +63,8 @@
                             <td style="text-align: center" th:text="${#strings.capitalize(paciente.estadosIdestado.nombre)}"></td>
 
                             <td class="align-middle" align="center">
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalHistorial-' + ${vEstado.index + 1}">Ver historial clínico</button>
-                                <!-- <a class="btn btn-primary btn-sm"  style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.pacienteDni.id}}"> </a>-->
+                                <a th:href="@{'/administrador/historialPaciente' + '?id=' + ${paciente.id}}" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px" >Ver Historial Médico</a>
                             </td>
 
                             <td class="align-middle" align="center">
