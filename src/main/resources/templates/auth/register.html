@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Pagina Principal')}">
 
+<body>
+    <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 </body>
 </html>
