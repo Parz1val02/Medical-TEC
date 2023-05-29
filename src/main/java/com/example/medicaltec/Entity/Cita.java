@@ -77,9 +77,4 @@ public class Cita implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor_dni1", referencedColumnName = "dni", nullable = false)
     private Usuario doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "informe_idinforme")
-    private Informe informeIdinforme;
-
 }
