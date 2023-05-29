@@ -8,6 +8,7 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
 import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,6 @@ public class AdministradorController {
     final EspecialidadeRepository especialidadeRepository;
     final UsuarioRepository usuarioRepository;
     final CitaRepository citaRepository;
-
     final AlergiaRepository alergiaRepository;
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     public AdministradorController (
@@ -55,8 +55,9 @@ public class AdministradorController {
 
     @GetMapping("/principal")
     public String pagprincipal(Model model, HttpServletRequest httpServletRequest){
-        List listaPacientes = usuarioRepository.obtenerListaPacientes2();
-        List listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+        List listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
         return "administrador/principal";
@@ -64,10 +65,11 @@ public class AdministradorController {
 
     @GetMapping("/usuarios")
     public String pagusuarios(Model model, @ModelAttribute("usuario") Usuario usuario, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2();
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
@@ -122,6 +124,7 @@ public class AdministradorController {
             HttpServletRequest httpServletRequest
 
     ){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         System.out.println(bindingResult.getAllErrors());
         if(bindingResult.hasErrors()){
             List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
@@ -129,7 +132,7 @@ public class AdministradorController {
             return "administrador/editarDoctor";
         } else {
             attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-            usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  1 );
+            usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId());
             return "redirect:/administrador/usuarios";
         }
 
@@ -191,7 +194,7 @@ public class AdministradorController {
             HttpServletRequest httpServletRequest
 
     ){
-
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         /*
         int a = 0;
         if(doctor.getNombre().isEmpty()){
@@ -279,7 +282,7 @@ public class AdministradorController {
         }
 
 
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
         boolean existeDoctor = false;
         for (Usuario doctorLista : listaDoctores) {
             if (doctor.getId().equalsIgnoreCase(doctorLista.getId()) ) {
@@ -299,7 +302,7 @@ public class AdministradorController {
         } else {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  1, doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasena );
+            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasena );
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
@@ -348,11 +351,12 @@ public class AdministradorController {
             Model model,
             HttpServletRequest httpServletRequest
     ){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             return "administrador/editarPaciente";
         } else {
             attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), 1 );
+            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), usuarioSession.getSedesIdsedes().getId() );
             return "redirect:/administrador/usuarios";
         }
     }
@@ -409,6 +413,7 @@ public class AdministradorController {
             HttpServletRequest httpServletRequest
 
     ){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         /*
         int a = 0;
         if(paciente.getNombre().isEmpty()){
@@ -493,7 +498,7 @@ public class AdministradorController {
         }
 
 
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
         boolean existePaciente = false;
         for (Usuario pacienteLista : listaPacientes) {
             if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
@@ -580,8 +585,10 @@ public class AdministradorController {
     @GetMapping("/settings")
     public String settings(Model model, HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        model.addAttribute("admin",usuarioSession);
+        return "administrador/settings";
 
-        /*
+         /*
         String dni = "71448628";
         Optional<Usuario> administrador = usuarioRepository.findById(dni);
         if (administrador.isPresent()){
@@ -592,8 +599,6 @@ public class AdministradorController {
             return "redirect:/administrador/principal";
         }
         */
-        model.addAttribute("admin",usuarioSession);
-        return "administrador/settings";
 
     }
 
@@ -607,18 +612,31 @@ public class AdministradorController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        //String pass1BCrypt = new BCryptPasswordEncoder().encode(pass1);
+        System.out.println("#####################################");
+        System.out.println("#####################################");
+        System.out.println("#####################################");
+        //System.out.println(pass1BCrypt);
+        System.out.println("#####################################");
+        System.out.println("#####################################");
+        System.out.println("#####################################");
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
         if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
             return "redirect:/administrador/password";
             //}else if(!pass1.equals(usuarioRepository.passAdmv())){
             //    attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
             //    return "redirect:/paciente/password";
+        } else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            return "redirect:/administrador/password";
         } else if (!pass3.equals(pass2) ) {
-            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/administrador/password";
         }else {
-            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuario.getId());
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/administrador/settings";
         }
