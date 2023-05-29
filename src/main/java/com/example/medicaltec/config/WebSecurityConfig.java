@@ -84,7 +84,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador")
                 .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor")
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and().exceptionHandling().accessDeniedPage("/403.html");
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }

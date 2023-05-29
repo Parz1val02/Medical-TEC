@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>ERROR 403</title>
+</head>
+<body>
+
+<h1>Acceso denegado</h1>
+
+<p><b><div sec:authorize="isAuthenticated()" th:text="${#authentication.name}"/></b>Usted no tiene permiso para ver este contenido.</p>
+
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'paciente':false}" th:href="@{'/'+'paciente'+'/'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'+'/'}" class="btn btn-dark">Regresar</a>
+
+
+</body>
+</html>

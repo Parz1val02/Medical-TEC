@@ -9,11 +9,9 @@ package com.example.medicaltec.controller;
         import jakarta.servlet.http.HttpSession;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
-        import org.springframework.web.bind.annotation.PostMapping;
+        import org.springframework.web.bind.annotation.GetMapping;
         import org.springframework.web.bind.annotation.RequestMapping;
         import org.springframework.web.bind.annotation.RequestMethod;
-        import org.springframework.web.bind.annotation.RequestParam;
-        import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
         import java.util.List;
 
@@ -62,6 +60,28 @@ public class ExampController {
         }
         //System.out.printf(usuario.getId());
 
+
+    }
+
+    @RequestMapping("/403.html")
+    public String forbidden403(Model model) {
+        // Add model attributes
+        return "/denegado";
+    }
+
+    @GetMapping("/QR")
+    public String qrcode(){
+        return "/auth/genqr";
+    }
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String registro(HttpSession session){
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario ==null){
+
+            return "auth/register";
+        } else {
+            return "redirect:/auth/principalpage";
+        }
 
     }
 

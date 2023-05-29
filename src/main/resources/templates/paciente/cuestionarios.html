@@ -46,7 +46,7 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-12" >
-                            <form method="post" th:action="@{/paciente/guardarRespuestas}">
+                            <form method="post" th:action="@{/paciente/guardarRespuestas}" th:object="${respuesta}">
                                 <div class="row">
                                     <!--<div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
 
@@ -56,9 +56,10 @@
                                     </div>-->
                                     <div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
 
-                                        <label for="disabledTextInput1" th:text="${preg.pregunta}" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
-                                        <input type="text" id="disabledTextInput1" class="form-control" th:name="'respuesta' + ${vEstado.index}">
-                                        <input type="text" class="form-control" th:name="${preg.cuestionarioIdcuestionario}">
+                                        <label  th:text="${preg.pregunta}" class="form-label"></label>
+                                        <input type="text" class="form-control" th:field="*{respuesta + ${vEstado.index} }" th:classappend="${#fields.hasErrors('respuesta')?'is-invalid':''}" >
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('respuesta')}" th:errors="*{respuesta}"></div>
+                                        <input type="hidden" class="form-control" th:name="${preg.cuestionarioIdcuestionario}">
                                     </div>
                                 </div>
 

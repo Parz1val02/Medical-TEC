@@ -77,7 +77,7 @@ public class PacienteController {
         this.recetaRepository = recetaRepository;
     }
 
-    @RequestMapping(value = "/principal")
+    @RequestMapping(value = {"/principal","/"})
     public String paginaprincipal(Model model, HttpServletRequest httpServletRequest){
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
@@ -164,10 +164,10 @@ public class PacienteController {
        return "paciente/pagos";
     }
     @RequestMapping("/cuestionarios")
-    public String cuestionarios(Model model, @RequestParam("id") int id){
+    public String cuestionarios(@ModelAttribute("respuesta")Respuesta respuesta, Model model, @RequestParam("id") int id){
 
         //Cuestionario cues = cuestionarioRepository.findById(id);
-
+        //falta logica que depende de la relacion para jalar los ids de los cuestioanrio
         model.addAttribute("preguntas",preguntaRepository.obtenerPreg(id));
         model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
@@ -293,15 +293,20 @@ public class PacienteController {
 
     //Adaptarlo para sesiones
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @RequestParam("respuesta0")String respuesta, RedirectAttributes attr){
+    public String guardarRptas( @ModelAttribute("respuesta") @Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if (bindingResult.hasErrors()) {
+            //List<Integer> idsCuest = ;
+            //falta logica que depende de la relacion para jalar los ids de los cuestioanrio
+            return "redirect:/paciente/cuestionarios";
+        } else {
+            respuesta.setHistorialmedicoIdhistorialmedico(usuario.getHistorialmedicoIdhistorialmedico());
+            //respuesta.setPreguntasIdpreguntas();
+            rptaRepository.save(respuesta);
 
-        //Cuestionario cues = cuestionarioRepository.findById(id);
-        //List<Pregunta> preguntas = preguntaRepository.obtenerPreg(id);
-        rptaRepository.guardarRptas(respuesta);
-
-
-        attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
-        return "redirect:/paciente/cuestionarios?id=1";
+            attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
+            return "redirect:/paciente/cuestionarios?id=1";
+        }
     }
 
 
