@@ -26,8 +26,4 @@ public class Historialmedico implements Serializable {
     @JoinColumn(name = "seguros_id_seguro", nullable = false)
     private Seguro segurosIdSeguro;
 
-    @ManyToOne
-    @JoinColumn(name = "cuestionario_idcuestionario", nullable = false)
-    private Cuestionario cuestionarioIdcuestionario;
-
 }

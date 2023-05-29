@@ -7,6 +7,8 @@
 
 
 <body class="">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
@@ -17,6 +19,7 @@
         <nav th:replace="~{fragmentos/sidebaradministrativo.html::sideBar}"></nav>
         <div class="content">
         <nav th:replace="~{fragmentos/topbaradministrativo.html::topBar}"></nav>
+            <div class="alert alert-success" role="alert" th:if="${envio != null}" th:text="${envio}"></div>
             <div class="alert alert-danger" role="alert" th:if="${errorenvio != null}" th:text="${errorenvio}"></div>
                 <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
             </div>
@@ -86,13 +89,11 @@
                                     3. El form pre-llenado registrará los datos a través del DNI del usuario.
                                 </p>
                                 <div style="display: flex; text-align: center; flex-direction: column;">
-                                    <button  class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="margin-right: 10px;
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 10px;
                                     background: #3d8af7; border: 5px solid #3d8af7; padding: 1px">Invitar Paciente</button>
-                                    <a th:href="form1" style="margin-top: 10px">
-                                        <button type="button" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa; padding: 1px">Previsualizar Formulario</button>
-                                        <!--button type="button" class="btn btn-secondary"
-                                                style="background: #3d8af7; border: 5px solid #3d8af7; padding: 1px">Previsualizar Formulario</button-->
-                                    </a>
+
                                     <!-- MODAL -->
                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -101,6 +102,7 @@
                                                     <h1 class="modal-title fs-5" id="exampleModalLabel">Invitar paciente</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                                                 </div>
+
                                                 <div class="modal-body">
                                                     <form method="POST" th:action="${'/administrativo/enviar'}">
                                                         <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
@@ -114,10 +116,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
-                                                            border-radius: 15px; border-color: #b38df7;" data-bs-dismiss="modal">Cerrar</a>
+                                                            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border-color: #b38df7;" >Cerrar</button>
                                                             <button type="submit" class="btn btn-primary" >Enviar</button>
                                                         </div>
+
                                                         <!--<div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                                             <div class="col-md-6">
                                                                 <p style="font-weight: bold; margin: 0px">Nombres: </p>
@@ -130,9 +133,17 @@
                                                         </div>-->
                                                     </form>
                                                 </div>
+
+
                                             </div>
                                         </div>
                                     </div>
+                                    <a th:href="${'/administrativo/form1'}" style="margin-top: 10px">
+                                        <button type="button" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa; padding: 1px">Previsualizar Formulario</button>
+                                        <!--button type="button" class="btn btn-secondary"
+                                                style="background: #3d8af7; border: 5px solid #3d8af7; padding: 1px">Previsualizar Formulario</button-->
+                                    </a>
+
                                 </div>
                             </div>
                         </div>
