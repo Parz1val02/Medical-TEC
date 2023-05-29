@@ -18,4 +18,8 @@ public interface InformeRepository extends JpaRepository<Informe,Integer> {
     @Modifying
     @Query("update Informe c set c.activo = ?1 where c.id = ?2")
     int updateActivoByActivo(Boolean activoNuevo, int id);
+
+    @Query(value = "SELECT * FROM telesystem_2.informe a Inner Join historialmedico b on a.historialmedico_idhistorialmedico=b.idhistorialmedico Inner Join usuario c on b.idhistorialmedico=c.historialmedico_idhistorialmedico where a.idinforme = ?1;",
+            nativeQuery = true)
+    Informe listarInforme(int id_cita);
 }

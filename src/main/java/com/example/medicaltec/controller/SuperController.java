@@ -26,6 +26,7 @@ public class SuperController {
     final RespuestaRepository respuestaRepository;
     final EstadoRepository estadoRepository;
     final CitaRepository citaRepository;
+    final HistorialMedicoRepository historialMedicoRepository;
 
     final SedeRepository sedeRepository;
     private final EspecialidadeRepository especialidadeRepository;
@@ -33,7 +34,7 @@ public class SuperController {
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           CitaRepository citaRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -42,6 +43,7 @@ public class SuperController {
         this.respuestaRepository = respuestaRepository;
         this.estadoRepository = estadoRepository;
         this.citaRepository = citaRepository;
+        this.historialMedicoRepository = historialMedicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
     }
@@ -627,8 +629,10 @@ public class SuperController {
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Cita> listaCitas = citaRepository.findAll();
-        model.addAttribute("citasList", listaCitas);
+        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
+        List<Informe> listaInformes = informeRepository.findAll();
+        model.addAttribute("historialList", listaHistorial);
+        model.addAttribute("informeList", listaInformes);
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
