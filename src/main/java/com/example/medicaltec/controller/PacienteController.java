@@ -7,17 +7,24 @@ import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.http.HttpRequest;
+import java.io.IOException;
+import org.springframework.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/paciente")
@@ -48,7 +55,7 @@ public class PacienteController {
     final HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository;
 
     final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
-    private final RecetaRepository recetaRepository;
+    final RecetaRepository recetaRepository;
 
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
@@ -73,13 +80,12 @@ public class PacienteController {
         this.historialMedicoHasAlergiaRepository=historialMedicoHasAlergiaRepository;
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
         this.cuestionarioRepository = cuestionarioRepository;
-
         this.recetaRepository = recetaRepository;
     }
 
-    @RequestMapping(value = {"/principal","/"})
-    public String paginaprincipal(Model model, HttpServletRequest httpServletRequest){
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+    @RequestMapping(value = "/principal")
+    public String paginaprincipal(Model model, HttpSession httpSession){
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
@@ -164,10 +170,10 @@ public class PacienteController {
        return "paciente/pagos";
     }
     @RequestMapping("/cuestionarios")
-    public String cuestionarios(@ModelAttribute("respuesta")Respuesta respuesta, Model model, @RequestParam("id") int id){
+    public String cuestionarios(Model model, @RequestParam("id") int id){
 
         //Cuestionario cues = cuestionarioRepository.findById(id);
-        //falta logica que depende de la relacion para jalar los ids de los cuestioanrio
+
         model.addAttribute("preguntas",preguntaRepository.obtenerPreg(id));
         model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
@@ -293,20 +299,15 @@ public class PacienteController {
 
     //Adaptarlo para sesiones
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @ModelAttribute("respuesta") @Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest httpServletRequest){
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        if (bindingResult.hasErrors()) {
-            //List<Integer> idsCuest = ;
-            //falta logica que depende de la relacion para jalar los ids de los cuestioanrio
-            return "redirect:/paciente/cuestionarios";
-        } else {
-            respuesta.setHistorialmedicoIdhistorialmedico(usuario.getHistorialmedicoIdhistorialmedico());
-            //respuesta.setPreguntasIdpreguntas();
-            rptaRepository.save(respuesta);
+    public String guardarRptas( @RequestParam("respuesta0")String respuesta, RedirectAttributes attr){
 
-            attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
-            return "redirect:/paciente/cuestionarios?id=1";
-        }
+        //Cuestionario cues = cuestionarioRepository.findById(id);
+        //List<Pregunta> preguntas = preguntaRepository.obtenerPreg(id);
+        rptaRepository.guardarRptas(respuesta);
+
+
+        attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
+        return "redirect:/paciente/cuestionarios?id=1";
     }
 
 
@@ -346,5 +347,44 @@ public class PacienteController {
             return "redirect:/paciente/perfil";
         }
 
+    }
+    @PostMapping("/guardarFoto")
+    public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+           attr.addFlashAttribute("foto", "Debe subir un archivo");
+           return "redirect:/paciente/perfil";
+        }
+        String filename = file.getOriginalFilename();
+        if(filename.contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/paciente/perfil";
+        }
+        try{
+           usuario.setFoto(file.getBytes());
+           usuario.setFotonombre(filename);
+           usuario.setFotocontenttype(file.getContentType());
+           usuarioRepository.save(usuario);
+           attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+           return "redirect:/paciente/perfil";
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/paciente/perfil";
+        }
+    }
+
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
+        Optional<Usuario> opt = usuarioRepository.findById(id);
+        if(opt.isPresent()){
+            Usuario u = opt.get();
+            byte[] imagenComoBytes = u.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(u.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }else{
+            return null;
+        }
     }
 }

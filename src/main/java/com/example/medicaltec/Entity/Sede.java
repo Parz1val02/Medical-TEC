@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "sedes")
+@JsonIgnoreProperties({"logo", "logonombre", "logocontenttype"})
 public class Sede implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

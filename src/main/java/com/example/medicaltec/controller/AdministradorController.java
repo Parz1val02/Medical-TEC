@@ -33,7 +33,6 @@ public class AdministradorController {
 
     final EspecialidadeRepository especialidadeRepository;
     final UsuarioRepository usuarioRepository;
-    final ReporteRepository reporteRepository;
     final CitaRepository citaRepository;
 
     final AlergiaRepository alergiaRepository;
@@ -41,13 +40,11 @@ public class AdministradorController {
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
-            ReporteRepository reporteRepository,
             EspecialidadeRepository especialidadeRepository,
             AlergiaRepository alergiaRepository,
             HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2
             ) {
         this.usuarioRepository = usuarioRepository;
-        this.reporteRepository = reporteRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;

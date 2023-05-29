@@ -1,10 +1,13 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.EmailSenderService;
 import com.example.medicaltec.Entity.*;
 
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +28,16 @@ public class AdministrativoController {
     final SedeRepository sedeRepository;
     final FormInvitationRepository formInvitationRepository;
 
-    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository) {
+    final EmailSenderService senderService;
+
+
+    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, EmailSenderService senderService) {
         this.usuarioRepository = usuarioRepository;
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
         this.formInvitationRepository = formInvitationRepository;
+        this.senderService = senderService;
     }
 
 
@@ -59,11 +66,11 @@ public class AdministrativoController {
     }
 
     @RequestMapping(value = {"/form"},method = RequestMethod.GET)
-    public String previewForm(@RequestParam("id")String dni, Model model, @ModelAttribute("FormInvitacion")FormInvitacion formInvitacion){
+    public String editForm(@RequestParam("id")String dni, Model model, @ModelAttribute("FormInvitacion")FormInvitacion formInvitacion){
 
         formInvitacion=formInvitationRepository.findFormbyPacient(dni);
 
-        model.addAttribute("usuario",formInvitacion);
+        model.addAttribute("formInvitacion",formInvitacion);
         model.addAttribute("listaseguros",seguroRepository.findAll());
         model.addAttribute("listasedes",sedeRepository.findAll());
 
@@ -77,11 +84,37 @@ public class AdministrativoController {
     public String editarForm(@ModelAttribute("FormInvitacion") @Valid FormInvitacion formInvitacion, BindingResult bindingResult, Model model, RedirectAttributes attr){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("usuario",formInvitacion);
+            model.addAttribute("formInvitacion",formInvitacion);
             model.addAttribute("listaseguros",seguroRepository.findAll());
             model.addAttribute("listasedes",sedeRepository.findAll());
 
+            if(formInvitacion.getDomicilio().equals("")){
+                model.addAttribute("domicilioError","El campo domicilio no puede estar vacio");
+            }
+            if(formInvitacion.getCorreo().equals("")){
+                model.addAttribute("correoError","El campo correo no puede estar vacio");
+            }
+            if(!isValidEmail(formInvitacion.getCorreo())){
+                model.addAttribute("correoError2","El campo correo ingresado no es correcto");
+            }
 
+            if(formInvitacion.getCelular().equals("")){
+                model.addAttribute("telefonoError","El campo telefono celular no puede estar vacio");
+            }
+
+            if(!isPositiveNumberWith8Digits(formInvitacion.getCelular())){
+                model.addAttribute("telefonoError2","El campo telefono celular debe ser un numero de 9 digitos");
+            }
+
+
+
+
+            if(formInvitacion.getMedicamentos().equals("")){
+                model.addAttribute("medicamentosError","El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba ninguno");
+            }
+            if(formInvitacion.getAlergias().equals("")){
+                model.addAttribute("alergiaError","El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba ninguna");
+            }
 
 
             return "administrativo/formListos";
@@ -94,7 +127,9 @@ public class AdministrativoController {
 
     }
     @GetMapping("/form1")
-    public String preview(){
+    public String preview(Model model){
+        model.addAttribute("listaseguros",seguroRepository.findAll());
+        model.addAttribute("listasedes",sedeRepository.findAll());
         return "administrativo/formpre";
     }
 
@@ -141,6 +176,15 @@ public class AdministrativoController {
     public String enviarForm(@RequestParam("dni") String dni,
                              @RequestParam("correo") String correo,Model model,RedirectAttributes attr){
 
+        try{
+            Integer dniInteger = Integer.valueOf(dni);
+        }catch (Exception e){
+            attr.addFlashAttribute("errorenvio","El dni no puede contener letras y/o estar vacio");
+            return "redirect:/administrativo/dashboard";
+        }
+
+
+
         List<String> dnispacientes = usuarioRepository.obtenerdnis();
         boolean existe = false;
         for (String dni1:dnispacientes) {
@@ -158,7 +202,9 @@ public class AdministrativoController {
                 model.addAttribute("dni",dni);
                 model.addAttribute("correo",correo);
                 model.addAttribute("api",api);
-                return "administrativo/clash";
+                model.addAttribute("listaseguros",seguroRepository.findAll());
+                model.addAttribute("listasedes",sedeRepository.findAll());
+                return "administrativo/formEnvio";
 
             }else{
                 attr.addFlashAttribute("errorenvio","El dni no fue encontrado");
@@ -175,6 +221,34 @@ public class AdministrativoController {
 
 
     }
+
+    @PostMapping("/enviarEmail")
+
+    public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
+        senderService.sendEmail(correo,
+                "Invitacion paciente para la clínica telesystem" ,
+                "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
+                "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
+                "http://localhost:8080/registro/formPaciente/"+id);
+
+                attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
+
+        return "redirect:/administrativo/dashboard";
+    }
+
+
+    //verificar dni correcto
+    public static boolean isPositiveNumberWith8Digits(String input) {
+        return input.matches("\\d{9}");
+    }
+    //verificar email correcto
+    public static boolean isValidEmail(String input) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return input.matches(emailRegex);
+    }
+
+
+
 
 
 }

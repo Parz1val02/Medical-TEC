@@ -5,6 +5,8 @@ import com.example.medicaltec.Entity.Cita;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.CitaRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +25,10 @@ public class RestController {
         this.citaRepository = citaRepository;
     }
 
-    @GetMapping(value = "/citas")
-    public List<Cita> returnCitas(Model model){
+    @GetMapping(value = "/citas", produces = MediaType.APPLICATION_JSON_VALUE + "; charset=utf-8")
+    public List<Cita> returnCitas(HttpServletRequest httpServletRequest){
+        //Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Usuario usuario = usuarioRepository.findByid("22647853");
-        List<Cita> citas = citaRepository.historialCitasAgendadas(usuario.getId());
-        return citas;
+        return citaRepository.historialCitasAgendadas(usuario.getId());
     }
 }

@@ -22,4 +22,7 @@ public class Cuestionario implements Serializable {
     @Column(name = "activo", nullable = false)
     private Boolean activo;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "paciente_dni", referencedColumnName = "dni", nullable = false)
+    private Usuario paciente;
 }
