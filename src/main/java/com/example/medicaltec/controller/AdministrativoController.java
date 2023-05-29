@@ -94,7 +94,9 @@ public class AdministrativoController {
 
     }
     @GetMapping("/form1")
-    public String preview(){
+    public String preview(Model model){
+        model.addAttribute("listaseguros",seguroRepository.findAll());
+        model.addAttribute("listasedes",sedeRepository.findAll());
         return "administrativo/formpre";
     }
 
@@ -141,6 +143,15 @@ public class AdministrativoController {
     public String enviarForm(@RequestParam("dni") String dni,
                              @RequestParam("correo") String correo,Model model,RedirectAttributes attr){
 
+        try{
+            Integer dniInteger = Integer.valueOf(dni);
+        }catch (Exception e){
+            attr.addFlashAttribute("errorenvio","El dni no puede contener letras");
+            return "redirect:/administrativo/dashboard";
+        }
+
+
+
         List<String> dnispacientes = usuarioRepository.obtenerdnis();
         boolean existe = false;
         for (String dni1:dnispacientes) {
@@ -158,7 +169,9 @@ public class AdministrativoController {
                 model.addAttribute("dni",dni);
                 model.addAttribute("correo",correo);
                 model.addAttribute("api",api);
-                return "administrativo/clash";
+                model.addAttribute("listaseguros",seguroRepository.findAll());
+                model.addAttribute("listasedes",sedeRepository.findAll());
+                return "administrativo/formEnvio";
 
             }else{
                 attr.addFlashAttribute("errorenvio","El dni no fue encontrado");
