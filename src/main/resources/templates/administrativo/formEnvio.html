@@ -39,6 +39,8 @@
                                 <input th:value="${correo}" class="form-control" name="correo" style="color: #9da9bb;" type="hidden">
                                 <input th:value="${api.nombres}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
                                 <input th:value="${api.apellidos}" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${api.id}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
+
 
 
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
@@ -55,12 +57,12 @@
                                 <div style="height: 10px"></div>
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
-                                        <p style="font-weight: bold; margin: 0px">Fecha de nacimiento: </p>
-                                        <input type="date" class="form-control" style="color: #9da9bb;" >
+                                        <p style="font-weight: bold; margin: 0px">Edad: </p>
+                                        <input type="text" class="form-control"  name="edad"   >
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                        <input type="text" class="form-control"  th:field="*{api.id}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${api.id}" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -130,7 +132,7 @@
                                 </div>
                                 <div style="height: 20px"></div>
                                 <div style="text-align: center">
-                                    <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Guardar Cambios</button>
+                                    <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Enviar Formulario</button>
                                     <button type="button" class="btn btn-secondary" th:href="${'/administrativo/dashboard'}" style="margin-left: 15px;
                                     border: 1px solid #9da9bb; background: #9da9bb">Cancelar</button>
                                 </div>
