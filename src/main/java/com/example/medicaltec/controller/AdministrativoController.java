@@ -224,12 +224,14 @@ public class AdministrativoController {
 
     @PostMapping("/enviarEmail")
 
-    public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo){
+    public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
         senderService.sendEmail(correo,
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado para ser parte de la plataforma telesystem \n"+
                 "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
-                "");
+                "http://localhost:8080/registro/formPaciente/"+id);
+
+                attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
         return "redirect:/administrativo/dashboard";
     }

@@ -19,6 +19,7 @@
         <nav th:replace="~{fragmentos/sidebaradministrativo.html::sideBar}"></nav>
         <div class="content">
         <nav th:replace="~{fragmentos/topbaradministrativo.html::topBar}"></nav>
+            <div class="alert alert-danger" role="alert" th:if="${envio != null}" th:text="${envio}"></div>
             <div class="alert alert-danger" role="alert" th:if="${errorenvio != null}" th:text="${errorenvio}"></div>
                 <div class="alert alert-success" role="alert" th:if="${msg != null}" th:text="${msg}">
             </div>
