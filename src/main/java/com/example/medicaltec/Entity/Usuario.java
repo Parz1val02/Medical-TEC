@@ -96,13 +96,12 @@ public class Usuario implements Serializable {
     @Column(name = "ceduladoctor", length = 45)
     private String ceduladoctor;
 
-
-  @Column(name = "fotonombre")
-  private String fotonombre;
-  @Column(name = "fotocontenttype")
-  private String fotocontenttype;
-
+    @Column(name = "fotonombre")
+    private String fotonombre;
+    @Column(name = "fotocontenttype")
+    private String fotocontenttype;
 
     @Column(name = "enabled")
     private Boolean enabled;
+
 }
