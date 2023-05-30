@@ -15,32 +15,33 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
 
     /*QUERYS USADOOS POR ADMINISTRADOR*/
+    @Query(nativeQuery = true, value = "select contrasena from usuario u where u.dni = ?1")
+    String buscarPasswordPropioUsuario(String id);
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = ?1 and u.enabled = 1")
+    List<Usuario> obtenerListaPacientes2(Integer sedes);
 
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = 1 and u.enabled = 1")
-    List<Usuario> obtenerListaPacientes2();
-
-    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = 1 and u.enabled = 1")
-    List<Usuario> obtenerlistaDoctores();
+    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1 and u.enabled = 1")
+    List<Usuario> obtenerlistaDoctoresAdmin(Integer sedes);
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado, modoregistro, enabled) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1,'invitado',1)")
-    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
+    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, Integer sede, int edad, String direccion, String sexo, String contrasena  );
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4 where  u.dni = ?5 and u.sedes_idsedes = ?6")
-    void editarPaciente(String email, String nombre, String apellido, String telefono, String dni, int sede );
+    void editarPaciente(String email, String nombre, String apellido, String telefono, String dni, Integer sede );
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, especialidades_id_especialidad, dni, sedes_idsedes, edad, direccion, sexo, contrasena, roles_idroles, estados_idestado,enabled) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,1,1,1)")
-    void crearDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede, int edad, String direccion, String sexo, String contrasena  );
+    void crearDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, Integer sede, int edad, String direccion, String sexo, String contrasena  );
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5 where  u.dni = ?6 and u.sedes_idsedes = ?7")
-    void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, int sede );
+    void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String dni, Integer sede );
 
 
     /*FIN QUERYS USADOOS POR ADMINISTRADOR*/
