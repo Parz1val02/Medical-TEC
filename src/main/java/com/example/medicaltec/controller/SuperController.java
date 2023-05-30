@@ -871,9 +871,13 @@ public class SuperController {
             } else {
                 Optional<Usuario> u = usuarioRepository.findById(dni);
                 if(u.isPresent()){
-                    attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
-                    c = c+1;
-                    dni = superadmin.getId();
+                    if(u.get().getId().equals(superadmin.getId())){
+
+                    } else {
+                        attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                        c = c+1;
+                        dni = superadmin.getId();
+                    }
                 }
             }
         } else {
