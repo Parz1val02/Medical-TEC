@@ -59,14 +59,14 @@
                       <div class="form-group">
                         <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
                         <label for="nombre" class="form-label">Nombres</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" th:placeholder="${superadmin.nombre}">
+                        <input type="text" id="nombre" name="nombre" class="form-control" th:value="${superadmin.nombre}">
                       </div>
                     </div>
                     <div class="col mb-3">
                       <div class="form-group">
                         <div th:if="${apellidomsg != null}" th:text="${apellidomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="apellido" class="form-label">Apellidos</label>
-                        <input type="text" id="apellido" name="apellido" class="form-control" th:placeholder="${superadmin.apellido}">
+                        <input type="text" id="apellido" name="apellido" class="form-control" th:value="${superadmin.apellido}">
                       </div>
                     </div>
                   </div>
@@ -75,14 +75,14 @@
                       <div class="form-group">
                         <div th:if="${correomsg != null}" th:text="${correomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="correo" class="form-label">Correo</label>
-                        <input type="text" id="correo" name="correo" class="form-control" th:placeholder="${superadmin.email}">
+                        <input type="text" id="correo" name="correo" class="form-control" th:value="${superadmin.email}">
                       </div>
                     </div>
                     <div class="col mb-3">
                       <div class="form-group">
                         <div th:if="${telefonomsg != null}" th:text="${telefonomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="telefono" class="form-label">Celular</label>
-                        <input type="text" id="telefono" name="telefono" class="form-control" th:placeholder="${superadmin.telefono}">
+                        <input type="text" id="telefono" name="telefono" class="form-control" th:value="${superadmin.telefono}">
                       </div>
                     </div>
                   </div>
@@ -91,7 +91,7 @@
                       <div class="form-group">
                         <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
                         <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dni" name="dni" class="form-control" th:placeholder="${superadmin.id}">
+                        <input type="text" id="dni" name="dni" class="form-control" th:value="${superadmin.id}">
                       </div>
                     </div>
                   </div>

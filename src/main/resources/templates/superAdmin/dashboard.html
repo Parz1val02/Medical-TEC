@@ -311,10 +311,16 @@
                                 </td>
                                 <td>
                                     <div class="dropdown font-sans-serif">
-                                        <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
-                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
-                                        </div>
+                                        <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                            <div style="display: none;">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="userId" name="userId" th:value="${admS.id}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -350,12 +356,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown font-sans-serif">
-                                        <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
-                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                    <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                        <div style="display: none;">
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" id="userId" name="userId" th:value="${ad.id}"/>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                        </div>
+                                    </form>
                                 </td>
                             </tr>
                             </tbody>
@@ -459,8 +469,16 @@
                                 <td>
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
-                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                            <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                                <div style="display: none;">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" id="userId" name="userId" th:value="${doctor.id}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
@@ -499,8 +517,17 @@
                                 <td>
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <button type="button" class="btn btn-secondary" style="text-align: center;background:  #3d8af7;
-                                border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                            <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                                <div style="display: none;">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" id="userId" name="userId" th:value="${paciente.id}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7;
+                                                    border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>

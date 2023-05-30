@@ -1,10 +1,18 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.dto.InformePacienteDto;
+import com.example.medicaltec.config.CustomUserDetails;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -637,8 +645,10 @@ public class SuperController {
     }
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
-        //Informe informe = (Informe) httpServletRequest.getSession().getAttribute("informe");
-        List<InformePacienteDto> listaInformes = informeRepository.listarInforme();
+        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
+        List<Informe> listaInformes = informeRepository.findAll();
+        model.addAttribute("historialList", listaHistorial);
         model.addAttribute("informeList", listaInformes);
         return "superAdmin/informes";
     }
@@ -894,37 +904,94 @@ public class SuperController {
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
     }
+    private AuthenticationManager authenticationManager;
 
-    @GetMapping("/loginFromSA")
-    public String editarPaciente(Model model, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
-        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
-        Usuario user;
-        if (optionalUsuario.isPresent()) {
-            user = optionalUsuario.get();
-            HttpSession session = httpServletRequest.getSession();
-            session.setAttribute("usuario", user);
-            Usuario log = (Usuario) session.getAttribute("usuario");
-            if (log ==null){
+    public void iniciarSesion(String username, String password) {
+        // Crea un objeto UsernamePasswordAuthenticationToken con las credenciales proporcionadas
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
-                return "auth/login";
-            } else {
-                switch(log.getRolesIdroles().getNombreRol()) {
-                    case "paciente":
-                        return "redirect:/paciente/principal";
-                    case "administrativo":
-                        return "redirect:/administrativo/dashboard";
-                    case "administrador":
-                        return "redirect:/administrador/principal";
-                    case "superadmin":
-                        return "redirect:/superAdmin/dashboard";
-                    default:
-                        return "redirect:/doctor/principal";
-                }//return "redirect:/paciente/principal";
+        // Autentica al usuario
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // Establece la autenticación en el contexto de seguridad
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+
+// ...
+
+    private boolean isCurrentUserSuperAdmin() {
+        // Obtener la autenticación actual desde el contexto de seguridad
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si la autenticación es válida y si el usuario tiene el rol de superadmin
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("superadmin"));
+        }
+
+        return false;
+    }
+
+
+    @PostMapping("/loginAsUser")
+    public String loginAsUser(@RequestParam("userId") String userId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Validar que el usuario actual sea un superadministrador
+        if (!isCurrentUserSuperAdmin()) {
+            // Manejar el caso cuando el usuario actual no es un superadministrador
+            return "redirect:/403.html"; // Página de acceso denegado
+        }
+        System.out.println(userId);
+        // Obtener el usuario por su ID (userId) desde tu repositorio de usuarios
+        Usuario user = usuarioRepository.findById(userId).orElse(null);
+
+        if (user != null) {
+            // Crear una implementación personalizada de UserDetails
+            UserDetails userDetails = new CustomUserDetails(user);
+            System.out.println("se creo userdetails");
+
+            String hashedPassword = user.getContrasena();
+            System.out.println(hashedPassword);
+
+            // Crear una autenticación personalizada para el usuario
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, hashedPassword, userDetails.getAuthorities());
+            System.out.println("se creo la autenticación sin contraseña");
+
+            // Establecer la autenticación en el contexto de seguridad
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("establece la autenticación");
+
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+            System.out.println("se establecio la sesión");
+            Usuario aaaaa = (Usuario) request.getSession().getAttribute("usuario");
+            System.out.println(aaaaa.getEmail());
+            System.out.println(((Usuario) request.getSession().getAttribute("usuario")).getEmail());
+
+            // Redireccionar al usuario a la página o ruta deseada según su rol
+            String rol = "";
+            for (GrantedAuthority role : authentication.getAuthorities()) {
+                rol = role.getAuthority();
+                break;
+            }
+            switch (rol) {
+                case "paciente":
+                    return "redirect:/paciente/principal";
+                case "administrativo":
+                    return "redirect:/administrativo/dashboard";
+                case "administrador":
+                    return "redirect:/administrador/principal";
+                case "doctor":
+                    return "redirect:/doctor/principal";
+                case "superadmin":
+                    return "redirect:/superAdmin/dashboard";
+                default:
+                    return "redirect:/"; // Redireccionar a una página predeterminada si el rol no coincide con ninguno de los casos anteriores
+
             }
         } else {
-            attr.addFlashAttribute("msgDanger","El usuario no existe");
-            return "redirect:/superAdmin/dashboard";
+            // Manejar el caso cuando no se encuentra el usuario
+            return "redirect:/404.html"; // Página de no encontrado
         }
     }
     @PostMapping("/guardarFoto")
@@ -965,4 +1032,7 @@ public class SuperController {
             return null;
         }
     }
+
+
+
 }
