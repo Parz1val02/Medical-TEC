@@ -79,13 +79,13 @@ public class WebSecurityConfig {
                 }
             }
         });
-        http.authorizeHttpRequests().requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("paciente")
-                .requestMatchers("/administrativo", "/administrativo/**").hasAnyAuthority("administrativo")
-                .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador")
-                .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor")
+        http.authorizeHttpRequests().requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("paciente","superadmin")
+                .requestMatchers("/administrativo", "/administrativo/**").hasAnyAuthority("administrativo","superadmin")
+                .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador","superadmin")
+                .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor","superadmin")
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
-                .anyRequest().permitAll()
-                .and().exceptionHandling().accessDeniedPage("/403.html");
+                .anyRequest().permitAll();
+                //.and().exceptionHandling().accessDeniedPage("/403.html");
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }
