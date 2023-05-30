@@ -1,13 +1,12 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.EmailSenderService;
+import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
 
+import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -225,11 +224,14 @@ public class AdministrativoController {
     @PostMapping("/enviarEmail")
 
     public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
+
+        String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(id));
+
         senderService.sendEmail(correo,
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
                 "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
-                "http://localhost:8080/registro/formPaciente/"+id);
+                "http://localhost:8080/registro/formPaciente/"+randomNumberStr);
 
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
