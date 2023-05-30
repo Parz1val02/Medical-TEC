@@ -85,7 +85,7 @@
                                                 <label for="estadosIdestado">Estado </label>
                                                 <select class="form-control" name="estadosIdestado" id="estadosIdestado">
                                                     <option th:each="estado : ${estadosList}" th:value="${estado.id}" th:text="${estado.nombre}"
-                                                            th:selected="${estado.id == admS.estadosIdestado.id}"></option>
+                                                            th:selected="${estado.id == admS.estadosIdestado.id}" th:if="${estado.id == 1 or estado.id == 2}"></option>
                                                 </select>
                                             </div>
                                             <div class="form-group">

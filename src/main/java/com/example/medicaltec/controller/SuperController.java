@@ -628,10 +628,8 @@ public class SuperController {
     }
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
-        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
-        List<Informe> listaInformes = informeRepository.findAll();
-        model.addAttribute("historialList", listaHistorial);
+        Informe informe = (Informe) httpServletRequest.getSession().getAttribute("informe");
+        List<Informe> listaInformes = informeRepository.listarInforme(informe.getId());
         model.addAttribute("informeList", listaInformes);
         return "superAdmin/informes";
     }
