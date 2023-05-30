@@ -84,8 +84,8 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/principal")
-    public String paginaprincipal(Model model, HttpSession httpSession){
-        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+    public String paginaprincipal(Model model, HttpServletRequest httpServletRequest){
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
