@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -331,22 +332,23 @@ public class PacienteController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
         if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
             return "redirect:/paciente/password";
-        //}else if(!pass1.equals(usuarioRepository.passAdmv())){
-        //    attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
-        //    return "redirect:/paciente/password";
+        } else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            return "redirect:/paciente/password";
         } else if (!pass3.equals(pass2) ) {
-            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/paciente/password";
         }else {
-            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuario.getId());
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/paciente/perfil";
         }
-
     }
     @PostMapping("/guardarFoto")
     public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){

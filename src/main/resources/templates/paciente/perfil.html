@@ -14,7 +14,7 @@
 
 
     <div class="container" data-layout="container">
-        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <nav th:replace="~{fragmentos/sidebar.html::sideBar}"></nav>
         <div class="content">
             <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
 
@@ -39,7 +39,7 @@
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div>
                 </div>
                 <br>
-                <div class="row">
+                <div class="col">
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>

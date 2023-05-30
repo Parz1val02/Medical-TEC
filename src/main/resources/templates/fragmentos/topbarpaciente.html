@@ -37,16 +37,13 @@
                 <div class="notification-avatar">
                   <div class="avatar avatar-2xl mr-3">
                     <img class="rounded-circle" src="/img/team/1-thumb.png" alt="" />
-
                   </div>
                 </div>
                 <div class="notification-body">
                   <p class="mb-1"><strong>Emma Watson</strong> replied to your comment : "Hello world 😍"</p>
                   <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">💬</span>Just now</span>
-
                 </div>
               </a>
-
             </div>
             <div class="list-group-item">
               <a class="notification notification-flush bg-200" href="#!">
@@ -58,10 +55,8 @@
                 <div class="notification-body">
                   <p class="mb-1"><strong>Albert Brooks</strong> reacted to <strong>Leonardo's</strong> status</p>
                   <span class="notification-time"><span class="mr-1 fab fa-gratipay text-danger"></span>9hr</span>
-
                 </div>
               </a>
-
             </div>
             <div class="list-group-title">EARLIER</div>
             <div class="list-group-item">
@@ -69,29 +64,23 @@
                 <div class="notification-avatar">
                   <div class="avatar avatar-2xl mr-3">
                     <img class="rounded-circle" src="/img/icons/weather-sm.jpg" alt="" />
-
                   </div>
                 </div>
                 <div class="notification-body">
                   <p class="mb-1">The forecast today shows a low of 20&#8451; in California. See today's weather.</p>
                   <span class="notification-time"><span class="mr-1" role="img" aria-label="Emoji">🌤️</span>1d</span>
-
                 </div>
               </a>
-
             </div>
           </div>
           <div class="card-footer text-center border-top"><a class="card-link d-block" th:href="@{/paciente/notificaciones}" >View all</a></div>
         </div>
       </div>
-
     </li>
-
     <li class="nav-item dropdown">
       <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="avatar avatar-xl">
-          <img class="rounded-circle" th:src="@{/img/team/avatar.png}" alt="" />
-
+          <img class="rounded-circle" th:src="@{|/paciente/image/${session.usuario.id}|}" alt="" />
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="navbarDropdownUser">
