@@ -63,9 +63,9 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="informe, info : ${informeList} "th:if="${informe.id != null && informe.activo == true}">
+            <tr th:each="informe, info : ${informeList} "th:if="${informe.id!= null && informe.activo == true}">
               <td th:text="${info.index+1}"></td>
-              <td th:text="${informe.nombreEspecialidad}"></td>
+              <td th:text="${informe.g}"></td>
               <td th:text="${cita.informeIdinforme.diagnostico}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
