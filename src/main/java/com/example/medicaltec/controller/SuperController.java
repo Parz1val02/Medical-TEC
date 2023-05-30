@@ -887,7 +887,9 @@ public class SuperController {
         }
         if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
+            Usuario nuevaUsuario = usuarioRepository.findByid(dni);
             attr.addFlashAttribute("msg","Usuario(SuperAdmin) editado exitosamente; por favor, vuelva a iniciar sesión para ver los cambios");
+            httpServletRequest.getSession().setAttribute("usuario",nuevaUsuario);
             return "redirect:/superAdmin/confSup";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
