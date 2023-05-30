@@ -21,10 +21,11 @@ public class Usuario implements Serializable {
     @Column(name = "contrasena", nullable = false, length = 100)
     private String contrasena;
 
-   @Column(name = "email", nullable = false, length = 100)
-   @NotBlank(message = "Es un campo obligatorio")
-   @Size(max = 100, message = "El correo ingresado es muy extenso. Maximo 100 caracteres")
-   private String email;
+    @Column(name = "email", nullable = false, length = 100)
+    @NotBlank(message = "Es un campo obligatorio")
+    @Size(max = 100, message = "El correo ingresado es muy extenso. Máximo 100 caracteres")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "El correo ingresado no es válido")
+    private String email;
 
 
     @Column(name = "nombre", nullable = false, length = 45)
