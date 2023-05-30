@@ -1,16 +1,23 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dto.InformePacienteDto;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -628,8 +635,8 @@ public class SuperController {
     }
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
-        Informe informe = (Informe) httpServletRequest.getSession().getAttribute("informe");
-        List<Informe> listaInformes = informeRepository.listarInforme(informe.getId());
+        //Informe informe = (Informe) httpServletRequest.getSession().getAttribute("informe");
+        List<InformePacienteDto> listaInformes = informeRepository.listarInforme();
         model.addAttribute("informeList", listaInformes);
         return "superAdmin/informes";
     }
@@ -884,5 +891,43 @@ public class SuperController {
         usuarioRepository.editAdmS(nombre,apellido,email,telefono,sede, estado,dni);
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
+    }
+    @PostMapping("/guardarFoto")
+    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+        String filename = file.getOriginalFilename();
+        if(filename.contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+        try{
+            usuario.setFoto(file.getBytes());
+            usuario.setFotonombre(filename);
+            usuario.setFotocontenttype(file.getContentType());
+            usuarioRepository.save(usuario);
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/superAdmin/editarPerfil";
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+    }
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
+        Optional<Usuario> opt = usuarioRepository.findById(id);
+        if(opt.isPresent()){
+            Usuario u = opt.get();
+            byte[] imagenComoBytes = u.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(u.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }else{
+            return null;
+        }
     }
 }
