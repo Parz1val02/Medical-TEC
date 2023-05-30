@@ -1,8 +1,5 @@
 package com.example.medicaltec.controller;
-import com.example.medicaltec.Entity.Alergia;
-import com.example.medicaltec.Entity.Cita;
-import com.example.medicaltec.Entity.Especialidade;
-import com.example.medicaltec.Entity.Usuario;
+import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.*;
@@ -37,18 +34,21 @@ public class AdministradorController {
     final CitaRepository citaRepository;
     final AlergiaRepository alergiaRepository;
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
+    final FormInvitationRepository formInvitationRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
             EspecialidadeRepository especialidadeRepository,
             AlergiaRepository alergiaRepository,
-            HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2
+            HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2,
+            FormInvitationRepository formInvitationRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.citaRepository = citaRepository;
         this.alergiaRepository = alergiaRepository;
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
+        this.formInvitationRepository = formInvitationRepository;
     }
 
 
@@ -642,6 +642,35 @@ public class AdministradorController {
         }
 
     }
+
+    @GetMapping("/listaFormulariosRegistro")
+    public String listaFormulariosRegistro(Model model, @ModelAttribute("usuario") Usuario usuario, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+        /*List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        model.addAttribute("listaEspecialidades",listaEspecialidades);
+        model.addAttribute("listaPacientes",listaPacientes);
+        model.addAttribute("listaDoctores",listaDoctores);
+        */
+        List<FormInvitacion> listaFormulariosRegistroPorInvitar = formInvitationRepository.findAll();
+        model.addAttribute("listaFormulariosRegistro",listaFormulariosRegistroPorInvitar);
+        return "administrador/listaFormulariosRegistro";
+    }
+
+    @PostMapping("/guardarFormulariosRegistro")
+    public String guardarFormulariosRegistro(@RequestParam("seleccionados") List<Long> idsSeleccionados){
+        //Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+
+
+        return "redirect:/administrador/listaFormulariosRegistro";
+    }
+
 
 
 
