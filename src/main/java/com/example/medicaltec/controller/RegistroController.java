@@ -1,11 +1,12 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.Entity.Api;
-import com.example.medicaltec.Entity.FormInvitacion;
+import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,33 +19,49 @@ public class RegistroController {
     final SedeRepository sedeRepository;
     final FormInvitationRepository formInvitationRepository;
     final UsuarioRepository usuarioRepository;
+    final EspecialidadeRepository especialidadeRepository;
 
 
-    public RegistroController(ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, UsuarioRepository usuarioRepository
-                              ) {
+    public RegistroController(ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, UsuarioRepository usuarioRepository,
+                              EspecialidadeRepository especialidadeRepository) {
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
         this.formInvitationRepository = formInvitationRepository;
         this.usuarioRepository = usuarioRepository;
 
+        this.especialidadeRepository = especialidadeRepository;
+    }
+
+    @RequestMapping(value = {"/index"},method = RequestMethod.GET)
+    public String paginaPrincipalfromRegistro(Model model){
+        List<Usuario> usuarioList = usuarioRepository.listarDoctores();
+        List<Especialidade> especialidadeList = especialidadeRepository.findAll();
+        List<Sede> sedeList = sedeRepository.findAll();
+        model.addAttribute("usuarioList",usuarioList);
+        model.addAttribute("especialidadesList",especialidadeList);
+        model.addAttribute("sedeList",sedeList);
+        return "auth/principalpage";
     }
 
     @GetMapping("/formPaciente/{id}")
-    public String formPaciente (@PathVariable("id") String id, Model model){
+    public String formPaciente (@PathVariable("id") String id, Model model, RedirectAttributes attr){
+
+        long idLong = RandomLineGenerator.convertToNumber(id);
+        String idLongStr = String.valueOf(idLong);
 
         boolean existe = false;
         List<FormInvitacion> formInvitacionList = formInvitationRepository.findAll();
         for(FormInvitacion formInvitacion : formInvitacionList){
-            if(id.equals(formInvitacion.getDni())){
+            if(idLongStr.equals(formInvitacion.getDni())){
                 existe = true;
                 break;
             }
         }
-
+        //valido si el usuario no fue invitado antes
         if(!existe){
-            Optional<Api> apiOptional = apiRepository.findById(id);
-
+            Optional<Api> apiOptional = apiRepository.findById(idLongStr);
+            //valido si el dni brindado se encuentra en la tabla api
             if(apiOptional.isPresent()){
 
                 Api api = apiOptional.get();
@@ -64,11 +81,13 @@ public class RegistroController {
 
                 return "administrativo/registroPaciente";
             }else{
-                return "auth/register";
+                attr.addFlashAttribute("error","el dni no fue encontrado");
+                return "redirect:/registro/index";
             }
 
         }else{
-            return "auth/register";
+            attr.addFlashAttribute("error","el usuario ya fue invitado a la plataforma");
+            return "redirect:/registro/index";
         }
 
 
@@ -78,12 +97,7 @@ public class RegistroController {
 
     }
 
-    @GetMapping("/out")
-    public String salirPrincipal(){
 
-        return "auth/login";
-
-    }
 
     @PostMapping("/llenadoform")
     public String formLlenado(@RequestParam("nombres") String nombres,
@@ -97,7 +111,9 @@ public class RegistroController {
                               @RequestParam("celular") String celular,
                               @RequestParam("medicamento") String medicamento,
                               @RequestParam("alergia")String alergia,
-                              @RequestParam("edad")String edad,Model model){
+                              @RequestParam("edad")String edad,
+
+                              Model model, RedirectAttributes attr){
 
         int numErrors = 0;
         String domicilioError = null;
@@ -109,6 +125,7 @@ public class RegistroController {
         String alergiaError = null;
         String edadError = null;
         String edadError1 = null;
+
 
             if(domicilio.equals("")){
                 numErrors++;
@@ -146,12 +163,16 @@ public class RegistroController {
 
             if(medicamento.equals("")){
                 numErrors++;
-        medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba ninguno";
+        medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba 'ninguno'";
     }
             if(alergia.equals("")){
                 numErrors++;
-        alergiaError="El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba ninguna";
+        alergiaError="El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba 'ninguna'";
     }
+
+            /*if(!checkboxValue){
+                checkBoxError="Debe aceptar los terminos y condiciones";
+            }*/
 
 
 
@@ -209,7 +230,8 @@ public class RegistroController {
 
 
 
-                return "administrativo/registroExito";
+                attr.addFlashAttribute("success","Su registro fue exitoso, pronto le llegará un correo con sus credenciales de acceso");
+                return "redirect:/registro/index";
             }
 
 

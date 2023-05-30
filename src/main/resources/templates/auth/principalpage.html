@@ -11,6 +11,12 @@
     <!-- Invitación Registro -->
     <div style="background: #f9f9fa">
         <div style="height: 50px;"></div>
+        <div class="alert alert-success" role="alert" th:if="${success != null}" th:text="${success}">
+
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+
+        </div>
         <div style="text-align: center">
             <div class="container" data-layout="container" style="overflow-y: auto">
                 <div class="content" style="text-align: center">
