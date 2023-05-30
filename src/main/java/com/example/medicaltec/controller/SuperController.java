@@ -1,16 +1,33 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.config.CustomUserDetails;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.medicaltec.controller.ExampController;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +43,7 @@ public class SuperController {
     final RespuestaRepository respuestaRepository;
     final EstadoRepository estadoRepository;
     final CitaRepository citaRepository;
+    final HistorialMedicoRepository historialMedicoRepository;
 
     final SedeRepository sedeRepository;
     private final EspecialidadeRepository especialidadeRepository;
@@ -33,7 +51,7 @@ public class SuperController {
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           CitaRepository citaRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -42,6 +60,7 @@ public class SuperController {
         this.respuestaRepository = respuestaRepository;
         this.estadoRepository = estadoRepository;
         this.citaRepository = citaRepository;
+        this.historialMedicoRepository = historialMedicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
     }
@@ -627,8 +646,10 @@ public class SuperController {
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Cita> listaCitas = citaRepository.findAll();
-        model.addAttribute("citasList", listaCitas);
+        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
+        List<Informe> listaInformes = informeRepository.findAll();
+        model.addAttribute("historialList", listaHistorial);
+        model.addAttribute("informeList", listaInformes);
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
@@ -883,4 +904,135 @@ public class SuperController {
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
     }
+    private AuthenticationManager authenticationManager;
+
+    public void iniciarSesion(String username, String password) {
+        // Crea un objeto UsernamePasswordAuthenticationToken con las credenciales proporcionadas
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+
+        // Autentica al usuario
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // Establece la autenticación en el contexto de seguridad
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+
+// ...
+
+    private boolean isCurrentUserSuperAdmin() {
+        // Obtener la autenticación actual desde el contexto de seguridad
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si la autenticación es válida y si el usuario tiene el rol de superadmin
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("superadmin"));
+        }
+
+        return false;
+    }
+
+
+    @PostMapping("/loginAsUser")
+    public String loginAsUser(@RequestParam("userId") String userId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Validar que el usuario actual sea un superadministrador
+        if (!isCurrentUserSuperAdmin()) {
+            // Manejar el caso cuando el usuario actual no es un superadministrador
+            return "redirect:/403.html"; // Página de acceso denegado
+        }
+        System.out.println(userId);
+        // Obtener el usuario por su ID (userId) desde tu repositorio de usuarios
+        Usuario user = usuarioRepository.findById(userId).orElse(null);
+
+        if (user != null) {
+            // Crear una implementación personalizada de UserDetails
+            UserDetails userDetails = new CustomUserDetails(user);
+            System.out.println("se creo userdetails");
+
+            String hashedPassword = user.getContrasena();
+            System.out.println(hashedPassword);
+
+            // Crear una autenticación personalizada para el usuario
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, hashedPassword, userDetails.getAuthorities());
+            System.out.println("se creo la autenticación sin contraseña");
+
+            // Establecer la autenticación en el contexto de seguridad
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("establece la autenticación");
+
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+            System.out.println("se establecio la sesión");
+            Usuario aaaaa = (Usuario) request.getSession().getAttribute("usuario");
+            System.out.println(aaaaa.getEmail());
+            System.out.println(((Usuario) request.getSession().getAttribute("usuario")).getEmail());
+
+            // Redireccionar al usuario a la página o ruta deseada según su rol
+            String rol = "";
+            for (GrantedAuthority role : authentication.getAuthorities()) {
+                rol = role.getAuthority();
+                break;
+            }
+            switch (rol) {
+                case "paciente":
+                    return "redirect:/paciente/principal";
+                case "administrativo":
+                    return "redirect:/administrativo/dashboard";
+                case "administrador":
+                    return "redirect:/administrador/principal";
+                case "doctor":
+                    return "redirect:/doctor/principal";
+                case "superadmin":
+                    return "redirect:/superAdmin/dashboard";
+                default:
+                    return "redirect:/"; // Redireccionar a una página predeterminada si el rol no coincide con ninguno de los casos anteriores
+
+            }
+        } else {
+            // Manejar el caso cuando no se encuentra el usuario
+            return "redirect:/404.html"; // Página de no encontrado
+        }
+    }
+    @PostMapping("/guardarFoto")
+    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+        String filename = file.getOriginalFilename();
+        if(filename.contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+        try{
+            usuario.setFoto(file.getBytes());
+            usuario.setFotonombre(filename);
+            usuario.setFotocontenttype(file.getContentType());
+            usuarioRepository.save(usuario);
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/superAdmin/editarPerfil";
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/superAdmin/editarPerfil";
+        }
+    }
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
+        Optional<Usuario> opt = usuarioRepository.findById(id);
+        if(opt.isPresent()){
+            Usuario u = opt.get();
+            byte[] imagenComoBytes = u.getFoto();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(u.getFotocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }else{
+            return null;
+        }
+    }
+
+
+
 }
