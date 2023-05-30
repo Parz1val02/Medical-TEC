@@ -39,10 +39,104 @@
       <br>
       <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
         <div class="card-body" style="background: #FFFFFF">
-          <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
-            Información del paciente
-          </h5>
+          <div>
+            <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+              Información del paciente
+            </h5>
+          </div>
           <br>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Nombre: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Edad: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.edad}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">DNI: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.id}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Sexo: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Dirección: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Seguro: </p>
+            </div>
+            <div class="col-md-6">
+              <div th:if="${paciente.segurosIdSeguro!=null}">
+                <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+              </div>
+              <div th:if="${paciente.segurosIdSeguro==null}">
+                <p style="font-weight: normal" th:text="${'El paciente no está afiliado a ningún seguro'}"></p>
+              </div>
+            </div>
+          </div>
+
+          <div th:if="${msgSinHistorial==null}">
+            <div class="row" style="width: 60%;">
+              <div class="col-md-6">
+                <p style="font-weight: bold">Alergias: </p>
+              </div>
+              <div class="col-md-6">
+                <div th:if="${#lists.size(listaAlergias)==0}">
+                  <div>
+                    <p style="font-weight: normal"> No tiene alergias registradas</p>
+                  </div>
+                </div>
+                <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
+              </div>
+            </div>
+
+            <div class="row" style="width: 60%;">
+              <div class="col-md-6">
+                <p style="font-weight: bold">Tratamiento: </p>
+              </div>
+              <div class="col-md-6">
+                <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
+              </div>
+            </div>
+
+          </div>
+          <br>
+          <div th:if="${msgSinHistorial!=null}" >
+            <h5 class="mb-2 mb-md-0" th:text="${msgSinHistorial}" style="font-weight: bold"> </h5>
+          </div>
+
+
+          <!--
           <div class="row" style="width: 60%;">
             <div class="col-md-6">
               <p style="font-weight: bold">Nombre: </p>
@@ -52,9 +146,9 @@
 
               <p style="font-weight: bold">Dirección: </p>
               <div th:if="${msgSinHistorial==null}">
-                <p style="font-weight: bold">Seguro: </p>
                 <p style="font-weight: bold">Alergias: </p>
                 <p style="font-weight: bold">Tratamiento: </p>
+                <p style="font-weight: bold">Seguro: </p>
               </div>
             </div>
             <div class="col-md-6">
@@ -64,9 +158,6 @@
               <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
               <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
               <div th:if="${msgSinHistorial==null}">
-                <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
-              </div>
-              <div th:if="${msgSinHistorial==null}">
                 <div th:if="${#lists.size(listaAlergias)==0}">
                   <div>
                     <p style="font-weight: normal"> No tiene alergias registradas</p>
@@ -75,13 +166,19 @@
                 <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
                 <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
               </div>
+              <div th:if="${msgSinHistorial==null}">
+                <div th:if="${paciente.segurosIdSeguro!=null}">
+                  <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+                </div>
+              </div>
             </div>
+
             <div th:if="${msgSinHistorial!=null}">
               <h5 th:text="${msgSinHistorial}"> </h5>
             </div>
 
 
-          </div>
+          </div>-->
           <br>
           <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
                           border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->

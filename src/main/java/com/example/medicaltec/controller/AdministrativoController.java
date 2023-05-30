@@ -1,13 +1,13 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.EmailSenderService;
+import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
 
+import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -152,18 +152,23 @@ public class AdministrativoController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        //String pass1BCrypt = new BCryptPasswordEncoder().encode(pass1);
+
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
         if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
             return "redirect:/administrativo/pass";
-        //}else if(!pass1.equals(usuarioRepository.passAdmv())){
-          //  attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
-          //  return "redirect:/administrativo/pass";
+
+        } else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            return "redirect:/administrativo/pass";
         } else if (!pass3.equals(pass2) ) {
-            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/administrativo/pass";
         }else {
-            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuario.getId());
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/administrativo/perfil";
         }
@@ -225,11 +230,14 @@ public class AdministrativoController {
     @PostMapping("/enviarEmail")
 
     public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
+
+        String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(id));
+
         senderService.sendEmail(correo,
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
                 "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
-                "http://localhost:8080/registro/formPaciente/"+id);
+                "34.28.24.16:8080/registro/formPaciente/"+randomNumberStr);
 
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
