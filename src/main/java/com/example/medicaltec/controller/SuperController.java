@@ -646,10 +646,7 @@ public class SuperController {
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
-        List<Informe> listaInformes = informeRepository.findAll();
-        model.addAttribute("historialList", listaHistorial);
-        model.addAttribute("informeList", listaInformes);
+        model.addAttribute("informeList", informeRepository.listarInforme());
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
@@ -1025,7 +1022,7 @@ public class SuperController {
             return "redirect:/superAdmin/editarPerfil";
         }
     }
-    @GetMapping("/image/{id}")
+    /*@GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
         Optional<Usuario> opt = usuarioRepository.findById(id);
         if(opt.isPresent()){
@@ -1037,7 +1034,7 @@ public class SuperController {
         }else{
             return null;
         }
-    }
+    }*/
 
 
 
