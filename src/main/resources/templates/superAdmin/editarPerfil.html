@@ -41,11 +41,17 @@
       </div>
       <div class="card mb-3">
         <div class="card-header position-relative min-vh-25 mb-7">
+
           <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
           </div>
           <!--/.bg-holder-->
 
-          <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="/img/team/2.jpg" width="200" alt="" /></div>
+          <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/superAdmin/image/${session.usuario.id}}" width="200" alt="" /></div>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+          <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+          <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
         </div>
         <div class="card-body">
           <div class="row">
@@ -59,14 +65,14 @@
                       <div class="form-group">
                         <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
                         <label for="nombre" class="form-label">Nombres</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" th:placeholder="${superadmin.nombre}">
+                        <input type="text" id="nombre" name="nombre" class="form-control" th:value="${superadmin.nombre}">
                       </div>
                     </div>
                     <div class="col mb-3">
                       <div class="form-group">
                         <div th:if="${apellidomsg != null}" th:text="${apellidomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="apellido" class="form-label">Apellidos</label>
-                        <input type="text" id="apellido" name="apellido" class="form-control" th:placeholder="${superadmin.apellido}">
+                        <input type="text" id="apellido" name="apellido" class="form-control" th:value="${superadmin.apellido}">
                       </div>
                     </div>
                   </div>
@@ -75,14 +81,14 @@
                       <div class="form-group">
                         <div th:if="${correomsg != null}" th:text="${correomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="correo" class="form-label">Correo</label>
-                        <input type="text" id="correo" name="correo" class="form-control" th:placeholder="${superadmin.email}">
+                        <input type="text" id="correo" name="correo" class="form-control" th:value="${superadmin.email}">
                       </div>
                     </div>
                     <div class="col mb-3">
                       <div class="form-group">
                         <div th:if="${telefonomsg != null}" th:text="${telefonomsg}" class="alert alert-danger" role="alert"></div>
                         <label for="telefono" class="form-label">Celular</label>
-                        <input type="text" id="telefono" name="telefono" class="form-control" th:placeholder="${superadmin.telefono}">
+                        <input type="text" id="telefono" name="telefono" class="form-control" th:value="${superadmin.telefono}">
                       </div>
                     </div>
                   </div>
@@ -91,7 +97,7 @@
                       <div class="form-group">
                         <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
                         <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dni" name="dni" class="form-control" th:placeholder="${superadmin.id}">
+                        <input type="text" id="dni" name="dni" class="form-control" th:value="${superadmin.id}">
                       </div>
                     </div>
                   </div>
@@ -116,14 +122,85 @@
 <!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->
-
+<div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" th:action="@{/superAdmin/guardarFoto}"
+              class="dropzone"
+              id="myGreatDropzone"></form>
+        <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
+        <!--form  method="POST" th:action="@{/paciente/guardarFoto}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" class="form-control" id="file" name="file">
+                </div>
+            <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+            <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
+        </form-->
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
 <!-- ===============================================-->
 <!--    JavaScripts-->
-<!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script th:src="@{/lib/dropzone/dropzone.min.js}"></script>
+<!-- ===============================================-->
+
+<script>
+  Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+    paramName: "file", // The name that will be used to transfer the file
+    maxFiles: 1,
+    autoProcessQueue: false,
+    acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+    maxFilesize: 5,
+    addRemoveLinks: true,
+    dictResponseError: 'Server not Configured',
+    init:function(){
+      var self = this;
+      // Update selector to match your button
+      $("#button").click(function (e) {
+        e.preventDefault();
+        self.processQueue();
+        // config
+        self.options.addRemoveLinks = true;
+        self.options.dictRemoveFile = "Delete";
+        //New file added
+        self.on("addedfile", function (file) {
+          console.log('new file added ', file);
+        });
+        // Send file starts
+        self.on("sending", function (file) {
+          console.log('upload started', file);
+          $('.meter').show();
+        });
+
+        // File upload Progress
+        self.on("totaluploadprogress", function (progress) {
+          console.log("progress ", progress);
+          $('.roller').width(progress + '%');
+        });
+
+        self.on("queuecomplete", function (progress) {
+          $('.meter').delay(999).slideUp(999);
+        });
+
+        // On removing file
+        self.on("removedfile", function (file) {
+          console.log(file);
+        });
+      });
+    }
+  };
+</script>
 </body>
 
 </html>

@@ -63,10 +63,10 @@
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="informe, info : ${informeList} "th:if="${informe.id!= null && informe.activo == true}">
+            <tr th:each="informe, info : ${informeList} "th:if="${informe.getIdinforme()!= null && informe.getActivo() == true}">
               <td th:text="${info.index+1}"></td>
-              <td th:text="${informe.g}"></td>
-              <td th:text="${cita.informeIdinforme.diagnostico}"></td>
+              <td th:text="${informe.getNombre()}"></td>
+              <td th:text="${informe.getDiagnostico()}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -94,7 +94,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${cita.informeIdinforme.id} + '&active='+ ${cita.informeIdinforme.activo}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${informe.getIdinforme()} + '&active='+ ${informe.getActivo()}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar informe</a>
                           </div>
                         </div>

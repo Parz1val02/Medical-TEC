@@ -7,7 +7,8 @@
 
 
 <body class="">
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 <main class="main" id="top">
 
     <div class="container" data-layout="container">
@@ -61,7 +62,7 @@
                                         <p style="font-weight: bold; margin: 0px">Edad: </p>
                                         <input type="text" class="form-control"  name="edad"  th:value="${edad}" th:classappend="${edaderror!=null || edaderror1!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${edaderror!=null}" th:text="${edaderror}"></div>
-                                        <div class ="invalid-feedback" th:if="${edaderror1!=null}" th:text="${edaderror1}"></div>
+                                        <div class ="invalid-feedback" th:if="${edaderror1!=null && edaderror==null}" th:text="${edaderror1}"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
@@ -99,7 +100,7 @@
                                         <p style="font-weight: bold; margin: 0px">Correo: </p>
                                         <input  type="text" class="form-control" name="correo" th:value="${correo}"  th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${correoError2!=null}" th:text="${correoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${correoError2!=null && correoError==null}" th:text="${correoError2}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -116,32 +117,92 @@
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Telefono celular:  </p>
-                                        <input  type="text" class="form-control" name="celular" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
+                                        <input  type="text" class="form-control" name="celular" th:value="${celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null}" th:text="${telefonoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null && telefonoError==null}" th:text="${telefonoError2}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null?'is-invalid':''}"></textarea>
+                                        <input class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null?'is-invalid':''}"></input>
                                         <div class ="invalid-feedback" th:if="${medicamentosError!=null}" th:text="${medicamentosError}"></div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Alergias: </p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null?'is-invalid':''}"></textarea>
+                                        <input class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null?'is-invalid':''}"></input>
                                         <div class ="invalid-feedback" th:if="${alergiaError!=null}" th:text="${alergiaError}"></div>
                                     </div>
 
 
                                 </div>
                                 <div style="height: 20px"></div>
+
+
+
+                                <div class="form-check pb-2">
+                                    <input class="form-check-input" type="checkbox" name="accept">
+                                    <label class="form-check-label">Acepto los terminos y condiciones</label>
+                                </div>
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Terminos y condiciones
+                                </button>
+                                <div class ="invalid-feedback" th:if="${checkBoxError!=null}" th:text="${checkBoxError}"></div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Terminos y Condiciones</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    Propósito del registro: El registro del usuario en la clínica tiene como objetivo facilitar la prestación de servicios médicos y administrativos, así como mantener un registro preciso y actualizado de la información del paciente.<br><br>
+
+                                                    Información personal: Al registrarse, el usuario proporciona información personal como nombre completo, fecha de nacimiento, dirección, número de teléfono, dirección de correo electrónico, historial médico, entre otros. El usuario acepta proporcionar información veraz, completa y actualizada.<br><br>
+
+                                                    Confidencialidad de la información: La clínica se compromete a mantener la confidencialidad de la información proporcionada por el usuario. La información personal no se compartirá con terceros, excepto cuando sea requerido por ley o para la prestación de servicios médicos necesarios.<br><br>
+
+                                                    Uso de la información: La información proporcionada por el usuario se utilizará para los siguientes propósitos:<br>
+                                                    a. Administrar y coordinar citas médicas y tratamientos.<br>
+                                                    b. Comunicarse con el usuario sobre su salud, citas y servicios relacionados.<br>
+                                                    c. Realizar análisis y diagnósticos médicos.<br>
+                                                    d. Facturación y procesamiento de pagos.<br>
+                                                    e. Cumplir con los requisitos legales y regulatorios.<br><br>
+
+                                                    Responsabilidad del usuario: El usuario es responsable de mantener la confidencialidad de su información de inicio de sesión, como nombre de usuario y contraseña. El usuario acepta notificar a la clínica de inmediato cualquier acceso no autorizado o uso indebido de su cuenta.<br><br>
+
+                                                    Actualización de la información: El usuario se compromete a mantener actualizada su información personal en caso de cambios. Esto incluye cambios de dirección, número de teléfono, dirección de correo electrónico u otra información relevante.<br><br>
+
+                                                    Derechos de propiedad: Todos los derechos de propiedad intelectual relacionados con la plataforma de registro de la clínica, incluyendo el software, diseño, logotipos y contenido, son propiedad exclusiva de la clínica.<br><br>
+
+                                                    Modificaciones: La clínica se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigencia después de su publicación en la plataforma de registro. El usuario será notificado de cualquier cambio significativo en los términos y condiciones.<br><br>
+
+                                                    Aceptación de los términos y condiciones: Al completar el formulario de registro, el usuario acepta y se compromete a cumplir con todos los términos y condiciones establecidos anteriormente.
+                                                </p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div style="height: 20px"></div>
                                 <div style="text-align: center">
                                     <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Guardar Cambios</button>
-                                    <button type="button" class="btn btn-secondary" th:href="${'/registro/out'}" style="margin-left: 15px;
-                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</button>
+                                    <a type="button" class="btn btn-secondary" th:href="${'/registro/index'}" style="margin-left: 15px;
+                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</a>
                                 </div>
                             </form>
                         </div>
@@ -154,55 +215,8 @@
         </div>
     </div>
 </main>
-<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
-<!--    Scripts de DataTable -->
-<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
-<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
 
-<!-- Initialize DataTable in JavaScript -->
-<script>
-    $(document).ready(function () {
-        //Esta busacando por el ID del tah <table>
-        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
-        $('#userList').DataTable({
-            dom: "<'d-flex justify-content-end pb-4'B>\n" +
-                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
-                "<'table-responsive'tr>\n" +
-                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
-            language: {
-                processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
-                loadingRecords: "Cargando...",
-                search: "Buscar:",
-                paginate: {
-                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
-                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
-                }
-            },
-            autoWidth: false,
-            lengthMenu: [
-                [10, 25, 50, -1], [10, 25, 50, "Todos"]
-            ],
-            buttons: [
-                {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
-                {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
-            ]
-        });
-    });
-</script>
 
 
 </body>

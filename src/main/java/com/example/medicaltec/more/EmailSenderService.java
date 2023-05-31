@@ -1,4 +1,4 @@
-package com.example.medicaltec;
+package com.example.medicaltec.more;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
