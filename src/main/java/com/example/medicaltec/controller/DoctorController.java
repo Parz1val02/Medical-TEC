@@ -42,12 +42,15 @@ public class DoctorController {
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
-    public String pagPrincipalDoctor(Model model){
+    public String pagPrincipalDoctor(Model model, HttpSession httpSession){
 
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesMasActuales());
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotificacionesMasActuales());
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
+
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario_doctor);
         return "doctor/principal";
     }
 
@@ -102,9 +105,10 @@ public class DoctorController {
     @GetMapping("/config")
     public String verConfiguracion(Model model, HttpSession httpSession){
         Usuario usuario1 = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario1);
+
         List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario1.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
-        model.addAttribute("usuario",usuario1);
         return "doctor/config";
     }
 

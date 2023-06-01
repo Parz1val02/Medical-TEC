@@ -114,7 +114,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <b>Tipo de Cita: </b>
-                                                    <p th:text="${cita.tipocitaIdtipocita.tipoCita}"></p>
+                                                    <p th:text="${#strings.capitalize(cita.tipocitaIdtipocita.tipoCita)}"></p>
                                                     <b>Sede:</b>
                                                     <p th:text="${cita.doctor.sedesIdsedes.nombre}"></p>
                                                 </div>

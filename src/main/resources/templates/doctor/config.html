@@ -86,7 +86,7 @@
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
 
                             <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
-                                  style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
+                                  style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group" style="display: block;">
 
                                     <label for="id" style="font-weight: bold !important; margin: 0;
@@ -108,6 +108,7 @@
                             </form>
 
                             <!-- CAMBIAR CONTRASEÑA -->
+                            <div style="height: 10px"></div>
                             <p style="font-weight: bold; margin: 5px">Contraseña</p>
                             <button onclick="toggleInputContra()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
                                     border: 1px solid #b38df7; border-radius: 1rem; background: #b38df7;
@@ -120,18 +121,20 @@
                             <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                             <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
-                            style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
+                            style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group">
 
                                     <label for="passActual" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña actual</label>
-                                    <input type="password" class="form-control" id="passActual" placeholder="Contraseña actual" name="pass1" required>
+                                    <input type="password" class="form-control" id="passActual" name="pass1" style="width: 90%" required>
+                                    <div style="height: 5px"></div>
                                     <label for="passNueva" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña nueva</label>
-                                    <input type="password" class="form-control" id="passNueva" name="pass2" required>
+                                    <input type="password" class="form-control" id="passNueva" name="pass2" style="width: 90%" required>
+                                    <div style="height: 5px"></div>
                                     <label for="passConfirmar" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Confirmar contraseña nueva</label>
-                                    <input type="password" class="form-control" id="passConfirmar" name="pass3" required>
+                                    <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 90%" required>
 
                                     <!--
                                     <label for="contrasena" style="font-weight: bold !important; margin: 0;

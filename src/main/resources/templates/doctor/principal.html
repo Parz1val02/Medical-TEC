@@ -23,7 +23,8 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
                             <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                                Bienvenido Dr./Dra. Hiroshi Giotoku
+                                Bienvenido
+                                <span style="color: #0032aa; font-weight: bold" th:text="|${usuario.nombre} ${usuario.apellido}|"></span>
                             </h2>
                         </div>
                         <div class="col-md-11">
@@ -35,19 +36,37 @@
                 </div>
             </div>
 
-            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+            <div style="display: flex; text-align: center">
+                <a style="flex: 1; width: 100%;">
+                    <button onclick="mostrarDiv()" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                        Notificaciones, Mensajería y Calendario
+                    </button>
+                </a>
+                <a style="flex: 1; width: 100%;">
+                    <button onclick="mostrarDiv()" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                        Proximas Citas
+                    </button>
+                </a>
+            </div>
+
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF" id="informacionreciente">
                 <div class="card-body" style="background: #FFFFFF">
-                    <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-left: 15px; padding-bottom: 5px">
-                        Información más reciente:
-                    </h3>
+                    <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                        Ponte al día
+                    </h2>
+                    <h6 class="mb-2 mb-md-0"  style="font-size: medium; color: #3d8af7; font-weight: 600;">
+                        Visualiza tus notificaciones, mensajería y calendario de citas.
+                    </h6>
                     <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <div class="card mb-3">
                                 <div class="card-body" style="max-height: 650px">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Calendario
                                     </h4>
-                                    <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                                    <!--div th:replace="~{fragmentos/calendar.html::calendar}"></div-->
                                 </div>
                             </div>
                         </div>
@@ -69,7 +88,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="height: 20px;"></div>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="card">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -91,29 +111,20 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF" id="proximascitas">
                 <div class="card-body">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-11">
-                            <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
-                                Próximas Citas Agendadas
-                            </h2>
-                        </div>
-                        <div class="col-md-11">
-                            <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: 600;">
-                                Visualiza información de tus próximas citas
-                            </h6>
-                        </div>
-                    </div>
-                    <br>
-
+                    <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                        Próximas Citas Agendadas
+                    </h2>
+                    <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: 600;">
+                        Visualiza información de tus próximas citas
+                    </h6>
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
                         <tr>
                             <th class="sort align-middle" style="width: 18%">Nombre Completo</th>
-                            <th class="sort align-middle" style="width: 17%">Fecha de Atención</th>
-                            <th class="sort align-middle" style="width: 15%;text-align: center">Tipo de Cita</th>
+                            <th class="sort align-middle" style="width: 20%;text-align: center">Fecha de Atención</th>
+                            <th class="sort align-middle" style="width: 12%;text-align: center">Tipo de Cita</th>
                             <th class="sort align-middle" style="width: 15%;text-align: center">Estado de Cita</th>
                             <th class="sort align-middle" style="width: 15%;text-align: center"></th>
                             <th class="sort align-middle" style="width: 20%;text-align: center"></th>
@@ -124,7 +135,7 @@
                             <td class="align-middle" th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|">
                                 Nombre Completo
                             </td>
-                            <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
+                            <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}:00hrs|">
                                 00/00/00 - 00:00hrs
                             </td>
                             <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.modalidad)}">
@@ -134,16 +145,20 @@
                                 Próxima cita
                             </td>
                             <td class="align-middle" style="text-align: center">
-                                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                border-radius: 15px">Iniciar Video</a>
+                                <input type="hidden" id="fecha" th:value="${cita.fecha}" />
+                                <input type="hidden" id="hora" th:value="${cita.hora}" />
+                                <button id="botonInicioVideo" onclick="activarBoton()" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
                             </td>
                             <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
                               <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
-                            <td class="align-middle">
-                                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                border-radius: 15px; border-color: #b38df7" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
+                            <td class="align-middle" style="text-align: center">
+                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                border-radius: 15px; border-color: #b38df7">Historial Clínico</button>
+                                </a>
                             </td>
                         </tr>
 
@@ -151,6 +166,30 @@
                     </table>
                 </div>
             </div>
+
+            <script>
+                function activarBoton(){
+                    // Obtener la fecha y hora actual
+                    var fecha = document.getElementById('fecha').value;
+                    var hora = document.getElementById('hora').value;
+                    var fechaActual = new Date();
+                    var horaActual = fechaActual.getHours();
+
+                    // Definir la fecha y hora objetivo
+                    var fechaHoraObjetivo = fecha + 'T' + hora ;
+                    var fechaObjetivo = new Date(fechaHoraObjetivo);
+                    var horaInicio = fechaObjetivo.getHours();
+                    var horaFin = horaInicio + 1;
+
+                    // Verificar si la hora actual está dentro del rango objetivo
+                    if (fechaActual.getTime() >= fechaObjetivo.getTime() && horaActual >= horaInicio && horaActual < horaFin) {
+                        // Habilitar el botón
+                        document.getElementById('botonInicioVideo').disabled = false;
+                        document.getElementById('botonInicioVideo').style.backgroundColor = '#3d8af7';
+                        document.getElementById('botonInicioVideo').style.borderColor = '#3d8af7';
+                    }
+                }
+            </script>
 
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
