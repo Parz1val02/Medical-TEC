@@ -2,6 +2,10 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +42,15 @@ public class DoctorController {
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
-    public String pagPrincipalDoctor(Model model){
+    public String pagPrincipalDoctor(Model model, HttpSession httpSession){
 
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesMasActuales());
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotificacionesMasActuales());
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
+
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario_doctor);
         return "doctor/principal";
     }
 
@@ -85,6 +92,7 @@ public class DoctorController {
     public String verCuestionarios(Model model){
         List<Cuestionario> cuestionariosList = cuestionarioRepository.findAll();
         model.addAttribute("cuestionariosList",cuestionariosList);
+        model.addAttribute("listaPacientes",usuarioRepository.obtenerListaPacientes());
         return "doctor/cuestionarios";
     }
 
@@ -95,11 +103,11 @@ public class DoctorController {
     }
 
     @GetMapping("/config")
-    public String verConfiguracion(Model model){
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById("12345678");
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("usuario",usuario);
-        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
+    public String verConfiguracion(Model model, HttpSession httpSession){
+        Usuario usuario1 = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario1);
+
+        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario1.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
     }
@@ -112,33 +120,36 @@ public class DoctorController {
         return "redirect:/doctor/config";
     }
 
-    @PostMapping("/cambiarContrasena")
-    public String cambiarContrasena(RedirectAttributes attr,
-                                    @RequestParam("contrasena") String password,
-                                    @RequestParam("contrasena_repetida") String password_repetida){
+    @PostMapping("/enviarCuest")
+    public String enviarCuest(RedirectAttributes attr){
 
-        if(password.equals(password_repetida)){
-            attr.addFlashAttribute("contrasena_correcta", "Se actualizó la contraseña del usuario");
-        }else {
-            attr.addFlashAttribute("contrasenas_diferentes", "Ambas contraseñas deben ser iguales");
-        }
-
-        return "redirect:/doctor/config";
+        attr.addFlashAttribute("cuestionario_enviado","Cuestionario enviado exitosamente.");
+        return "redirect:/doctor/cuestionarios";
     }
 
-    @PostMapping("/enviarCuest")
-    public String enviarCuest(RedirectAttributes attr,
-                              @RequestParam("pacientecorreo") String correo,
-                              @RequestParam("mensaje") String mensaje){
-
-        Usuario usuario = usuarioRepository.findByEmail(correo);
-        if(usuario.getId()!=null){
-            attr.addFlashAttribute("cuestionario_correcto", "Se envió el cuestionario.");
+    @PostMapping("/cambiarContrasena")
+    public String cambiarContrasena(@RequestParam("pass1") String pass1,
+                                 @RequestParam("pass2") String pass2,
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
+    {
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
+        if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
+            attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacíos");
+            return "redirect:/doctor/config";
+        } else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            return "redirect:/doctor/config";
+        } else if (!pass3.equals(pass2) ) {
+            attr.addFlashAttribute("errorPass", "Las contraseñas ingresadas no coinciden");
+            return "redirect:/doctor/config";
         }else {
-            attr.addFlashAttribute("no_existe_correo", "No existe el correo indicado");
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
+            attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
+            return "redirect:/doctor/config";
         }
 
-        return "redirect:/doctor/cuestionarios";
     }
 
 }

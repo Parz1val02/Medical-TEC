@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Paciente')}">
 </head>
 
 
@@ -58,8 +58,8 @@
                                     correoelectronico@hotmail.com
                                 </td>
                                 <td class="align-middle" align="center">
-                                    <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
+                                    <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
                                 </td>
                             </tr>
 

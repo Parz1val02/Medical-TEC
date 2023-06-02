@@ -646,10 +646,7 @@ public class SuperController {
     @RequestMapping(value = {"/informes"},method = RequestMethod.GET)
     public String informes(Model model, HttpServletRequest httpServletRequest){
         Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Historialmedico> listaHistorial = historialMedicoRepository.findAll();
-        List<Informe> listaInformes = informeRepository.findAll();
-        model.addAttribute("historialList", listaHistorial);
-        model.addAttribute("informeList", listaInformes);
+        model.addAttribute("informeList", informeRepository.listarInforme());
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
@@ -871,9 +868,13 @@ public class SuperController {
             } else {
                 Optional<Usuario> u = usuarioRepository.findById(dni);
                 if(u.isPresent()){
-                    attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
-                    c = c+1;
-                    dni = superadmin.getId();
+                    if(u.get().getId().equals(superadmin.getId())){
+
+                    } else {
+                        attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+                        c = c+1;
+                        dni = superadmin.getId();
+                    }
                 }
             }
         } else {
@@ -883,7 +884,9 @@ public class SuperController {
         }
         if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
+            Usuario nuevaUsuario = usuarioRepository.findByid(dni);
             attr.addFlashAttribute("msg","Usuario(SuperAdmin) editado exitosamente; por favor, vuelva a iniciar sesión para ver los cambios");
+            httpServletRequest.getSession().setAttribute("usuario",nuevaUsuario);
             return "redirect:/superAdmin/confSup";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
@@ -1019,7 +1022,7 @@ public class SuperController {
             return "redirect:/superAdmin/editarPerfil";
         }
     }
-    @GetMapping("/image/{id}")
+    /*@GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
         Optional<Usuario> opt = usuarioRepository.findById(id);
         if(opt.isPresent()){
@@ -1031,7 +1034,7 @@ public class SuperController {
         }else{
             return null;
         }
-    }
+    }*/
 
 
 

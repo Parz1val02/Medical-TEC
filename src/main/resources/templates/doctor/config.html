@@ -86,7 +86,7 @@
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
 
                             <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
-                                  style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
+                                  style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group" style="display: block;">
 
                                     <label for="id" style="font-weight: bold !important; margin: 0;
@@ -97,16 +97,18 @@
                                     </select>
 
                                 </div>
-                                <div class="form-group">
-
+                                <div class="form-group" style="text-align: right;">
                                     <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7">Elegir</button>
-                                    <a th:href="@{/doctor/config}" style="text-decoration: underline; padding-left: 15px; color: #3d4858"> Cancelar</a>
-
+                                    border-radius: 15px; border-color: #3d8af7;width: 130px;">Cambiar Sede</button>
+                                    <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
+                                        <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
+                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
+                                    </a>
                                 </div>
                             </form>
 
                             <!-- CAMBIAR CONTRASEÑA -->
+                            <div style="height: 10px"></div>
                             <p style="font-weight: bold; margin: 5px">Contraseña</p>
                             <button onclick="toggleInputContra()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
                                     border: 1px solid #b38df7; border-radius: 1rem; background: #b38df7;
@@ -114,24 +116,42 @@
                                 ¿Deseas cambiar de contraseña?
                             </button>
                             <div style="height: 10px"></div>
-                            <div th:if="${contrasena_correcta != null}" th:text="${contrasena_correcta}" class="alert alert-success" role="alert"
+                            <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                            <div th:if="${contrasenas_diferentes != null}" th:text="${contrasenas_diferentes}" class="alert alert-danger" role="alert"
+                            <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                             <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
-                            style="padding: 10px;border: 1px solid #b6c1d2;border-radius: 2px;">
-                                <div class="form-group" style="font-family: 'Open Sans',serif">
+                            style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
+                                <div class="form-group">
+
+                                    <label for="passActual" style="font-weight: bold !important; margin: 0;
+                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña actual</label>
+                                    <input type="password" class="form-control" id="passActual" name="pass1" style="width: 90%" required>
+                                    <div style="height: 5px"></div>
+                                    <label for="passNueva" style="font-weight: bold !important; margin: 0;
+                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña nueva</label>
+                                    <input type="password" class="form-control" id="passNueva" name="pass2" style="width: 90%" required>
+                                    <div style="height: 5px"></div>
+                                    <label for="passConfirmar" style="font-weight: bold !important; margin: 0;
+                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Confirmar contraseña nueva</label>
+                                    <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 90%" required>
+
+                                    <!--
                                     <label for="contrasena" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba su nueva contraseña:</label>
                                     <input type="password" class="form-control" id="contrasena" name="contrasena">
                                     <label for="contrasena_repetida" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba nuevamente su nueva contraseña:</label>
                                     <input type="password" class="form-control" id="contrasena_repetida" name="contrasena_repetida">
+                                    -->
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="text-align: right;">
                                     <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7">Elegir</button>
-                                    <a th:href="@{/doctor/config}" style="text-decoration: underline; padding-left: 15px; color: #3d4858"> Cancelar</a>
+                                    border-radius: 15px; border-color: #3d8af7;width: 190px;">Cambiar Contraseña</button>
+                                    <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
+                                        <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
+                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
+                                    </a>
                                 </div>
                             </form>
                         </div>

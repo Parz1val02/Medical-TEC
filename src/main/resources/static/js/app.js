@@ -1,2 +1,2 @@
 const QRcontenedor = document.getElementById('contenedorQR')
-new QRCode(QRcontenedor, "https://www.geeksforgeeks.org")
+new QRCode(QRcontenedor, "")

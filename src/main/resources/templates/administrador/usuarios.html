@@ -30,6 +30,7 @@
                                 Gestiona los pacientes y doctores de tu sede
                             </h5>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -37,12 +38,25 @@
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
 
+            <!--
+            <div style="padding-bottom: 1rem">
+                <a th:href="@{/administrador/listaFormulariosRegistro}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                        border-color: #FFFFFF"> Lista formularios de registro</a>
+            </div>-->
+
+
             <div class="card mb-3">
                 <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a th:href="@{/administrador/crearPacientePagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                            border-color: #FFFFFF"> Crear paciente </a>
+                            <a th:href="@{/administrador/listaFormulariosRegistro}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                            border-color: #FFFFFF; margin-left: 1rem"> Lista formularios de registro</a>
+                        </div>
+                    </div>
 
-                    <a th:href="@{/administrador/crearPacientePagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
-                        border-color: #FFFFFF"> Crear paciente </a>
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
                         <tr>
