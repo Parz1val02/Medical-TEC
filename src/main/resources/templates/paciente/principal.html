@@ -116,7 +116,7 @@
                   </div>
                     <div class="col-auto">
                       <div class="input-group">
-                        <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
+                        <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar por especialidad" id="quicksearch">
                         <span class="input-group-append">
                           <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
                             <i class="fas fa-search"></i>
@@ -126,10 +126,10 @@
                     </div>
                 </div>
               </div>
-              <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                <div class="row">
+              <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center" id="contenedorCards">
+                <!--div class="row"-->
                   <div class="col-sm-6 mb-3" th:each="doctor, arch : ${doctores}">
-                    <div class="card" style="min-height: 20rem">
+                    <div class="card doctores" style="min-height: 20rem">
                       <div class="card-body">
                         <div class="row">
                           <div class="col" style="display: flex; align-items: center">
@@ -140,7 +140,7 @@
                           <div class="col" style="">
                             <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
                               </h4>
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></h5>
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" id="especialidadDoctor"></h5>
                           </div>
                         </div>
                         <div class="row">
@@ -159,7 +159,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                <!--/div-->
                 <br>
               </div>
             </div>
@@ -222,7 +222,6 @@
                       <div class="card mb-3 h-100">
                         <div class="card-header bg-light" style="text-align: center;">
                           <h5 class="mb-0">Horarios de disponibilidad</h5>
-                          <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
                         </div>
                         <div class="card-body fs--1">
                           <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
@@ -321,6 +320,26 @@
 
 
 
+<!--    Scripts de Isotope -->
+<script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
+<script>
+   // Initialize Isotope
+   var $cardContainer = $('#contenedorCards').isotope({
+     itemSelector: '.doctores',
+     layoutMode: 'fitRows'
+   });
+   // Filter cards based on the input value
+   $('#quicksearch').on('input',function() {
+     var filterValue = this.val().toLowerCase(); // Convert input value to lowercase
+     $cardContainer.isotope({
+       filter: function() {
+         var especialidad =$('#especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
+         return especialidad.includes(filterValue); // Filter based on card title
+       }
+     });
+   });
+</script>
+<!-- ===============================================-->
 <!--    Scripts de Calendar -->
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!-- ===============================================-->
