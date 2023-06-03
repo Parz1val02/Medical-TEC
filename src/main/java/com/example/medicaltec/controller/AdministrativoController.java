@@ -1,5 +1,7 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.Entity.Persona;
+import com.example.medicaltec.dao.PersonaDao;
 import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
 
@@ -7,6 +9,7 @@ import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,9 @@ import java.util.Optional;
 @RequestMapping("/administrativo")
 @Controller
 public class AdministrativoController {
+
+    @Autowired
+    PersonaDao personaDao;
 
     final UsuarioRepository usuarioRepository;
     final ApiRepository apiRepository;
@@ -181,6 +187,8 @@ public class AdministrativoController {
     public String enviarForm(@RequestParam("dni") String dni,
                              @RequestParam("correo") String correo,Model model,RedirectAttributes attr){
 
+
+
         try{
             Integer dniInteger = Integer.valueOf(dni);
         }catch (Exception e){
@@ -201,20 +209,17 @@ public class AdministrativoController {
 
         if(!existe){
 
-            Optional<Api> apiOptional = apiRepository.findById(dni);
-            if(apiOptional.isPresent()){
-                Api api = apiOptional.get();
-                model.addAttribute("dni",dni);
+
+
+
+                model.addAttribute("persona",personaDao.obtenerPersona(dni));
                 model.addAttribute("correo",correo);
-                model.addAttribute("api",api);
+                model.addAttribute("dni",dni);
                 model.addAttribute("listaseguros",seguroRepository.findAll());
                 model.addAttribute("listasedes",sedeRepository.findAll());
                 return "administrativo/formEnvio";
 
-            }else{
-                attr.addFlashAttribute("errorenvio","El dni no fue encontrado");
-                return "redirect:/administrativo/dashboard";
-            }
+
 
 
 
@@ -254,7 +259,6 @@ public class AdministrativoController {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return input.matches(emailRegex);
     }
-
 
 
 

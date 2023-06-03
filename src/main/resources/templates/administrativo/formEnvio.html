@@ -37,9 +37,9 @@
                             <br>
                             <form method="POST"  th:action="@{'/administrativo/enviarEmail'}">
                                 <input th:value="${correo}" class="form-control" name="correo" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${api.nombres}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${api.apellidos}" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${api.id}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${persona.getNombres()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
+                                <input th:value="|${persona.getApellido_paterno()} ${persona.getApellido_materno()} |" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${dni}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
 
 
 
@@ -47,11 +47,11 @@
 
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Nombres: </p>
-                                        <input type="text" class="form-control" th:field="*{api.nombres}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control" th:value="${persona.getNombres()}" style="color: #9da9bb;" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Apellidos: </p>
-                                        <input type="text" class="form-control"  th:field="*{api.apellidos}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="|${persona.getApellido_paterno()} ${persona.getApellido_materno()} |" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                        <input type="text" class="form-control"  th:value="${api.id}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${dni}" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -133,8 +133,8 @@
                                 <div style="height: 20px"></div>
                                 <div style="text-align: center">
                                     <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Enviar Formulario</button>
-                                    <button type="button" class="btn btn-secondary" th:href="${'/administrativo/dashboard'}" style="margin-left: 15px;
-                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</button>
+                                    <a type="button" class="btn btn-secondary" th:href="${'/administrativo/dashboard'}" style="margin-left: 15px;
+                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</a>
                                 </div>
                             </form>
                         </div>
