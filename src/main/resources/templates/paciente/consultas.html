@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 
@@ -46,7 +52,7 @@
             <div class="card mb-3">
                 <div id="calendar"></div>
                 <!-- Start popup dialog box -->
-                <div class="modal fade" id="event_entry_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <!--div class="modal fade" id="event_entry_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-md" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -85,8 +91,7 @@
                                 <button type="button" class="btn btn-primary" onclick="save_event()">Save Event</button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div-->
                 <!-- End popup dialog box -->
             </div>
             <div class="card mb-3 bg-card-gradient">
@@ -266,7 +271,6 @@
     </div>
 
 
-
 </main>
 <!-- ===============================================-->
 <!--    End of Main Content-->
@@ -330,27 +334,38 @@
 
 
 <script>
+    //var myCalendar = new FalconCalendar('#appCalendar');
+    //$.ajax({
+    //    url: '/obtener_eventos.php',
+    //    dataType: 'json',
+    //    success: function(data) {
+    //        // Aquí se procesan los datos
 
-    var myCalendar = new FalconCalendar('#appCalendar');
-
-    $.ajax({
-        url: '/obtener_eventos.php',
-        dataType: 'json',
-        success: function(data) {
-            // Aquí se procesan los datos
-
-            $.each(data, function(index, event) {
-                myCalendar.addEvent({
-                    date: event.start_time,
-                    title: event.title,
-                    description: event.description
-                });
-            });
-        }
+    //        $.each(data, function(index, event) {
+    //            myCalendar.addEvent({
+    //                date: event.start_time,
+    //                title: event.title,
+    //                description: event.description
+    //            });
+    //        });
+    //    }
+    //});
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            start: 'title', // will normally be on the left. if RTL, will be on the right
+            center: '',
+            end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
+            defaultView: 'month',
+            editable: true,
+            themeSystem: 'bootstrap4',
+            height: 650,
+            weekday: 'long',
+            selectable: true
+        });
+        calendar.render();
     });
-
-
-
 </script>
 
 </body>
