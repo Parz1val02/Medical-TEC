@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PreguntaRepository extends JpaRepository<Pregunta, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM telesystem.preguntas where cuestionario_idcuestionario=?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.preguntas where cuestionario_idcuestionario=?1")
     List<Pregunta> obtenerPreg(int id);
 }

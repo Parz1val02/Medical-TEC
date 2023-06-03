@@ -14,12 +14,12 @@ import java.util.List;
 @Repository
 public interface InformeRepository extends JpaRepository<Informe,Integer> {
 
-    @Query(value = "SELECT * FROM telesystem.informe WHERE cita_idcita=?1",
+    @Query(value = "SELECT * FROM telesystem_2.informe WHERE cita_idcita=?1",
             nativeQuery = true)
     Informe listarInformePorCita(int id_cita);
     @Transactional
     @Modifying
-    @Query("update Informe c set c.activo = ?1 where c.id = ?2")
+    @Query(value="update Informe c set c.activo = ?1 where c.id = ?2", nativeQuery = true)
     int updateActivoByActivo(Boolean activoNuevo, int id);
 
     @Query(value = "SELECT a.idinforme, a.diagnostico, a.activo, c.dni, concat(c.nombre, \" \", c.apellido) as \"nombre\" FROM telesystem_2.informe a Inner Join historialmedico b on a.historialmedico_idhistorialmedico=b.idhistorialmedico Inner Join usuario c on b.idhistorialmedico=c.historialmedico_idhistorialmedico",

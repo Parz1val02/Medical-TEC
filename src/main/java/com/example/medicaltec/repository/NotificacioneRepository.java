@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface NotificacioneRepository extends JpaRepository<Notificacione,Integer> {
 
-    @Query(value = "SELECT * FROM telesystem.notificaciones order by idnotificaciones ASC;",
+    @Query(value = "SELECT * FROM telesystem_2.notificaciones order by idnotificaciones ASC;",
             nativeQuery = true)
     List<Notificacione> listarNotificacionesMasActuales();
 }

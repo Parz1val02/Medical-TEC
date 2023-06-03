@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 public interface SedeRepository extends JpaRepository<Sede,Integer> {
-    @Query(nativeQuery = true, value = "SELECT idsedes FROM telesystem.sedes where idsedes=?1")
+    @Query(nativeQuery = true, value = "SELECT idsedes FROM telesystem_2.sedes where idsedes=?1")
     String verificaridSede(String id);
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set  sedes_idsedes=?1 where dni=?2;" )
     void cambiarSede(String idSede, String dni);
-    @Query(value="SELECT * FROM telesystem.sedes s WHERE NOT s.idsedes=?1", nativeQuery = true)
+    @Query(value="SELECT * FROM telesystem_2.sedes s WHERE NOT s.idsedes=?1", nativeQuery = true)
     List<Sede> sedesMenosActual(int sede_actual);
 }

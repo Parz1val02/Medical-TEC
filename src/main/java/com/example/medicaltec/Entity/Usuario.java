@@ -70,7 +70,7 @@ public class Usuario implements Serializable {
     private Role rolesIdroles;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "historialmedico_idhistorialmedico", referencedColumnName = "idhistorialmedico", nullable = false)
+    @JoinColumn(name = "historialmedico_idhistorialmedico", referencedColumnName = "idhistorialmedico")
     private Historialmedico historialmedicoIdhistorialmedico;
 
     @ManyToOne

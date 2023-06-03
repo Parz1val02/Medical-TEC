@@ -10,7 +10,7 @@ import java.util.List;
 public interface RecetaHasMedicamentoRepository extends JpaRepository<RecetaHasMedicamento, RecetaHasMedicamentoId> {
 
 
-    @Query(nativeQuery = true, value = "SELECT medicamentos_idmedicamentos FROM telesystem.receta_has_medicamentos where receta_idreceta=?1")
+    @Query(nativeQuery = true, value = "SELECT medicamentos_idmedicamentos FROM telesystem_2.receta_has_medicamentos where receta_idreceta=?1")
     List<Integer> listarMedxId(Integer id);
 
 }

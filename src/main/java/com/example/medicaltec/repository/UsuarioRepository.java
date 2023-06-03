@@ -76,14 +76,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     void cambiarSeguro(String idSeguro, String dni);
 
 
-    @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 1", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 1", nativeQuery = true)
     List<Usuario> listarDoctores();
 
-    @Query(value = "select * from telesystem.usuario u where u.roles_idroles = 2", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 2", nativeQuery = true)
     List<Usuario> listarPacientes();
     @Modifying
     @Transactional
-    @Query(value = "UPDATE telesystem.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
+    @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
     void actualizarSede(int id_nuevo);
     @Modifying
     @Transactional
@@ -104,25 +104,25 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `roles_idroles`) " +
+    @Query(value = "INSERT INTO `telesystem_2`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `roles_idroles`) " +
             "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 4);",nativeQuery = true)
     void crearAdmSede(String dni, String password,String email,String nombre, String apellido,int edad, String telefono, String sexo, String direccion, int sede, int estado);
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO `telesystem`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `especialidades_id_especialidad`,`roles_idroles`) " +
+    @Query(value = "INSERT INTO `telesystem_2`.`usuario` (`dni`, `contrasena`, `email`, `nombre`, `apellido`, `edad`, `telefono`, `sexo`, `direccion`, `sedes_idsedes`, `estados_idestado`, `especialidades_id_especialidad`,`roles_idroles`) " +
             "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, 3);",nativeQuery = true)
     void crearAdmT(String dni, String password,String email,String nombre,String apellido, int edad, String telefono, String sexo, String direccion, int sede, int estado, int especialidad);
 
 
     @Transactional
     @Modifying
-    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, sedes_idsedes =?5, estados_idestado=?6 where dni = ?7",nativeQuery = true)
+    @Query(value = "update `telesystem_2`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, sedes_idsedes =?5, estados_idestado=?6 where dni = ?7",nativeQuery = true)
     void editAdmS(String nombre, String apellido,String email,String telefono, int sede, int estado, String dni);
 
     @Transactional
     @Modifying
-    @Query(value = "update `telesystem`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where dni=?6",nativeQuery = true)
+    @Query(value = "update `telesystem_2`.`usuario` set nombre = ?1, apellido=?2, email=?3, telefono=?4, dni =?5 where dni=?6",nativeQuery = true)
     void editSuperAdmin(String nombre, String apellido,String email,String telefono, String dni, String dnipast);
     @Transactional
     @Modifying
