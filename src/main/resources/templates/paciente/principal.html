@@ -128,7 +128,7 @@
               </div>
               <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center" id="contenedorCards">
                 <!--div class="row"-->
-                  <div class="col-sm-6 mb-3" th:each="doctor, arch : ${doctores}">
+                  <div th:each="doctor, arch : ${doctores}">
                     <div class="card doctores" style="min-height: 20rem">
                       <div class="card-body">
                         <div class="row">
@@ -323,21 +323,30 @@
 <!--    Scripts de Isotope -->
 <script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
 <script>
-   // Initialize Isotope
-   var $cardContainer = $('#contenedorCards').isotope({
-     itemSelector: '.doctores',
-     layoutMode: 'fitRows'
-   });
-   // Filter cards based on the input value
-   $('#quicksearch').on('input',function() {
-     var filterValue = this.val().toLowerCase(); // Convert input value to lowercase
-     $cardContainer.isotope({
-       filter: function() {
-         var especialidad =$('#especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
-         return especialidad.includes(filterValue); // Filter based on card title
-       }
-     });
-   });
+  $(document).ready(function(){
+    // Initialize Isotope
+    var $cardContainer = $('#contenedorCards').isotope({
+      itemSelector: '.doctores',
+      layoutMode: 'fitRows'
+    });
+    // Filter cards based on the input value
+    var myInput = document.getElementById('quicksearch');
+
+    myInput.addEventListener('input', function() {
+      var text = myInput.value;
+      console.log(text);
+    });
+
+    $('#quicksearch').on('input',function() {
+      var filterValue = this.val().toLowerCase(); // Convert input value to lowercase
+      $cardContainer.isotope({
+        filter: function() {
+          var especialidad =$('#especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
+          return especialidad.includes(filterValue); // Filter based on card title
+        }
+      });
+    });
+  });
 </script>
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
