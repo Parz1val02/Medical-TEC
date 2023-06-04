@@ -126,13 +126,13 @@
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
-                                        <input class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null?'is-invalid':''}"></input>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null?'is-invalid':''}"></textarea>
                                         <div class ="invalid-feedback" th:if="${medicamentosError!=null}" th:text="${medicamentosError}"></div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Alergias: </p>
-                                        <input class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null?'is-invalid':''}"></input>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null?'is-invalid':''}"></textarea>
                                         <div class ="invalid-feedback" th:if="${alergiaError!=null}" th:text="${alergiaError}"></div>
                                     </div>
 
