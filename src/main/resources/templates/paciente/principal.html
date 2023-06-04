@@ -128,23 +128,19 @@
               </div>
               <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center" id="contenedorCards">
                 <!--div class="row"-->
-                  <div class="col-sm-6 mb-3" th:each="doctor, arch : ${doctores}">
-                    <div class="card doctores" style="min-height: 20rem">
+                  <div class="col-sm-8 mb-3 doctores" th:each="doctor, arch : ${doctores}">
+                    <div class="card" style="min-height: 20rem">
                       <div class="card-body">
                         <div class="row">
-                          <div class="col" style="display: flex; align-items: center">
-                            <div class="avatar avatar-2x1">
-                              <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
+                          <div class="col" >
+                            <div class="avatar" style="display: flex; align-items: center">
+                              <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
                             </div>
                           </div>
                           <div class="col" style="">
                             <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
                               </h4>
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" id="especialidadDoctor"></h5>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
+                            <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" ></h5>
                             <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
                               Próximos horarios de disponibilidad:
                             </h6>
@@ -321,31 +317,41 @@
 
 
 <!--    Scripts de Isotope -->
-<script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
 <script>
-  $(document).ready(function(){
+  document.addEventListener('DOMContentLoaded',function(){
     // Initialize Isotope
     var $cardContainer = $('#contenedorCards').isotope({
       itemSelector: '.doctores',
       layoutMode: 'fitRows'
     });
     // Filter cards based on the input value
-    var myInput = document.getElementById('quicksearch');
-
-    myInput.addEventListener('input', function() {
-      var text = myInput.value;
-      console.log(text);
-    });
-
-    $('#quicksearch').on('input',function() {
-      var filterValue = this.val().toLowerCase(); // Convert input value to lowercase
-      $cardContainer.isotope({
-        filter: function() {
-          var especialidad =$('#especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
-          return especialidad.includes(filterValue); // Filter based on card title
+    $('#quicksearch').on('input',debounce(
+            function() {
+              var filterValue = this.value.toLowerCase(); // Convert input value to lowercase
+              console.log("filerValue: "+filterValue);
+              $cardContainer.isotope({
+                filter: function() {
+                  var especialidad =$(this).find('.especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
+                  console.log("especialidad: "+especialidad);
+                  return especialidad.includes(filterValue); // Filter based on card title
+                }
+               }
+              );
+            }, 200)
+    );
+    function debounce( fn, threshold ) {
+      var timeout;
+      threshold = threshold || 100;
+      return function debounced() {
+        clearTimeout( timeout );
+        var args = arguments;
+        var _this = this;
+        function delayed() {
+          fn.apply( _this, args );
         }
-      });
-    });
+        timeout = setTimeout( delayed, threshold );
+      }
+    }
   });
 </script>
 <!-- ===============================================-->
@@ -355,5 +361,6 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
 </body>
 </html>
