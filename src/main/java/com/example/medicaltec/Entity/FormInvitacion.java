@@ -60,4 +60,6 @@ public class FormInvitacion {
     @Column(name = "alergias", length = 200)
     private String alergias;
 
+    private boolean pendiente;
+
 }
