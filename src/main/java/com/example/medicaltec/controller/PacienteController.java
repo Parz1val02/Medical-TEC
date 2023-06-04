@@ -1,6 +1,6 @@
 package com.example.medicaltec.controller;
 
-
+import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
@@ -26,6 +26,8 @@ import org.springframework.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/paciente")
@@ -330,6 +332,7 @@ public class PacienteController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
+        Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
         boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
@@ -341,6 +344,9 @@ public class PacienteController {
             return "redirect:/paciente/password";
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
+            return "redirect:/paciente/password";
+        }else if(regex.contrasenaisValid(pass2)){
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
             return "redirect:/paciente/password";
         }else {
             usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
