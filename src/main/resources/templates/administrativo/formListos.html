@@ -44,22 +44,22 @@
                                     <input   class="form-control"  th:field="*{edad}"  type="hidden"/>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Nombres: </p>
-                                        <input type="text" class="form-control" th:field="*{nombres}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control" th:value="${formInvitacion.nombres}" style="color: #9da9bb;" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Apellidos: </p>
-                                        <input type="text" class="form-control"  th:field="*{apellidos}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${formInvitacion.apellidos}" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Edad: </p>
-                                        <input type="text" class="form-control"  th:field="*{edad}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${formInvitacion.edad}" style="color: #9da9bb;" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                        <input type="text" class="form-control"  th:field="*{dni}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${formInvitacion.dni}" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -93,7 +93,8 @@
                                         <p style="font-weight: bold; margin: 0px">Correo: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
                                         <input  type="text" class="form-control"  th:field="*{correo}"    th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}">
                                         <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${correoError2!=null} && ${correoError==null}" th:text="${correoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${correoError2!=null && correoLleno}" th:text="${correoError2}"></div>
+
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -111,7 +112,7 @@
                                         <p style="font-weight: bold; margin: 0px" for="celular">Telefono celular: <span style="color: #3d8af7; font-size: small">(editable)</span> </p>
                                         <input  type="text" class="form-control"  th:field="*{celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null} && ${telefonoError==null}" th:text="${telefonoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null && numeroLleno}" th:text="${telefonoError2}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
