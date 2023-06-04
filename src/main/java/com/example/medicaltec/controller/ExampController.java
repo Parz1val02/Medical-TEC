@@ -1,11 +1,10 @@
 package com.example.medicaltec.controller;
 
         import com.example.medicaltec.Entity.Especialidade;
+        import com.example.medicaltec.Entity.ExamenMedico;
         import com.example.medicaltec.Entity.Sede;
         import com.example.medicaltec.Entity.Usuario;
-        import com.example.medicaltec.repository.EspecialidadeRepository;
-        import com.example.medicaltec.repository.SedeRepository;
-        import com.example.medicaltec.repository.UsuarioRepository;
+        import com.example.medicaltec.repository.*;
         import jakarta.servlet.http.HttpSession;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
@@ -17,21 +16,26 @@ package com.example.medicaltec.controller;
 
 @Controller
 public class ExampController {
+
+
     final UsuarioRepository usuarioRepository;
     final SedeRepository sedeRepository;
     final EspecialidadeRepository especialidadeRepository;
-    public ExampController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, EspecialidadeRepository especialidadeRepository) {
+    final ExamenMedicoRepository examenMedicoRepository;
+    final SeguroRepository seguroRepository;
+
+    public ExampController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, EspecialidadeRepository especialidadeRepository, ExamenMedicoRepository examenMedicoRepository, SeguroRepository seguroRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.especialidadeRepository=especialidadeRepository;
-        this.sedeRepository=sedeRepository;
+        this.sedeRepository = sedeRepository;
+        this.especialidadeRepository = especialidadeRepository;
+        this.examenMedicoRepository = examenMedicoRepository;
+        this.seguroRepository = seguroRepository;
     }
 
     @RequestMapping(value = {"/"},method = RequestMethod.GET)
     public String paginaPrincipal(Model model){
-        List<Usuario> usuarioList = usuarioRepository.listarDoctores();
         List<Especialidade> especialidadeList = especialidadeRepository.findAll();
         List<Sede> sedeList = sedeRepository.findAll();
-        model.addAttribute("usuarioList",usuarioList);
         model.addAttribute("especialidadesList",especialidadeList);
         model.addAttribute("sedeList",sedeList);
         return "auth/principalpage";
@@ -73,11 +77,13 @@ public class ExampController {
     public String qrcode(){
         return "/auth/genqr";
     }
+
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String registro(HttpSession session){
+    public String registro(HttpSession session, Model model){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario ==null){
-
+            model.addAttribute("listaseguros",seguroRepository.findAll());
+            model.addAttribute("listasedes",sedeRepository.findAll());
             return "auth/register";
         } else {
             return "redirect:/auth/principalpage";
@@ -118,4 +124,20 @@ public class ExampController {
     //        return "redirect:/";
     //    }
     //}
+
+    @GetMapping("/servicios")
+    public String servicios(Model model){
+        List<ExamenMedico> examenMedicoList = examenMedicoRepository.findAll();
+        model.addAttribute("examenesMedicos",examenMedicoList);
+        model.addAttribute("especialidadesList",especialidadeRepository.findAll());
+        return "auth/servicios";
+    }
+
+    @GetMapping("/staffmedico")
+    public String staffMedico(Model model){
+        model.addAttribute("doctoresList",usuarioRepository.listarDoctores());
+        model.addAttribute("segurosList",seguroRepository.findAll());
+        model.addAttribute("especialidadesList",especialidadeRepository.findAll());
+        return "auth/staffmedico";
+    }
 }

@@ -1,8 +1,136 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Pagina Principal')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Registro')}">
 
 <body>
     <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
+
+    <div class="container">
+        <h1 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Registro de nuevo usuario:</h1>
+        <p>
+            ¡Regístrate y comienza tu camino hacia una mejor salud!
+
+            En nuestra clínica, nos complace ofrecerte la oportunidad de registrarte como nuevo paciente. Al registrarte,
+            tendrás acceso a una amplia gama de servicios médicos y atención personalizada para satisfacer tus necesidades de salud.
+
+            Nuestro proceso de registro es rápido y sencillo. Solo tienes que completar nuestro formulario de registro en línea,
+            proporcionando la información necesaria, como tu nombre, fecha de nacimiento, información de contacto y antecedentes
+            médicos relevantes. Garantizamos la confidencialidad y seguridad de tus datos, cumpliendo con los más altos estándares de privacidad.
+        </p>
+        <h6 class="card-title" style="color: #3d8af7; font-weight: bold;">Completa la siguiente información para llevar a cabo tu autoregistro:</h6>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                    <div class="card-body" style="background: #FFFFFF">
+                        <form method="POST" >
+                            <!-- DNI -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">DNI: </p>
+                                    <input type="text" class="form-control" style="color: #9da9bb;" placeholder="Ingrese su DNI">
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Nombre y apellidos -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0">Nombres: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0">Apellidos: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" disabled>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Fecha de nacimiento y Domicilio -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0">Fecha de nacimiento: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="date" class="form-control" style="color: #9da9bb;  background: #9da9bb66;" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Domicilio: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" disabled>
+                                    <div class ="invalid-feedback" ></div>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Sexo y Telefono -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0">Sexo: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0">Telefono celular: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" disabled>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Seguro y Sede -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Seguro: </p>
+                                    <select class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                        <option selected>Elija su seguro</option>
+                                        <option th:each="seguro : ${listaseguros}"
+                                                th:value="${seguro.id}"
+                                                th:text="${seguro.nombreSeguro}"
+                                        ></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Sede:</p>
+                                    <select class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                        <option selected>Elija su sede</option>
+                                        <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
+                                                th:text="${sede.nombre}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Correo y Contraseña -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Correo:</p>
+                                    <input type="text" class="form-control">
+                                    <div class ="invalid-feedback" ></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Contraseña:</p>
+                                    <input type="password" class="form-control">
+                                </div>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <!-- Weas -->
+                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: /p>
+                                        <textarea class="form-control" placeholder="Ingrese el nombre de los medicamentos" ></textarea>
+                                    <div class ="invalid-feedback"></div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="font-weight: bold; margin: 0px">Alergias: </p>
+                                    <textarea class="form-control" placeholder="Ingrese en caso tenga alergias, caso contrario, ingrese '-'."></textarea>
+                                    <div class ="invalid-feedback" ></div>
+                                </div>
+                            </div>
+                            <div style="height: 20px"></div>
+                            <!-- Botón -->
+                            <div style="text-align: center">
+                                <button type="submit" class="btn btn-primary">Registrarme</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
 </body>
 </html>
