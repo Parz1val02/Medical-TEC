@@ -80,7 +80,8 @@ public class AdministrativoController {
         model.addAttribute("listaseguros",seguroRepository.findAll());
         model.addAttribute("listasedes",sedeRepository.findAll());
 
-
+        model.addAttribute("correoLleno",true);
+        model.addAttribute("numeroLleno",true);
 
 
         return "administrativo/formListos";
@@ -88,6 +89,9 @@ public class AdministrativoController {
     //save changes
     @PostMapping(value="/editForm")
     public String editarForm(@ModelAttribute("FormInvitacion") @Valid FormInvitacion formInvitacion, BindingResult bindingResult, Model model, RedirectAttributes attr){
+
+
+
 
         if(bindingResult.hasErrors()){
             model.addAttribute("formInvitacion",formInvitacion);
@@ -99,14 +103,24 @@ public class AdministrativoController {
             }
             if(formInvitacion.getCorreo().equals("")){
                 model.addAttribute("correoError","El campo correo no puede estar vacio");
+                model.addAttribute("correoLleno",false);
+            }else{
+
+                model.addAttribute("correoLleno",true);
             }
+
             if(!isValidEmail(formInvitacion.getCorreo())){
                 model.addAttribute("correoError2","El campo correo ingresado no es correcto");
             }
 
             if(formInvitacion.getCelular().equals("")){
                 model.addAttribute("telefonoError","El campo telefono celular no puede estar vacio");
+                model.addAttribute("numeroLleno",false);
+            }else{
+
+                model.addAttribute("numeroLleno",true);
             }
+
 
             if(!isPositiveNumberWith8Digits(formInvitacion.getCelular())){
                 model.addAttribute("telefonoError2","El campo telefono celular debe ser un numero de 9 digitos");
@@ -185,29 +199,24 @@ public class AdministrativoController {
 
     @PostMapping("/enviar")
     public String enviarForm(@RequestParam("dni") String dni,
-                             @RequestParam("correo") String correo,Model model,RedirectAttributes attr){
+                             @RequestParam("correo") String correo,Model model,RedirectAttributes attr) throws Exception {
 
 
+        if(!isValidEmail(correo) || !isPositiveNumberWith8Digits1(dni)){
+            attr.addFlashAttribute("errorenvio","Los datos ingresados no son correctos, el dni debe contener 8 digitos y el email el formato adecuado");
 
-        try{
-            Integer dniInteger = Integer.valueOf(dni);
-        }catch (Exception e){
-            attr.addFlashAttribute("errorenvio","El dni no puede contener letras y/o estar vacio");
             return "redirect:/administrativo/dashboard";
-        }
-
-
-
-        List<String> dnispacientes = usuarioRepository.obtenerdnis();
-        boolean existe = false;
-        for (String dni1:dnispacientes) {
-            if(dni.equals(dni1)){
-                existe=true;
-                break;
+        }else{
+            List<String> dnispacientes = usuarioRepository.obtenerdnis();
+            boolean existe = false;
+            for (String dni1:dnispacientes) {
+                if(dni.equals(dni1)){
+                    existe=true;
+                    break;
+                }
             }
-        }
 
-        if(!existe){
+            if(!existe){
 
 
 
@@ -224,10 +233,17 @@ public class AdministrativoController {
 
 
 
-        }else{
-            attr.addFlashAttribute("errorenvio","El usuario que ha invitado ya se encuentra registrado en la plataforma");
-            return "redirect:/administrativo/dashboard";
+            }else{
+                attr.addFlashAttribute("errorenvio","El usuario que ha invitado ya se encuentra registrado en la plataforma");
+                return "redirect:/administrativo/dashboard";
+            }
         }
+
+
+
+
+
+
 
 
     }
@@ -250,10 +266,15 @@ public class AdministrativoController {
     }
 
 
-    //verificar dni correcto
+    //verificar numero correcto
     public static boolean isPositiveNumberWith8Digits(String input) {
         return input.matches("\\d{9}");
     }
+
+    public static boolean isPositiveNumberWith8Digits1(String input) {
+        return input.matches("\\d{8}");
+    }
+
     //verificar email correcto
     public static boolean isValidEmail(String input) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
