@@ -85,7 +85,8 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/principal")
-    public String paginaprincipal(Model model, HttpServletRequest httpServletRequest){
+    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest){
+        HttpSession httpSession1 = httpServletRequest.getSession();
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         model.addAttribute("doctores", doctores);
@@ -121,10 +122,7 @@ public class PacienteController {
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
-        List<Cita> citas1 = citaRepository.historialCitasAgendadas(usuario.getId());
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
-
-
         for (int i = 0; i < citas.size(); i++) {
             //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
             List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
@@ -132,12 +130,9 @@ public class PacienteController {
             for (int j = 0; j < idmed.size(); j++) {
                 medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(j)));
             }
-
         }
         model.addAttribute("medicamentos", medicamentos);
-
         model.addAttribute("citas", citas);
-        model.addAttribute("citas1", citas1);
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
@@ -252,9 +247,12 @@ public class PacienteController {
                 model.addAttribute("arch", "windowzzz");
                 return "paciente/agendar";
             }
+            Estadoscita estadoscita = new Estadoscita();
+            estadoscita.setId(1);
             cita.setCitacancelada(false);
             cita.setPaciente(paciente);
             cita.setDoctor(doctor);
+            cita.setEstadoscitaIdestados(estadoscita);
             citaRepository.save(cita);
             attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         }

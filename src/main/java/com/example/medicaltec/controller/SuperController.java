@@ -1022,7 +1022,7 @@ public class SuperController {
             return "redirect:/superAdmin/editarPerfil";
         }
     }
-    /*@GetMapping("/image/{id}")
+    @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
         Optional<Usuario> opt = usuarioRepository.findById(id);
         if(opt.isPresent()){
@@ -1034,7 +1034,7 @@ public class SuperController {
         }else{
             return null;
         }
-    }*/
+    }
 
 
 

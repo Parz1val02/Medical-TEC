@@ -2,12 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
-    <style>
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 
 
@@ -139,29 +133,6 @@
                     </table>
                 </div>
             </div>
-            <div class="card mb-3">
-                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                    <table class="table table-striped" id="listaHistorial1">
-                        <thead style="background: #cdeffc">
-                        <tr>
-                            <th class="sort align-middle" style="width: 22%">Especialidad</th>
-                            <th class="sort align-middle" style="width: 13%">Fecha</th>
-                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white">
-                        <tr th:each="cita, info : ${citas1}">
-                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
-                            </td>
-                            <td th:text="${cita.fecha}" class="align-middle">
-                            </td>
-                            <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             <div th:each="cita, info : ${citas}">
                 <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
                     <div class="modal-dialog">
@@ -281,8 +252,11 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
+<!--script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
-
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->
@@ -333,23 +307,7 @@
 </script>
 
 
-<script>
-    //var myCalendar = new FalconCalendar('#appCalendar');
-    //$.ajax({
-    //    url: '/obtener_eventos.php',
-    //    dataType: 'json',
-    //    success: function(data) {
-    //        // Aquí se procesan los datos
-
-    //        $.each(data, function(index, event) {
-    //            myCalendar.addEvent({
-    //                date: event.start_time,
-    //                title: event.title,
-    //                description: event.description
-    //            });
-    //        });
-    //    }
-    //});
+<script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -358,14 +316,85 @@
             center: '',
             end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
             defaultView: 'month',
-            editable: true,
-            themeSystem: 'bootstrap4',
-            height: 650,
             weekday: 'long',
-            selectable: true
+            selectable: true,
+            height: 650,
+            events: [],
+            eventTextColor: '#ffffff',
+            eventBackgroundColor: '#3d8af7',
+            eventDisplay: 'block',
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            allDay: false,
+            displayEventTime: true,
+            eventDidMount: function(info) {
+                tippy(info.el, {
+                    trigger: 'mouseenter',
+                    content: generateTooltipContent(info.event), // call a function to generate the html content
+                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
+                    animation: 'fade',
+                    allowHTML: 'true'
+                })
+            }
+        });
+        // AJAX request to fetch events
+        $.ajax({
+            url: 'http://localhost:8081/api/citas', // Replace with your API endpoint URL
+            type: 'GET',
+            data: {
+                dni: [[${session.usuario.id}]], // Specify the GET parameter
+            },
+            headers: {
+                'Content-Type': 'application/json' // Set the Content-Type header
+            },
+            success: function(response) {
+                // Parse and format the received data
+                var events = [];
+                response.forEach(function(eventData) {
+                    var event = {
+                        title: eventData.title,
+                        start: eventData.start,
+                        modalidad: eventData.modalidad,
+                        doctor: eventData.doctor,
+                        hora: eventData.hora,
+                        sede: eventData.sede,
+                        tipoCita: eventData.tipoCita,
+                        formaPago: eventData.formaPago
+                        // Add more properties as needed
+                    };
+                    events.push(event);
+                });
+
+                // Add the events to FullCalendar
+                calendar.addEventSource(events);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
         });
         calendar.render();
     });
+    function generateTooltipContent(event) {
+        // Generate the HTML content for the tooltip
+        // Assuming you have a time string like '14:30'
+        var timeString = event.extendedProps.hora;
+
+        // Parse the time string using Moment.js
+        var time = moment(timeString, 'HH:mm');
+
+        // Format the time as 'h:mm A' (e.g., '2:30 PM')
+        var formattedTime = time.format('h:mm A');
+
+        var content = '<strong>' + event.title + '</strong>';
+        content += '<br>Hora: ' + formattedTime;
+        content += '<br>Doctor: ' + event.extendedProps.doctor;
+        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+
+        return content;
+    }
 </script>
 
 </body>
