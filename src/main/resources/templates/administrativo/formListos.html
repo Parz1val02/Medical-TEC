@@ -93,7 +93,7 @@
                                         <p style="font-weight: bold; margin: 0px">Correo: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
                                         <input  type="text" class="form-control"  th:field="*{correo}"    th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}">
                                         <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${correoError2!=null}" th:text="${correoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${correoError2!=null} && ${correoError==null}" th:text="${correoError2}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -111,7 +111,7 @@
                                         <p style="font-weight: bold; margin: 0px" for="celular">Telefono celular: <span style="color: #3d8af7; font-size: small">(editable)</span> </p>
                                         <input  type="text" class="form-control"  th:field="*{celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
-                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null}" th:text="${telefonoError2}"></div>
+                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null} && ${telefonoError==null}" th:text="${telefonoError2}"></div>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
