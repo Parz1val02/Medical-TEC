@@ -43,13 +43,12 @@ public class DoctorController {
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
 
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
-        model.addAttribute("listaMensajes",mensajeRepository.listarMensajesMasActuales());
-        model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotificacionesMasActuales());
+        model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));
+        model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
-
-        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario",usuario_doctor);
         return "doctor/principal";
     }
@@ -150,6 +149,14 @@ public class DoctorController {
             return "redirect:/doctor/config";
         }
 
+    }
+
+    @PostMapping("/enviarBitacora")
+    public String enviarBitacora(@RequestParam("bitacora") String bitacora,
+                                 @RequestParam("usuarioid") String usuarioid){
+
+
+        return "redirect:/doctor/principal";
     }
 
 }

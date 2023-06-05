@@ -38,20 +38,24 @@
 
             <div style="display: flex; text-align: center">
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv()" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                         Notificaciones, Mensajería y Calendario
                     </button>
                 </a>
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv()" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                         Proximas Citas
                     </button>
                 </a>
             </div>
-
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF" id="informacionreciente">
+            <br>
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: block; text-align: center; line-height: 30;" id="div1">
+                Seleccione una opción para empezar a navegar.
+            </div>
+            <!-- Información Reciente -->
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
                 <div class="card-body" style="background: #FFFFFF">
                     <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                         Ponte al día
@@ -59,8 +63,50 @@
                     <h6 class="mb-2 mb-md-0"  style="font-size: medium; color: #3d8af7; font-weight: 600;">
                         Visualiza tus notificaciones, mensajería y calendario de citas.
                     </h6>
+                    <br>
                     <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-4">
+                        <div class="col-sm-6" style="padding: 0">
+                            <div class="card" style="margin: 15px">
+                                <div class="card-body" style="padding: 25px !important;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                        Notificaciones
+                                    </h4>
+                                    <div style="height: 250px;">
+                                        <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                                             th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
+                                                <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="padding: 0">
+                            <div class="card" style="margin: 15px">
+                                <div class="card-body" style="padding: 25px !important;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                        Mensajería
+                                    </h4>
+                                    <div style="height: 250px;">
+                                        <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                                             th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
+                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
+                                                <div th:text="${mensaje.contenido}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-sm-6">
                             <div class="card mb-3">
                                 <div class="card-body" style="max-height: 650px">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
@@ -70,48 +116,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Notificaciones
+                        <div class="col-sm-6">
+                            <div class="card mb-3">
+                                <div class="card-body" style="max-height: 650px">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                        Cuestionarios
                                     </h4>
-                                    <div style="height: 200px;">
-                                        <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
-                                             th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
-                     margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="${noti.usuarioDni.nombre}"></b>
-                                                <div th:text="${noti.contenido}"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Mensajería
-                                    </h4>
-                                    <div style="height: 200px;">
-                                        <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
-                                             th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                                    <!--
+                                    <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                                         th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
                   margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="${mensaje.fecha}"></b>
-                                                <div th:text="${mensaje.contenido}"></div>
-                                            </div>
+                                        <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                            <b th:text="${mensaje.fecha}"></b>
+                                            <div th:text="${mensaje.contenido}"></div>
                                         </div>
                                     </div>
+                                    -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF" id="proximascitas">
+            <!-- Próximas Citas -->
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div3">
                 <div class="card-body">
                     <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                         Próximas Citas Agendadas
@@ -189,8 +217,17 @@
                         document.getElementById('botonInicioVideo').style.borderColor = '#3d8af7';
                     }
                 }
-            </script>
 
+                function mostrarDiv(numeroDiv) {
+                    for (var i = 1; i <= 3; i++) {
+                        var div = document.getElementById("div" + i);
+                        div.style.display = "none";
+                    }
+                    // Mostrar el div seleccionado
+                    var divMostrar = document.getElementById("div" + numeroDiv);
+                    divMostrar.style.display = "block";
+                }
+            </script>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>

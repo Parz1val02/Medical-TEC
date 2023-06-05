@@ -95,23 +95,24 @@
                                         </div>
                                         <div class="col-sm-2" th:align="right">
                                             <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans';" data-toggle="modal"
+                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans',serif;" data-toggle="modal"
                                                     data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
                                                 <i class="fa fa-file"></i> Ver Reporte
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="input-hidden" id="input-container">
-                                        <input type="text" style="font-family: 'Open Sans';
-                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" placeholder="Agregue notas o comentarios personales">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
+                                    <form th:action="@{/doctor/enviarBitacora}" method="post" class="input-hidden" id="input-container">
+                                        <input type="hidden" th:name="usuarioid" th:value="${paciente.id}" />
+                                        <input type="text" style="font-family: 'Open Sans',serif;
+                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" name="bitacora" value="bitacora" placeholder="Agregue notas o comentarios personales">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
                                         margin-top: 10px; background: #b38df7; border-color: white; color: white" >Guardar</button>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
 
                             <div class="col-md-2" style="padding: 10px">
-                                <button onclick="toggleInput()" style="font-family: 'Open Sans';border: 1px solid #748194;
+                                <button onclick="toggleInput()" style="font-family: 'Open Sans',serif;border: 1px solid #748194;
                                 border-radius: 0.375rem;background: white; width: 80%;">
                                     <i class="fa fa-comment"></i> Dejar comentarios
                                 </button>
