@@ -54,8 +54,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.formLogin()
                 .loginPage("/loginA")
-                .loginProcessingUrl("/login");
-               // .defaultSuccessUrl("/rbr",true);
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/rbr",true);
                /* .successHandler((request, response, authentication) -> {
                 //new AuthenticationSuccessHandler() {
             //@Override
