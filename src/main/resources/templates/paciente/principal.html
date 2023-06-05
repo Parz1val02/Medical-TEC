@@ -80,12 +80,12 @@
                     <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                     <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
                     <label for="" style="font-size: medium">Sede Actual</label>
-                    <input th:each="sede : ${sedes}" th:if="${sede.id == session.usuario.sedesIdsedes.id}" class="form-control col text-black" id="" type="text" th:placeholder="${sede.nombre}" readonly="" style="text-align: center">
+                    <input class="form-control col text-black" id="" type="text" th:placeholder="${sedeUsuario.nombre}" readonly="" style="text-align: center">
                     <hr style="height: 1px; background-color: #FFFFFF; border: none">
                     <div class="dropdown">
                       <button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
                       <div  class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <a th:each="sede : ${sedes}" th:value="${sede.id} == value" id="zona"
+                        <a th:each="sede : ${sedes}" th:value="${sede.id}" id="zona"
                                 th:text="${sede.nombre}" class="dropdown-item btn" type="button" th:href="@{'/paciente/sede' + '?id=' + ${sede.id}}"></a>
                       </div>
                     </div>

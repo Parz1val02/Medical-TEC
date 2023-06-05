@@ -1,5 +1,6 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.dto.SedeDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.RecetaMedicamentoDto;
@@ -90,9 +91,11 @@ public class PacienteController {
     public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest){
         HttpSession httpSession1 = httpServletRequest.getSession();
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(Integer.parseInt(sedeUsuario.getId()));
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("sedeUsuario", sedeUsuario);
         List<Sede> listaSedes = sedeRepository.findAll();
         model.addAttribute("listaSedes",listaSedes);
         model.addAttribute("arch", "arch");
