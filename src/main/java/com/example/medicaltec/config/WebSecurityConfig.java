@@ -19,6 +19,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
@@ -52,7 +53,11 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.formLogin().loginPage("/loginA").loginProcessingUrl("/login").successHandler((request, response, authentication) -> {
+        http.formLogin()
+                .loginPage("/loginA")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/rbr",true);
+               /* .successHandler((request, response, authentication) -> {
                 //new AuthenticationSuccessHandler() {
             //@Override
             //public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -85,7 +90,7 @@ public class WebSecurityConfig {
                 }
             }
         //}
-        );
+        );*/
         http.authorizeHttpRequests().requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("paciente","superadmin")
                 .requestMatchers("/administrativo", "/administrativo/**").hasAnyAuthority("administrativo","superadmin")
                 .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador","superadmin")
@@ -93,6 +98,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
                 .anyRequest().permitAll();
                 //.and().exceptionHandling().accessDeniedPage("/403.html");
+        //http.securityContext(security -> security.securityContextRepository(new HttpSessionSecurityContextRepository()));
+        //http.securityContext(security -> security.requireExplicitSave(true));
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }

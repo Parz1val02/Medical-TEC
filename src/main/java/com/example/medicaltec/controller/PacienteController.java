@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dto.SedeDto;
+import com.example.medicaltec.dto.SeguroDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.RecetaMedicamentoDto;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -88,8 +90,10 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/principal")
-    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest){
-        HttpSession httpSession1 = httpServletRequest.getSession();
+    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        //HttpSession httpSession1 = httpServletRequest.getSession();
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(Integer.parseInt(sedeUsuario.getId()));
@@ -105,6 +109,7 @@ public class PacienteController {
     @RequestMapping("/perfil")
     public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model, HttpServletRequest httpServletRequest){
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        SeguroDto seguroUsuario = seguroRepository.getSeguro(usuario.getId());
         List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> alergias = new ArrayList<>();
         for(int i=0; i<idAlergias.size(); i++){
@@ -112,6 +117,7 @@ public class PacienteController {
         }
         model.addAttribute("alergias", alergias);
         model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("seguroUsuario", seguroUsuario);
         model.addAttribute("arch", "windowzzz");
         return "paciente/perfil";
     }
@@ -280,17 +286,29 @@ public class PacienteController {
     @PostMapping("/guardarAlergias")
     public String guardarAlergias(@ModelAttribute("alergia") @Valid Alergia alergia, BindingResult bindingResult,
                                   RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest) {
+        Regex regex = new Regex();
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if (bindingResult.hasErrors()) {
             List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
             ArrayList<Alergia> alergias = new ArrayList<>();
-            for(int i=0; i<idAlergias.size(); i++){
+            for (int i = 0; i < idAlergias.size(); i++) {
                 alergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
             }
             model.addAttribute("alergias", alergias);
             model.addAttribute("seguros", seguroRepository.findAll());
             model.addAttribute("arch", "windowzzz");
             return "paciente/perfil";
+        }else if(!regex.inputisValid(alergia.getNombre())){
+            List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+            ArrayList<Alergia> alergias = new ArrayList<>();
+            for(int i = 0; i < idAlergias.size(); i++) {
+                alergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
+            }
+            model.addAttribute("alergias", alergias);
+            model.addAttribute("seguros", seguroRepository.findAll());
+            model.addAttribute("arch", "windowzzz");
+            attr.addFlashAttribute("msgRegex", "Ingresar solo texto en el input");
+            return "redirect:/paciente/perfil";
         }else{
             alergia.setEnabled(true);
             alergiaRepository.save(alergia);

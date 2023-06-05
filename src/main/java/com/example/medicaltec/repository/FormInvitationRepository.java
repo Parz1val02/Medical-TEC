@@ -10,8 +10,14 @@ import java.util.List;
 
 public interface FormInvitationRepository extends JpaRepository<FormInvitacion,Integer> {
 
+
+    /*QUERYS USADOS POR ADMINISTRATIVO*/
     @Query(nativeQuery = true,value="select * from form_invitacion where dni = ?")
     FormInvitacion findFormbyPacient(String dni);
+
+    @Query(nativeQuery = true, value="select dni from form_invitacion")
+    List<String> dnisFormInvitacion();
+    /*FIN QUERYS USADOS POR ADMINISTRATIVO*/
 
 
     /*QUERYS USADOOS POR ADMINISTRADOR*/

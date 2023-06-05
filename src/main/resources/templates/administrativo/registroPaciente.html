@@ -40,20 +40,20 @@
                             <br>
                             <form method="POST"  th:action="@{'/registro/llenadoform'}">
 
-                                <input th:value="${api.nombres}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${api.apellidos}" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${api.id}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${api.getNombres()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
+                                <input  th:value="|${api.getApellidoPaterno()} ${api.getApellidoMaterno()}|"class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${api.getNumeroDocumento()}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
 
 
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
 
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Nombres: </p>
-                                        <input type="text" class="form-control" th:field="*{api.nombres}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control" th:value="${api.getNombres()}" style="color: #9da9bb;" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Apellidos: </p>
-                                        <input type="text" class="form-control"  th:field="*{api.apellidos}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="|${api.getApellidoPaterno()} ${api.getApellidoMaterno()}|" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                        <input type="text" class="form-control"  th:field="*{api.id}" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="${api.getNumeroDocumento()}" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
@@ -93,8 +93,9 @@
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Domicilio: </p>
-                                        <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null?'is-invalid':''}" >
+                                        <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null || domiciliohack!=null?'is-invalid':''}" >
                                         <div class ="invalid-feedback" th:if="${domicilioError!=null}" th:text="${domicilioError}"></div>
+                                        <div class ="invalid-feedback" th:if="${domiciliohack!=null && domicilioError==null}" th:text="${domiciliohack}"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Correo: </p>
@@ -126,14 +127,16 @@
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null?'is-invalid':''}"></textarea>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null || medicamentoshack!=null?'is-invalid':''}"></textarea>
                                         <div class ="invalid-feedback" th:if="${medicamentosError!=null}" th:text="${medicamentosError}"></div>
+                                        <div class ="invalid-feedback" th:if="${medicamentoshack!=null && medicamentosError==null}" th:text="${medicamentoshack}"></div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Alergias: </p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null?'is-invalid':''}"></textarea>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null || alergiaHack!=null?'is-invalid':''}"></textarea>
                                         <div class ="invalid-feedback" th:if="${alergiaError!=null}" th:text="${alergiaError}"></div>
+                                        <div class ="invalid-feedback" th:if="${alergiaHack!=null && alergiaError==null}" th:text="${alergiaHack}"></div>
                                     </div>
 
 
@@ -151,7 +154,7 @@
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                     Terminos y condiciones
                                 </button>
-                                <div class ="invalid-feedback" th:if="${checkBoxError!=null}" th:text="${checkBoxError}"></div>
+                                <div class ="invalid-feedback" ></div>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

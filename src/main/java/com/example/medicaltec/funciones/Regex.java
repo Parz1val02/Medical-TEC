@@ -10,4 +10,10 @@ public class Regex {
         Matcher matcher = pattern.matcher(pass2);
         return matcher.find();
     }
+    public boolean inputisValid(String input){
+        String regex = "^[A-Za-zñÑáéíóúÁÉÍÓÚ]{1,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
 }

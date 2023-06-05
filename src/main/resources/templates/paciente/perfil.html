@@ -99,7 +99,7 @@
                                                 <option  th:each="seguro : ${seguros}"
                                                          th:value="${seguro.id}"
                                                          th:text="${seguro.nombreSeguro}"
-                                                        th:selected="${seguro.id==session.usuario.segurosIdSeguro.id}"></option>
+                                                        th:selected="${seguro.id==seguroUsuario.id}"></option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Aceptar</button>
@@ -130,6 +130,7 @@
                                         <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
                                         <div th:if="${msg4 != null}" th:text="${msg4}" class="alert alert-success" role="alert"></div>
                                         <div th:if="${msg5 != null}" th:text="${msg5}" class="alert alert-danger" role="alert"></div>
+                                        <div th:if="${msgRegex!= null}" th:text="${msgRegex}" class="alert alert-warning" role="alert"></div>
                                         <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agregue sus alergias</h6>
                                         <form method="post" th:action="@{/paciente/guardarAlergias}" th:object="${alergia}">
                                             <div class="mb-3">
