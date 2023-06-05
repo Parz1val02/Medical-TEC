@@ -61,7 +61,10 @@ public class WebSecurityConfig {
 
                 HttpSession httpSession = request.getSession();
                 Usuario usuario = usuarioRepository.findByEmail(authentication.getName());
+                    System.out.println(usuario.getNombre() + " " + usuario.getApellido() + " " + usuario.getTelefono());
                 httpSession.setAttribute("usuario", usuario);
+                    Usuario superadmin = (Usuario) request.getSession().getAttribute("usuario");
+                    System.out.println(superadmin.getNombre());
 
                 if (defaultSavedRequest != null) {
                     String targetURL = defaultSavedRequest.getRedirectUrl();
