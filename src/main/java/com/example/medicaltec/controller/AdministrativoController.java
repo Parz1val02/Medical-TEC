@@ -18,7 +18,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequestMapping("/administrativo")
@@ -50,8 +52,18 @@ public class AdministrativoController {
 
 
     @RequestMapping(value = {"/dashboard", ""},method = RequestMethod.GET)
-    public String dashboard(Model model){
-        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+    public String dashboard(Model model,HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Usuario> listaUsuarios1 = usuarioRepository.findAll();
+
+        List<Usuario> listaUsuarios = new ArrayList<>();
+
+        for(Usuario usuario : listaUsuarios1){
+            if(Objects.equals(usuario.getSedesIdsedes().getId(), usuarioSession.getSedesIdsedes().getId()) && usuario.getRolesIdroles().getNombreRol().equalsIgnoreCase("paciente")){
+                listaUsuarios.add(usuario);
+            }
+        }
+
         model.addAttribute("listaUsuarios",listaUsuarios);
 
         //System.out.println(listaUsuarios.get(0).getEstadosIdestado().getNombre());
