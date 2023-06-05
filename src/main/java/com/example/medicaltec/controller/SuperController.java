@@ -664,17 +664,19 @@ public class SuperController {
         return "redirect:/superAdmin/informes";
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
-    public String confSup(Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession){
+    public String confSup(Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         System.out.println("Entrando A Perfil de SuperAdmin");
         //Usuario user1 =
-        Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        //Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        httpSession.setAttribute("usuario",SPA);
         System.out.println("Se saco el usuario de sesión");
-        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
-        System.out.println("se saco usuario_doctor");
-        System.out.println(usuario_doctor.getNombre() + " y su " + usuario_doctor.getTelefono());
+        //Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        //System.out.println("se saco usuario_doctor");
+        //System.out.println(usuario_doctor.getNombre() + " y su " + usuario_doctor.getTelefono());
         //System.out.println(superadmin.getNombre() + " y su " + superadmin.getTelefono());
         //Usuario user = usuarioRepository.obtenerSuperAdmin();
-        model.addAttribute("superadmin",usuario_doctor);
+        model.addAttribute("superadmin",SPA);
         return "superAdmin/confSup";
     }
     @RequestMapping(value = {"/superPass"},method = RequestMethod.GET)

@@ -53,7 +53,11 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.formLogin().loginPage("/loginA").loginProcessingUrl("/login").successHandler((request, response, authentication) -> {
+        http.formLogin()
+                .loginPage("/loginA")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/rbr",true);
+               /* .successHandler((request, response, authentication) -> {
                 //new AuthenticationSuccessHandler() {
             //@Override
             //public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -86,7 +90,7 @@ public class WebSecurityConfig {
                 }
             }
         //}
-        );
+        );*/
         http.authorizeHttpRequests().requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("paciente","superadmin")
                 .requestMatchers("/administrativo", "/administrativo/**").hasAnyAuthority("administrativo","superadmin")
                 .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador","superadmin")

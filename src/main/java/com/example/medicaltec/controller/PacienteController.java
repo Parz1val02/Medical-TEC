@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -89,8 +90,10 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/principal")
-    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest){
-        HttpSession httpSession1 = httpServletRequest.getSession();
+    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        //HttpSession httpSession1 = httpServletRequest.getSession();
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(Integer.parseInt(sedeUsuario.getId()));
