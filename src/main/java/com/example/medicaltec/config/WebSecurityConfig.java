@@ -19,6 +19,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
@@ -93,6 +94,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
                 .anyRequest().permitAll();
                 //.and().exceptionHandling().accessDeniedPage("/403.html");
+        //http.securityContext(security -> security.securityContextRepository(new HttpSessionSecurityContextRepository()));
+        //http.securityContext(security -> security.requireExplicitSave(true));
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }
