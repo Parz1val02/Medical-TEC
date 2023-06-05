@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @Entity
@@ -20,5 +23,11 @@ public class Notificacione {
     @ManyToOne
     @JoinColumn(name = "usuario_dni", nullable = false)
     private Usuario usuarioDni;
+
+    @Column(name = "fecha", length = 200)
+    private LocalDate fecha;
+
+    @Column(name = "hora", length = 200)
+    private LocalTime hora;
 
 }
