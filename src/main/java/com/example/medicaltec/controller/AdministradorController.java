@@ -302,7 +302,8 @@ public class AdministradorController {
         } else {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasena );
+            String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
+            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
@@ -514,7 +515,9 @@ public class AdministradorController {
         } else {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasena );
+            String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
+
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
@@ -644,28 +647,34 @@ public class AdministradorController {
     }
 
     @GetMapping("/listaFormulariosRegistro")
-    public String listaFormulariosRegistro(Model model, @ModelAttribute("usuario") Usuario usuario, HttpServletRequest httpServletRequest){
+    public String listaFormulariosRegistro(Model model, HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
-        /*List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
-        model.addAttribute("listaEspecialidades",listaEspecialidades);
-        model.addAttribute("listaPacientes",listaPacientes);
-        model.addAttribute("listaDoctores",listaDoctores);
-        */
-        List<FormInvitacion> listaFormulariosRegistroPorInvitar = formInvitationRepository.findAll();
+        List<FormInvitacion> listaFormulariosRegistroPorInvitar = formInvitationRepository.findFormbySede(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaFormulariosRegistro",listaFormulariosRegistroPorInvitar);
         return "administrador/listaFormulariosRegistro";
     }
 
     @PostMapping("/guardarFormulariosRegistro")
-    public String guardarFormulariosRegistro(@RequestParam("seleccionados") List<Long> idsSeleccionados){
+    public String guardarFormulariosRegistro(@RequestParam("seleccionados") List<String> idsSeleccionados, RedirectAttributes attr){
         //Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
-        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
-        //List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        //sList<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+
+        for (String idStr : idsSeleccionados) {
+            // Obtienes el registro por ID desde tu servicio o repositorio
+            Integer idInt = Integer.parseInt(idStr);
+            Optional<FormInvitacion> formInvitacionOptional = formInvitationRepository.findById(idInt);
+
+
+            // Realizas las operaciones necesarias para guardar el registro en la base de datos
+            // ...
+            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
+            String contrasena = generadorDeContrasenha.crearPassword();
+            String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
+            usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
+            // Actualizar el estado de pendiente a 0. ya no es pendiente.
+            formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
+        }
+
+        attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
 
 
         return "redirect:/administrador/listaFormulariosRegistro";

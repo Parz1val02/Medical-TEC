@@ -1,5 +1,6 @@
 package com.example.medicaltec.config;
 
+import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.repository.UsuarioRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
@@ -51,14 +53,23 @@ public class WebSecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.formLogin().loginPage("/loginA").loginProcessingUrl("/login").successHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        http.formLogin()
+                .loginPage("/loginA")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/rbr",true);
+               /* .successHandler((request, response, authentication) -> {
+                //new AuthenticationSuccessHandler() {
+            //@Override
+            //public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                 DefaultSavedRequest defaultSavedRequest =
                         (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
                 HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+                Usuario usuario = usuarioRepository.findByEmail(authentication.getName());
+                    System.out.println(usuario.getNombre() + " " + usuario.getApellido() + " " + usuario.getTelefono());
+                httpSession.setAttribute("usuario", usuario);
+                    Usuario superadmin = (Usuario) request.getSession().getAttribute("usuario");
+                    System.out.println(superadmin.getNombre());
 
                 if (defaultSavedRequest != null) {
                     String targetURL = defaultSavedRequest.getRedirectUrl();
@@ -78,14 +89,17 @@ public class WebSecurityConfig {
                     }
                 }
             }
-        });
+        //}
+        );*/
         http.authorizeHttpRequests().requestMatchers("/paciente", "/paciente/**").hasAnyAuthority("paciente","superadmin")
                 .requestMatchers("/administrativo", "/administrativo/**").hasAnyAuthority("administrativo","superadmin")
                 .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador","superadmin")
                 .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor","superadmin")
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
-                .anyRequest().permitAll()
-                .and().exceptionHandling().accessDeniedPage("/403.html");
+                .anyRequest().permitAll();
+                //.and().exceptionHandling().accessDeniedPage("/403.html");
+        //http.securityContext(security -> security.securityContextRepository(new HttpSessionSecurityContextRepository()));
+        //http.securityContext(security -> security.requireExplicitSave(true));
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);
         return http.build();
     }

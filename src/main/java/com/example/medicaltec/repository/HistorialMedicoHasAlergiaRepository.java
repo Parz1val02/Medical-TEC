@@ -22,6 +22,6 @@ public interface HistorialMedicoHasAlergiaRepository extends JpaRepository<Histo
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "DELETE FROM telesystem.historialmedico_has_alergias WHERE (historialmedico_idhistorialmedico = ?1) and (alergias_idalergias = ?2)")
+    @Query(nativeQuery = true, value = "DELETE FROM telesystem_2.historialmedico_has_alergias WHERE (historialmedico_idhistorialmedico = ?1) and (alergias_idalergias = ?2)")
     void borrarweas(String id1, String id2);
 }

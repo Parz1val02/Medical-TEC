@@ -10,7 +10,7 @@ import java.util.List;
 public interface RecetaRepository extends JpaRepository<Receta, Integer> {
 
 
-    @Query(nativeQuery = true, value = "SELECT m.idmedicamentos, m.nombre, m.precio, m.cantidad, m.frecuencia FROM telesystem.receta r\n" +
+    @Query(nativeQuery = true, value = "SELECT m.idmedicamentos, m.nombre, m.precio, m.cantidad, m.frecuencia FROM telesystem_2.receta r\n" +
             "inner join receta_has_medicamentos rhm on r.idreceta=rhm.receta_idreceta\n" +
             "inner join medicamentos m on m.idmedicamentos=rhm.medicamentos_idmedicamentos\n" +
             "where idreceta=?1")

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface HistorialMedicoRepository extends JpaRepository<Historialmedico, Integer> {
-    @Query(nativeQuery = true, value = "SELECT idhistorialmedico FROM telesystem.historialmedico where idhistorialmedico=?1")
+    @Query(nativeQuery = true, value = "SELECT idhistorialmedico FROM telesystem_2.historialmedico where idhistorialmedico=?1")
     String verificaridHistorialMedico(String id);
 }

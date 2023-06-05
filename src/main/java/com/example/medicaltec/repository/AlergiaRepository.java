@@ -8,13 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface AlergiaRepository extends JpaRepository<Alergia,Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT idalergias FROM telesystem.alergias where idalergias=?1")
+    @Query(nativeQuery = true, value = "SELECT idalergias FROM telesystem_2.alergias where idalergias=?1")
     String verificaridAlergia(String id);
 
     @Query(value = "SELECT LAST_INSERT_ID();", nativeQuery = true)
     Integer lastID();
 
-    @Query(value = "SELECT * FROM telesystem.alergias where idalergias=?1 and enabled=1;", nativeQuery = true)
+    @Query(value = "SELECT * FROM telesystem_2.alergias where idalergias=?1 and enabled=1;", nativeQuery = true)
     Alergia obtenerAlergia(Integer id);
 
     @Modifying

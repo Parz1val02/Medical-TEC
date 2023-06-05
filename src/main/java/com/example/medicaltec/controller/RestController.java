@@ -27,8 +27,8 @@ public class RestController {
 
     @GetMapping(value = "/citas", produces = MediaType.APPLICATION_JSON_VALUE + "; charset=utf-8")
     public List<Cita> returnCitas(HttpServletRequest httpServletRequest){
-        //Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        Usuario usuario = usuarioRepository.findByid("22647853");
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        //Usuario usuario = usuarioRepository.findByid("22647853");
         return citaRepository.historialCitasAgendadas(usuario.getId());
     }
 }

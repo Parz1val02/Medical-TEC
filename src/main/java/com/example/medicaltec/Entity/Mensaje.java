@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @Entity
@@ -17,11 +20,22 @@ public class Mensaje {
     @Column(name = "contenido", nullable = false, length = 500)
     private String contenido;
 
-    @Column(name = "fecha", nullable = false, length = 45)
-    private String fecha;
+    @Column(name = "fecha", length = 200)
+    private LocalDate fecha;
+
+    @Column(name = "hora", length = 200)
+    private LocalTime hora;
 
     @ManyToOne
     @JoinColumn(name = "conversaciones_idconversaciones", nullable = false)
     private Conversacione conversacionesIdconversaciones;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "emisorDNI", referencedColumnName = "dni", nullable = false)
+    private Usuario emisorDNI;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "receptorDNI", referencedColumnName = "dni", nullable = false)
+    private Usuario receptorDNI;
 
 }

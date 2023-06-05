@@ -1,8 +1,10 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dao.PersonaDao;
 import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/registro")
 public class RegistroController {
+
+    @Autowired
+    PersonaDao personaDao;
     final ApiRepository apiRepository;
     final SeguroRepository seguroRepository;
     final SedeRepository sedeRepository;
@@ -60,28 +65,29 @@ public class RegistroController {
         }
         //valido si el usuario no fue invitado antes
         if(!existe){
-            Optional<Api> apiOptional = apiRepository.findById(idLongStr);
+
             //valido si el dni brindado se encuentra en la tabla api
-            if(apiOptional.isPresent()){
+            try {
 
-                Api api = apiOptional.get();
-                model.addAttribute("api",api);
-                model.addAttribute("listaseguros",seguroRepository.findAll());
-                model.addAttribute("listasedes",sedeRepository.findAll());
 
-                model.addAttribute("sedeid",1);
-                model.addAttribute("sexo","");
-                model.addAttribute("domicilio","");
-                model.addAttribute("correo","");
-                model.addAttribute("seguroid",1);
-                model.addAttribute("celular","");
-                model.addAttribute("medicamento","");
-                model.addAttribute("alergia","");
-                model.addAttribute("edad","");
+
+                model.addAttribute("api",personaDao.obtenerPersona(idLongStr) );
+                model.addAttribute("listaseguros", seguroRepository.findAll());
+                model.addAttribute("listasedes", sedeRepository.findAll());
+
+                model.addAttribute("sedeid", 1);
+                model.addAttribute("sexo", "");
+                model.addAttribute("domicilio", "");
+                model.addAttribute("correo", "");
+                model.addAttribute("seguroid", 1);
+                model.addAttribute("celular", "");
+                model.addAttribute("medicamento", "");
+                model.addAttribute("alergia", "");
+                model.addAttribute("edad", "");
 
                 return "administrativo/registroPaciente";
-            }else{
-                attr.addFlashAttribute("error","el dni no fue encontrado");
+            }catch(Exception e){
+                attr.addFlashAttribute("error","ha ocurrido un error");
                 return "redirect:/registro/index";
             }
 
@@ -117,12 +123,15 @@ public class RegistroController {
 
         int numErrors = 0;
         String domicilioError = null;
+        String domiciliohack = null;
         String correoError = null;
         String correoError2 = null;
         String telefonoError = null;
         String telefonoError2 = null;
         String medicamentosError = null;
+        String medicamentoshack = null;
         String alergiaError = null;
+        String alergiahack = null;
         String edadError = null;
         String edadError1 = null;
 
@@ -131,6 +140,11 @@ public class RegistroController {
                 numErrors++;
                 domicilioError="El campo domicilio no puede estar vacio";
     }
+            if(!noScriptPlease(domicilio)){
+                domiciliohack ="El campo domicilio no acepta estos caracteres.";
+                numErrors++;
+            }
+
             if(correo.equals("")){
                 numErrors++;
                 correoError="El campo correo no puede estar vacio";
@@ -145,7 +159,7 @@ public class RegistroController {
                 telefonoError="El campo telefono celular no puede estar vacio";
     }
 
-            if(!isPositiveNumberWith8Digits(celular)){
+            if(!isPositiveNumberWith9Digits(celular)){
                 numErrors++;
              telefonoError2="El campo telefono celular debe ser un numero de 9 digitos";
     }
@@ -165,10 +179,20 @@ public class RegistroController {
                 numErrors++;
         medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba 'ninguno'";
     }
+            if(!noScriptPlease(medicamento)){
+                numErrors++;
+                medicamentoshack="El campo medicamento no acepta dichos caracteres";
+            }
+
             if(alergia.equals("")){
                 numErrors++;
         alergiaError="El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba 'ninguna'";
     }
+
+            if(!noScriptPlease(alergia)){
+                numErrors++;
+                alergiahack="El campo alergia no acepta estos caracteres";
+            }
 
             /*if(!checkboxValue){
                 checkBoxError="Debe aceptar los terminos y condiciones";
@@ -178,9 +202,8 @@ public class RegistroController {
 
 
             if(numErrors>0){
-                Optional<Api> apiOptional = apiRepository.findById(id);
-                Api api = apiOptional.get();
-                model.addAttribute("api",api);
+
+                model.addAttribute("api",personaDao.obtenerPersona(id));
                 model.addAttribute("listaseguros",seguroRepository.findAll());
                 model.addAttribute("listasedes",sedeRepository.findAll());
 
@@ -196,14 +219,18 @@ public class RegistroController {
 
                 //msgs
                 model.addAttribute("domicilioError",domicilioError);
+                model.addAttribute("domiciliohack",domiciliohack);
                 model.addAttribute("correoError",correoError);
                 model.addAttribute("correoError2",correoError2);
                 model.addAttribute("telefonoError",telefonoError);
                 model.addAttribute("telefonoError2",telefonoError2);
                 model.addAttribute("medicamentosError",medicamentosError);
+                model.addAttribute("medicamentoshack",medicamentoshack);
                 model.addAttribute("alergiaError",alergiaError);
                 model.addAttribute("edaderror",edadError);
                 model.addAttribute("edaderror1",edadError1);
+                model.addAttribute("alergiaHack",alergiahack);
+
 
 
                 return "administrativo/registroPaciente";
@@ -225,6 +252,8 @@ public class RegistroController {
                 formInvitacion.setMedicamentos(medicamento);
                 formInvitacion.setAlergias(alergia);
 
+                //Para el administrador
+                formInvitacion.setPendiente(true);
 
                 formInvitationRepository.save(formInvitacion);
 
@@ -244,8 +273,8 @@ public class RegistroController {
 
 
 
-    //verificar dni correcto
-    public static boolean isPositiveNumberWith8Digits(String input) {
+    //verificar numero correcto
+    public static boolean isPositiveNumberWith9Digits(String input) {
         return input.matches("\\d{9}");
     }
     //verificar email correcto
@@ -263,5 +292,9 @@ public class RegistroController {
         }
     }
 
+    public static boolean noScriptPlease(String input){
+        String emailRegex = "^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\\s]+$";
+        return input.matches(emailRegex);
+    }
 
 }

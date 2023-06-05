@@ -1,6 +1,8 @@
 package com.example.medicaltec.controller;
 
-
+import com.example.medicaltec.dto.SedeDto;
+import com.example.medicaltec.dto.SeguroDto;
+import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
@@ -12,6 +14,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,8 @@ import org.springframework.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/paciente")
@@ -84,11 +90,16 @@ public class PacienteController {
     }
 
     @RequestMapping(value = "/principal")
-    public String paginaprincipal(Model model, HttpSession httpSession){
-        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+    public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        //HttpSession httpSession1 = httpServletRequest.getSession();
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(Integer.parseInt(sedeUsuario.getId()));
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
+        model.addAttribute("sedeUsuario", sedeUsuario);
         List<Sede> listaSedes = sedeRepository.findAll();
         model.addAttribute("listaSedes",listaSedes);
         model.addAttribute("arch", "arch");
@@ -98,6 +109,7 @@ public class PacienteController {
     @RequestMapping("/perfil")
     public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model, HttpServletRequest httpServletRequest){
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        SeguroDto seguroUsuario = seguroRepository.getSeguro(usuario.getId());
         List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> alergias = new ArrayList<>();
         for(int i=0; i<idAlergias.size(); i++){
@@ -105,6 +117,7 @@ public class PacienteController {
         }
         model.addAttribute("alergias", alergias);
         model.addAttribute("seguros", seguroRepository.findAll());
+        model.addAttribute("seguroUsuario", seguroUsuario);
         model.addAttribute("arch", "windowzzz");
         return "paciente/perfil";
     }
@@ -120,10 +133,7 @@ public class PacienteController {
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
-        List<Cita> citas1 = citaRepository.historialCitasAgendadas(usuario.getId());
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
-
-
         for (int i = 0; i < citas.size(); i++) {
             //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
             List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
@@ -131,12 +141,9 @@ public class PacienteController {
             for (int j = 0; j < idmed.size(); j++) {
                 medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(j)));
             }
-
         }
         model.addAttribute("medicamentos", medicamentos);
-
         model.addAttribute("citas", citas);
-        model.addAttribute("citas1", citas1);
         model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
@@ -258,9 +265,12 @@ public class PacienteController {
                 model.addAttribute("arch", "windowzzz");
                 return "paciente/agendar";
             }
+            Estadoscita estadoscita = new Estadoscita();
+            estadoscita.setId(1);
             cita.setCitacancelada(false);
             cita.setPaciente(paciente);
             cita.setDoctor(doctor);
+            cita.setEstadoscitaIdestados(estadoscita);
             citaRepository.save(cita);
             attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         }
@@ -283,17 +293,29 @@ public class PacienteController {
     @PostMapping("/guardarAlergias")
     public String guardarAlergias(@ModelAttribute("alergia") @Valid Alergia alergia, BindingResult bindingResult,
                                   RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest) {
+        Regex regex = new Regex();
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if (bindingResult.hasErrors()) {
             List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
             ArrayList<Alergia> alergias = new ArrayList<>();
-            for(int i=0; i<idAlergias.size(); i++){
+            for (int i = 0; i < idAlergias.size(); i++) {
                 alergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
             }
             model.addAttribute("alergias", alergias);
             model.addAttribute("seguros", seguroRepository.findAll());
             model.addAttribute("arch", "windowzzz");
             return "paciente/perfil";
+        }else if(!regex.inputisValid(alergia.getNombre())){
+            List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+            ArrayList<Alergia> alergias = new ArrayList<>();
+            for(int i = 0; i < idAlergias.size(); i++) {
+                alergias.add(alergiaRepository.obtenerAlergia(idAlergias.get(i)));
+            }
+            model.addAttribute("alergias", alergias);
+            model.addAttribute("seguros", seguroRepository.findAll());
+            model.addAttribute("arch", "windowzzz");
+            attr.addFlashAttribute("msgRegex", "Ingresar solo texto en el input");
+            return "redirect:/paciente/perfil";
         }else{
             alergia.setEnabled(true);
             alergiaRepository.save(alergia);
@@ -371,22 +393,27 @@ public class PacienteController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Regex regex = new Regex();
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
         if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
             return "redirect:/paciente/password";
-        //}else if(!pass1.equals(usuarioRepository.passAdmv())){
-        //    attr.addFlashAttribute("errorPass", "La contraseña actual no coincide");
-        //    return "redirect:/paciente/password";
+        } else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            return "redirect:/paciente/password";
         } else if (!pass3.equals(pass2) ) {
-            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no son iguales");
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
+            return "redirect:/paciente/password";
+        }else if(regex.contrasenaisValid(pass2)){
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
             return "redirect:/paciente/password";
         }else {
-            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuario.getId());
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/paciente/perfil";
         }
-
     }
     @PostMapping("/guardarFoto")
     public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){

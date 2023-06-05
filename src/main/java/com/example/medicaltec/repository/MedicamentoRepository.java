@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MedicamentoRepository extends JpaRepository<Medicamento, Integer> {
 
-    @Query(value = "SELECT * FROM telesystem.medicamentos where idmedicamentos=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM telesystem_2.medicamentos where idmedicamentos=?1", nativeQuery = true)
     Medicamento obtenerMedicamento(Integer id);
 
 

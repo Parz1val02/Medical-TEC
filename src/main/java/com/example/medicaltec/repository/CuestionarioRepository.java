@@ -13,7 +13,7 @@ public interface CuestionarioRepository extends JpaRepository<Cuestionario, Inte
     //en superadmin
     @Transactional
     @Modifying
-    @Query("update Cuestionario c set c.activo = ?1 where c.id = ?2")
+    @Query(value = "update Cuestionario c set c.activo = ?1 where c.id = ?2", nativeQuery = true)
     int updateActivoByActivo(Boolean activoNuevo, int id);
 
 
