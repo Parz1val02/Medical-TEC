@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface CuestionarioRepository extends JpaRepository<Cuestionario, Integer> {
 
     //en superadmin
@@ -13,5 +15,10 @@ public interface CuestionarioRepository extends JpaRepository<Cuestionario, Inte
     @Modifying
     @Query("update Cuestionario c set c.activo = ?1 where c.id = ?2")
     int updateActivoByActivo(Boolean activoNuevo, int id);
+
+
+    //para paciente
+    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cuestionario where paciente_dni=?1")
+    Cuestionario cuestionaXPaciente(String dni);
 
 }
