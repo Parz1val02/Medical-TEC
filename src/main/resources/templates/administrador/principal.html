@@ -76,7 +76,7 @@
                                     Pacientes
                                 </h4>
                             </div>
-                            <div class="card-body fs--1" >  <!--style="display: flex; justify-content: space-around; overflow-x: auto"-->
+                            <div class="card-body border-top fs--1" >  <!--style="display: flex; justify-content: space-around; overflow-x: auto"-->
 
                                 <table class="table table-striped" id="userList">
                                     <thead style="background: #cdeffc">
@@ -160,7 +160,7 @@
                             </div>
                             <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
                                 <div class="row">
-                                    <div class="col-sm-6 mb-3" th:each="doctor, arch : ${listaDoctores}">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3" th:each="doctor, arch : ${listaDoctores}">
                                         <div class="card" style="min-height: 20rem">
                                             <div class="card-body">
                                                 <div class="row">
@@ -467,7 +467,7 @@
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
         $('#userList').DataTable({
             dom:
-                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'row align-items-center'<'d-flex justify-content-center col-sm-12 col-md-12 col-12'l><'d-flex justify-content-center col-sm-12 col-md-12 col-12'f>>\n" +
                 "<'table-responsive'tr>\n" +
                 "<'row align-items-center'<'col-sm-12 col-md-12 d-flex justify-content-center'i><'col-sm-12 col-md-12 d-flex justify-content-center'p>>",
             language: {
