@@ -35,10 +35,12 @@
                                 Datos del paciente
                             </h3>
                             <br>
+
+
                             <form method="POST"  th:action="@{'/administrativo/enviarEmail'}">
                                 <input th:value="${correo}" class="form-control" name="correo" style="color: #9da9bb;" type="hidden">
-                                <input th:value="${persona.getNombres()()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
-                                <input th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoPaterno()()} |" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${persona.getNombres()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
+                                <input th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoPaterno()} |" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
                                 <input th:value="${dni}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
 
 
@@ -51,7 +53,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Apellidos: </p>
-                                        <input type="text" class="form-control"  th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoMaterno()()} |" style="color: #9da9bb;" disabled>
+                                        <input type="text" class="form-control"  th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoMaterno()} |" style="color: #9da9bb;" disabled>
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>

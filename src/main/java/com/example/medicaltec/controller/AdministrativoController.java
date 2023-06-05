@@ -82,7 +82,7 @@ public class AdministrativoController {
 
         return "administrativo/CambiarPassword";
     }
-
+    //ver formulario llenado por el paciente invitado
     @RequestMapping(value = {"/form"},method = RequestMethod.GET)
     public String editForm(@RequestParam("id")String dni, Model model, @ModelAttribute("FormInvitacion")FormInvitacion formInvitacion){
 
@@ -102,51 +102,99 @@ public class AdministrativoController {
     @PostMapping(value="/editForm")
     public String editarForm(@ModelAttribute("FormInvitacion") @Valid FormInvitacion formInvitacion, BindingResult bindingResult, Model model, RedirectAttributes attr){
 
+        int error = 0;
 
 
 
-        if(bindingResult.hasErrors()){
-            model.addAttribute("formInvitacion",formInvitacion);
-            model.addAttribute("listaseguros",seguroRepository.findAll());
-            model.addAttribute("listasedes",sedeRepository.findAll());
+
+            String domicilioError=null;
+            String domiciliohack=null;
+            String correoError=null;
+            String correoError2=null;
+            String telefonoError=null;
+            String telefonoError2=null;
+            String medicamentosError=null;
+            String medicamentoshack=null;
+            String alergiaError=null;
+            String alergiaHack=null;
+
 
             if(formInvitacion.getDomicilio().equals("")){
-                model.addAttribute("domicilioError","El campo domicilio no puede estar vacio");
+               domicilioError= "El campo domicilio no puede estar vacio.";
+               error++;
             }
+            if (!noScriptPlease(formInvitacion.getDomicilio())) {
+                domiciliohack ="El campo domicilio no acepta estos caracteres.";
+                error++;
+            }
+
             if(formInvitacion.getCorreo().equals("")){
-                model.addAttribute("correoError","El campo correo no puede estar vacio");
+                correoError="El campo correo no puede estar vacio";
+                error++;
                 model.addAttribute("correoLleno",false);
-            }else{
+            }
+             else{
 
                 model.addAttribute("correoLleno",true);
             }
 
             if(!isValidEmail(formInvitacion.getCorreo())){
-                model.addAttribute("correoError2","El campo correo ingresado no es correcto");
+                correoError2="El campo correo ingresado no es correcto";
+                error++;
             }
 
             if(formInvitacion.getCelular().equals("")){
-                model.addAttribute("telefonoError","El campo telefono celular no puede estar vacio");
+                telefonoError="El campo telefono celular no puede estar vacio";
+                error++;
                 model.addAttribute("numeroLleno",false);
-            }else{
+            }  else{
 
                 model.addAttribute("numeroLleno",true);
             }
 
 
             if(!isPositiveNumberWith8Digits(formInvitacion.getCelular())){
-                model.addAttribute("telefonoError2","El campo telefono celular debe ser un numero de 9 digitos");
+                telefonoError2="El campo telefono celular debe ser un numero de 9 digitos";
+                error++;
             }
 
 
 
 
             if(formInvitacion.getMedicamentos().equals("")){
-                model.addAttribute("medicamentosError","El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba ninguno");
+                medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba ninguno";
+                error++;
             }
+            if (!noScriptPlease(formInvitacion.getMedicamentos())){
+                medicamentoshack="El campo medicamento no acepta dichos caracteres";
+                error++;
+            }
+
             if(formInvitacion.getAlergias().equals("")){
-                model.addAttribute("alergiaError","El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba ninguna");
+               alergiaError="El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba ninguna";
+                error++;
             }
+            if (!noScriptPlease(formInvitacion.getAlergias())) {
+                alergiaHack="El campo alergia no acepta estos caracteres";
+                error++;
+            }
+
+
+        if(error>0){
+            model.addAttribute("formInvitacion",formInvitacion);
+            model.addAttribute("listaseguros",seguroRepository.findAll());
+            model.addAttribute("listasedes",sedeRepository.findAll());
+
+            model.addAttribute("domicilioError",domicilioError);
+            model.addAttribute("domiciliohack",domiciliohack);
+            model.addAttribute("correoError",correoError);
+            model.addAttribute("correoError2",correoError2);
+            model.addAttribute("telefonoError",telefonoError);
+            model.addAttribute("telefonoError2",telefonoError2);
+            model.addAttribute("medicamentosError",medicamentosError);
+            model.addAttribute("medicamentoshack",medicamentoshack);
+            model.addAttribute("alergiaError",alergiaError);
+            model.addAttribute("alergiaHack",alergiaHack);
 
 
             return "administrativo/formListos";
@@ -179,6 +227,7 @@ public class AdministrativoController {
         return "administrativo/notificaciones";
     }
 
+    //Cambio de contraseña
     @PostMapping("/change")
     public String changePassword(@RequestParam("pass1") String pass1,
                                  @RequestParam("pass2") String pass2,
@@ -208,49 +257,63 @@ public class AdministrativoController {
 
     }
 
-
+    //Modal open, dni y correo
     @PostMapping("/enviar")
     public String enviarForm(@RequestParam("dni") String dni,
-                             @RequestParam("correo") String correo,Model model,RedirectAttributes attr) throws Exception {
+                             @RequestParam("correo") String correo,Model model,RedirectAttributes attr) {
+
+        try {
+            if (!isValidEmail(correo) || !isPositiveNumberWith8Digits1(dni)) {
+                attr.addFlashAttribute("errorenvio", "Los datos ingresados no son correctos, el dni debe contener 8 digitos y el email el formato adecuado");
+
+                return "redirect:/administrativo/dashboard";
+            } else {
 
 
-        if(!isValidEmail(correo) || !isPositiveNumberWith8Digits1(dni)){
-            attr.addFlashAttribute("errorenvio","Los datos ingresados no son correctos, el dni debe contener 8 digitos y el email el formato adecuado");
+                List<String> dnispacientes = usuarioRepository.obtenerdnis();
+                List<String> dnisInvitados = formInvitationRepository.dnisFormInvitacion();
+                boolean existe1 = false;
+                boolean existe2 = false;
+                for (String dni1 : dnispacientes) {
+                    if (dni.equals(dni1)) {
+                        existe1 = true;
+                        break;
+                    }
+                }
 
-            return "redirect:/administrativo/dashboard";
-        }else{
-            List<String> dnispacientes = usuarioRepository.obtenerdnis();
-            boolean existe = false;
-            for (String dni1:dnispacientes) {
-                if(dni.equals(dni1)){
-                    existe=true;
-                    break;
+                for (String dni1 : dnisInvitados) {
+                    if (dni.equals(dni1)) {
+                        existe2 = true;
+                        break;
+                    }
+                }
+
+
+                if (!existe1 && !existe2) {
+
+
+                    model.addAttribute("persona", personaDao.obtenerPersona(dni));
+                    model.addAttribute("correo", correo);
+                    model.addAttribute("dni", dni);
+                    model.addAttribute("listaseguros", seguroRepository.findAll());
+                    model.addAttribute("listasedes", sedeRepository.findAll());
+                    return "administrativo/formEnvio";
+
+
+                } else if (existe2) {
+
+                    attr.addFlashAttribute("errorenvio", "El usuario ya ha sido invitado a la plataforma");
+                    return "redirect:/administrativo/dashboard";
+
+                } else {
+                    attr.addFlashAttribute("errorenvio", "El usuario que ha invitado ya se encuentra registrado en la plataforma");
+                    return "redirect:/administrativo/dashboard";
                 }
             }
-
-            if(!existe){
-
-
-
-
-                model.addAttribute("persona",personaDao.obtenerPersona(dni));
-                model.addAttribute("correo",correo);
-                model.addAttribute("dni",dni);
-                model.addAttribute("listaseguros",seguroRepository.findAll());
-                model.addAttribute("listasedes",sedeRepository.findAll());
-                return "administrativo/formEnvio";
-
-
-
-
-
-
-            }else{
-                attr.addFlashAttribute("errorenvio","El usuario que ha invitado ya se encuentra registrado en la plataforma");
-                return "redirect:/administrativo/dashboard";
-            }
+        }catch (Exception e){
+            attr.addFlashAttribute("errorenvio", "Un error ha ocurrido al procesar los datos");
+            return "redirect:/administrativo/dashboard";
         }
-
 
 
 
@@ -289,11 +352,14 @@ public class AdministrativoController {
 
     //verificar email correcto
     public static boolean isValidEmail(String input) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String emailRegex = "^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return input.matches(emailRegex);
     }
 
-
+    public static boolean noScriptPlease(String input){
+        String emailRegex = "^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\\s]+$";
+        return input.matches(emailRegex);
+    }
 
 
 }
