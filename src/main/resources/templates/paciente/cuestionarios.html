@@ -42,34 +42,46 @@
                     </div>
                     <!--/.bg-holder-->
                 </div>
-                <div class="card-body" style="margin-top: -70px">
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12" >
-                            <form method="post" th:action="@{/paciente/guardarRespuestas}" th:object="${respuesta}">
-                                <div class="row">
-                                    <!--<div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
 
-                                        <label for="disabledTextInput1" th:text="${preg.pregunta}" class="form-label">¿Qué enfermedades previas has tenido/tienes?</label>
-                                        <input type="text" class="form-control" name="preguntasIdpreguntas" th:value="${preg.id}" hidden>
-                                        <input type="text" id="disabledTextInput1" class="form-control" name="respuesta">
-                                    </div>-->
-                                    <div class="col mb-2" th:each=" preg, vEstado: ${preguntas}">
+                <div class>
+                    <div class="card h-100 mb-3">
+                        <br>
+                        <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 30px; text-align: left">
+                            Responda el cuestionario que se acaba de enviar
+                        </h5>
+                        <br>
+                        <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                            <div th:if="${#lists.size(cuestionarios)==0}">
+                                Lo sentimos, no hay cuestionarios
+                            </div>
+                            <div class="row" style="align-items: stretch">
+                                <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionarios}">
+                                    <div class="card" style="height: 100%">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 align-content-center"  style="align-items: center">
+                                                    <div style="height: 15px"></div>
 
-                                        <label  th:text="${preg.pregunta}" class="form-label"></label>
-                                        <input type="text" class="form-control" th:field="*{respuesta + ${vEstado.index} }" th:classappend="${#fields.hasErrors('respuesta')?'is-invalid':''}" >
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('respuesta')}" th:errors="*{respuesta}"></div>
-                                        <input type="hidden" class="form-control" th:name="${preg.cuestionarioIdcuestionario}">
+                                                    <div style="height: 10px"></div>
+                                                    <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                                </div>
+                                                <div class="col-md-6" align="center" style="align-items: center">
+                                                    <!--<button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>-->
+                                                    <div style="height: 15px"></div>
+                                                    <a class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario}">Responder</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary" >Enviar cuestionario</button>
-                                <!-- Modal -->
-
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
