@@ -155,12 +155,18 @@ public class PacienteController {
 
 
     @RequestMapping("/notificaciones")
-    public String notificaciones(Model model){
+    public String notificaciones(Model model, HttpServletRequest httpServletRequest,HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("arch", "windowzzz");
        return "paciente/notificaciones";
     }
     @RequestMapping("/mensajeria")
-    public String mensajeria(Model model){
+    public String mensajeria(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("arch", "windowzzz");
        return "paciente/mensajeria";
     }
@@ -184,9 +190,9 @@ public class PacienteController {
        return "paciente/pagos";
     }
     @RequestMapping("/cuestionarios")
-    public String cuestionarios(Model model,HttpServletRequest httpServletRequest){
-
-
+    public String cuestionarios(Model model,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Cuestionario cuestionario=cuestionarioRepository.cuestionaXPaciente(usuario.getId());
         //creo que se debe enviar tambien lista de preguntas por cuestionario
@@ -345,9 +351,11 @@ public class PacienteController {
 
     //Adaptarlo para sesiones
     @GetMapping("/responderCuestionario")
-    public String responderCues(Model model, HttpServletRequest httpServletRequest){
-
+    public String responderCues(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+
         Cuestionario cuestionario = cuestionarioRepository.cuestionaXPaciente(usuario.getId());
 
         ArrayList<Pregunta> preguntasCuestionario = new ArrayList<>();
@@ -369,8 +377,10 @@ public class PacienteController {
 
 
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @ModelAttribute("respuesta")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest){
+    public String guardarRptas( @ModelAttribute("respuesta")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
 
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         //Cuestionario cues = cuestionarioRepository.findById(id);
 
