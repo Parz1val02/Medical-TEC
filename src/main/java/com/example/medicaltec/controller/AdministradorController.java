@@ -400,7 +400,7 @@ public class AdministradorController {
             System.out.println("########################");
             System.out.println("########################");
             if ( paciente.getEmail().length() > 100  ||  (!regex.emailValid(paciente.getEmail()))) {
-                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos");
+                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
                 a = a + 1;
             } else {
                 List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
@@ -533,7 +533,9 @@ public class AdministradorController {
     */
 
     @GetMapping("/crearPacientePagina")
-    public String crearPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente, RedirectAttributes attr){
+    public String crearPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente,
+                                      @ModelAttribute("edadParam") String edad,
+                                      RedirectAttributes attr){
         return "administrador/crearPacientePRUEBA";
     }
 
@@ -665,6 +667,7 @@ public class AdministradorController {
     @PostMapping("/crearPaciente")
     public String crearPaciente(
             @ModelAttribute("paciente") Usuario paciente,
+            @ModelAttribute("edadParam") String edad,
             RedirectAttributes attr,
             Model model,
             HttpServletRequest httpServletRequest
@@ -712,13 +715,14 @@ public class AdministradorController {
             System.out.println("########################");
             System.out.println("########################");
             if ( paciente.getEmail().length() > 100  ||  (!regex.emailValid(paciente.getEmail()))) {
-                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos");
+                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
                 a = a + 1;
-            }
-            List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-            for (Usuario pacienteLista : listaPacientes) {
-                if (paciente.getEmail().equals(pacienteLista.getEmail()) ) {
-                    existeCorreo= true;
+            } else {
+                List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+                for (Usuario pacienteLista : listaPacientes) {
+                    if (paciente.getEmail().equals(pacienteLista.getEmail()) ) {
+                        existeCorreo= true;
+                    }
                 }
             }
         } else {
@@ -761,22 +765,9 @@ public class AdministradorController {
         }
         System.out.println(paciente.getSexo());
 
-        if (paciente.getEdad()!=null){
-            try {
-                //Integer edadEntero = Integer.parseInt(paciente.getEdad());
-                if (paciente.getEdad()<0 || paciente.getEdad()>120) {
-                    model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
-                    a = a+1;
-                }
-            } catch (NumberFormatException e) {
-                model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
-                a = a + 1;
-            }
 
-        } else {
-            model.addAttribute("edadmsg","La edad no puede ser nulo");
-            a = a+1;
-        }
+
+
 
         if ( paciente.getTelefono() != null  && (!paciente.getTelefono().isBlank()) ) {
             try {
@@ -792,6 +783,24 @@ public class AdministradorController {
         } else {
             model.addAttribute("telefonomsg","El teléfono no puede ser nulo");
             a = a + 1;
+        }
+
+        Integer edadEntero = 0;
+        if (edad!=null && !edad.isBlank()){
+            try {
+                edadEntero = Integer.parseInt(edad);
+                if (edadEntero<0 || edadEntero>120) {
+                    model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
+                    a = a+1;
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
+                a = a + 1;
+            }
+
+        } else {
+            model.addAttribute("edadmsg","La edad no puede ser nulo");
+            a = a+1;
         }
 
         if ( existePaciente) {
@@ -810,7 +819,7 @@ public class AdministradorController {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), edadEntero, paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
