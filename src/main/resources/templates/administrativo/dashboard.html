@@ -47,23 +47,24 @@
                                     </thead>
                                     <tbody class="bg-white" style="font-size: 15px">
                                     <tr th:each="user : ${listaUsuarios}">
-                                        <td class="align-middle" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente')}" th:text="|${#strings.capitalize(user.nombre)} ${#strings.capitalize(user.apellido)}|">
+                                        <td class="align-middle"  th:text="|${#strings.capitalize(user.nombre)} ${#strings.capitalize(user.apellido)}|">
                                         </td>
-                                        <td class="align-middle" style="text-align: center" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente')}" th:text="${#strings.capitalize(user.estadosIdestado.nombre)}">
+                                        <td class="align-middle" style="text-align: center"  th:text="${#strings.capitalize(user.estadosIdestado.nombre)}">
                                             Registrado
                                         </td>
-                                        <td class="align-middle" style="text-align: center" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente')}" th:text="${#strings.capitalize(user.modoregistro)}">
+                                        <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(user.modoregistro)}">
                                             Invitacion
                                         </td>
-                                        <td class="align-middle" style="text-align: center" th:if="${user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && !user.estadosIdestado.nombre.equalsIgnoreCase('invitado')}" >
-                                            <a th:href="@{'/administrativo/form?id='+${user.id}}">
-                                                <button type="button" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 1px">Formulario</button>
+                                        <td class="align-middle" style="text-align: center"  >
+                                            <a th:href="@{'/administrativo/form?id='+${user.id}}" th:if="${user.getModoregistro().equalsIgnoreCase('invitado') && !user.estadosIdestado.nombre.equalsIgnoreCase('invitado')}">
+                                                <button  type="button" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 1px">Formulario</button>
                                             </a>
+
+                                            <div th:if="${ user.getModoregistro().equalsIgnoreCase('autoregistro') || ( user.getModoregistro().equalsIgnoreCase('invitado') && user.estadosIdestado.nombre.equalsIgnoreCase('invitado') )}">
+                                                <p>No disponible</p>
+                                            </div>
                                         </td>
-                                        <td class="align-middle" style="text-align: center"
-                                            th:if="${(user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('autoregistro')) || (user.rolesIdroles.getNombreRol().equalsIgnoreCase('paciente') && user.getModoregistro().equalsIgnoreCase('invitado') && user.estadosIdestado.nombre.equalsIgnoreCase('invitado') )}" >
-                                            No disponible
-                                        </td>
+
                                     </tr>
                                     </tbody>
                                 </table>

@@ -180,11 +180,18 @@ public class PacienteController {
        return "paciente/pagos";
     }
     @RequestMapping("/cuestionarios")
-    public String cuestionarios(Model model, @RequestParam("id") int id){
+    public String cuestionarios(Model model,HttpServletRequest httpServletRequest){
 
-        //Cuestionario cues = cuestionarioRepository.findById(id);
 
-        model.addAttribute("preguntas",preguntaRepository.obtenerPreg(id));
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Cuestionario cuestionario=cuestionarioRepository.cuestionaXPaciente(usuario.getId());
+        //creo que se debe enviar tambien lista de preguntas por cuestionario
+        ArrayList<Pregunta> preguntas = new ArrayList<>();
+
+        /*for (int i = 0; i < cuestionarioList.size(); i++) {
+            preguntas.add(  preguntaRepository.obtenerPreguntas( cuestionarioList.get(i).getId())  );
+        }*/
+        model.addAttribute("cuestionarios",cuestionarioRepository.cuestionaXPaciente(usuario.getId()));
         model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
     }
@@ -333,16 +340,49 @@ public class PacienteController {
     }
 
     //Adaptarlo para sesiones
+    @GetMapping("/responderCuestionario")
+    public String responderCues(Model model, HttpServletRequest httpServletRequest){
+
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Cuestionario cuestionario = cuestionarioRepository.cuestionaXPaciente(usuario.getId());
+
+        ArrayList<Pregunta> preguntasCuestionario = new ArrayList<>();
+        ArrayList<Cuestionario> cuestionarios1 = new ArrayList<>();
+        /*for (int i = 0; i < ; i++) {
+            cuestionarios1.add(cuestionarios.get(i));
+        }*/
+
+
+        List<Pregunta> preguntas = preguntaRepository.obtenerPreguntas(cuestionario.getId());
+
+
+        //List<Pregunta> preguntas = preguntaRepository.obtenerPreguntas(cuestionarios.get().getId());
+        model.addAttribute("preguntas", preguntas);
+
+        return "paciente/responderCuestionario";
+    }
+
+
+
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @RequestParam("respuesta0")String respuesta, RedirectAttributes attr){
+    public String guardarRptas( @ModelAttribute("respuesta")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest){
 
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         //Cuestionario cues = cuestionarioRepository.findById(id);
+
+        if (bindingResult.hasErrors()){
+
+            return "/paciente/responderCuestionario";
+        }else {
+            //model.addAttribute("preguntas");
+
+            attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
+            return "redirect:/paciente/cuestionarios";
+
+        }
         //List<Pregunta> preguntas = preguntaRepository.obtenerPreg(id);
-        rptaRepository.guardarRptas(respuesta);
+        //rptaRepository.guardarRptas(respuesta);
 
-
-        attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
-        return "redirect:/paciente/cuestionarios?id=1";
     }
 
 
