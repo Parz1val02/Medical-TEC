@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/superAdmin")
@@ -401,12 +402,17 @@ public class SuperController {
         attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
         return "redirect:/superAdmin/dashboard";
     }
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
     @PostMapping(value = "/Guardar/AdmSede")
     public String guardarAdmSede(Model model, RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                  @RequestParam("correo") String correo, @RequestParam("password") String password,
-                                 @RequestParam(value = "edad",required = false) Integer edad, @RequestParam("telefono") String telefono,
-                                 @RequestParam("address") String address, @RequestParam("sede") int sede,
+                                 @RequestParam(value = "edad",required = false) String edad, @RequestParam("telefono") String telefono,
+                                 @RequestParam("address") String address, @RequestParam("sede") String sede,
                                  @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
@@ -415,56 +421,106 @@ public class SuperController {
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
         }
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            a = a+1;
+        }
+        if(sexo.isBlank() ){
+            attr.addFlashAttribute("sexomsg","El sexo del paciente no puede ser nulo");
+            a = a+1;
+        } else if ( !sexo.equals("F") && !sexo.equals("M") ){
+            attr.addFlashAttribute("sexomsg","El sexo debe ser masculino o femenino");
+            a = a+1;
+        }
+        boolean requi = verificarRequisitos(password);
+        if(password.isBlank() ){
+            attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
+            a = a+1;
+        } else if (!requi){
+            attr.addFlashAttribute("passwordmsg","La contraseña no cumple con los requisitos");
+            a = a+1;
+        }
         if(apellido.isEmpty()){
             attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
         }
-        if (correo.isEmpty()){
-            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
-            a = a+1;
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            a = a + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            a = a + 1;
         }
         if (password.isEmpty()){
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             a = a+1;
         }
-        if (edad == null){
+        if(edad.isEmpty()){
             attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            a = a+1;
-        } else {
-            if (edad <0){
+            a =a+1;
+        } else if (esNumeroEntero(edad)) {
+             int edad1 = Integer.parseInt(edad);
+            if (edad1 <0){
                 attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
                 a = a+1;
             }
+        } else {
+            a=a+1;
+            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
         }
-        if (telefono.isEmpty()){
+        if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
-            a = a+1;
-        }
-        if (telefono.length()!=9){
+            a =a+1;
+        } else if (telefono.length()!=9) {
             attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
             a = a+1;
-        }
+            } else if (esNumeroEntero(telefono)) {
+                int telefono1 = Integer.parseInt(telefono);
+                if (telefono1 <=0){
+                    attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                    a = a+1;
+                }
+            }else {
+            a=a+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
+            }
         if(address.isEmpty()) {
             attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
             a = a+1;
         }
         if(dni.isEmpty()){
-            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            //attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            //model.addAttribute("dnimsg1","El DNI no puede ser nulo");
+            attr.addFlashAttribute("dnimsg1","El DNI no puede ser nulo");
+            System.out.println("hola ajdilasdoahdiahdlsanadoi");
             a = a+1;
         } else if (dni.length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
+            attr.addFlashAttribute("dnimsg1","El DNI tiene que tener 8 dígitos");
             a = a+1;
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(dni);
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+        } else if (esNumeroEntero(dni)){
+            int dni1 = Integer.parseInt(dni);
+            if (dni1 <=0){
+                attr.addFlashAttribute("dnimsg1","El DNI no puede ser negativo");
                 a = a+1;
+            }else {
+                Optional<Usuario> u = usuarioRepository.findById(dni);
+                if(u.isPresent()){
+                    attr.addFlashAttribute("dnimsg1","El DNI ya se encuentra registrado.");
+                    a = a+1;
+                }
             }
+        }else {
+            a=a+1;
+            attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
-
         if(a == 0){
             int estado=1;
-            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad,  telefono,  sexo,  address, sede, estado);
+            int edad2 = Integer.parseInt(edad);
+            int sede2 = Integer.parseInt(sede);
+            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad2,  telefono,  sexo,  address, sede2, estado);
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
@@ -475,67 +531,136 @@ public class SuperController {
 
     @PostMapping(value = "/Guardar/AdmT")
     public String guardarAdmT(Model model, RedirectAttributes attr,
-                                       @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
-                                       @RequestParam("correo") String correo, @RequestParam("password") String password,
-                                       @RequestParam(value = "edad", required = false) Integer edad, @RequestParam("telefono") String telefono,
-                                       @RequestParam("address") String address, @RequestParam("sede") int sede, @RequestParam("especialidad") int especialidad,
-                                       @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, HttpSession httpSession,Authentication authentication){
+                              @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                              @RequestParam("correo") String correo, @RequestParam("password") String password,
+                              @RequestParam(value = "edad",required = false) String edad, @RequestParam("telefono") String telefono,
+                              @RequestParam("address") String address, @RequestParam("sede") String sede,
+                              @RequestParam("dni") String dni, @RequestParam("sexo") String sexo, @RequestParam("especialidad") String especialidad,
+                              HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         int b = 0;
+        List<Especialidade>listaEspecialidades = especialidadeRepository.findAll();
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            b = b+1;
+        }
+        if(especialidad.isBlank() ){
+            attr.addFlashAttribute("espemsg","La especialidad no puede ser nula");
+            b = b+1;
+        } else if (esNumeroEntero(especialidad)) {
+            int num_esp = listaEspecialidades.size();
+            int espeee = Integer.parseInt(especialidad);
+            System.out.println("LA CANTIAD DE ESPECIALIDADES ESSSANDSKNDAJLDNAJSD "+num_esp);
+            if (!(espeee<=17 && espeee>=1)){
+                attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+                b = b+1;
+            }
+        } else {
+            attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+            b = b+1;
+        }
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            b = b+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            b = b+1;
+        }
+        if(sexo.isBlank() ){
+            attr.addFlashAttribute("sexomsg","El sexo del paciente no puede ser nulo");
+            b = b+1;
+        } else if ( !sexo.equals("F") && !sexo.equals("M") ){
+            attr.addFlashAttribute("sexomsg","El sexo debe ser masculino o femenino");
+            b = b+1;
+        }
+        boolean requi = verificarRequisitos(password);
+        if(password.isBlank() ){
+            attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
+            b = b+1;
+        } else if (!requi){
+            attr.addFlashAttribute("passwordmsg","La contraseña no cumple con los requisitos");
             b = b+1;
         }
         if(apellido.isEmpty()){
             attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
             b = b+1;
         }
-        if (correo.isEmpty()){
-            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
-            b = b+1;
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            b = b + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            b = b + 1;
         }
         if (password.isEmpty()){
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             b = b+1;
         }
-        if (edad == null){
+        if(edad.isEmpty()){
             attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            b = b+1;
-        } else {
-            if (edad <0){
+            b =b+1;
+        } else if (esNumeroEntero(edad)) {
+            int edad1 = Integer.parseInt(edad);
+            if (edad1 <0){
                 attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
                 b = b+1;
             }
+        } else {
+            b=b+1;
+            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
         }
-        if (telefono.isEmpty()){
+        if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
-            b = b+1;
-        }
-        if (telefono.length()!=9){
+            b =b+1;
+        } else if (telefono.length()!=9) {
             attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
             b = b+1;
+        } else if (esNumeroEntero(telefono)) {
+            int telefono1 = Integer.parseInt(telefono);
+            if (telefono1 <=0){
+                attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                b = b+1;
+            }
+        }else {
+            b=b+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
         }
         if(address.isEmpty()) {
             attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
             b = b+1;
         }
         if(dni.isEmpty()){
-            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            //attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
+            //model.addAttribute("dnimsg1","El DNI no puede ser nulo");
+            attr.addFlashAttribute("dnimsg1","El DNI no puede ser nulo");
+            System.out.println("hola ajdilasdoahdiahdlsanadoi");
             b = b+1;
         } else if (dni.length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
+            attr.addFlashAttribute("dnimsg1","El DNI tiene que tener 8 dígitos");
             b = b+1;
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(dni);
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
+        } else if (esNumeroEntero(dni)){
+            int dni1 = Integer.parseInt(dni);
+            if (dni1 <=0){
+                attr.addFlashAttribute("dnimsg1","El DNI no puede ser negativo");
                 b = b+1;
+            }else {
+                Optional<Usuario> u = usuarioRepository.findById(dni);
+                if(u.isPresent()){
+                    attr.addFlashAttribute("dnimsg1","El DNI ya se encuentra registrado.");
+                    b = b+1;
+                }
             }
+        }else {
+            b=b+1;
+            attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
         if(b == 0){
             int estado=1;
-            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad,  telefono,  sexo,  address,  sede, estado, especialidad);
+            int edad2 = Integer.parseInt(edad);
+            int sede2 = Integer.parseInt(sede);
+            int especialidad2 = Integer.parseInt(especialidad);
+            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad2,  telefono,  sexo,  address,  sede2, estado, especialidad2);
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
