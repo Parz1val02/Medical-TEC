@@ -21,7 +21,7 @@
 
 
                 <div class="row no-gutters">
-                    <div class="col-lg-5 pr-lg-2" style="padding-top: 25px">
+                    <div class="col-lg-6 pr-lg-2" style="padding-top: 25px">
                         <div class="card h-100 bg-gradient">
                             <div class="card-header bg-transparent">
                                 <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
@@ -36,9 +36,8 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-7 pl-lg-2" style="padding-top: 25px">
+                    <div class="col-lg-6 pl-lg-2" style="padding-top: 25px">
                         <div class="card h-100 mb-3">
-
                             <div class="card-header h-100  bg-light py-2">
                                 <div class="row flex-between-center">
                                     <div class="col-md-6 col-lg-6">
@@ -58,6 +57,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row flex-between-center">
+                                    <div class="col-md-12 col-lg-12">
+                                       <div id="calendar"></div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -69,7 +73,7 @@
                 <!--SEGUNDO ROW -->
 
                 <div class="row no-gutters" >
-                    <div class="col-lg-5 pr-lg-2" style="padding-top: 25px">
+                    <div class="col-lg-6 pr-lg-2" style="padding-top: 25px">
                         <div class="card h-100 ">
                             <div class="card-header bg-transparent">
                                 <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
@@ -136,7 +140,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-7 pl-lg-2" style="padding-top: 25px">
+                    <div class="col-lg-6 pl-lg-2" style="padding-top: 25px">
                         <div class="card h-100 mb-3">
                             <div class="card-header bg-light py-2">
                                 <div class="row flex-between-center">
@@ -603,6 +607,34 @@
 
 </script>
 
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridWeek',
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'dayGridWeek,dayGridDay' // user can switch between the two
+            },
+            defaultView: 'month',
+            weekday: 'long',
+            selectable: true,
+            events: [],
+            eventTextColor: '#ffffff',
+            eventBackgroundColor: '#3d8af7',
+            eventDisplay: 'block',
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            firstDay: 1,
+            locale: 'es',
+        });
+        calendar.render();
+    });
+</script>
 
 
 </body>
