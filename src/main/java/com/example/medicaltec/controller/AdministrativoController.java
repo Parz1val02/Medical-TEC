@@ -19,8 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -349,6 +351,34 @@ public class AdministrativoController {
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
         return "redirect:/administrativo/dashboard";
+    }
+
+    @PostMapping("/guardarFoto")
+    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/administrativo/perfil";
+        }
+        String filename = file.getOriginalFilename();
+        if(filename.contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/administrativo/perfil";
+        }
+        try{
+            usuario.setFoto(file.getBytes());
+            usuario.setFotonombre(filename);
+            usuario.setFotocontenttype(file.getContentType());
+            usuarioRepository.save(usuario);
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/administrativo/perfil";
+        } catch (IOException e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/administrativo/perfil";
+        }
     }
 
 
