@@ -112,13 +112,14 @@
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Calendario
                                     </h4>
+                                    <div id="calendar"></div>
                                     <!--div th:replace="~{fragmentos/calendar.html::calendar}"></div-->
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="card mb-3">
-                                <div class="card-body" style="max-height: 650px">
+                                <div class="card-body" >
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Cuestionarios
                                     </h4>
@@ -245,6 +246,7 @@
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -290,6 +292,34 @@
     });
 </script>
 
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridWeek',
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'dayGridWeek,dayGridDay' // user can switch between the two
+            },
+            defaultView: 'month',
+            weekday: 'long',
+            selectable: true,
+            events: [],
+            eventTextColor: '#ffffff',
+            eventBackgroundColor: '#3d8af7',
+            eventDisplay: 'block',
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            firstDay: 1,
+            locale: 'es',
+        });
+        calendar.render();
+    });
+</script>
 
 </body>
 </html>

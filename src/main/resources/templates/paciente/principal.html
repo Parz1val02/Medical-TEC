@@ -128,29 +128,27 @@
               </div>
               <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center" id="contenedorCards">
                 <!--div class="row"-->
-                  <div class="col-sm-8 mb-3 doctores" th:each="doctor, arch : ${doctores}">
-                    <div class="card" style="min-height: 20rem">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col" >
-                            <div class="avatar" style="display: flex; align-items: center">
-                              <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
-                            </div>
+                  <div class="card col-sm-10 mb-3 doctores" th:each="doctor, arch : ${doctores}">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col" >
+                          <div class="avatar" style="display: flex; align-items: center">
+                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
                           </div>
-                          <div class="col" style="">
-                            <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
-                              </h4>
-                            <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" ></h5>
-                            <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
-                              Próximos horarios de disponibilidad:
-                            </h6>
-                            <div class="form-group" style="text-align: center">
-                              <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                              <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
-                            </div>
-                            <!-- Button trigger modal-->
-                            <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
+                        </div>
+                        <div class="col" style="">
+                          <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
+                            </h4>
+                          <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" ></h5>
+                          <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                            Próximos horarios de disponibilidad:
+                          </h6>
+                          <div class="form-group" style="text-align: center">
+                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
                           </div>
+                          <!-- Button trigger modal-->
+                          <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
                         </div>
                       </div>
                     </div>
@@ -291,7 +289,7 @@
                     </div>
                     <div class="col-lg-6 pl-lg-2 mb-3">
                       <div class="card mb-3 h-100">
-                        <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                        <div id="calendar"></div>
                       </div>
                     </div>
 
@@ -362,5 +360,35 @@
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
+
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridWeek',
+      headerToolbar: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'dayGridWeek,dayGridDay' // user can switch between the two
+      },
+      defaultView: 'month',
+      weekday: 'long',
+      selectable: true,
+      height: 650,
+      events: [],
+      eventTextColor: '#ffffff',
+      eventBackgroundColor: '#3d8af7',
+      eventDisplay: 'block',
+      eventTimeFormat:{
+        hour: 'numeric',
+        minute: '2-digit',
+        meridiem: 'short'
+      },
+      firstDay: 1,
+      locale: 'es',
+    });
+    calendar.render();
+  });
+</script>
 </body>
 </html>

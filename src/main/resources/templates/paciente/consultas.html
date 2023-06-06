@@ -328,6 +328,8 @@
                 minute: '2-digit',
                 meridiem: 'short'
             },
+            firstDay: 1,
+            locale: 'es',
             allDay: false,
             displayEventTime: true,
             eventDidMount: function(info) {
@@ -342,10 +344,10 @@
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://localhost:8081/api/citas', // Replace with your API endpoint URL
+            url: 'http://34.28.24.16:8081/api/citas', // Replace with your API endpoint URL
             type: 'GET',
             data: {
-                dni: [[${session.usuario.id}]], // Specify the GET parameter
+                dni: [[${session.usuario.id}]] // Specify the GET parameter
             },
             headers: {
                 'Content-Type': 'application/json' // Set the Content-Type header
@@ -388,10 +390,15 @@
         // Format the time as 'h:mm A' (e.g., '2:30 PM')
         var formattedTime = time.format('h:mm A');
 
+        var dateString = event.start;
+        var date = moment(dateString, 'YYYY-MM-DD');
+        var fechaFormateada = date.format('DD/MM/YYYY');
+
         var content = '<strong>' + event.title + '</strong>';
-        content += '<br>Hora: ' + formattedTime;
         content += '<br>Doctor: ' + event.extendedProps.doctor;
         content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+        content += '<br>Fecha: ' + fechaFormateada;
+        content += '<br>Hora: ' + formattedTime;
 
         return content;
     }
