@@ -15,7 +15,7 @@ public class Usuario implements Serializable {
     @Id
     @Column(name = "dni", nullable = false, length = 8)
     @NotBlank(message = "Es un campo obligatorio")
-    @Size(max = 8, message = "Deber se un numero de DNI valido de maximo 8 digitos")
+    @Size(max = 8, message = "Deber ser un número de DNI valido de máximo 8 digitos")
     private String id;
 
     @Column(name = "contrasena", nullable = false, length = 100)
