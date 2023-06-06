@@ -344,7 +344,7 @@ public class AdministrativoController {
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
                 "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
-                "34.28.24.16:8080/registro/formPaciente/"+randomNumberStr);
+                "35.238.205.255:8080/registro/formPaciente/"+randomNumberStr);
 
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
