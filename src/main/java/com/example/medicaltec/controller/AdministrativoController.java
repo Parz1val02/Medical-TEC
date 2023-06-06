@@ -2,14 +2,17 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.Persona;
 import com.example.medicaltec.dao.PersonaDao;
+import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
 
 import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -231,13 +234,18 @@ public class AdministrativoController {
     @PostMapping("/change")
     public String changePassword(@RequestParam("pass1") String pass1,
                                  @RequestParam("pass2") String pass2,
-                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication)
     {
+
+        Regex regex = new Regex();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
+
         //String pass1BCrypt = new BCryptPasswordEncoder().encode(pass1);
 
-        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
         if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
             return "redirect:/administrativo/pass";
@@ -248,7 +256,10 @@ public class AdministrativoController {
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/administrativo/pass";
-        }else {
+        } else if(!regex.contrasenaisValid(pass2)){
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no cumple con los requerimientos.");
+            return "redirect:/administrativo/pass";
+        } else {
             usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/administrativo/perfil";
