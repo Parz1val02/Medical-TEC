@@ -8,7 +8,7 @@ import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
-import jdk.swing.interop.SwingInterOpUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.security.crypto.bcrypt.BCrypt;

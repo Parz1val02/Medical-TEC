@@ -37,90 +37,108 @@
                     </div>
                 </div>
             </div>
-
             <br>
             <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
-                <div class="card-body" style="background: #FFFFFF">
+                <div class="card-body">
                     <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
                         Información del paciente
                     </h5>
                     <br>
-                    <div class="row" style="width: 60%;">
-                        <div class="col-md-6">
-                            <p style="font-weight: bold">Nombre: </p>
-                            <p style="font-weight: bold">Edad: </p>
-                            <p style="font-weight: bold">DNI: </p>
-                            <p style="font-weight: bold">Sexo: </p>
-                            <p style="font-weight: bold">Seguro: </p>
-                            <p style="font-weight: bold">Dirección: </p>
-                            <p style="font-weight: bold">Alergias: </p>
-                            <p style="font-weight: bold">Tratamiento: </p>
+                    <div class="">
+                        <div class="">
+                            <h4 class="mb-1" th:text="|${paciente.nombre.toUpperCase()} ${paciente.apellido.toUpperCase()}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            </h4>
+                            <form>
+                                <fieldset disabled>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput1" class="form-label">Correo</label>
+                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${paciente.email}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput2" class="form-label">DNI</label>
+                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${paciente.id}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput3" class="form-label">Dirección</label>
+                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${paciente.direccion}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput4" class="form-label">Teléfono</label>
+                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${paciente.telefono}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">Edad</label>
+                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${paciente.edad}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Sexo</label>
+                                            <input type="text" id="disabledTextInput6" class="form-control" th:placeholder="${paciente.sexo}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">Sede</label>
+                                            <input type="text" id="disabledTextInput7" class="form-control" th:placeholder="${paciente.sedesIdsedes.nombre}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Seguro</label>
+                                            <input type="text" id="disabledTextInput8" class="form-control" th:placeholder="${paciente.segurosIdSeguro.nombreSeguro}">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
                         </div>
-                        <div class="col-md-6">
-                            <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
-                            <p style="font-weight: normal" th:text="${paciente.edad}"></p>
-                            <p style="font-weight: normal" th:text="${paciente.id}"></p>
-                            <p style="font-weight: normal" th:text="${paciente.sexo}"></p>
-                            <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
-                            <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
-                            <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
-                            <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
-                        </div>
-                    </div>
                     <br>
                     <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
                                     border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->
-                </div>
-            </div>
-
-            <div>
-                <div class="card h-100 mb-3">
-                    <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                        <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
-                            Citas/consultas pasadas y bitácora de notas:
-                        </h5>
-                        <br>
-                        <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
-                            <div class="card-body">
-                                <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
-                            </div>
+                    </div>
+                    <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                        Citas/consultas pasadas y bitácora de notas:
+                    </h5>
+                    <br>
+                    <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
+                        <div class="card-body">
+                            <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
                         </div>
-                        <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
-                            <div class="col-md-10">
-                                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <b th:text="|${cita.fecha} - ${cita.hora}hrs: ${#strings.capitalize(cita.tipocitaIdtipocita.tipoCita)}|"></b>
-                                            <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
-                                        </div>
-                                        <div class="col-sm-2" th:align="right">
-                                            <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans',serif;" data-toggle="modal"
-                                                    data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
-                                                <i class="fa fa-file"></i> Ver Reporte
-                                            </button>
-                                        </div>
+                    </div>
+                    <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
+                        <div class="col-md-12">
+                            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <b th:text="|${cita.fecha} - ${cita.hora}hrs: ${#strings.capitalize(cita.tipocitaIdtipocita.tipoCita)}|"></b>
+                                        <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
                                     </div>
-                                    <form th:action="@{/doctor/enviarBitacora}" method="post" class="input-hidden" id="input-container">
-                                        <input type="hidden" th:name="usuarioid" th:value="${paciente.id}" />
-                                        <input type="text" style="font-family: 'Open Sans',serif;
-                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" name="bitacora" value="bitacora" placeholder="Agregue notas o comentarios personales">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
+                                    <div class="col-sm-2" th:align="right">
+                                        <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
+                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans',serif;" data-toggle="modal"
+                                                data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
+                                            <i class="fa fa-file"></i> Ver Informe
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-12">
+                                            <input type="hidden" th:name="usuarioid" th:value="${paciente.id}" />
+                                            <input type="text" style="font-family: 'Open Sans',serif;
+                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" name="bitacora" placeholder="Agregue notas o comentarios personales">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
                                         margin-top: 10px; background: #b38df7; border-color: white; color: white" >Guardar</button>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-2" style="padding: 10px">
-                                <button onclick="toggleInput()" style="font-family: 'Open Sans',serif;border: 1px solid #748194;
-                                border-radius: 0.375rem;background: white; width: 80%;">
-                                    <i class="fa fa-comment"></i> Dejar comentarios
-                                </button>
                             </div>
                         </div>
                     </div>
+
+                    <br>
+                    <br>
+                    <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
                 </div>
-            </div>
+
 
             <script>
                 function toggleInput() {
@@ -163,7 +181,7 @@
                 </div>
             </div>
 
-            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+
         </div>
     </div>
 </main>
