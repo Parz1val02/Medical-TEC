@@ -16,4 +16,11 @@ public class Regex {
         Matcher matcher = pattern.matcher(input);
         return matcher.find();
     }
+
+    public boolean emailValid(String input) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
 }

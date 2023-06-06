@@ -38,13 +38,13 @@
                         <div class="col-lg">
                             <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
                             <form method="post" th:action="@{/administrador/crearPaciente}" th:object="${paciente}">
+
                                 <fieldset >
-                                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">DNI</label>
-                                            <input type="text" th:field="*{id}" class="form-control"  th:classappend="${#fields.hasErrors('id') || dnimsg !=null ?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+                                            <input type="text" th:field="*{id}" class="form-control"  th:classappend="${dnimsg !=null ?'is-invalid':''}">
                                             <div class="invalid-feedback" th:if="${dnimsg!=null}" th:text="${dnimsg}"></div>
                                         </div>
 
@@ -52,8 +52,8 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label class="form-label">Nombre</label>
-                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" >
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${nombremsg !=null?'is-invalid':''}" >
+                                            <div class="invalid-feedback" th:if="${nombremsg !=null}" th:text="${nombremsg}"></div>
                                         </div>
 
                                     </div>
@@ -61,41 +61,42 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Apellido</label>
-                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${#fields.hasErrors('apellido')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${apellidomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${apellidomsg !=null}" th:text="${apellidomsg}"></div>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Direccion</label>
-                                            <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{apellido}"></div>
+                                            <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${direccionmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${direccionmsg != null}" th:text="${direccionmsg}"></div>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
-                                            <label for="sexo">Sexo  </label>
-                                            <select class="form-control" name="sexo" id="sexo">
+                                            <label >Sexo  </label>
+                                            <select class="form-control" th:classappend="${sexomsg !=null?'is-invalid':''}" th:field="*{sexo}">
                                                 <option value="M"> Masculino </option>
                                                 <option value="F"> Femenino </option>
                                             </select>
+                                            <div class="invalid-feedback" th:if="${sexomsg !=null}" th:text="${sexomsg}"></div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label >Edad </label>
-                                        <input type="number" th:field="*{edad}" class="form-control" th:classappend="${#fields.hasErrors('edad')?'is-invalid':''}" >
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"></div>
+                                        <input type="number" th:field="*{edad}" class="form-control" th:classappend="${edadmsg !=null?'is-invalid':''}" >
+                                        <div class="invalid-feedback" th:if="${edadmsg !=null}" th:text="${edadmsg }"></div>
                                     </div>
 
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Email</label>
-                                            <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                                            <input type="email" th:field="*{email}" class="form-control" th:classappend="${emailmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${emailmsg !=null}" th:text="${emailmsg}"></div>
                                         </div>
 
                                     </div>
@@ -104,9 +105,9 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Telefono</label>
-                                            <input type="number" th:field="*{telefono}" class="form-control" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
-                                           <!-- <div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>-->
+                                            <input type="number" th:field="*{telefono}" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${telefonomsg !=null}" th:text="${telefonomsg}"></div>
+                                            <!-- <div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>-->
                                         </div>
 
                                     </div>
