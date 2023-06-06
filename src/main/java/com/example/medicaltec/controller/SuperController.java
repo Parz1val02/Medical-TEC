@@ -812,7 +812,7 @@ public class SuperController {
         if(c == 0){
             usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
             Usuario nuevaUsuario = usuarioRepository.findByid(dni);
-            attr.addFlashAttribute("msg","Usuario(SuperAdmin) editado exitosamente; por favor, vuelva a iniciar sesión para ver los cambios");
+            attr.addFlashAttribute("msg","Usuario(SuperAdmin) ha sido editado exitosamente");
             httpSession.setAttribute("usuario",nuevaUsuario);
             return "redirect:/superAdmin/confSup";
         }else {
@@ -964,6 +964,28 @@ public class SuperController {
         }else{
             return null;
         }
+    }
+
+    @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)
+    public String createCuest(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillas";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/guardarPlantilla")
+    public String guardarPlantilla(@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        int i = 0;
+        for (String pregunta : listaPreguntas){
+            System.out.println(pregunta);
+            i++;
+            System.out.println(i);
+        }
+        //return "redirect:/superAdmin/cuestionarios";
+        return "Hola";
     }
 
 
