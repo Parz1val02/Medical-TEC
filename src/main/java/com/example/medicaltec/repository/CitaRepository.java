@@ -15,7 +15,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where citacancelada=0 and paciente_dni=?1")
    List<Cita> historialCitas(String dniPaciente);
 
-   @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where fecha < current_date() and citacancelada=0 and paciente_dni=?1")
+   @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where fecha < current_date() and citacancelada=0 and estadoscita_idestados=3 and paciente_dni=?1")
    List<Cita> historialCitas2(String dniPaciente);
 
    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where fecha >= current_date() and citacancelada=0 and paciente_dni=?1")
@@ -31,7 +31,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
                     nativeQuery = true)
     List<Cita> proximasCitasAgendadas();
 
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
+    @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1  and citanAND fecha<now() ORDER BY fecha DESC, hora DESC;",
                     nativeQuery = true)
     List<Cita> citasPorUsuario(String id_paciente);
 

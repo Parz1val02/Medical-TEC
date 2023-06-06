@@ -124,7 +124,9 @@ public class PacienteController {
     }
 
     @GetMapping("/password")
-    public String cambiarContra(Model model){
+    public String cambiarContra(Model model, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         model.addAttribute("arch", "windowzzz");
         return "paciente/cambioContrasena";
     }
@@ -165,6 +167,8 @@ public class PacienteController {
 
     @RequestMapping("/pagos")
     public String pagos(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("usuario", usuario);
 
@@ -421,7 +425,7 @@ public class PacienteController {
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/paciente/password";
-        }else if(regex.contrasenaisValid(pass2)){
+        }else if(!regex.contrasenaisValid(pass2)){
             attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
             return "redirect:/paciente/password";
         }else {

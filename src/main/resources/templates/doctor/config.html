@@ -120,6 +120,12 @@
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                             <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                            <p  style="font-weight: bold; margin: 0px">
+                                Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+                                • Que la contraseña contenga al menos ocho caracteres.<br>
+                                • Que la contraseña contenga al menos un número.<br>
+                                • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+                                • Que la contraseña contenga al menos una mayúscula. </p>
                             <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
                             style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group">
