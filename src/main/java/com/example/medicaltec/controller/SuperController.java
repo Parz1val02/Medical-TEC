@@ -965,7 +965,48 @@ public class SuperController {
             return null;
         }
     }
-
-
+    @PostMapping("/editarLogo")
+    public String editarLogo(Model model, @ModelAttribute("sede") Sede sede, @RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/superAdmin/dashboard";
+        }
+        String filename = file.getOriginalFilename();
+        if(filename.contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/superAdmin/dashboard";
+        }
+            try {
+                sede.setLogo(file.getBytes());
+                sede.setLogonombre(filename);
+                sede.setLogocontenttype(file.getContentType());
+                //superadmin.setFoto(file.getBytes());
+                //superadmin.setFotonombre(filename);
+                //superadmin.setFotocontenttype(file.getContentType());
+                //usuarioRepository.save(superadmin);
+                sedeRepository.save(sede);
+                attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+                return "redirect:/superAdmin/dashboard";
+            } catch (IOException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+                return "redirect:/superAdmin/dashboard";
+            }
+    }
+    @GetMapping("/logo/{id}")
+    public ResponseEntity<byte[]> mostrarLogo(@PathVariable("id") int id){
+        Optional<Sede> opt = sedeRepository.findById(id);
+        if(opt.isPresent()){
+            Sede sede = opt.get();
+            byte[] imagenComoBytes = sede.getLogo();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(sede.getLogocontenttype()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }else{
+            return null;
+        }
+    }
 
 }
