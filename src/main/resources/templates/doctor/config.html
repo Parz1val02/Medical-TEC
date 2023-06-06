@@ -31,54 +31,111 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row" style="display: flex; align-items: stretch;">
-                <div class="col-6">
-                    <div class="card mb-3 bg-card-gradient" style="height: 100%; background: #FFFFFF">
-                        <div class="card-body" style="background: #FFFFFF">
-                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
-                                Perfil
-                            </h3>
-                            <div class="margin-cinco" style="height: 10px"></div>
+            <div class="card mb-3">
+                <div class="card-header position-relative min-vh-25 mb-7">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/22.png);">
+                    </div>
+                    <!--/.bg-holder-->
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div>
+                </div>
+                <br>
+                <div class="col">
+                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h4 class="mb-1" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                            </h4>
+                            <form>
+                                <fieldset disabled>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput1" class="form-label">Nombres</label>
+                                            <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${session.usuario.nombre}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput2" class="form-label">Apellidos</label>
+                                            <input type="text" id="disabledTextInput2" class="form-control" th:placeholder="${session.usuario.apellido}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">DNI</label>
+                                            <input type="text" id="disabledTextInput5" class="form-control" th:placeholder="${session.usuario.id}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Estado</label>
+                                            <input type="text" id="disabledTextInput6" class="form-control" th:placeholder="${#strings.capitalize(session.usuario.estadosIdestado.nombre)}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput3" class="form-label">Dirección</label>
+                                            <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${session.usuario.direccion}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput4" class="form-label">Número telefonico</label>
+                                            <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${session.usuario.telefono}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">Correo</label>
+                                            <input type="text" id="disabledTextInput7" class="form-control" th:placeholder="${session.usuario.email}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Estado</label>
+                                            <input type="text" id="disabledTextInput8" class="form-control" th:placeholder="${#strings.capitalize(session.usuario.estadosIdestado.nombre)}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">Edad</label>
+                                            <input type="text" id="disabledTextInput9" class="form-control" th:placeholder="|${session.usuario.edad} años|">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Sexo</label>
+                                            <input type="text" id="disabledTextInput10" class="form-control" th:placeholder="${session.usuario.sexo}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput5" class="form-label">Especialidad</label>
+                                            <input type="text" id="disabledTextInput11" class="form-control" th:placeholder="${session.usuario.especialidadesIdEspecialidad.nombreEspecialidad}">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <label for="disabledTextInput6" class="form-label">Cédula</label>
+                                            <input type="text" id="disabledTextInput12" class="form-control" th:placeholder="${session.usuario.ceduladoctor}">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="col-lg-5">
+                            <!-- CAMBIAR FOTO DE PERFIL -->
+                            <div style="height: 30px"></div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold">Nombre: </p>
-                                    <p style="font-weight: bold">Número telefonico: </p>
-                                    <p style="font-weight: bold">Dirección: </p>
-                                    <p style="font-weight: bold">Estado: </p>
-                                    <p style="font-weight: bold">Correo: </p>
-                                    <p style="font-weight: bold">Edad y Sexo: </p>
-                                    <p style="font-weight: bold">Especialidad: </p>
-                                    <p style="font-weight: bold">Cédula: </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: normal" th:text="|${#strings.capitalize(usuario.nombre)} ${#strings.capitalize(usuario.apellido)}|"></p>
-                                    <p style="font-weight: normal" th:text="${usuario.telefono}"></p>
-                                    <p style="font-weight: normal" th:text="${usuario.direccion}"></p>
-                                    <p style="font-weight: normal" th:text="${#strings.capitalize(usuario.estadosIdestado.nombre)}"></p>
-                                    <p style="font-weight: normal" th:text="${usuario.email}"></p>
-                                    <p style="font-weight: normal" th:text="|${usuario.edad}, ${usuario.sexo}|"></p>
-                                    <p style="font-weight: normal" th:text="${usuario.especialidadesIdEspecialidad.nombreEspecialidad}"></p>
-                                    <p style="font-weight: normal" th:text="${usuario.ceduladoctor}"></p>
+                                <div class="col mb-3">
+                                    <label for="disabledTextInput1" class="form-label">Sede Actual</label>
+                                    <input type="text" id="disabledTextInput13" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}" disabled>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="card mb-3 bg-card-gradient" style="height: 100%; background: #FFFFFF;">
-                        <div class="card-body" style="padding-bottom: 1rem; background: #FFFFFF; ">
-                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 15px">
-                                Actualizar mis datos:
-                            </h3>
+                            <div style="">
+                                <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu foto de perfil?</p>
+                                <button type="button" class="btn btn-secondary btn-sm" style="text-align: center;background: #3a85f3;
+                                    border-radius: 15px; border-color: #3a85f3;width: 130px;" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                            </div>
+                            <div style="height: 10px"></div>
+                            <div style="height: 10px"></div>
 
                             <!-- CAMBIAR SEDE -->
-                            <p style="font-weight: bold; margin: 5px">Sede Actual: <span style="font-weight: normal" th:text="${usuario.sedesIdsedes.nombre}"></span></p>
+                            <p style="margin: 0 0 10px 0; font-weight: bold;"> ¿Deseas cambiar tu sede?</p>
                             <button onclick="toggleInput()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #b38df7; border-radius: 1rem; background: #b38df7;
+                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
                                     font-size: 15px; color: white">
-                                ¿Deseas cambiar de sede?
+                                Cambiar sede
                             </button>
 
                             <div style="height: 10px"></div>
@@ -109,27 +166,26 @@
 
                             <!-- CAMBIAR CONTRASEÑA -->
                             <div style="height: 10px"></div>
-                            <p style="font-weight: bold; margin: 5px">Contraseña</p>
+                            <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu contraseña?</p>
                             <button onclick="toggleInputContra()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #b38df7; border-radius: 1rem; background: #b38df7;
+                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
                                     font-size: 15px; color: white">
-                                ¿Deseas cambiar de contraseña?
+                                Cambiar contraseña
                             </button>
                             <div style="height: 10px"></div>
                             <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                             <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
                                  style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                            <p  style="font-weight: bold; margin: 0px">
-                                Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
-                                • Que la contraseña contenga al menos ocho caracteres.<br>
-                                • Que la contraseña contenga al menos un número.<br>
-                                • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
-                                • Que la contraseña contenga al menos una mayúscula. </p>
                             <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
-                            style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
+                                  style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
                                 <div class="form-group">
-
+                                    <p  style="margin: 0">
+                                        Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+                                        • Que la contraseña contenga al menos ocho caracteres.<br>
+                                        • Que la contraseña contenga al menos un número.<br>
+                                        • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+                                        • Que la contraseña contenga al menos una mayúscula. </p>
                                     <label for="passActual" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña actual</label>
                                     <input type="password" class="form-control" id="passActual" name="pass1" style="width: 90%" required>
@@ -160,43 +216,34 @@
                                     </a>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                    <!--div class="card mb-3 bg-card-gradient" style="height: 100%; background: #FFFFFF" align="center">
-                        <div class="card-body" style="  background: #FFFFFF; ">
-                            <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 10px" align="left">
-                                Conoce las sedes:
-                            </h4>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1950.7672059942151!2d-77.0690430410581!3d-12.075522405736658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91046bc86a9%3A0xc44e2f0808f16654!2sAv.%20Jos%C3%A9%20Legu%C3%ADa%20y%20Mel%C3%A9ndez%2C%20Pueblo%20Libre%2015084!5e0!3m2!1ses!2spe!4v1681093467425!5m2!1ses!2spe"
-                                height="pixels" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            <div style="height: 11px;"></div>
-                        </div>
-                    </div>
-                </div-->
-                    <script>
-                        function toggleInput() {
-                            var inputContainer = document.getElementById("formscontainersede");
-                            if (inputContainer.style.display === "none") {
-                                inputContainer.style.display = "block";
-                            } else {
-                                inputContainer.style.display = "none";
-                            }
-                        }
 
-                        function toggleInputContra() {
-                            var inputContainer = document.getElementById("formscontainercontra");
-                            if (inputContainer.style.display === "none") {
-                                inputContainer.style.display = "block";
-                            } else {
-                                inputContainer.style.display = "none";
-                            }
-                        }
-                    </script>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+            <script>
+                function toggleInput() {
+                    var inputContainer = document.getElementById("formscontainersede");
+                    if (inputContainer.style.display === "none") {
+                        inputContainer.style.display = "block";
+                    } else {
+                        inputContainer.style.display = "none";
+                    }
+                }
 
+                function toggleInputContra() {
+                    var inputContainer = document.getElementById("formscontainercontra");
+                    if (inputContainer.style.display === "none") {
+                        inputContainer.style.display = "block";
+                    } else {
+                        inputContainer.style.display = "none";
+                    }
+                }
+            </script>
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
-        </div>
+    </div>
     </div>
 </main>
 <!-- ===============================================-->
