@@ -1042,9 +1042,9 @@ public class SuperController {
             dni = superadmin.getId();
         }
         if(c == 0){
-            usuarioRepository.editSuperAdmin(nombre,apellido,correo,telefono,dni,superadmin.getId());
+            usuarioRepository.editSuperAdmin(nombre,apellido,superadmin.getEmail(),telefono,dni,superadmin.getId());
             Usuario nuevaUsuario = usuarioRepository.findByid(dni);
-            attr.addFlashAttribute("msg","Usuario(SuperAdmin) ha sido editado exitosamente");
+            attr.addFlashAttribute("msg","Usuario(SuperAdmin) ha sido editado exitosamente, el correo no puede ser editado por motivos de sesión");
             httpSession.setAttribute("usuario",nuevaUsuario);
             return "redirect:/superAdmin/confSup";
         }else {
