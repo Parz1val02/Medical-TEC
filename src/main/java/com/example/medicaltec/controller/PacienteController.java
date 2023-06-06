@@ -92,11 +92,10 @@ public class PacienteController {
     @RequestMapping(value = "/principal")
     public String paginaprincipal(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        //HttpSession httpSession1 = httpServletRequest.getSession();
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(Integer.parseInt(sedeUsuario.getId()));
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
         model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
         model.addAttribute("sedeUsuario", sedeUsuario);
@@ -107,7 +106,9 @@ public class PacienteController {
    }
 
     @RequestMapping("/perfil")
-    public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model, HttpServletRequest httpServletRequest){
+    public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SeguroDto seguroUsuario = seguroRepository.getSeguro(usuario.getId());
         List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
@@ -129,7 +130,9 @@ public class PacienteController {
     }
 
     @RequestMapping("/consultas")
-    public String citas(Model model, HttpServletRequest httpServletRequest){
+    public String citas(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
@@ -161,7 +164,7 @@ public class PacienteController {
     }
 
     @RequestMapping("/pagos")
-    public String pagos(Model model, HttpServletRequest httpServletRequest){
+    public String pagos(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("usuario", usuario);
 
@@ -187,7 +190,9 @@ public class PacienteController {
     }
 
     @GetMapping("/sede")
-    public String cambiarSede(@RequestParam("id")String idSede, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+    public String cambiarSede(@RequestParam("id")String idSede, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String id = sedeRepository.verificaridSede(idSede);
         if(id!=null){
@@ -199,7 +204,9 @@ public class PacienteController {
         return "redirect:/paciente/principal";
     }
     @GetMapping("/agendarCita")
-    public String agendarCita(@ModelAttribute("cita")Cita cita,Model model, HttpServletRequest httpServletRequest){
+    public String agendarCita(@ModelAttribute("cita")Cita cita,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         ArrayList<String> modalidad = new ArrayList<>();
@@ -219,7 +226,9 @@ public class PacienteController {
     }
     @PostMapping("/guardarCita")
     public String guardarCita(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult,
-                              Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+                              Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
             List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
@@ -271,7 +280,9 @@ public class PacienteController {
     }
 
     @PostMapping("/cambiarSeguro")
-    public String cambiarSeguro(@RequestParam("seguro") String seguro, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+    public String cambiarSeguro(@RequestParam("seguro") String seguro, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String id = seguroRepository.verificaridSeguro(seguro);
         if(id!=null){
@@ -285,8 +296,10 @@ public class PacienteController {
 
     @PostMapping("/guardarAlergias")
     public String guardarAlergias(@ModelAttribute("alergia") @Valid Alergia alergia, BindingResult bindingResult,
-                                  RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest) {
+                                  RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
         Regex regex = new Regex();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if (bindingResult.hasErrors()) {
             List<Integer> idAlergias = historialMedicoHasAlergiaRepository.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
@@ -351,9 +364,11 @@ public class PacienteController {
     @PostMapping("/change")
     public String changePassword(@RequestParam("pass1") String pass1,
                                  @RequestParam("pass2") String pass2,
-                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
+                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication)
     {
         Regex regex = new Regex();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
         boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
@@ -376,7 +391,9 @@ public class PacienteController {
         }
     }
     @PostMapping("/guardarFoto")
-    public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+    public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(file.isEmpty()){
            attr.addFlashAttribute("foto", "Debe subir un archivo");
