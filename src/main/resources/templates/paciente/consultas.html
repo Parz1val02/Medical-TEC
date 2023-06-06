@@ -390,8 +390,8 @@
         // Format the time as 'h:mm A' (e.g., '2:30 PM')
         var formattedTime = time.format('h:mm A');
 
-        var dateString = event.extendedProps.start;
-        var date = moment(dateString);
+        var dateString = event.start;
+        var date = moment(dateString, 'YYYY-MM-DD');
         var fechaFormateada = date.format('DD/MM/YYYY');
 
         var content = '<strong>' + event.title + '</strong>';
