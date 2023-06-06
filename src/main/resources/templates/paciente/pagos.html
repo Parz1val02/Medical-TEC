@@ -120,9 +120,9 @@
                                                 <tr>
                                                     <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
                                                     </td>
-                                                    <td th:text="${boletas[info.index].conceptopago}" class="align-middle">
+                                                    <td th:if="${boletas[info.index].conceptopago!=null}" th:text="${boletas[info.index].conceptopago}" class="align-middle">
                                                     </td>
-                                                    <td th:text="${boletas[info.index].monto}" class="align-middle" >
+                                                    <td th:if="${boletas[info.index].monto!=null}" th:text="${boletas[info.index].monto}" class="align-middle" >
                                                     </td>
                                                 </tr>
 

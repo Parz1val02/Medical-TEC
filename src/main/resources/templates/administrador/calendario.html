@@ -34,8 +34,9 @@
           </div>
         </div>
       </div>
-
-      <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+      <div class="card mb-3">
+        <div id="calendar"></div>
+      </div>
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
@@ -103,6 +104,36 @@
   });
 </script>
 
+
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      start: 'title', // will normally be on the left. if RTL, will be on the right
+      center: '',
+      end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
+      defaultView: 'month',
+      weekday: 'long',
+      selectable: true,
+      height: 650,
+      events: [],
+      eventTextColor: '#ffffff',
+      eventBackgroundColor: '#3d8af7',
+      eventDisplay: 'block',
+      eventTimeFormat:{
+        hour: 'numeric',
+        minute: '2-digit',
+        meridiem: 'short'
+      },
+      firstDay: 1,
+      locale: 'es',
+      allDay: false,
+      displayEventTime: true,
+    });
+    calendar.render();
+  });
+</script>
 
 </body>
 </html>
