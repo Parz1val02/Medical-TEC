@@ -990,10 +990,14 @@ public class SuperController {
             c = c+1;
             apellido = superadmin.getApellido();
         }
-        if (correo.isEmpty()){
+        if (correo.isEmpty()) {
             attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
             c = c+1;
             correo = superadmin.getEmail();
+        } else if (!isValidEmail(correo)) {
+            c = c+1;
+            correo = superadmin.getEmail();
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
         }
         if (telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
