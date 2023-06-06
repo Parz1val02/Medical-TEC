@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.medicaltec.controller.ExampController;
 
 
+import javax.print.attribute.standard.Sides;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -105,6 +106,7 @@ public class SuperController {
             model.addAttribute("admS", admS);
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
+            httpSession.setAttribute("dnieditable",dni);
             return "superAdmin/editarAdmSede";
         } else {
             attr.addFlashAttribute("administrador_noexiste","El administrador a editar no existe");
@@ -112,49 +114,74 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(@ModelAttribute("admS") @Valid Usuario admS, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpSession httpSession,Authentication authentication){
+    public String actualizarAdministrador(Model model, RedirectAttributes attr,
+                                          @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                          @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
+                                           @RequestParam("sede") String sede, @RequestParam("estadosIdestado") String estadosIdestado,
+                                          HttpSession httpSession, Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        if(bindingResult.hasErrors()){
-            model.addAttribute("sedesList", sedeRepository.findAll());
-            model.addAttribute("estadosList", estadoRepository.findAll());
-            return "superAdmin/editarAdmSede";
-        }
-        else{
-            usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
-            attr.addFlashAttribute("administrador_actualizado", "Administrador actualizado exitosamente");
-            return "redirect:/superAdmin/dashboard";
-        }
-        /*
+        String dnieditable = (String) httpSession.getAttribute("dnieditable");
+        System.out.println(dnieditable);
+        System.out.println("si hay dni editable de sesión: "+dnieditable );
         int a = 0;
-        if(admS.getNombre().isEmpty()){
+        if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
         }
-        if(admS.getApellido().isEmpty()){
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            a = a+1;
+        }
+        if(estadosIdestado.isBlank() ){
+            attr.addFlashAttribute("estadomsg","El estado no puede ser nulo");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2")){
+            attr.addFlashAttribute("estadomsg","El estado ingresada es incorrecto");
+            a = a+1;
+        }
+        if(apellido.isEmpty()){
             attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
         }
-        if (admS.getEmail().isEmpty()){
-            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
-            a = a+1;
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            a = a + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            a = a + 1;
         }
-        if (admS.getTelefono().isEmpty()){
+        if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
-            a = a+1;
-        }
-        if (admS.getTelefono().length()!=9){
+            a =a+1;
+        } else if (telefono.length()!=9) {
             attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
             a = a+1;
+        } else if (esNumeroEntero(telefono)) {
+            int telefono1 = Integer.parseInt(telefono);
+            if (telefono1 <=0){
+                attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                a = a+1;
+            }
+        }else {
+            a=a+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
         }
         if(a == 0){
-            usuarioRepository.editarAdministradores(admS.getEmail(), admS.getNombre(), admS.getApellido(), admS.getSedesIdsedes().getId(), admS.getTelefono(), admS.getEstadosIdestado().getId(), admS.getId());
+            int sede1 = Integer.parseInt(sede);
+            int estado = Integer.parseInt(estadosIdestado);
+            usuarioRepository.editarAdministradores(correo, nombre, apellido, sede1, telefono, estado, dnieditable);
+            httpSession.removeAttribute("dnieditable");
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
-            return "redirect:/superAdmin/dashboard/Adm";
+            return "redirect:/superAdmin/dashboard";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/editarAdmS";
-        } */
+            String url = "redirect:/superAdmin/editarAdmS?id="+dnieditable;
+            return url;
+        }
 
     }
     @GetMapping("/editarAdmT")
@@ -168,6 +195,7 @@ public class SuperController {
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            httpSession.setAttribute("dnieditable",dni);
             return "superAdmin/editarAdmT";
         } else {
             attr.addFlashAttribute("administrativo_noexiste","El administrativo a editar no existe");
@@ -175,19 +203,94 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmT")
-    public String actualizarAdministrativo(@ModelAttribute("admT") @Valid Usuario admT,BindingResult bindingResult, Model model, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    public String actualizarAdministrativo(Model model, RedirectAttributes attr,
+                                           @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                           @RequestParam("correo") String correo, @RequestParam("especialidadesIdEspecialidad") String especialidad,
+                                           @RequestParam("telefono") String telefono,
+                                           @RequestParam("sede") String sede, @RequestParam("estadosIdestado") String estadosIdestado,
+                                           HttpSession httpSession, Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        if(bindingResult.hasErrors()){
-            model.addAttribute("especialidadList", especialidadeRepository.findAll());
-            model.addAttribute("sedesList", sedeRepository.findAll());
-            model.addAttribute("estadosList", estadoRepository.findAll());
-            return "superAdmin/editarAdmT";
+        String dnieditable = (String) httpSession.getAttribute("dnieditable");
+        System.out.println(dnieditable);
+        System.out.println("si hay dni editable de sesión: "+dnieditable );
+        int a = 0;
+        if(nombre.isEmpty()){
+            System.out.println("nombre vació");
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
         }
-        else {
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            a = a+1;
+        }
+        if(estadosIdestado.isBlank() ){
+            attr.addFlashAttribute("estadomsg","El estado no puede ser nulo");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2")){
+            attr.addFlashAttribute("estadomsg","El estado ingresada es incorrecto");
+            a = a+1;
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        }
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            a = a + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            a = a + 1;
+        }
+        if(telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a =a+1;
+        } else if (telefono.length()!=9) {
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            a = a+1;
+        } else if (esNumeroEntero(telefono)) {
+            int telefono1 = Integer.parseInt(telefono);
+            if (telefono1 <=0){
+                attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                a = a+1;
+            }
+        }else {
+            a=a+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
+        }
+        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        if(especialidad.isBlank() ){
+            attr.addFlashAttribute("espemsg","La especialidad no puede ser nula");
+            a =a+1;
+        } else if (esNumeroEntero(especialidad)) {
+            int num_esp = listaEspecialidades.size();
+            int espeee = Integer.parseInt(especialidad);
+            System.out.println("LA CANTIAD DE ESPECIALIDADES ESSSANDSKNDAJLDNAJSD "+num_esp);
+            System.out.println("LA ESPECIALDIAD ES" + espeee);
+            if (!(espeee<=17 && espeee>=1)){
+                attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+                a = a+1;
+            }
+        } else {
+            attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+            a = a+1;
+        }
+        if(a == 0){
+            int sede1 = Integer.parseInt(sede);
+            int estado = Integer.parseInt(estadosIdestado);
+            int especialidad1 = Integer.parseInt(especialidad);
+            System.out.println(dnieditable);
             attr.addFlashAttribute("administrativo_actualizado", "Administrativo actualizado exitosamente");
-            usuarioRepository.editarAdministrativo(admT.getEmail(), admT.getNombre(), admT.getApellido(), admT.getSedesIdsedes().getId(), admT.getTelefono(), admT.getEstadosIdestado().getId(), admT.getEspecialidadesIdEspecialidad().getId(), admT.getId());
+            usuarioRepository.editarAdministrativo(correo, nombre, apellido,sede1, telefono, estado, especialidad1, dnieditable);
+            httpSession.removeAttribute("dnieditable");
             return "redirect:/superAdmin/dashboard";
+        }else {
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            String url = "redirect:/superAdmin/editarAdmT?id="+dnieditable;
+            return url;
         }
     }
     @GetMapping("/editarDoctor")
@@ -520,7 +623,7 @@ public class SuperController {
             int estado=1;
             int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
-            usuarioRepository.crearAdmSede(dni,password,correo, nombre,apellido,  edad2,  telefono,  sexo,  address, sede2, estado);
+            usuarioRepository.crearAdmSede(dni, new BCryptPasswordEncoder().encode(password),correo, nombre,apellido,  edad2,  telefono,  sexo,  address, sede2, estado);
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
@@ -660,7 +763,7 @@ public class SuperController {
             int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
             int especialidad2 = Integer.parseInt(especialidad);
-            usuarioRepository.crearAdmT( dni,  password, correo, nombre,apellido,  edad2,  telefono,  sexo,  address,  sede2, estado, especialidad2);
+            usuarioRepository.crearAdmT( dni,   new BCryptPasswordEncoder().encode(password), correo, nombre,apellido,  edad2,  telefono,  sexo,  address,  sede2, estado, especialidad2);
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
