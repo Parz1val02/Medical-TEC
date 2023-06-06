@@ -31,7 +31,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
                     nativeQuery = true)
     List<Cita> proximasCitasAgendadas();
 
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1  and citanAND fecha<now() ORDER BY fecha DESC, hora DESC;",
+    @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
                     nativeQuery = true)
     List<Cita> citasPorUsuario(String id_paciente);
 

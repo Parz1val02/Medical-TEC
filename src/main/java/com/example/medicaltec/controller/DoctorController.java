@@ -50,6 +50,9 @@ public class DoctorController {
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
         model.addAttribute("usuario",usuario_doctor);
+        model.addAttribute("listaCuestionarios",cuestionarioRepository.findAll());
+
+
         return "doctor/principal";
     }
 
@@ -57,10 +60,10 @@ public class DoctorController {
     @GetMapping("/historial")
     public String verHistorial(Model model, @RequestParam("id") String id){
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("paciente",usuario);
+        Usuario paciente = optionalUsuario.get();
+        model.addAttribute("paciente",paciente);
 
-        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(paciente.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> listaAlergias = new ArrayList<>();
         for (Integer idAlergia : idAlergias) {
             listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
@@ -68,6 +71,12 @@ public class DoctorController {
         model.addAttribute("listaAlergias",listaAlergias);
         List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+        if(paciente.getSexo().equals("M")){
+            paciente.setSexo("Masculino");
+        }else if (paciente.getSexo().equals("F")){
+            paciente.setSexo("Femenino");
+        }
 
         return "doctor/historial";
     }
@@ -103,10 +112,16 @@ public class DoctorController {
 
     @GetMapping("/config")
     public String verConfiguracion(Model model, HttpSession httpSession){
-        Usuario usuario1 = (Usuario) httpSession.getAttribute("usuario");
-        model.addAttribute("usuario",usuario1);
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario);
 
-        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario1.getSedesIdsedes().getId());
+        if(usuario.getSexo().equals("M")){
+            usuario.setSexo("Masculino");
+        }else if (usuario.getSexo().equals("F")){
+            usuario.setSexo("Femenino");
+        }
+
+        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
     }

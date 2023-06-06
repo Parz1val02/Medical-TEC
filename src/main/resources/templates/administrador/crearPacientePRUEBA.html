@@ -87,7 +87,7 @@
 
                                     <div class="form-group">
                                         <label >Edad </label>
-                                        <input type="number" name="edadParam" class="form-control" th:classappend="${edadmsg !=null?'is-invalid':''}" >
+                                        <input type="number" th:field="*{edad}" class="form-control" th:classappend="${edadmsg !=null?'is-invalid':''}" >
                                         <div class="invalid-feedback" th:if="${edadmsg !=null}" th:text="${edadmsg }"></div>
                                     </div>
 
