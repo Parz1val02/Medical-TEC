@@ -139,6 +139,10 @@
                 </div>
                 <div th:if="${cuestionario_enviado != null}" th:text="${cuestionario_enviado}" class="alert alert-success" role="alert"
                      style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
+                <div th:if="${usuario_vacio != null}" th:text="${usuario_vacio}" class="alert alert-danger" role="alert"
+                     style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif">
+                    A simple danger alert—check it out!
+                </div>
                 <form th:action="@{/doctor/enviarCuest}" method="post" style="padding-left: 35px; padding-right: 15px">
                     <div class="form-group">
                         <div class="row">

@@ -18,7 +18,7 @@ public interface CuestionarioRepository extends JpaRepository<Cuestionario, Inte
 
 
     //para paciente
-    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cuestionario where paciente_dni=?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cuestionario where paciente_dni=?1 AND activo=1")
     Cuestionario cuestionaXPaciente(String dni);
 
 }

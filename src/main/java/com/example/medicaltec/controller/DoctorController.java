@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -50,6 +51,9 @@ public class DoctorController {
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
         model.addAttribute("usuario",usuario_doctor);
+        model.addAttribute("listaCuestionarios",cuestionarioRepository.findAll());
+
+
         return "doctor/principal";
     }
 
@@ -57,10 +61,10 @@ public class DoctorController {
     @GetMapping("/historial")
     public String verHistorial(Model model, @RequestParam("id") String id){
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("paciente",usuario);
+        Usuario paciente = optionalUsuario.get();
+        model.addAttribute("paciente",paciente);
 
-        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(paciente.getHistorialmedicoIdhistorialmedico().getId());
         ArrayList<Alergia> listaAlergias = new ArrayList<>();
         for (Integer idAlergia : idAlergias) {
             listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
@@ -68,6 +72,12 @@ public class DoctorController {
         model.addAttribute("listaAlergias",listaAlergias);
         List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
         model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+        if(paciente.getSexo().equals("M")){
+            paciente.setSexo("Masculino");
+        }else if (paciente.getSexo().equals("F")){
+            paciente.setSexo("Femenino");
+        }
 
         return "doctor/historial";
     }
@@ -103,10 +113,16 @@ public class DoctorController {
 
     @GetMapping("/config")
     public String verConfiguracion(Model model, HttpSession httpSession){
-        Usuario usuario1 = (Usuario) httpSession.getAttribute("usuario");
-        model.addAttribute("usuario",usuario1);
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario",usuario);
 
-        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario1.getSedesIdsedes().getId());
+        if(usuario.getSexo().equals("M")){
+            usuario.setSexo("Masculino");
+        }else if (usuario.getSexo().equals("F")){
+            usuario.setSexo("Femenino");
+        }
+
+        List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
     }
@@ -128,9 +144,10 @@ public class DoctorController {
 
     @PostMapping("/cambiarContrasena")
     public String cambiarContrasena(@RequestParam("pass1") String pass1,
-                                 @RequestParam("pass2") String pass2,
-                                 @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
+                                    @RequestParam("pass2") String pass2,
+                                    @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
+        Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
         boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
@@ -142,6 +159,9 @@ public class DoctorController {
             return "redirect:/doctor/config";
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las contraseñas ingresadas no coinciden");
+            return "redirect:/doctor/config";
+        }else if(!regex.contrasenaisValid(pass2)){
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
             return "redirect:/doctor/config";
         }else {
             usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
