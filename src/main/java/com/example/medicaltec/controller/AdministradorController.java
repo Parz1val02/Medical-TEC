@@ -459,11 +459,13 @@ public class AdministradorController {
             String retorno = "redirect:/administrador/editarPacientePagina?id="+ idNecesario;
             System.out.println("DNI NULO ");
             return retorno;
-        } else if (existeCorreo) {
+        } /*
+        else if (existeCorreo) {
             model.addAttribute("msgDanger","El correo del paciente ingresado ya existe");
             System.out.println("EXISTECORREO");
             return "administrador/editarPacientePRUEBA";
-        } else if (a > 0) {
+            */
+        else if (a > 0) {
             System.out.println("ALGUN ERROR ESTA SALTANDO");
             return "administrador/editarPacientePRUEBA";
         } else {
