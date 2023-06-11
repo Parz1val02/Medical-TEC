@@ -5,117 +5,255 @@
 
 <!--</head>-->
 <body>
-    <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
+    <div class="container" style="background: #FFFFFF">
+        <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
-    <!-- Invitación Registro -->
-    <div style="background: #9da9bb">
-        <div style="height: 50px;"></div>
-        <div class="alert alert-success" role="alert" th:if="${success != null}" th:text="${success}">
+        <!-- Invitación Registro -->
+        <!--
+        <div style="background: #9da9bb">
+            <div style="height: 50px;"></div>
+            <div class="alert alert-success" role="alert" th:if="${success != null}" th:text="${success}">
 
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+            </div>
+
+
+            <div style="text-align: center">
+                <div class="container" data-layout="container" style="overflow-y: auto">
+                    <div class="content" style="text-align: center">
+                        <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
+                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
+                                <div id="qrcode" ></div>
+                            </div>
+                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
+                                <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
+                                    <div class="card-body" style="padding: 1rem !important;">
+                                        <h4 class="card-subtitle"
+                                            style="color: #3d8af7; font-weight: bold; padding-bottom: 5px">ÚNETE A NOSOTROS</h4>
+                                        <h6 class="card-title"
+                                            style="color: #0032aa; font-weight: bold">Registro de Nuevo usuario</h6>
+                                        <p class="card-text" style="color: #9da9bb; font-weight: bold"> Ve a la página de registro
+                                            escaneando el QR o presionando el botón de abajo</p>
+                                        <a type="button" class="btn btn-light" style="background: #b38df7; color: #FFFFFF"
+                                        th:href="@{/register}">Quiero registrarme</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 50px;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
-
+        -->
+        <!-- Invitación Registro -->
+        <!-- Listar Sedes -->
+        <!--
+        <div style="background: #FFFFFF">
+            <div style="text-align: center">
+                <div class="container" data-layout="container" style="overflow-y: auto">
+                    <div class="content" style="text-align: center">
+                        <div style="height: 30px;"></div>
+                        <h1 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Sedes</h1>
+                        <div style="height: 30px;"></div>
+                        <div style="height: 10px;"></div>
+                        <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
+                            <div class="col-sm-3 mb-1" th:each="sede, i : ${sedeList}" style="margin-bottom: 10px !important;">
+                                <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;
+                                        min-height: 200px">
+                                    <img class="card-img-top img-fluid" th:src="@{/img/clinica.jpg}" alt="...">
+                                    <div class="card-body" style="padding: 1rem !important;">
+                                        <h6 class="card-title" th:text="|N°${i.index+1}|"
+                                            style="color: #3d8af7; font-weight: bold">Número Sede</h6>
+                                        <h4 class="card-subtitle" th:text="${sede.nombre}"
+                                            style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
+                                        <p class="card-text" th:text="|${sede.torre} - ${sede.piso}|"
+                                           style="color: #3d8af7; font-weight: bold">Torre - Piso</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 50px;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
+        -->
+        <!-- Listar Sedes -->
+        <!-- Listar Especialidades -->
+        <!--
+        <div style="background: #0032aa">
+            <div style="text-align: center">
+                <div class="container" data-layout="container" style="overflow-y: auto">
+                    <div class="content" style="text-align: center">
+                        <div style="height: 30px;"></div>
+                        <h1 style="color: #FFFFFF; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Especialidades</h1>
+                        <div style="height: 30px;"></div>
+                        <div style="height: 10px;"></div>
+                        <div class="row justify-content-center align-items-center" style="margin-left: 15px;margin-right: 15px;">
+                            <div class="col-sm-3 mb-1" th:each="especialidad, i : ${especialidadesList}" style="margin-bottom: 10px !important;">
+                                <div class="card bg-card-gradient align-content-center" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
+                                    <div class="card-body" style="padding: 1rem !important;">
+                                        <h6 class="card-title" th:text="|N°${i.index+1}|"
+                                           style="color: #9da9bb; margin-bottom: 0 !important;">Número Especialidad</h6>
+                                        <h4 class="card-text" th:text="${especialidad.nombreEspecialidad}"
+                                            style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 50px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+        <!-- Listar Especialidades -->
+
+        <div>
+            <img class="card-img-top img-fluid" th:src="@{img/foto_clinica.png}">
+        </div>
+        <div style="height: 60px;"></div>
+
+        <!-- NUESTROS SERVICIOS -->
         <div style="text-align: center">
             <div class="container" data-layout="container" style="overflow-y: auto">
                 <div class="content" style="text-align: center">
-                    <!--div style="height: 30px;"></div>
-                    <h1 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Sedes</h1>
                     <div style="height: 30px;"></div>
-                    <div style="height: 10px;"></div-->
-                    <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
-                        <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
-
-                            <div id="qrcode" ></div>
-
-                            <!--<img class="img-fluid" th:src="@{/img/registerQR.png}" alt="..." width="200">-->
+                    <h2 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Nuestros Servicios</h2>
+                    <a type="button" th:href="@{/servicios}" class="btn btn-link" style="text-align: right; text-decoration: underline;color: #0032aa;">
+                        Conocer más sobre nuestros servicios
+                    </a>
+                    <div style="height: 40px;"></div>
+                    <div style="display: flex">
+                        <div class="card mb-3" style="flex: 1; border: 1px solid #b6c1d2; margin-right: 20px">
+                            <div class="row g-0" style="height: 100%;">
+                                <div class="col-md-5" style="
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            overflow: hidden;
+                            ">
+                                    <img  th:src="@{/img/principalpage/consulta.jpg}" class="img-fluid rounded-start" style="height: 100% !important;
+                                object-fit: cover;
+                                object-position: center;
+                                border-right: 1px solid #b6c1d2;">
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Consulta médica</h5>
+                                        <p class="card-text">
+                                            La consulta médica es un encuentro fundamental entre tú y nuestros expertos en salud.
+                                            Durante la consulta, nuestros médicos escucharán tus preocupaciones y
+                                            evaluarán detalladamente tu condición de salud. Te invitamos a reservar una consulta médica
+                                            para recibir atención personalizada, obtener asesoramiento médico confiable y establecer una
+                                            relación de confianza con nuestros profesionales de la salud. Tu bienestar es nuestra prioridad.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
-                            <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
-                                <div class="card-body" style="padding: 1rem !important;">
-                                    <h4 class="card-subtitle"
-                                        style="color: #3d8af7; font-weight: bold; padding-bottom: 5px">ÚNETE A NOSOTROS</h4>
-                                    <h6 class="card-title"
-                                        style="color: #0032aa; font-weight: bold">Registro de Nuevo usuario</h6>
-                                    <p class="card-text" style="color: #9da9bb; font-weight: bold"> Ve a la página de registro
-                                        escaneando el QR o presionando el botón de abajo</p>
-                                    <a type="button" class="btn btn-light" style="background: #b38df7; color: #FFFFFF"
-                                    th:href="@{/register}">Quiero registrarme</a>
+                        <div style="height: 10px;"></div>
+                        <div class="card mb-3" style="flex: 1; border: 1px solid #b6c1d2;">
+                            <div class="row g-0" style="height: 100%;">
+                                <div class="col-md-5" style="
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            overflow: hidden;">
+                                    <img  th:src="@{/img/principalpage/examen.jpg}" class="img-fluid rounded-start" style="    height: 100% !important;
+                                object-fit: cover;
+                                object-position: center;
+                                border-right: 1px solid #b6c1d2;">
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Consulta médica</h5>
+                                        <p class="card-text">
+                                            Nuestros exámenes médicos son una oportunidad invaluable para cuidar de tu salud de manera integral.
+                                            Nuestros profesionales de la salud realizarán un análisis exhaustivo, abarcando diferentes aspectos
+                                            de tu bienestar. Los exámenes médicos nos permiten detectar
+                                            tempranamente posibles afecciones, monitorear tu progreso y brindarte recomendaciones preventivas
+                                            personalizadas. Tú mereces una atención médica integral y de calidad.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="height: 50px;"></div>
+                    <div style="height: 30px;"></div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Invitación Registro -->
 
-    <!-- Listar Sedes -->
-    <div style="background: #FFFFFF">
+        <!-- POR QUÉ NOSOTROS-->
         <div style="text-align: center">
             <div class="container" data-layout="container" style="overflow-y: auto">
                 <div class="content" style="text-align: center">
                     <div style="height: 30px;"></div>
-                    <h1 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Sedes</h1>
-                    <div style="height: 30px;"></div>
-                    <div style="height: 10px;"></div>
-                    <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
-                        <div class="col-sm-3 mb-1" th:each="sede, i : ${sedeList}" style="margin-bottom: 10px !important;">
-                            <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;
-                                    min-height: 200px">
-                                <img class="card-img-top img-fluid" th:src="@{/img/clinica.jpg}" alt="...">
-                                <div class="card-body" style="padding: 1rem !important;">
-                                    <h6 class="card-title" th:text="|N°${i.index+1}|"
-                                        style="color: #3d8af7; font-weight: bold">Número Sede</h6>
-                                    <h4 class="card-subtitle" th:text="${sede.nombre}"
-                                        style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
-                                    <p class="card-text" th:text="|${sede.torre} - ${sede.piso}|"
-                                       style="color: #3d8af7; font-weight: bold">Torre - Piso</p>
-                                </div>
-                            </div>
+                    <h2 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 25px"> ¿Por qué elegir MedicalTec?</h2>
+                    <div style="display: flex">
+                        <div style="margin: 20px;">
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Atención centrada en el paciente</h4>
+                            <p style="font-size: 15px;">
+                                No solo nos preocupamos por tus condiciones de salud. Nos preocupamos por ti. Eso significa
+                                que nuestros proveedores se toman el tiempo para escuchar lo que es importante para ti antes
+                                de recomendar los siguientes pasos.
+                            </p>
+                        </div>
+                        <div style="margin: 20px;">
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Reconocimiento nacional:</h4>
+                            <p style="font-size: 15px;">
+                                MedicalTec se encuentra consistentemente clasificada como uno de los mejores hospitales de la nación según
+                                U.S. News & World Report. Newsweek también nos ha reconocido como uno de los mejores hospitales del mundo.
+                            </p>
+                        </div>
+                        <div style="margin: 20px;">
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Proveedores colaborativos:</h4>
+                            <p style="font-size: 15px;">
+                                Recibirás atención de expertos certificados por el consejo y con entrenamiento de especialización,
+                                quienes trabajan juntos para crear un plan de tratamiento diseñado especialmente para ti.
+                                Solo los más altos estándares aseguran excelentes resultados.
+                            </p>
+                        </div>
+                        <div style="margin: 20px;">
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Innovación e investigación:</h4>
+                            <p style="font-size: 15px;">
+                                Estamos enfocados en el presente y en el futuro. Nuestro enfoque en la investigación y en ofrecer las últimas opciones
+                                significa que puedes encontrar una amplia gama de ensayos clínicos y otros tratamientos que no encontrarás en otro lugar.
+                            </p>
                         </div>
                     </div>
-                    <div style="height: 50px;"></div>
+                    <div style="height: 30px;"></div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Listar Sedes -->
 
-    <!-- Listar Especialidades -->
-    <div style="background: #0032aa">
+        <!-- VISITANOS -->
         <div style="text-align: center">
             <div class="container" data-layout="container" style="overflow-y: auto">
                 <div class="content" style="text-align: center">
                     <div style="height: 30px;"></div>
-                    <h1 style="color: #FFFFFF; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Especialidades</h1>
-                    <div style="height: 30px;"></div>
-                    <div style="height: 10px;"></div>
-                    <div class="row justify-content-center align-items-center" style="margin-left: 15px;margin-right: 15px;">
-                        <div class="col-sm-3 mb-1" th:each="especialidad, i : ${especialidadesList}" style="margin-bottom: 10px !important;">
-                            <div class="card bg-card-gradient align-content-center" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
-                                <div class="card-body" style="padding: 1rem !important;">
-                                    <h6 class="card-title" th:text="|N°${i.index+1}|"
-                                       style="color: #9da9bb; margin-bottom: 0 !important;">Número Especialidad</h6>
-                                    <h4 class="card-text" th:text="${especialidad.nombreEspecialidad}"
-                                        style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
-                                </div>
-                            </div>
+                    <h2 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 25px"> Visitanos</h2>
+                    <div class="row">
+                        <div class="col-md-5">
+                            Ya no se que poner
+                        </div>
+                        <div class="col-md-7">
+                            Me quede sin ideas
                         </div>
                     </div>
-                    <div style="height: 50px;"></div>
+                    <div style="height: 30px;"></div>
                 </div>
             </div>
         </div>
+
+        <div style="height: 100px;"></div>
+        <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
-    <!-- Listar Especialidades -->
-
-
-    <div style="height: 100px;"></div>
-    <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
-
 
     <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
     <script th:src="@{/js/qrcode.min.js}" ></script>
