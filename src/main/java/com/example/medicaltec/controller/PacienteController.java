@@ -291,6 +291,10 @@ public class PacienteController {
             cita.setDoctor(doctor);
             cita.setEstadoscitaIdestados(estadoscita);
             citaRepository.save(cita);
+
+            //para la boleta de la cita creada
+            Boleta boleta=new Boleta();
+            boletaRepository.crearBoletaCita(tipoCitaRepository.findById(1).get().getTipoCita(), 60, SPA.getSegurosIdSeguro().getId(), null, cita.getId());
             attr.addFlashAttribute("msg", "Cita agendada de manera exitosa");
         }
         return "redirect:/paciente/principal";
@@ -369,15 +373,16 @@ public class PacienteController {
 
 
         //List<Pregunta> preguntas = preguntaRepository.obtenerPreguntas(cuestionarios.get().getId());
+        Respuesta respuesta=new Respuesta();
         model.addAttribute("preguntas", preguntas);
-
+        model.addAttribute("respuesta", respuesta);
         return "paciente/responderCuestionario";
     }
 
 
 
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @ModelAttribute("respuesta")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String guardarRptas( @ModelAttribute("respuestas")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
 
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);

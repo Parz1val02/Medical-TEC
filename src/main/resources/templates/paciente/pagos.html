@@ -66,6 +66,12 @@
                                     border-radius: 15px" th:data-target="'#Boleta' + ${info.index+1}">Ver más</button>
                                 <!-- Modal -->
                             </td>
+
+
+                            <td class="align-middle" align="center" th:if="${cita.getCitacancelada()==false && cita.getEstadoscitaIdestados().getId()==1}">
+                                <button type="submit" class="btn btn-primary btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Pagar</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

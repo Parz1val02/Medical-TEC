@@ -48,6 +48,8 @@
 
                     <!--<input type="hidden" name="paciente.id" th:value="${session.usuario.id}" class="form-control">-->
                     <label th:text="${p.getPregunta()}"></label>
+                    <input type="text" th:name="${respuesta.preguntasIdpreguntas}" hidden>
+                    <input type="text" th:name="${respuesta.respuesta}">
                   </div>
                 </div>
               </div>
