@@ -11,10 +11,10 @@
 
 <p><b><div sec:authorize="isAuthenticated()" th:text="${#authentication.name}"/></b>Usted no tiene permiso para ver este contenido.</p>
 
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'paciente':false}" th:href="@{'/'+'paciente'+'/'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/principal'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/dashboard'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'paciente':false}" th:href="@{'/'+'paciente'+'/principal'}" class="btn btn-dark">Regresar</a>
+<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/principal'}" class="btn btn-dark">Regresar</a>
 <a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'+'/'}" class="btn btn-dark">Regresar</a>
 
 
