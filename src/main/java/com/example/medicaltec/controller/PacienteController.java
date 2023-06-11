@@ -1,5 +1,6 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.dto.Sede1Dto;
 import com.example.medicaltec.dto.SedeDto;
 import com.example.medicaltec.dto.SeguroDto;
 import com.example.medicaltec.funciones.Regex;
@@ -101,6 +102,8 @@ public class PacienteController {
         model.addAttribute("sedeUsuario", sedeUsuario);
         List<Sede> listaSedes = sedeRepository.findAll();
         model.addAttribute("listaSedes",listaSedes);
+        List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
+        model.addAttribute("listaSedes1",listaSedes1);
         model.addAttribute("arch", "arch");
         return "paciente/principal";
    }
