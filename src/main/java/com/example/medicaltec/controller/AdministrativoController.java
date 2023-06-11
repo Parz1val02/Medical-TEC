@@ -8,7 +8,9 @@ import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -293,13 +295,21 @@ public class AdministrativoController {
 
                 if (!existe1 && !existe2) {
 
+                    Persona3 persona3 = personaDao.obtenerPersona(dni);
 
-                    model.addAttribute("persona", personaDao.obtenerPersona(dni));
-                    model.addAttribute("correo", correo);
-                    model.addAttribute("dni", dni);
-                    model.addAttribute("listaseguros", seguroRepository.findAll());
-                    model.addAttribute("listasedes", sedeRepository.findAll());
-                    return "administrativo/formEnvio";
+                    if(persona3.getSuccess().equalsIgnoreCase("false")){
+                        attr.addFlashAttribute("errorenvio", "Número de DNI no se encuentra en el padrón de RENIEC");
+                        return "redirect:/administrativo/dashboard";
+                    }else {
+                        model.addAttribute("persona", personaDao.obtenerPersona(dni));
+                        model.addAttribute("correo", correo);
+                        model.addAttribute("dni", dni);
+                        model.addAttribute("listaseguros", seguroRepository.findAll());
+                        model.addAttribute("listasedes", sedeRepository.findAll());
+                        return "administrativo/formEnvio";
+                    }
+
+
 
 
                 } else if (existe2) {
@@ -344,7 +354,7 @@ public class AdministrativoController {
 
     @PostMapping("/guardarFoto")
     public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
-        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getDeclaringClass().getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(file.isEmpty()){
