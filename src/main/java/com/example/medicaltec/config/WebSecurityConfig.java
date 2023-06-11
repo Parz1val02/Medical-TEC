@@ -96,8 +96,8 @@ public class WebSecurityConfig {
                 .requestMatchers("/administrador", "/administrador/**").hasAnyAuthority("administrador","superadmin")
                 .requestMatchers("/doctor", "/doctor/**").hasAnyAuthority("doctor","superadmin")
                 .requestMatchers("/superAdmin", "/superAdmin/**").hasAnyAuthority("superadmin")
-                .anyRequest().permitAll();
-                //.and().exceptionHandling().accessDeniedPage("/403.html");
+                .anyRequest().permitAll()
+                .and().exceptionHandling().accessDeniedPage("/403.html");
         //http.securityContext(security -> security.securityContextRepository(new HttpSessionSecurityContextRepository()));
         //http.securityContext(security -> security.requireExplicitSave(true));
         http.logout().logoutSuccessUrl("/").deleteCookies("JSESSIONID").invalidateHttpSession(true);

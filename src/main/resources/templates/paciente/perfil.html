@@ -36,7 +36,8 @@
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
                     <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/perfilPaciente}" width="200" alt="" /></div>
+                    <!--div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div-->
                 </div>
                 <br>
                 <div class="col">
@@ -187,7 +188,7 @@
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form method="POST" th:action="@{/paciente/guardarFoto}"
+                <form method="POST" th:action="@{/guardarImagen}"
                       class="dropzone"
                       id="myGreatDropzone"></form>
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
@@ -252,8 +253,8 @@
         paramName: "file", // The name that will be used to transfer the file
         maxFiles: 1,
         autoProcessQueue: false,
-        acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
-        maxFilesize: 5,
+        acceptedFiles: ".jpg,.jpeg",
+        maxFilesize: 2,
         addRemoveLinks: true,
         dictResponseError: 'Server not Configured',
         init:function(){

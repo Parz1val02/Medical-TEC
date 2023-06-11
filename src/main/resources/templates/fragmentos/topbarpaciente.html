@@ -80,7 +80,8 @@
     <li class="nav-item dropdown">
       <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="avatar avatar-xl">
-          <img class="rounded-circle" th:src="@{|/paciente/image/${session.usuario.id}|}" alt="" />
+          <!--img class="rounded-circle" th:src="@{|/paciente/image/${session.usuario.id}|}" alt="" /-->
+          <img class="rounded-circle" th:src="@{/perfilPaciente}" alt="" />
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right py-0" aria-labelledby="navbarDropdownUser">
