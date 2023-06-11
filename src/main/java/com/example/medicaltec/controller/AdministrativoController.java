@@ -303,13 +303,19 @@ public class AdministrativoController {
                 if (!existe1 && !existe2) {
 
 
-                    model.addAttribute("persona", personaDao.obtenerPersona(dni));
-                    model.addAttribute("correo", correo);
-                    model.addAttribute("dni", dni);
-                    model.addAttribute("listaseguros", seguroRepository.findAll());
-                    model.addAttribute("listasedes", sedeRepository.findAll());
-                    return "administrativo/formEnvio";
+                    Persona3 persona3 = personaDao.obtenerPersona(dni);
 
+                    if(persona3.getSuccess().equalsIgnoreCase("false")){
+                        attr.addFlashAttribute("errorenvio", "Número de DNI no se encuentra en el padrón de RENIEC");
+                        return "redirect:/administrativo/dashboard";
+                    }else {
+                        model.addAttribute("persona", personaDao.obtenerPersona(dni));
+                        model.addAttribute("correo", correo);
+                        model.addAttribute("dni", dni);
+                        model.addAttribute("listaseguros", seguroRepository.findAll());
+                        model.addAttribute("listasedes", sedeRepository.findAll());
+                        return "administrativo/formEnvio";
+                    }
 
                 } else if (existe2) {
 
