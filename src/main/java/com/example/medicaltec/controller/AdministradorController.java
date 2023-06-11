@@ -8,7 +8,7 @@ import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.*;
 import jakarta.validation.Valid;
-import jdk.swing.interop.SwingInterOpUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -844,6 +844,7 @@ public class AdministradorController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
+        Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
         //String pass1BCrypt = new BCryptPasswordEncoder().encode(pass1);
@@ -866,6 +867,9 @@ public class AdministradorController {
             return "redirect:/administrador/password";
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
+            return "redirect:/administrador/password";
+        }else if(!regex.contrasenaisValid(pass2)){
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
             return "redirect:/administrador/password";
         }else {
             usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());

@@ -186,10 +186,10 @@ public class PacienteController {
     @RequestMapping("/cuestionarios")
     public String cuestionarios(Model model,HttpServletRequest httpServletRequest){
 
-
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(usuario.getId());
         Cuestionario cuestionario=cuestionarioRepository.cuestionaXPaciente(usuario.getId());
-        //creo que se debe enviar tambien lista de preguntas por cuestionario
+        //creo que se debe enviar también lista de preguntas por cuestionario
         ArrayList<Pregunta> preguntas = new ArrayList<>();
 
         /*for (int i = 0; i < cuestionarioList.size(); i++) {

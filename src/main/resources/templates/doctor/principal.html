@@ -38,24 +38,21 @@
 
             <div style="display: flex; text-align: center">
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                         Notificaciones, Mensajería y Calendario
                     </button>
                 </a>
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                         Proximas Citas
                     </button>
                 </a>
             </div>
             <br>
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: block; text-align: center; line-height: 30;" id="div1">
-                Seleccione una opción para empezar a navegar.
-            </div>
             <!-- Información Reciente -->
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: block;" id="div1">
                 <div class="card-body" style="background: #FFFFFF">
                     <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                         Ponte al día
@@ -123,16 +120,16 @@
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Cuestionarios
                                     </h4>
-                                    <!--
-                                    <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
-                                         th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
-                  margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
-                                        <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                            <b th:text="${mensaje.fecha}"></b>
-                                            <div th:text="${mensaje.contenido}"></div>
+                                    <div>
+                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
+                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <b th:text="|${cuestionario.nombrecuestionario}|"></b>
+                                                <div> Descripción cuestionario respectiva</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    -->
                                 </div>
                             </div>
                         </div>
@@ -140,7 +137,7 @@
                 </div>
             </div>
             <!-- Próximas Citas -->
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div3">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
                 <div class="card-body">
                     <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
                         Próximas Citas Agendadas
@@ -173,11 +170,14 @@
                             <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}">
                                 Próxima cita
                             </td>
-                            <td class="align-middle" style="text-align: center">
+                            <td class="align-middle" style="text-align: center" th:if="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
                                 <input type="hidden" id="fecha" th:value="${cita.fecha}" />
                                 <input type="hidden" id="hora" th:value="${cita.hora}" />
-                                <button id="botonInicioVideo" onclick="activarBoton()" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
+                                <button id="botonInicioVideo" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
                                 border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
+                                No disponible
                             </td>
                             <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
                               <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
@@ -197,36 +197,29 @@
             </div>
 
             <script>
-                function activarBoton(){
-                    // Obtener la fecha y hora actual
-                    var fecha = document.getElementById('fecha').value;
-                    var hora = document.getElementById('hora').value;
-                    var fechaActual = new Date();
-                    var horaActual = fechaActual.getHours();
+                // Obtener la referencia al botón
+                var boton = document.getElementById('miBoton');
 
-                    // Definir la fecha y hora objetivo
-                    var fechaHoraObjetivo = fecha + 'T' + hora ;
-                    var fechaObjetivo = new Date(fechaHoraObjetivo);
-                    var horaInicio = fechaObjetivo.getHours();
-                    var horaFin = horaInicio + 1;
+                // Obtener la fecha y hora actual
+                var fechaActual = new Date();
 
-                    // Verificar si la hora actual está dentro del rango objetivo
-                    if (fechaActual.getTime() >= fechaObjetivo.getTime() && horaActual >= horaInicio && horaActual < horaFin) {
-                        // Habilitar el botón
-                        document.getElementById('botonInicioVideo').disabled = false;
-                        document.getElementById('botonInicioVideo').style.backgroundColor = '#3d8af7';
-                        document.getElementById('botonInicioVideo').style.borderColor = '#3d8af7';
-                    }
-                }
+                // Crear la fecha y hora objetivo
+                var fecha = document.getElementById('fecha').value;
+                var hora = document.getElementById('hora').value;
+                var fechaObjetivo = new Date(fecha + ' ' + hora);
+                var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                // Verificar si la fecha y hora actual están dentro del rango objetivo
+                boton.disabled = !(fechaActual >= fechaInicio && fechaActual <= fechaFin);
 
                 function mostrarDiv(numeroDiv) {
-                    for (var i = 1; i <= 3; i++) {
-                        var div = document.getElementById("div" + i);
-                        div.style.display = "none";
-                    }
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
                     // Mostrar el div seleccionado
-                    var divMostrar = document.getElementById("div" + numeroDiv);
-                    divMostrar.style.display = "block";
+                    document.getElementById("div" + numeroDiv).style.display = "block";
                 }
             </script>
 
