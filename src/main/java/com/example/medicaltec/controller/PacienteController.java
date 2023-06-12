@@ -141,9 +141,8 @@ public class PacienteController {
             //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
             List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
 
-            for (int j = 0; j < idmed.size(); j++) {
-                medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(j)));
-            }
+            medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(i)));
+
         }
         model.addAttribute("medicamentos", medicamentos);
         model.addAttribute("citas", citas);
