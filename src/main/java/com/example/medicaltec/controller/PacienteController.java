@@ -96,15 +96,12 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
-        model.addAttribute("doctores", doctores);
         model.addAttribute("sedes", sedeRepository.findAll());
         model.addAttribute("sedeUsuario", sedeUsuario);
         List<Sede> listaSedes = sedeRepository.findAll();
         model.addAttribute("listaSedes",listaSedes);
         List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
         model.addAttribute("listaSedes1",listaSedes1);
-        model.addAttribute("arch", "arch");
         return "paciente/principal";
    }
 
@@ -122,7 +119,6 @@ public class PacienteController {
         model.addAttribute("alergias", alergias);
         model.addAttribute("seguros", seguroRepository.findAll());
         model.addAttribute("seguroUsuario", seguroUsuario);
-        model.addAttribute("arch", "windowzzz");
         return "paciente/perfil";
     }
 
@@ -130,7 +126,6 @@ public class PacienteController {
     public String cambiarContra(Model model, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
-        model.addAttribute("arch", "windowzzz");
         return "paciente/cambioContrasena";
     }
 
@@ -152,7 +147,6 @@ public class PacienteController {
         }
         model.addAttribute("medicamentos", medicamentos);
         model.addAttribute("citas", citas);
-        model.addAttribute("arch", "windowzzz");
         return "paciente/consultas";
     }
 
@@ -162,7 +156,6 @@ public class PacienteController {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        model.addAttribute("arch", "windowzzz");
        return "paciente/notificaciones";
     }
     @RequestMapping("/mensajeria")
@@ -170,7 +163,6 @@ public class PacienteController {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        model.addAttribute("arch", "windowzzz");
        return "paciente/mensajeria";
     }
 
@@ -189,9 +181,21 @@ public class PacienteController {
         model.addAttribute("boletas", boletas);
         model.addAttribute("citas", citaRepository.historialCitas2(usuario.getId()));
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
-        model.addAttribute("arch", "windowzzz");
        return "paciente/pagos";
     }
+
+    @RequestMapping("/listaDoctores")
+    public String doctores(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        model.addAttribute("usuario", usuario);
+        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
+        model.addAttribute("doctores", doctores);
+        return "paciente/listarDoctores";
+    }
+
     @RequestMapping("/cuestionarios")
     public String cuestionarios(Model model,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
@@ -205,7 +209,6 @@ public class PacienteController {
             preguntas.add(  preguntaRepository.obtenerPreguntas( cuestionarioList.get(i).getId())  );
         }*/
         model.addAttribute("cuestionarios",cuestionarioRepository.cuestionaXPaciente(usuario.getId()));
-        model.addAttribute("arch", "windowzzz");
        return "paciente/cuestionarios";
     }
 
@@ -241,7 +244,6 @@ public class PacienteController {
         model.addAttribute("tipos", tipoCitaRepository.findAll());
         model.addAttribute("modalidades", modalidad);
         model.addAttribute("pagos", formapago);
-        model.addAttribute("arch", "windowzzz");
        return "paciente/agendar";
     }
     @PostMapping("/guardarCita")
@@ -264,7 +266,6 @@ public class PacienteController {
             model.addAttribute("tipos", tipoCitaRepository.findAll());
             model.addAttribute("modalidades", modalidad);
             model.addAttribute("pagos", formapago);
-            model.addAttribute("arch", "windowzzz");
             return "paciente/agendar";
         }else{
             Usuario paciente = usuarioRepository.findByid(cita.getPaciente().getId());
@@ -284,7 +285,6 @@ public class PacienteController {
                 model.addAttribute("modalidades", modalidad);
                 model.addAttribute("pagos", formapago);
                 model.addAttribute("errorUsuario","Input ingresado no válido");
-                model.addAttribute("arch", "windowzzz");
                 return "paciente/agendar";
             }
             Estadoscita estadoscita = new Estadoscita();

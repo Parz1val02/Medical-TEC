@@ -32,7 +32,7 @@ public class GcsController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @PostMapping("/guardarImagen")
+    @PostMapping("/uploadPaciente")
     public String guardarImagenEvento(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
@@ -50,7 +50,7 @@ public class GcsController {
             return "redirect:/paciente/perfil";
         }
         String id = usuario.getId();
-        String nombreArchivo= "fotosPacientes/perfil-" + id;
+        String nombreArchivo= "fotosPerfil/perfil-" + id;
         try{
             uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
             attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
@@ -108,13 +108,13 @@ public class GcsController {
         Blob blob = storage.get(blobId);
         return blob.getContent();
     }
-    @GetMapping("/perfilPaciente")
+    @GetMapping("/fotoPerfil")
     public ResponseEntity<byte[]> displayItemImage(HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication) throws IOException {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String id = usuario.getId();
-        String blobName = "fotosPacientes/perfil-" + id +".jpeg";
+        String blobName = "fotosPerfil/perfil-" + id +".jpeg";
         byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);

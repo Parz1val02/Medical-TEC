@@ -22,25 +22,36 @@
 <!--    Main Content-->
 <!-- ===============================================-->
 <main class="main" id="top">
-
-
   <div class="container" data-layout="container">
     <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
     <div class="content" >
-      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
       <div class="content">
         <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <div class="card-deck">
           <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
             <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
               <div style="text-align: center">
-                <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
+                <span class="far fa-hospital" style="font-size: 3em; color: #0032aa"></span>
                 <hr style="height: 1px; background-color: #333; border: none">
                 <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                  Sección de Pagos
+                  Agendar Cita
                 </h4>
-                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h6>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agende sus futuras consultas médicas</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/agendarCita}">Ingresar</a>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="fas fa-user-nurse" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Busque a su Médico
+                </h4>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualice la información de los doctores de su sede</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/listaDoctores}">Ingresar</a>
               </div>
             </div>
           </div>
@@ -57,259 +68,66 @@
               </div>
             </div>
           </div>
-          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
-            <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
-              <div style="text-align: center">
-                <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
-                <hr style="height: 1px; background-color: #333; border: none">
-                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                  Cuestionarios
-                </h4>
-                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario, aparecerá en esta sección</h6>
-                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="row no-gutters">
-          <div class="col-lg-4 pr-lg-2">
+        <div class="card-deck">
+          <div class="col-lg-8 pl-lg-2">
             <div class="card h-100 bg-gradient">
               <div class="card-header bg-transparent">
                 <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
-                  Sedes
+                  Sede Actual
                 </h4>
+                <div class="form-group" style="text-align: center">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                      <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
+                      <select class="form-control" id="zona">
+                        <option  th:each="sede : ${listaSedes1}"
+                                 th:value="${sede.idsedes}"
+                                 th:text="${sede.nombre}"
+                                 th:selected="${sede.idsedes==sedeUsuario.id}"></option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
-                <div class="row">
-                  <div class="form-group" style="text-align: center">
-                    <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
-                    <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
-                    <label for="" style="font-size: medium">Sede Actual</label>
-                    <input class="form-control col text-black" id="" type="text" th:placeholder="${sedeUsuario.nombre}" readonly="" style="text-align: center">
-                    <hr style="height: 1px; background-color: #FFFFFF; border: none">
-                    <div class="dropdown">
-                      <!--<button class="btn btn-info dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar Sede</button>
-                      <div  class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <a th:each="sede : ${sedes}" th:value="${sede.id}" id="zona"
-                                th:text="${sede.nombre}" class="dropdown-item btn" type="button" th:href="@{'/paciente/sede' + '?id=' + ${sede.id}}"></a>
-                      -->
-                        <select class="form-control" id="zona">
-                          <option  th:each="sede : ${listaSedes1}"
-                                   th:value="${sede.idsedes}"
-                                   th:text="${sede.nombre}"
-                                   th:selected="${sede.idsedes==sedeUsuario.id}"></option>
-                        </select>
-                      </div>
-                    </div>
-                    <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1950.7672059942151!2d-77.0690430410581!3d-12.075522405736658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c91046bc86a9%3A0xc44e2f0808f16654!2sAv.%20Jos%C3%A9%20Legu%C3%ADa%20y%20Mel%C3%A9ndez%2C%20Pueblo%20Libre%2015084!5e0!3m2!1ses!2spe!4v1681093467425!5m2!1ses!2spe" height="pixels" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    -->
-                    <div class="row g-2" style="border: black 2px">
-                      <div id="map"></div>
-                      <div style="height: 15px; display: block;"></div>
-                    </div>
-                    <h6 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
-                      Consentimientos:
-                    </h6>
-                    <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
-                  </div>
-                </div>
+                  <div id="map" class="col-sm-12"></div>
+              </div>
+              <div class="card-footer bg-transparent">
+                  <h5 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
+                    Consentimientos:
+                  </h5>
+                  <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
               </div>
             </div>
           </div>
-          <div class="col-lg-8 pl-lg-2">
-            <div class="card h-100 mb-3">
-              <div class="card-header bg-light py-2">
-                <div class="row flex-between-center">
-                  <div class="col-auto">
-                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                      Busca a tu Médico
-                    </h4>
-                    <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualiza la información de los doctores</h5>
-                  </div>
-                    <div class="col-auto">
-                      <div class="input-group">
-                        <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar por especialidad" id="quicksearch">
-                        <span class="input-group-append">
-                          <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </span>
-                      </div>
-                    </div>
+          <div class="col-lg-4 pl-lg-2">
+            <div class="card h-50">
+              <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+                <div style="text-align: center">
+                  <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
+                  <hr style="height: 1px; background-color: #333; border: none">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                    Sección de Pagos
+                  </h4>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h6>
+                  <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
                 </div>
-              </div>
-              <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center" id="contenedorCards">
-                <!--div class="row"-->
-                  <div class="card col-sm-10 mb-3 doctores" th:each="doctor, arch : ${doctores}">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col" >
-                          <div class="avatar" style="display: flex; align-items: center">
-                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
-                          </div>
-                        </div>
-                        <div class="col" style="">
-                          <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
-                            </h4>
-                          <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" ></h5>
-                          <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
-                            Próximos horarios de disponibilidad:
-                          </h6>
-                          <div class="form-group" style="text-align: center">
-                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
-                          </div>
-                          <!-- Button trigger modal-->
-                          <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <!--/div-->
-                <br>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modal-->
-      <div  th:each="doctor, arch : ${doctores}">
-        <div class="modal fade" th:id="'PerfilDoctor' + ${arch.index + 1}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
-          <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil de Doctor ${doctor.nombre}|"></h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
-              </div>
-              <div class="modal-body">
-                <div class="container">
-                  <div class="row">
-                    <div class="col">
-                      <form th:object="${doctor}">
-                        <div class="row" style="display: flex; align-items: center">
-                          <!-- Columna 1 -->
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="nombres">Nombres</label>
-                              <input type="text" id="nombres" name="nombres" th:placeholder="${doctor.nombre}" class="form-control" disabled>
-                            </div>
-                            <div class="form-group">
-                              <label for="cedula">Cedula profesional</label>
-                              <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.ceduladoctor}" class="form-control" disabled>
-                            </div>
-                          </div>
-                          <!-- Columna 2 -->
-                          <div class="col-sm-6">
-                            <div class="form-group">
-                              <label for="apellidos">Apellidos</label>
-                              <input type="text" id="apellidos" name="apellidos" th:placeholder="${doctor.apellido}" class="form-control" disabled>
-                            </div>
-                            <div class="form-group">
-                              <label for="especialidad">Especialidad</label>
-                              <input type="text" id="especialidad" name="especialidad" th:placeholder="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" class="form-control" disabled>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <!-- Botón de envío -->
-
-                      </form>
-                    </div>
-                    <div class="col">
-                      <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
-                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row no-gutters">
-                    <div class="col-lg-6 pl-lg-2 mb-3">
-                      <div class="card mb-3 h-100">
-                        <div class="card-header bg-light" style="text-align: center;">
-                          <h5 class="mb-0">Horarios de disponibilidad</h5>
-                        </div>
-                        <div class="card-body fs--1">
-                          <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                            <div class="row" style="display: flex; align-items: center">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">10:00 - 10:30 am</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">10:30 - 11:00 am</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">11:30 - 12:00 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">12:00 - 12:30 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">13:30 - 14:00 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">14:30 - 15:00 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">15:30 - 16:00 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                            <div class="row" style="display: flex; align-items: center">
-                              <div class="col" style="text-align: center;">
-                                <p class="text-1000 mb-0">16:00 - 16:30 pm</p>
-                              </div>
-                              <div class="col" style="text-align: center">
-                                <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 pl-lg-2 mb-3">
-                      <div class="card mb-3 h-100">
-                        <div id="calendar"></div>
-                      </div>
-                    </div>
-
-                  </div>
+            <br>
+            <div class="card h-50">
+              <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+                <div style="text-align: center">
+                  <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
+                  <hr style="height: 1px; background-color: #333; border: none">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                    Cuestionarios
+                  </h4>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario aparecerá en esta sección</h6>
+                  <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-falcon-secondary btn-sm" type="button" data-dismiss="modal">Aceptar</button>
               </div>
             </div>
           </div>
@@ -325,54 +143,10 @@
 
 
 
-
-<!--    Scripts de Isotope -->
-<script>
-  document.addEventListener('DOMContentLoaded',function(){
-    // Initialize Isotope
-    var $cardContainer = $('#contenedorCards').isotope({
-      itemSelector: '.doctores',
-      layoutMode: 'fitRows'
-    });
-    // Filter cards based on the input value
-    $('#quicksearch').on('input',debounce(
-            function() {
-              var filterValue = this.value.toLowerCase(); // Convert input value to lowercase
-              console.log("filerValue: "+filterValue);
-              $cardContainer.isotope({
-                filter: function() {
-                  var especialidad =$(this).find('.especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
-                  console.log("especialidad: "+especialidad);
-                  return especialidad.includes(filterValue); // Filter based on card title
-                }
-               }
-              );
-            }, 200)
-    );
-    function debounce( fn, threshold ) {
-      var timeout;
-      threshold = threshold || 100;
-      return function debounced() {
-        clearTimeout( timeout );
-        var args = arguments;
-        var _this = this;
-        function delayed() {
-          fn.apply( _this, args );
-        }
-        timeout = setTimeout( delayed, threshold );
-      }
-    }
-  });
-</script>
-<!-- ===============================================-->
-<!--    Scripts de Calendar -->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-<script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
-
 <script th:inline="javascript">
   $(document).ready(function () {
 
@@ -425,37 +199,6 @@
 
     set_map($('#zona').val())
     /*]]>*/
-  });
-</script>
-
-
-<script th:inline="javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridWeek',
-      headerToolbar: {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridWeek,dayGridDay' // user can switch between the two
-      },
-      defaultView: 'month',
-      weekday: 'long',
-      selectable: true,
-      height: 650,
-      events: [],
-      eventTextColor: '#ffffff',
-      eventBackgroundColor: '#3d8af7',
-      eventDisplay: 'block',
-      eventTimeFormat:{
-        hour: 'numeric',
-        minute: '2-digit',
-        meridiem: 'short'
-      },
-      firstDay: 1,
-      locale: 'es',
-    });
-    calendar.render();
   });
 </script>
 </body>

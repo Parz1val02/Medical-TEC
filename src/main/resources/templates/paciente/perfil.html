@@ -16,7 +16,7 @@
     <div class="container" data-layout="container">
         <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
         <div class="content">
-            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar(validar = ${arch})}"></nav>
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
 
             <!-- ===============================================-->
             <!--    static Content-->
@@ -36,7 +36,7 @@
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
                     <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/perfilPaciente}" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" /></div>
                     <!--div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div-->
                 </div>
                 <br>
@@ -188,7 +188,7 @@
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form method="POST" th:action="@{/guardarImagen}"
+                <form method="POST" th:action="@{/uploadPaciente}"
                       class="dropzone"
                       id="myGreatDropzone"></form>
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
