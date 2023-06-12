@@ -2,14 +2,19 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dao.PersonaDao;
+import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -273,6 +278,141 @@ public class RegistroController {
 
 
 
+    @PostMapping("/autoregistro")
+    public String autoRegistro(@RequestParam("dni") String dni,
+                               @RequestParam("nombres") String nombres,
+                               @RequestParam("apellidos")String apellidos,
+                               @RequestParam("edad")String edad,
+                               @RequestParam("domicilio")String domicilio,
+                               @RequestParam("sexo")String sexo,
+                               @RequestParam("celular") String celular,
+                               @RequestParam("seguroId") String seguroId,
+                               @RequestParam("sedeId") String sedeId,
+                               @RequestParam("correo") String correo,
+                               @RequestParam("contrasenia") String contrasenia,Model model, RedirectAttributes attr){
+
+
+        int numErrors = 0;
+        String domicilioError = null;
+        String domiciliohack = null;
+        String correoError = null;
+        String correoError2 = null;
+        String telefonoError = null;
+        String telefonoError2 = null;
+        String edadError = null;
+        String edadError1 = null;
+
+        String passwordError = null;
+        String passwordValid = null;
+
+
+
+        if(domicilio.equalsIgnoreCase("")){
+            domicilioError = "El campo domicilio no puede ir vacio";
+            numErrors++;
+        }
+        if(!noScriptPlease(domicilio)){
+            domiciliohack = "El campo domicilio no acepta esos caracteres";
+            numErrors++;
+        }
+        if(correo.equalsIgnoreCase("")){
+            correoError = "El campo correo no puede ir vacio";
+            numErrors++;
+        }
+        if(!isValidEmail(correo)){
+            correoError2 = "El campo correo no acepta ese formato";
+            numErrors++;
+        }
+        if(celular.equalsIgnoreCase("")){
+            telefonoError = "El campo celular no puede ir vacio";
+            numErrors++;
+        }
+        if(!noScriptPlease(celular)){
+            telefonoError2 = "El campo celular acepta esos caracteres";
+            numErrors++;
+        }
+
+        if(!isValidNumber(edad)){
+            numErrors++;
+            edadError1 = "la edad debe ser un numero";
+        }
+        if(edad.equals("")){
+            edadError="El campo de edad no puede estar vacio";
+            numErrors++;
+        }
+
+        Regex regex = new Regex();
+
+        if(!regex.contrasenaisValid(contrasenia)){
+            passwordValid="La contraseña no cumple con los parametros establecidos";
+            numErrors++;
+        }
+
+        if(contrasenia.equalsIgnoreCase("")){
+            passwordError="El campo contraseña no puede estar vacio";
+            numErrors++;
+        }
+
+        if(numErrors>0){
+            model.addAttribute("nombres",nombres);
+            model.addAttribute("apellidos",apellidos);
+            model.addAttribute("dni",dni);
+            model.addAttribute("listaseguros",seguroRepository.findAll());
+            model.addAttribute("listasedes",sedeRepository.findAll());
+
+            model.addAttribute("sedeid",sedeId);
+            model.addAttribute("sexo",sexo);
+            model.addAttribute("domicilio",domicilio);
+            model.addAttribute("correo",correo);
+            model.addAttribute("seguroid",seguroId);
+            model.addAttribute("celular",celular);
+            model.addAttribute("contrasenia",contrasenia);
+
+            model.addAttribute("edad",edad);
+
+            //msgs
+            model.addAttribute("domicilioError",domicilioError);
+            model.addAttribute("domiciliohack",domiciliohack);
+            model.addAttribute("correoError",correoError);
+            model.addAttribute("correoError2",correoError2);
+            model.addAttribute("telefonoError",telefonoError);
+            model.addAttribute("telefonoError2",telefonoError2);
+
+            model.addAttribute("edaderror",edadError);
+            model.addAttribute("edaderror1",edadError1);
+            model.addAttribute("passwordValid",passwordValid);
+            model.addAttribute("passwordError",passwordError);
+
+            return "auth/register";
+
+        }else{
+
+            Usuario usuario = new Usuario();
+
+            usuario.setId(dni);
+            usuario.setNombre(nombres);
+            usuario.setApellido(apellidos);
+            usuario.setEdad(Integer.valueOf(edad));
+            usuario.setDireccion(domicilio);
+            usuario.setSexo(sexo);
+            usuario.setTelefono(celular);
+            usuario.setContrasena(contrasenia);
+            usuario.setEmail(correo);
+
+            Role role = new Role();
+            role.setId(2);
+            usuario.setRolesIdroles(role);
+            usuarioRepository.save(usuario);
+
+            attr.addFlashAttribute("success","Ha sido registrado en la plataforma con exito");
+            return "redirect:/registro/index";
+
+        }
+
+
+
+    }
+
     //verificar numero correcto
     public static boolean isPositiveNumberWith9Digits(String input) {
         return input.matches("\\d{9}");
@@ -296,5 +436,7 @@ public class RegistroController {
         String emailRegex = "^[A-Za-zñÑáéíóúÁÉÍÓÚ0-9\\s]+$";
         return input.matches(emailRegex);
     }
+
+
 
 }

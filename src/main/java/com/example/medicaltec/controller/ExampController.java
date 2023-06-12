@@ -6,9 +6,11 @@ package com.example.medicaltec.controller;
         import com.example.medicaltec.Entity.Usuario;
         import com.example.medicaltec.repository.*;
         import jakarta.servlet.http.HttpSession;
+        import org.springframework.http.ResponseEntity;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
         import org.springframework.web.bind.annotation.GetMapping;
+        import org.springframework.web.bind.annotation.PathVariable;
         import org.springframework.web.bind.annotation.RequestMapping;
         import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -23,13 +25,15 @@ public class ExampController {
     final EspecialidadeRepository especialidadeRepository;
     final ExamenMedicoRepository examenMedicoRepository;
     final SeguroRepository seguroRepository;
+    final FormInvitationRepository formInvitationRepository;
 
-    public ExampController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, EspecialidadeRepository especialidadeRepository, ExamenMedicoRepository examenMedicoRepository, SeguroRepository seguroRepository) {
+    public ExampController(UsuarioRepository usuarioRepository, SedeRepository sedeRepository, EspecialidadeRepository especialidadeRepository, ExamenMedicoRepository examenMedicoRepository, SeguroRepository seguroRepository, FormInvitationRepository formInvitationRepository) {
         this.usuarioRepository = usuarioRepository;
         this.sedeRepository = sedeRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.examenMedicoRepository = examenMedicoRepository;
         this.seguroRepository = seguroRepository;
+        this.formInvitationRepository = formInvitationRepository;
     }
 
     @RequestMapping(value = {"/"},method = RequestMethod.GET)
@@ -82,6 +86,23 @@ public class ExampController {
     public String registro(HttpSession session, Model model){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         if (usuario ==null){
+
+            model.addAttribute("nombres","");
+            model.addAttribute("apellidos","");
+            model.addAttribute("dni","");
+
+
+            model.addAttribute("sedeid",1);
+            model.addAttribute("sexo","M");
+            model.addAttribute("domicilio","");
+            model.addAttribute("correo","");
+            model.addAttribute("seguroid",1);
+            model.addAttribute("celular","");
+            model.addAttribute("contrasenia","");
+
+            model.addAttribute("edad","");
+
+
             model.addAttribute("listaseguros",seguroRepository.findAll());
             model.addAttribute("listasedes",sedeRepository.findAll());
             return "auth/register";
@@ -140,4 +161,28 @@ public class ExampController {
         model.addAttribute("especialidadesList",especialidadeRepository.findAll());
         return "auth/staffmedico";
     }
+
+
+    //Chequear si dni existe
+
+
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<?> checkDniExists(@PathVariable("dni") String dni) {
+
+        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+        boolean exists=false;
+        for(Usuario usuario : listaUsuarios){
+            if(dni.equalsIgnoreCase(usuario.getId())){
+                exists=true;
+                break;
+            }
+        }
+
+
+        return ResponseEntity.ok(exists);
+    }
+
+
+
+
 }
