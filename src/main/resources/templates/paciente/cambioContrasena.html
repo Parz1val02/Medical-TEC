@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Contrasena')}">
+</head>
+
+<body class="">
+
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+    <div class="content" >
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                Cambiar Contraseña
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3 bg-card-gradient">
+        <div class="card-body ">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md">
+              <h5 class="mb-2 mb-md-0 text-white">Requisitos</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF; display: flex; align-items: center; justify-content: space-around">
+          <p  style="font-weight: bold; margin: 0px">
+            Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+            • Que la contraseña contenga al menos ocho caracteres.<br>
+            • Que la contraseña contenga al menos un número.<br>
+            • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+            • Que la contraseña contenga al menos una mayúscula. </p>
+          <form method="POST" th:action="@{'/paciente/change'}">
+            <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger"
+                 role="alert"></div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="actual" class="form-label" style="font-weight: bold">Contraseña actual:</label>
+                <input type="password" id="actual" class="form-control" placeholder="Contraseña actual" name="pass1">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="nueva" class="form-label" style="font-weight: bold">Contraseña nueva:</label>
+                <input type="password" id="nueva" class="form-control" placeholder="Contraseña nueva" name="pass2">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="confirmar" class="form-label" style="font-weight: bold">Confirmar contraseña nueva:</label>
+                <input type="password" id="confirmar" class="form-control" placeholder="Contraseña nueva" name="pass3">
+              </div>
+            </div>
+            <a type="button" class="btn btn-secondary" style="text-align: center;border-radius: 15px;" th:href="@{/paciente/perfil}">Cancelar</a>
+            <button type="submit" class="btn btn-primary" >Guardar </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+  </div>
+
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+</body>
+
+</html>

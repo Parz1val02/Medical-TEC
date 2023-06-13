@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+<style>
+  #map {
+    height: 300px;
+    width: 300px;
+  }
+</style>
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+    <div class="content" >
+      <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+      <div class="content">
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+        <div class="card-deck">
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="far fa-hospital" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Agendar Cita
+                </h4>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Agende sus futuras consultas médicas</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/agendarCita}">Ingresar</a>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="fas fa-user-nurse" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Busque a su Médico
+                </h4>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualice la información de los doctores de su sede</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/listaDoctores}">Ingresar</a>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3 overflow-hidden" style="min-width: 12rem; min-height: 20rem;">
+            <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+              <div style="text-align: center">
+                <span class="far fa-address-book" style="font-size: 3em; color: #0032aa"></span>
+                <hr style="height: 1px; background-color: #333; border: none">
+                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                  Consultas Médicas
+                </h4>
+                <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Revise información sobre sus consultas médicas</h6>
+                <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/consultas}">Ingresar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-deck">
+          <div class="col-lg-8 pl-lg-2">
+            <div class="card h-100 bg-gradient">
+              <div class="card-header bg-transparent">
+                <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
+                  Sede Actual
+                </h4>
+                <div class="form-group" style="text-align: center">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                      <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
+                      <select class="form-control" id="zona">
+                        <option  th:each="sede : ${listaSedes1}"
+                                 th:value="${sede.idsedes}"
+                                 th:text="${sede.nombre}"
+                                 th:selected="${sede.idsedes==sedeUsuario.id}"></option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+                  <div id="map" class="col-sm-12"></div>
+              </div>
+              <div class="card-footer bg-transparent">
+                  <h5 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
+                    Consentimientos:
+                  </h5>
+                  <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 pl-lg-2">
+            <div class="card h-50">
+              <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+                <div style="text-align: center">
+                  <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
+                  <hr style="height: 1px; background-color: #333; border: none">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                    Sección de Pagos
+                  </h4>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h6>
+                  <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="card h-50">
+              <div class="bg-holder bg-card card-body" style="display: flex; align-items: center; justify-content: space-around">
+                <div style="text-align: center">
+                  <span class="far fa-file-alt" style="font-size: 3em; color: #0032aa"></span>
+                  <hr style="height: 1px; background-color: #333; border: none">
+                  <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                    Cuestionarios
+                  </h4>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">En caso su doctor solicite un cuestionario aparecerá en esta sección</h6>
+                  <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/cuestionarios}">Ingresar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script th:inline="javascript">
+  $(document).ready(function () {
+
+    $('#zona').on('change', function () {
+      set_map($(this).val());
+    });
+    var map = L.map('map')
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    ;
+    var marker;
+
+    function set_map(value){
+
+      /*<![CDATA[*/
+      var arregloSedes = [[${listaSedes1}]];
+      var clash = arregloSedes[0]
+      console.log(clash)
+      console.log(clash.idsedes)
+      console.log(value)
+
+      var latitud,longitud,nombre
+      // Iterar sobre la lista de zonas
+      for (var i = 0; i < arregloSedes.length; i++) {
+        var sede = arregloSedes[i];
+        console.log(sede.idsedes)
+        if(value == sede.idsedes){
+          console.log(sede)
+          // Obtén los valores de cada elemento
+          longitud = sede.longitud;
+          latitud = sede.latitud;
+          nombre = sede.nombre;
+          console.log("Latitud: " + latitud + ", Longitud: " + longitud + ", Nombre: " + nombre);
+        }
+      }
+      map.setView([latitud, longitud], 30);
+
+      if (marker) {
+        marker.setLatLng([latitud, longitud])
+                .bindPopup(nombre)
+                .openPopup();
+      } else {
+        marker = L.marker([latitud, longitud]).addTo(map)
+                .bindPopup(nombre)
+                .openPopup();
+      }
+    }
+
+    set_map($('#zona').val())
+    /*]]>*/
+  });
+</script>
+</body>
+</html>

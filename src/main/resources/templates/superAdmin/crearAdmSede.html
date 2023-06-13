@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+<body class="">
+
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Crear Administrador de Sede
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Crear un Administrador para la sede de tu elección
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="card mb-3">
+                <div class="card-body border-top">
+                    <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger" role="alert"></div>
+                    <form method="post" th:action="@{/superAdmin/Guardar/AdmSede}">
+                        <!-- Código HTML de los campos del formulario -->
+                        <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="dni">DNI</label>
+                            <input type="text" class="form-control" th:classappend="${dnimsg1!=null?'is-invalid':''}" id="dni" name="dni" placeholder="Ingrese el DNI">
+                            <div class="invalid-feedback" th:if="${dnimsg1!=null}" th:text="${dnimsg1}"></div>
+                        </div>
+                        <div th:if="${nombremsg1 != null}" th:text="${nombremsg1}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control"  th:classappend="${nombremsg!=null?'is-invalid':''}" id="nombre" name="nombre" placeholder="Escriba un nombre">
+                            <div class="invalid-feedback" th:if="${nombremsg!=null}" th:text="${nombremsg}"></div>
+                        </div>
+                        <div th:if="${apellidomsg1 != null}" th:text="${apellidomsg1}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="apellido">Apellido</label>
+                            <input type="text" class="form-control" th:classappend="${apellidomsg!=null?'is-invalid':''}" id="apellido" name="apellido" placeholder="Escriba un apellido">
+                            <div class="invalid-feedback" th:if="${apellidomsg!=null}" th:text="${apellidomsg}"></div>
+                        </div>
+                        <div th:if="${correoms1g != null}" th:text="${correom1sg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="correo">Correo</label>
+                            <input type="text" class="form-control" th:classappend="${correomsg!=null?'is-invalid':''}" id="correo" name="correo" placeholder="Escriba un correo">
+                            <div class="invalid-feedback" th:if="${correomsg!=null}" th:text="${correomsg}"></div>
+                        </div>
+                        <div th:if="${passwordm1sg != null}" th:text="${password1msg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password" class="form-control" th:classappend="${passwordmsg!=null?'is-invalid':''}" id="password" name="password" placeholder="Escriba una contraseña">
+                            <div class="invalid-feedback" th:if="${passwordmsg!=null}" th:text="${passwordmsg}"></div>
+                        </div>
+                        <div th:if="${edadms1g != null}" th:text="${edad1msg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="edad">Edad</label>
+                            <input type="number" class="form-control" th:classappend="${edadmsg!=null?'is-invalid':''}"  id="edad" name="edad" placeholder="Ingrese la edad">
+                            <div class="invalid-feedback" th:if="${edadmsg!=null}" th:text="${edadmsg}"></div>
+                        </div>
+                        <div th:if="${telefonom1sg != null}" th:text="${tele1fonomsg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="telefono">Telefono</label>
+                            <input type="text" class="form-control" th:classappend="${telefonomsg!=null?'is-invalid':''}"  id="telefono" name="telefono" placeholder="Ingrese el telefono">
+                            <div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>
+                        </div>
+                        <div th:if="${addressm1sg != null}" th:text="${addre1ssmsg}" class="alert alert-danger" role="alert"></div>
+                        <div class="form-group">
+                            <label for="address">Dirección</label>
+                            <input type="text" class="form-control" th:classappend="${addressmsg!=null?'is-invalid':''}"  id="address" name="address" placeholder="Escriba la dirección">
+                            <div class="invalid-feedback" th:if="${addressmsg!=null}" th:text="${addressmsg}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sede">Sede</label>
+                            <select class="form-control"  th:classappend="${sedemsg!=null?'is-invalid':''}"   name="sede" id="sede">
+                                <option th:each="sede : ${listaSede}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${sedemsg!=null}" th:text="${sedemsg}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sexo">Sexo</label>
+                            <select class="form-control" th:classappend="${sexomsg!=null?'is-invalid':''}"   name="sexo" id="sexo">
+                                <option  th:value="${'M'}" th:text="'Masculino'"></option>
+                                <option  th:value="${'F'}" th:text="'Femenino'"></option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${sexomsg!=null}" th:text="${sexomsg}"></div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                    <a th:href="@{/superAdmin/dashboard}">
+                        <button type="submit" class="btn btn-danger mx-2">Cancelar</button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        const exampleModal = document.getElementById('exampleModal')
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                const recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+
+                // Update the modal's content.
+                const modalTitle = exampleModal.querySelector('.modal-title')
+                const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+                modalTitle.textContent = `New message to ${recipient}`
+                modalBodyInput.value = recipient
+            })
+        }
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList1').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList2').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList3').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+    });
+</script>
+
+
+</body>
+
+</html>

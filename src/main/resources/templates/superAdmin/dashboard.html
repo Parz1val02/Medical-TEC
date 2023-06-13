@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
+<body class="">
+
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                               Bienvenido Superadmin
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Maneja y edita la información de los usuarios de nuestra clínica.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center no-gutters">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-sm-4" style="display: flex;align-items: center; justify-content: center; font-weight: 600">
+                                    Registra nuevos usuarios:
+                                </div>
+                                <div class="col-sm-7" style="display: flex; padding: 0; text-align: center">
+                                    <a th:href="@{/superAdmin/Crear/AdmSede}" style="flex: 1">
+                                        <button type="submit" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa;
+                                        margin-right: 5px; margin-left: 5px; padding: 2px !important;">
+                                            Registrar Administrador
+                                        </button>
+                                    </a>
+                                    <a th:href="@{/superAdmin/Crear/AdmT}" style="flex: 1">
+                                        <button type="button" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa;
+                                        margin-right: 5px; margin-left: 5px; padding: 2px !important;">
+                                            Registrar Administrativo
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6" style="display: flex;align-items: center; justify-content: center; font-weight: 600">
+                                    Cambia tu Interfaz:
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            style="background: #b38df7; border: 5px solid #b38df7; margin-right: 5px; margin-left: 5px; padding: 2px !important;">
+                                        Cambiar UX/UI
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1>Cambio de interfaz</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" th:action="@{/superAdmin/editarLogo}" class="mt-2" th:object="${sede}">
+                                <p>Seleccione la sede: </p>
+                                <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
+                                    <option selected value>------</option>
+                                    <option value="1">San Miguel</option>
+                                    <option value="2">Jesús María</option>
+                                    <option value="3">Lince</option>
+                                </select>
+                                <p>Escoja el color de la interfaz: </p>
+                                <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color" style="width:70px; margin-bottom: 20px">
+                                <p>Escoja el logo: </p>
+                                <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{sede.logo}" width="200" alt="" /></div>
+                                <div class="col">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+                                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+                                </div>
+                                    <div class="mb-3">
+                                        <input class="form-control" type="file" id="formFile" style="height:40px; width: 400px">
+                                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        <!--<span>Seleccione la sede </span>
+            <select class="form-select" aria-label="Default select example" style="margin-left: 15px">
+                <option selected value>------</option>
+                <option value="1">San Miguel</option>
+                <option value="2">Jesús María</option>
+                <option value="3">Lince</option>
+            </select>
+            <br>
+            <span>Seleccione el tipo de usuario</span>
+            <select class="form-select" aria-label="Default select example" style="margin: 15px">
+                <option selected value>------</option>
+                <option value="1">Paciente</option>
+                <option value="2">Doctor</option>
+                <option value="3">Administrativo</option>
+                <option value="4">Administrador</option>
+            </select>//
+            <br>      -->
+            <div class="card mb-3">
+                <div class="card-body border-top">
+                    <!-- Div Inicial-->
+                    <div id="titulo1" style="display: block;">
+                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;
+                        padding-bottom: 5px">Todos los Usuarios</h2></div>
+                    <!-- Div Administradores -->
+                    <div id="titulo2" style="display: none;">
+                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;
+                        padding-bottom: 5px">Administradores de Sede</h2></div>
+                    <!-- Div Administrativos -->
+                    <div id="titulo3" style="display: none;">
+                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;
+                        padding-bottom: 5px">Administrativos</h2></div>
+                    <!-- Div Doctores -->
+                    <div id="titulo4" style="display: none;">
+                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;
+                        padding-bottom: 5px">Doctores</h2></div>
+                    <!-- Div Pacientes -->
+                    <div id="titulo5" style="display: none;">
+                        <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;
+                        padding-bottom: 5px">Pacientes</h2></div>
+                    <br>
+                    <div th:if="${administrador_actualizado != null}" th:text="${administrador_actualizado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${administrador_noexiste != null}" th:text="${administrador_noexiste}" class="alert alert-danger" role="alert"></div>
+
+                    <div th:if="${administrativo_actualizado != null}" th:text="${administrativo_actualizado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${administrativo_noexiste != null}" th:text="${administrativo_noexiste}" class="alert alert-danger" role="alert"></div>
+
+                    <div th:if="${doctor_actualizado != null}" th:text="${doctor_actualizado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${doctor_noexiste != null}" th:text="${doctor_noexiste}" class="alert alert-danger" role="alert"></div>
+
+                    <div th:if="${paciente_actualizado != null}" th:text="${paciente_actualizado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${paciente_noexiste != null}" th:text="${paciente_noexiste}" class="alert alert-danger" role="alert"></div>
+
+                    <div class="row no-gutters" style="width: 100%">
+                        <div class="col-sm-2" style="display: flex;align-items: center; justify-content: center; font-weight: 600">
+                            Visualizar los usuarios:
+                        </div>
+                        <div class="col-sm-10" style="display: flex; text-align: center">
+                            <a style="flex: 1; width: 100%;">
+                                <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 90%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                    Todos
+                                </button>
+                            </a>
+                            <a style="flex: 1; width: 100%;">
+                                <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                    Administradores
+                                </button>
+                            </a>
+                            <a style="flex: 1; width: 100%;">
+                                <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                    Administrativos
+                                </button>
+                            </a>
+                            <a style="flex: 1; width: 100%;">
+                                <button onclick="mostrarDiv(4)" type="button" class="btn btn-primary" style="background: #3d8af7 ; border: 5px solid #3d8af7; width: 90%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                    Doctores
+                                </button>
+                            </a>
+                            <a style="flex: 1; width: 100%;">
+                                <button onclick="mostrarDiv(5)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 90%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                    Pacientes
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Lista Inicial-->
+                    <div id="div1" style="display: block;">
+                        <table class="table table-striped" id="userList">
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort align-middle" style="width: 30%">Nombres</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white" style="text-align: center;">
+                            <tr th:each="user, info : ${usuarioList}">
+                                <td th:text="|${user.nombre} ${user.apellido}|" class="align-middle" style="text-align: left;"></td>
+                                <td th:text="${user.id}" class="align-middle"></td>
+                                <td th:text="${user.sedesIdsedes != null ? user.sedesIdsedes.nombre : 'sin sede'}" class="align-middle"> </td>
+                                <td th:text="${user.estadosIdestado != null ? #strings.capitalize(user.estadosIdestado.nombre) : 'Sin estado'}" class="align-middle"></td>
+                                <!--   <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel3">Editar usuario</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <form method="post" th:action="@{/superAdmin/editarAdmS}">
+                                        <div class="modal-body">
+                                          <div class="row">
+                                            <div class="col-sm-6">
+                                              <div class="form-group">
+                                                <label for="nombre2">Nombre </label>
+                                                <input type="text" id="nombre2" name="nombre"  th:value="${admS.nombre}" class="form-control" >
+                                              </div>
+
+                                              <div class="form-group">
+                                                <label for="id2">DNI </label>
+                                                <input type="text" class="form-control" th:value="${admS.id}" disabled>
+                                                <input type="hidden" id="id2" name="id2" class="form-control" th:value="${admS.id}" >
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="email2">Email </label>
+                                                <input type="email" id="email2" name="email"   class="form-control" th:value="${admS.email}" >
+                                              </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                              <div class="form-group">
+                                                <label for="sede2"> Sede  </label>
+                                                <input type="text" id="sede2" name="telefono"  class="form-control" th:value="${admS.sedesIdsedes.nombre}">
+                                              </div>
+
+                                              <div class="form-group">
+                                                <label for="estado2">Estado </label>
+                                                <input type="text" id="estado2" name="estado"   th:value="${admS.estadosIdestado.nombreEstado}" class="form-control" >
+                                              </div>
+                                              <div class="form-group">
+                                                <label for="telefono2"> Teléfono  </label>
+                                                <input type="text" id="telefono2" name="telefono"  class="form-control" th:value="${admS.telefono}">
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" > Editar Administrador de Sede </button>
+                                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                                          </div>
+                                        </div>
+
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="align-middle">-->
+                                <!-- A esto me referia con opciones-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Lista Administradores -->
+                    <div id="div2" style="display: none;">
+                        <table class="table table-striped" id="administradoresList" >
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white" style="text-align: center;">
+                            <tr th:each="admS, info : ${administradoresList}">
+                                <td th:text="|${admS.nombre} ${admS.apellido}|" class="align-middle" style="text-align: left;"> </td>
+                                <td th:text="${admS.id}" class="align-middle"> </td>
+                                <td th:text="${admS.sedesIdsedes != null ? admS.sedesIdsedes.nombre : 'Sin sede'}" class="align-middle"> </td>
+                                <td th:text="${admS.estadosIdestado != null ? #strings.capitalize(admS.estadosIdestado.nombre) : 'Sin estado'}" class="align-middle"></td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarAdmS' + '?id=' + ${admS.id}}" >Editar</a>                  </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="dropdown font-sans-serif">
+                                        <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                            <div style="display: none;">
+                                                <div class="form-group">
+                                                    <input class="form-control" type="text" id="userId" name="userId" th:value="${admS.id}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Lista Administrativos -->
+                    <div id="div3" style="display: none;">
+                        <table class="table table-striped" id="administrativosList">
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort align-middle" style="width: 25%">Nombres</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white" style="text-align: center;">
+                            <tr th:each="ad, info : ${administrativosList}">
+                                <td th:text="|${ad.nombre} ${ad.apellido}|" class="align-middle" style="text-align: left;"> </td>
+                                <td th:text="${ad.id}" class="align-middle"> </td>
+                                <td th:text="${ad.sedesIdsedes != null ? ad.sedesIdsedes.nombre : 'Sin sede'}" class="align-middle"> </td>
+                                <td th:text="${ad.estadosIdestado != null ? #strings.capitalize(ad.estadosIdestado.nombre) : 'Sin estado'}" class="align-middle"></td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarAdmT' + '?id=' + ${ad.id}}" >Editar</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                        <div style="display: none;">
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" id="userId" name="userId" th:value="${ad.id}"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Lista Doctores -->
+                    <div id="div4" style="display: none;">
+                        <table class="table table-striped" id="doctorList">
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort align-middle" style="width: 25%">Nombres</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white" style="text-align: center;">
+                            <tr th:each="doctor, info : ${doctoresList}">
+                                <td th:text="|${doctor.nombre} ${doctor.apellido}|" class="align-middle" style="text-align: left;"> </td>
+                                <td th:text="${doctor.id}" class="align-middle"> </td>
+                                <td th:text="${doctor.sedesIdsedes != null ? doctor.sedesIdsedes.nombre : 'Sin sede'}" class="align-middle"> </td>
+                                <td th:text="${doctor.estadosIdestado != null ? #strings.capitalize(doctor.estadosIdestado.nombre) : 'Sin estado'}" class="align-middle"></td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarDoctor' + '?id=' + ${doctor.id}}" >Editar</a>
+                                        </div>
+                                    </div>
+                                    <!--<div class="modal fade" th:id="'modalPerfilEditar-' + ${info.index + 1}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title">Editar Doctor <span th:text="' ' + ${info.index + 1}"></span>   </h1>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <form method="post" th:action="@{/superAdmin/editarDoctores}">
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="nombre">Nombres </label>
+                                                                    <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="apellido">Apellidos </label>
+                                                                    <input type="text" id="apellido" name="apellido"  th:value="${doctor.apellido}" class="form-control" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="id">DNI </label>
+                                                                    <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                                                    <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" >
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="email">Email </label>
+                                                                    <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" >
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="sede"> Sede  </label>
+                                                                    <select class="form-control" name="sede" id="sede">
+                                                                        <option th:each="sede : ${sedesList}" th:value="${sede.id}" th:text="${sede.nombre}"
+                                                                                th:selected="${sede.id == doctor.sedesIdsedes.id}"></option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="especialidad">Especialidad </label>
+                                                                    <select class="form-control" name="especialidad" id="especialidad">
+                                                                        <option th:each="especialidad : ${especialidadList}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                                                th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="estado">Estado </label>
+                                                                    <select class="form-control" name="estado" id="estado">
+                                                                        <option th:each="estado : ${estadosList}" th:value="${estado.id}" th:text="${estado.nombre}"
+                                                                                th:selected="${estado.id == doctor.estadosIdestado.id}"></option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="telefono"> Teléfono  </label>
+                                                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${doctor.telefono}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary" > Editar Administrativo </button>
+                                                            <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </td>
+                                <td>
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                                <div style="display: none;">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" id="userId" name="userId" th:value="${doctor.id}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7; border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Lista Paciente -->
+                    <div id="div5" style="display: none;">
+                        <table class="table table-striped" id="pacienteList">
+                            <thead class="bg-200">
+                            <tr>
+                                <th class="sort align-middle" style="width: 25%">Nombres</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white" style="text-align: center;">
+                            <tr th:each="paciente, info : ${pacientesList}">
+                                <td th:text="|${paciente.nombre} ${paciente.apellido}|" class="align-middle" style="text-align: left;"> </td>
+                                <td th:text="${paciente.id}" class="align-middle"> </td>
+                                <td th:text="${paciente.sedesIdsedes != null ? paciente.sedesIdsedes.nombre : 'Sin sede'}" class="align-middle"> </td>
+                                <td th:text="${paciente.estadosIdestado != null ? #strings.capitalize(paciente.estadosIdestado.nombre) : 'Sin estado'}" class="align-middle"></td>
+                                <td class="align-middle">
+                                    <!-- A esto me referia con opciones-->
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarPaciente' + '?id=' + ${paciente.id}}" >Editar</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="dropdown font-sans-serif">
+                                        <div class="form-group" align="center">
+                                            <form th:action="@{/superAdmin/loginAsUser}" method="post">
+                                                <div style="display: none;">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" id="userId" name="userId" th:value="${paciente.id}"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary" style="text-align: center;background: #3d8af7;
+                                                    border-radius: 15px; border-color: #FFFFFF; width: 150px">Iniciar sesión</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- SCRIPTS -->
+                    <script>
+                        function mostrarDiv(numeroDiv) {
+                            for (var i = 1; i <= 5; i++) {
+                                var div = document.getElementById("div" + i);
+                                div.style.display = "none";
+                                var titulo = document.getElementById("titulo" + i);
+                                titulo.style.display = "none";
+                            }
+
+                            // Mostrar el div seleccionado
+                            var divMostrar = document.getElementById("div" + numeroDiv);
+                            divMostrar.style.display = "block";
+                            var tituloMostrar = document.getElementById("titulo" + numeroDiv);
+                            tituloMostrar.style.display = "block";
+                        }
+                    </script>
+                </div>
+            </div>
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+<div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar Logo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" th:action="@{/superAdmin/guardarLogo}"
+                      class="dropzone"
+                      id="myGreatDropzone"></form>
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
+                <!--form  method="POST" th:action="@{/paciente/guardarFoto}" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="file" class="form-control" id="file" name="file">
+                        </div>
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
+                </form-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        const exampleModal = document.getElementById('exampleModal')
+        if (exampleModal) {
+            exampleModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                // Extract info from data-bs-* attributes
+                const recipient = button.getAttribute('data-bs-whatever')
+                // If necessary, you could initiate an Ajax request here
+                // and then do the updating in a callback.
+
+                // Update the modal's content.
+                const modalTitle = exampleModal.querySelector('.modal-title')
+                const modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+                modalTitle.textContent = `New message to ${recipient}`
+                modalBodyInput.value = recipient
+            })
+        }
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+               ]
+        });
+        $('#userList1').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList2').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+        $('#userList3').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+            ]
+        });
+    });
+</script>
+
+<script>
+    Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+        paramName: "file", // The name that will be used to transfer the file
+        maxFiles: 1,
+        autoProcessQueue: false,
+        acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+        maxFilesize: 5,
+        addRemoveLinks: true,
+        dictResponseError: 'Server not Configured',
+        init:function(){
+            var self = this;
+            // Update selector to match your button
+            $("#button").click(function (e) {
+                e.preventDefault();
+                self.processQueue();
+                // config
+                self.options.addRemoveLinks = true;
+                self.options.dictRemoveFile = "Delete";
+                //New file added
+                self.on("addedfile", function (file) {
+                    console.log('new file added ', file);
+                });
+                // Send file starts
+                self.on("sending", function (file) {
+                    console.log('upload started', file);
+                    $('.meter').show();
+                });
+
+                // File upload Progress
+                self.on("totaluploadprogress", function (progress) {
+                    console.log("progress ", progress);
+                    $('.roller').width(progress + '%');
+                });
+
+                self.on("queuecomplete", function (progress) {
+                    $('.meter').delay(999).slideUp(999);
+                });
+
+                // On removing file
+                self.on("removedfile", function (file) {
+                    console.log(file);
+                });
+            });
+            this.on("queuecomplete", function(progress) {
+                // File upload is complete
+                location.reload();
+            });
+        }
+    };
+</script>
+<!--<script>
+    document.getElementsByClassName("rounded-d-flex align-items-center py-3")[0].src = "https://i.ibb.co/xD1c5PY/flecha3.png";
+</script>-->
+
+</body>
+
+</html>

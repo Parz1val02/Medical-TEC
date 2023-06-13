@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cuestionarios')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Cuestionarios
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Responda las preguntas formuladas para usted
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
+            <div class="card mb-3">
+                <div class="card-header position-relative min-vh-25 mb-7">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
+                    </div>
+                    <!--/.bg-holder-->
+                </div>
+
+                <div class>
+                    <div class="card h-100 mb-3">
+                        <br>
+                        <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 30px; text-align: left">
+                            Responda el cuestionario que se acaba de enviar
+                        </h5>
+                        <br>
+                        <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                            <div th:if="${#lists.size(cuestionarios)==0}">
+                                Lo sentimos, no hay cuestionarios
+                            </div>
+                            <div class="row" style="align-items: stretch">
+                                <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionarios}">
+                                    <div class="card" style="height: 100%">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 align-content-center"  style="align-items: center">
+                                                    <div style="height: 15px"></div>
+
+                                                    <div style="height: 10px"></div>
+                                                    <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                                </div>
+                                                <div class="col-md-6" align="center" style="align-items: center">
+                                                    <!--<button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>-->
+                                                    <div style="height: 15px"></div>
+                                                    <a class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario}">Responder</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+
+
+</body>
+</html>

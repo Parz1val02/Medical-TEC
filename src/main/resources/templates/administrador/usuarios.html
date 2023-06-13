@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebaradministrador.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Usuarios
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Gestiona los pacientes y doctores de tu sede
+                            </h5>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
+
+            <!--
+            <div style="padding-bottom: 1rem">
+                <a th:href="@{/administrador/listaFormulariosRegistro}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                        border-color: #FFFFFF"> Lista formularios de registro</a>
+            </div>-->
+
+
+            <div class="card mb-3">
+                <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Pacientes </div>
+                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a th:href="@{/administrador/crearPacientePagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                            border-color: #FFFFFF"> Crear paciente </a>
+                             </div>
+                        <div class="col-md-5">
+                            <a th:href="@{/administrador/listaFormulariosRegistro}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                            border-color: #FFFFFF"> Lista formularios de registro</a>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped" id="userList">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 22%">Nombre Completo</th>
+                            <th class="sort align-middle" style="width: 13%">DNI</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Correo</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Estado</th>
+                            <th class="no-sort" style="width: 20%;" ></th> <!--style="width: 35%"-->
+                            <th class="no-sort" style="width: 15%;" ></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="paciente, vEstado : ${listaPacientes}">
+
+                            <td th:text="${#strings.capitalize(paciente.nombre)} + ' ' + ${#strings.capitalize(paciente.apellido)} "></td>
+                            <td th:text="${paciente.id}"></td>
+                            <td th:text="${paciente.email}"></td>
+                            <td style="text-align: center" th:text="${#strings.capitalize(paciente.estadosIdestado.nombre)}"></td>
+
+                            <td class="align-middle" align="center">
+                                <a th:href="@{'/administrador/historialPaciente' + '?id=' + ${paciente.id}}" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                border-radius: 15px" >Ver Historial Médico</a>
+                            </td>
+
+                            <td class="align-middle" align="center">
+                                <a th:href="@{'/administrador/editarPacientePagina' + '?id=' + ${paciente.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- SEGUNDA TABLA -->
+            <div class="card mb-3" style="margin-top: 25px">
+                <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Doctor </div>
+                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+
+                    <a th:href="@{/administrador/crearDoctorPagina}" class="btn btn-secondary" style="text-align: center;background: #02b0fb;
+                        border-color: #FFFFFF"> Crear doctor </a>
+
+                    <table class="table table-striped" id="userList2">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 22%">Nombre Completo</th>
+                            <th class="sort align-middle" style="width: 18%; text-align: center">Correo</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Especialidad</th>
+
+                            <th class="no-sort" style="width: 15%;" ></th> <!--style="width: 35%"-->
+                            <th class="no-sort" style="width: 15%;" ></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="doctor, vEstado : ${listaDoctores}">
+
+                            <td th:text="${#strings.capitalize(doctor.nombre)} + ' ' + ${#strings.capitalize(doctor.apellido)} "></td>
+                            <td th:text="${doctor.email}"></td>
+                            <td style="text-align: center" th:text="${#strings.capitalize(doctor.especialidadesIdEspecialidad.nombreEspecialidad)}"></td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
+                            </td>
+                            <td class="align-middle" align="center">
+                                <a th:href="@{'/administrador/editarDoctorPagina' + '?id=' + ${doctor.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                    border-radius: 15px" >Editar</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+<!-- Modal-->
+<div th:each="doctor, vEstado : ${listaDoctores}">
+    <div class="modal fade" th:id="'modalPerfil-' + ${vEstado.index + 1}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Perfil de Dr. <span th:text="' ' + ${#strings.capitalize(doctor.nombre)} + ' ' + ${#strings.capitalize(doctor.apellido)}"></span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6">
+                                <form action="#" method="post">
+
+                                    <div class="row" style="display: flex; align-items: center">
+
+                                        <!-- Columna 1 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="nombres">Nombres</label>
+                                                <input type="text" id="nombres"   th:value="${#strings.capitalize(doctor.nombre)}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="text" id="email"  th:value="${doctor.email}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- Columna 2 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="apellidos">Apellidos</label>
+                                                <input type="text" id="apellidos"   th:value="${#strings.capitalize(doctor.apellido)}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="especialidad">Especialidad</label>
+                                                <input type="text" id="especialidad"  class="form-control" th:value="${#strings.capitalize(doctor.especialidadesIdEspecialidad.nombreEspecialidad)}" disabled>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row justify-content-center" >
+
+                                        <!-- Columna 1 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Telefono">Telefono</label>
+                                                <input type="text" id="telefono"  th:value="${doctor.telefono}" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Edad</label>
+                                                <input type="text" id="edad" th:value="${doctor.edad}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- Columna 2 -->
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="estado">Estado</label>
+                                                <input type="text" id="estado" th:value="${doctor.enabled==true?'Activo':'Inactivo'}" class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Botón de envío -->
+
+                                </form>
+                            </div>
+                            <div class="col-lg-6 justify-content-center d-flex align-items-center">
+                                <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
+                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-lg-6 pl-lg-2 mb-3">
+                                <div class="card mb-3 h-100">
+                                    <div class="card-header bg-light" style="text-align: center;">
+                                        <h5 class="mb-0">Horarios de disponibilidad</h5>
+                                        <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
+                                    </div>
+                                    <div class="card-body fs--1">
+                                        <div class="card-body" style="max-height:100%; overflow-y: auto; text-align: center">
+                                            <div class="row" style="display: flex; align-items: center">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">10:00 - 10:30 am</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">10:30 - 11:00 am</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">11:30 - 12:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">12:00 - 12:30 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">13:30 - 14:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">14:30 - 15:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">15:30 - 16:00 pm</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="display: flex; align-items: center">
+                                                <div class="col" style="text-align: center;">
+                                                    <p class="text-1000 mb-0 h4">16:00 - 16:30 pm</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 pl-lg-2 mb-3">
+                                <div class="card mb-3 h-100">
+                                    <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-falcon-secondary btn-sm" type="button" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- ===============================================-->
+<!--   Modals -->
+<!-- ===============================================-->
+
+<div th:each="doctor, vEstado : ${listaDoctores}">
+    <div class="modal fade" th:id="'modalPerfilEditar-' + ${vEstado.index + 1}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Aquí puedes agregar el contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Doctor <span th:text="' ' + ${vEstado.index + 1}"></span>   </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form method="post" th:action="@{/administrador/editarDoctor}">
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                   <div class="modal-body">
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <div class="form-group">
+                                   <label for="nombre">Nombre </label>
+                                   <input type="text" id="nombre" name="nombre"  th:value="${doctor.nombre}" class="form-control"  required>
+                               </div>
+
+                               <div class="form-group">
+                                   <label for="email">Email </label>
+                                   <input type="email" id="email" name="email"   class="form-control" th:value="${doctor.email}" required>
+                               </div>
+
+                               <div class="form-group">
+                                   <label for="id">DNI </label>
+                                   <input type="text" class="form-control" th:value="${doctor.id}" disabled>
+                                   <input type="hidden" id="id" name="id" class="form-control" th:value="${doctor.id}" required>
+                               </div>
+
+                               <div class="form-group">
+                                   <label for="estado">Estado </label>
+                                   <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${doctor.estadosIdestado.nombre}" class="form-control" disabled>
+                               </div>
+
+
+                           </div>
+
+                           <!-- Columna 2 -->
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label for="apellido">Apellido  </label>
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${doctor.apellido}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="especialidad">Especialidad</label>
+                                    <select class="form-control" name="especialidad" id="especialidad">
+                                        <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                                th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${doctor.telefono}" required>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar doctor </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--
+<div class="modal fade" id="modalCrearDoctor">
+    <div class="modal-dialog">
+        <div class="modal-content">
+             Aquí puedes agregar el contenido del modal
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Doctor  </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" th:action="@{/administrador/crearDoctor}">
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="nombre">Nombre </label>
+                                <input type="text" id="nombre" name="nombre"  class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id">DNI </label>
+                                <input type="text" id="id" name="id" class="form-control" required>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="edad">Edad </label>
+                                <input type="text" id="edad" name="edad"   class="form-control" required>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" id="telefono" name="telefono"   class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email </label>
+                                <input type="email" id="email" name="email"   class="form-control" required>
+                            </div>
+
+
+
+                        </div>
+
+                       Columna 2
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="apellido">Apellido  </label>
+                                <input type="text" id="apellido" name="apellido"   class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sexo">Sexo  </label>
+                                <select class="form-control" name="sexo" id="sexo">
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="direccion">Direccion </label>
+                                <input type="text" id="direccion" name="direccion"   class="form-control" required>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="especialidad">Especialidad</label>
+                                <select class="form-control" name="especialidad" id="especialidad">
+                                    <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
+                                            ></option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="contrasena">Contrasena </label>
+                                <input type="text" id="contrasena" name="contrasena"    class="form-control" >
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" > Crear doctor </button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="modalCrearPaciente">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        Aquí puedes agregar el contenido del modal
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Paciente  </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form method="post" th:action="@{/administrador/crearPaciente}" th:object="${usuario}">
+                <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                 <div class="modal-body">
+                     <div class="row">
+                         <div class="col-sm-6">
+
+                             <div class="form-group">
+                                 <label for="nombre">Nombre </label>
+                                 <input type="text" th:field="*{nombre}"  class="form-control" required>
+                             </div>
+
+                             <div class="form-group">
+                                 <label for="id">DNI </label>
+                                 <input type="text" th:field="*{id}" class="form-control" required>
+
+                             </div>
+
+
+                             <div class="form-group">
+                                 <label for="edad">Edad </label>
+                                 <input type="text" th:field="*{edad}"   class="form-control" required>
+                             </div>
+
+
+
+                             <div class="form-group">
+                                 <label for="email">Email </label>
+                                 <input type="email" th:field="*{email}"   class="form-control" required>
+                             </div>
+
+
+
+                         </div>
+
+                    Columna 2
+                        <div class="col-sm-6">
+
+                            <div class="form-group">
+                                <label for="apellido">Apellido  </label>
+                                <input type="text" th:field="*{apellido}"   class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sexo">Sexo  </label>
+                                <select class="form-control" th:field="*{sexo}">
+                                    <option value="M"> Masculino </option>
+                                    <option value="F"> Femenino </option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="direccion">Direccion </label>
+                                <input type="text" th:field="*{direccion}"   class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="telefono">Telefono </label>
+                                <input type="text" th:field="*{telefono}"   class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contrasena">Contrasena </label>
+                                <input type="text" id="contrasena" name="contrasena"    class="form-control" >
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" > Crear e invitar paciente </button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div th:each="paciente, vEstado : ${listaPacientes}">
+    <div class="modal fade" th:id="'modalEditarPaciente-' + ${vEstado.index + 1}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           Aquí puedes agregar el contenido del modal
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Paciente <span th:text="' ' + ${vEstado.index + 1}"></span>   </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form method="post" th:action="@{/administrador/editarPaciente}" >
+                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
+                      <div class="modal-body">
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <label for="nombre">Nombre </label>
+                                      <input type="text" id="nombre" name="nombre"  th:value="${paciente.nombre}" class="form-control" required>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <label for="email">Email </label>
+                                      <input type="email" id="email" name="email"   class="form-control" th:value="${paciente.email}" required>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <label for="id">DNI </label>
+                                      <input type="text" class="form-control" th:value="${paciente.id}" disabled>
+                                      <input type="hidden" id="id" name="id" class="form-control" th:value="${paciente.id}" >
+                                  </div>
+
+
+
+                              </div>
+
+                           Columna 2
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label for="apellido">Apellido  </label>
+                                    <input type="text" id="apellido" name="apellido"   class="form-control" th:value="${paciente.apellido}" required>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="telefono"> Teléfono  </label>
+                                    <input type="text" id="telefono" name="telefono"  class="form-control" th:value="${paciente.telefono}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado">Estado </label>
+                                    <input type="text" id="estadosIdestado" name="estadosIdestado"   th:value="${paciente.estadosIdestado.nombre}" class="form-control" disabled>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" > Editar paciente </button>
+                        <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+-->
+
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<!--    Scripts de Calendar -->
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+
+
+
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList2').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [6, 10, 15, -1], [6, 10, 15, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Consultas Médicas
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Revise información sobre sus consultas médicas
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3 bg-card-gradient">
+                <div class="card-body ">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md">
+                            <h5 class="mb-2 mb-md-0 text-white">Próximas Citas</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div id="calendar"></div>
+                <!-- Start popup dialog box -->
+                <!--div class="modal fade" id="event_entry_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel">Add New Event</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="img-container">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="event_name">Event name</label>
+                                                <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter your event name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="event_start_date">Event start</label>
+                                                <input type="date" name="event_start_date" id="event_start_date" class="form-control onlydatepicker" placeholder="Event start date">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="event_end_date">Event end</label>
+                                                <input type="date" name="event_end_date" id="event_end_date" class="form-control" placeholder="Event end date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="save_event()">Save Event</button>
+                            </div>
+                        </div>
+                    </div-->
+                <!-- End popup dialog box -->
+            </div>
+            <div class="card mb-3 bg-card-gradient">
+                <div class="card-body ">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md">
+                            <h5 class="mb-2 mb-md-0 text-white">Historial de Citas</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+                    <table class="table table-striped" id="listaHistorial">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 22%">Especialidad</th>
+                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
+                            <th class="no-sort" style="width: 15%;" ></th>
+                            <th class="no-sort" style="width: 15%;" ></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="cita, info : ${citas}">
+                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
+                            </td>
+                            <td th:text="${cita.fecha}" class="align-middle">
+                            </td>
+                            <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
+                            </td>
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Detalles' + ${info.index+1}">Detalles</button>
+                                <!-- Modal -->
+                            </td>
+
+                            <td class="align-middle" align="center">
+                                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Receta' + ${info.index+1}">Receta</button>
+                                <!-- Modal -->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div th:each="cita, info : ${citas}">
+                <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detalles de la cita</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre del paciente:</label>
+                                            <input type="text" id="nombre" name="nombre"  th:placeholder="|${session.usuario.nombre} ${session.usuario.apellido}|" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="especialidad">Especialidad:</label>
+                                            <input type="text" id="especialidad" name="especialidad" th:placeholder="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fecha">Fecha:</label>
+                                            <input type="text" id="fecha" name="fecha" th:placeholder="${cita.fecha}" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tipocita">Tipo de cita:</label>
+                                            <input type="text" id="tipocita" name="tipocita"  th:placeholder="${cita.tipocitaIdtipocita.tipoCita}" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <!-- Columna 2 -->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="sede">Sede:</label>
+                                            <input type="text" id="sede" name="sede" th:placeholder="${cita.sedesIdsedes.nombre}" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="doctor">Doctor:</label>
+                                            <input type="text" id="doctor" name="doctor" th:placeholder="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="form-control" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hora">Hora:</label>
+                                            <input type="text" id="hora" name="hora" th:placeholder="${cita.hora}" class="form-control" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="seguro">Seguro de salud:</label>
+                                            <input type="text" id="seguro" name="seguro" th:placeholder="${session.usuario.segurosIdSeguro.nombreSeguro}" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:each="cita, info : ${citas}">
+                <div class="modal fade" th:id="'Receta' + ${info.index + 1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Receta Medica</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <header>
+                                    <h1>Receta Médica</h1>
+                                    <p>Nombre del paciente: <strong th:text="${session.usuario.nombre} + ' ' + ${session.usuario.apellido}">Carlos Pisco</strong></p>
+                                    <p>Nombre del doctor: <strong th:text="${cita.getDoctor.nombre} + ' ' + ${cita.getDoctor.apellido}">Manuel Yarleque</strong></p>
+                                    <p>Fecha de emisión: <strong th:text="${cita.fecha}">21 de abril de 2023</strong></p>
+                                </header>
+
+                                <body>
+                                    <h2>Medicamentos Recetados</h2>
+                                    <ul th:each="med : ${medicamentos}">
+                                        <li >Nombre del Medicamento: <strong th:text="${med.getNombre()}"></strong> </li>
+                                        <li >Cantidad: <strong th:text="${med.getCantidad()}"></strong></li>
+                                        <li >Frecuencia: <strong th:text="${med.getFrecuencia()}"></strong></li>
+                                    </ul>
+
+                                </body>
+
+                                <footer>
+                                    <p>Esta receta médica es válida por un mes a partir de la fecha de emisión.</p>
+                                </footer>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+
+
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<!--    Scripts de Calendar -->
+<!--script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#listaHistorial').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  citas",
+                zeroRecords: "No se encontraron citas pasadas",
+                emptyTable: "No hay citas",
+                info: "Mostrando citas del _START_ al _END_ <br>Total _TOTAL_ citas",
+                infoEmpty: "Mostrando citas del 0 al 0 <br>Total 0 citas pasadas",
+                infoFiltered: "(filtrado de un total de _MAX_ citas)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [5, 10, 15, -1], [5, 10, 15, "Todos"]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+</script>
+
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            start: 'title', // will normally be on the left. if RTL, will be on the right
+            center: '',
+            end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
+            defaultView: 'month',
+            weekday: 'long',
+            selectable: true,
+            height: 650,
+            events: [],
+            eventTextColor: '#ffffff',
+            eventBackgroundColor: '#3d8af7',
+            eventDisplay: 'block',
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            firstDay: 1,
+            locale: 'es',
+            allDay: false,
+            displayEventTime: true,
+            eventDidMount: function(info) {
+                tippy(info.el, {
+                    trigger: 'mouseenter',
+                    content: generateTooltipContent(info.event), // call a function to generate the html content
+                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
+                    animation: 'fade',
+                    allowHTML: 'true'
+                })
+            }
+        });
+        // AJAX request to fetch events
+        $.ajax({
+            url: 'http://34.28.24.16:8081/api/citas', // Replace with your API endpoint URL
+            type: 'GET',
+            data: {
+                dni: [[${session.usuario.id}]] // Specify the GET parameter
+            },
+            headers: {
+                'Content-Type': 'application/json' // Set the Content-Type header
+            },
+            success: function(response) {
+                // Parse and format the received data
+                var events = [];
+                response.forEach(function(eventData) {
+                    var event = {
+                        title: eventData.title,
+                        start: eventData.start,
+                        modalidad: eventData.modalidad,
+                        doctor: eventData.doctor,
+                        hora: eventData.hora,
+                        sede: eventData.sede,
+                        tipoCita: eventData.tipoCita,
+                        formaPago: eventData.formaPago
+                        // Add more properties as needed
+                    };
+                    events.push(event);
+                });
+
+                // Add the events to FullCalendar
+                calendar.addEventSource(events);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+        calendar.render();
+    });
+    function generateTooltipContent(event) {
+        // Generate the HTML content for the tooltip
+        // Assuming you have a time string like '14:30'
+        var timeString = event.extendedProps.hora;
+
+        // Parse the time string using Moment.js
+        var time = moment(timeString, 'HH:mm');
+
+        // Format the time as 'h:mm A' (e.g., '2:30 PM')
+        var formattedTime = time.format('h:mm A');
+
+        var dateString = event.start;
+        var date = moment(dateString, 'YYYY-MM-DD');
+        var fechaFormateada = date.format('DD/MM/YYYY');
+
+        var content = '<strong>' + event.title + '</strong>';
+        content += '<br>Doctor: ' + event.extendedProps.doctor;
+        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+        content += '<br>Fecha: ' + fechaFormateada;
+        content += '<br>Hora: ' + formattedTime;
+
+        return content;
+    }
+</script>
+
+</body>
+</html>

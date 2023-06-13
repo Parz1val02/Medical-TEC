@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Página Principal')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Bienvenido
+                                <span style="color: #0032aa; font-weight: bold" th:text="|${usuario.nombre} ${usuario.apellido}|"></span>
+                            </h2>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: 600; padding-left: 15px">
+                                Lleva a cabo la gestión de citas médicas, historial médico y citas en telemedicina.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; text-align: center">
+                <a style="flex: 1; width: 100%;">
+                    <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                        Notificaciones, Mensajería y Calendario
+                    </button>
+                </a>
+                <a style="flex: 1; width: 100%;">
+                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                        Proximas Citas
+                    </button>
+                </a>
+            </div>
+            <br>
+            <!-- Información Reciente -->
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: block;" id="div1">
+                <div class="card-body" style="background: #FFFFFF">
+                    <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                        Ponte al día
+                    </h2>
+                    <h6 class="mb-2 mb-md-0"  style="font-size: medium; color: #3d8af7; font-weight: 600;">
+                        Visualiza tus notificaciones, mensajería y calendario de citas.
+                    </h6>
+                    <br>
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-sm-6" style="padding: 0">
+                            <div class="card" style="margin: 15px">
+                                <div class="card-body" style="padding: 25px !important;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                        Notificaciones
+                                    </h4>
+                                    <div style="height: 250px;">
+                                        <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                                             th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
+                                                <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="padding: 0">
+                            <div class="card" style="margin: 15px">
+                                <div class="card-body" style="padding: 25px !important;">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                        Mensajería
+                                    </h4>
+                                    <div style="height: 250px;">
+                                        <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                                             th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
+                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
+                                                <div th:text="${mensaje.contenido}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-sm-6">
+                            <div class="card mb-3">
+                                <div class="card-body" style="max-height: 650px">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                        Calendario
+                                    </h4>
+                                    <div id="calendar"></div>
+                                    <!--div th:replace="~{fragmentos/calendar.html::calendar}"></div-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card mb-3">
+                                <div class="card-body" >
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                        Cuestionarios
+                                    </h4>
+                                    <div>
+                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
+                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <b th:text="|${cuestionario.nombrecuestionario}|"></b>
+                                                <div> Descripción cuestionario respectiva</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Próximas Citas -->
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
+                <div class="card-body">
+                    <h2 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">
+                        Próximas Citas Agendadas
+                    </h2>
+                    <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: 600;">
+                        Visualiza información de tus próximas citas
+                    </h6>
+                    <table class="table table-striped" id="userList">
+                        <thead style="background: #cdeffc">
+                        <tr>
+                            <th class="sort align-middle" style="width: 18%">Nombre Completo</th>
+                            <th class="sort align-middle" style="width: 20%;text-align: center">Fecha de Atención</th>
+                            <th class="sort align-middle" style="width: 12%;text-align: center">Tipo de Cita</th>
+                            <th class="sort align-middle" style="width: 15%;text-align: center">Estado de Cita</th>
+                            <th class="sort align-middle" style="width: 15%;text-align: center"></th>
+                            <th class="sort align-middle" style="width: 20%;text-align: center"></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="cita : ${listaProximasCitas}">
+                            <td class="align-middle" th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|">
+                                Nombre Completo
+                            </td>
+                            <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}:00hrs|">
+                                00/00/00 - 00:00hrs
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.modalidad)}">
+                                Presencial
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}">
+                                Próxima cita
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:if="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
+                                <input type="hidden" id="fecha" th:value="${cita.fecha}" />
+                                <input type="hidden" id="hora" th:value="${cita.hora}" />
+                                <button id="botonInicioVideo" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
+                                No disponible
+                            </td>
+                            <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
+                              <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                  border-radius: 15px">Iniciar Video</a>
+                            </td-->
+                            <td class="align-middle" style="text-align: center">
+                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                                border-radius: 15px; border-color: #b38df7">Historial Clínico</button>
+                                </a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <script>
+                // Obtener la referencia al botón
+                var boton = document.getElementById('miBoton');
+
+                // Obtener la fecha y hora actual
+                var fechaActual = new Date();
+
+                // Crear la fecha y hora objetivo
+                var fecha = document.getElementById('fecha').value;
+                var hora = document.getElementById('hora').value;
+                var fechaObjetivo = new Date(fecha + ' ' + hora);
+                var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                // Verificar si la fecha y hora actual están dentro del rango objetivo
+                boton.disabled = !(fechaActual >= fechaInicio && fechaActual <= fechaFin);
+
+                function mostrarDiv(numeroDiv) {
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
+                    // Mostrar el div seleccionado
+                    document.getElementById("div" + numeroDiv).style.display = "block";
+                }
+            </script>
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta buscando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: []
+        });
+    });
+</script>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridWeek',
+            headerToolbar: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'dayGridWeek,dayGridDay' // user can switch between the two
+            },
+            defaultView: 'month',
+            weekday: 'long',
+            selectable: true,
+            events: [],
+            eventTextColor: '#ffffff',
+            eventBackgroundColor: '#3d8af7',
+            eventDisplay: 'block',
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            firstDay: 1,
+            locale: 'es',
+        });
+        calendar.render();
+    });
+</script>
+
+</body>
+</html>

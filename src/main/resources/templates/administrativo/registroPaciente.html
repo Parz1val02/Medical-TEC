@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head
+    th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Registro')}">
+
+
+
+<body class="">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<main class="main" id="top">
+
+    <div class="container" data-layout="container">
+
+        <div class="content">
+
+
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Formulario de Invitacion
+                            </h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                        <div class="card-body" style="background: #FFFFFF">
+                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px; text-align: center; text-decoration: underline">
+                                Datos del paciente
+                            </h3>
+                            <br>
+                            <form method="POST"  th:action="@{'/registro/llenadoform'}">
+
+                                <input th:value="${api.getNombres()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
+                                <input  th:value="|${api.getApellidoPaterno()} ${api.getApellidoMaterno()}|"class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${api.getDni()}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
+
+
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Nombres: </p>
+                                        <input type="text" class="form-control" th:value="${api.getNombres()}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Apellidos: </p>
+                                        <input type="text" class="form-control"  th:value="|${api.getApellidoPaterno()} ${api.getApellidoMaterno()}|" style="color: #9da9bb;" disabled>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Edad: </p>
+                                        <input type="text" class="form-control"  name="edad"  th:value="${edad}" th:classappend="${edaderror!=null || edaderror1!=null?'is-invalid':''}" >
+                                        <div class ="invalid-feedback" th:if="${edaderror!=null}" th:text="${edaderror}"></div>
+                                        <div class ="invalid-feedback" th:if="${edaderror1!=null && edaderror==null}" th:text="${edaderror1}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">DNI: </p>
+                                        <input type="text" class="form-control"  th:value="${api.getDni()}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sede:</p>
+                                        <select name="sedeid" class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
+                                                    th:text="${sede.nombre}"
+                                                   th:selected="${sedeid==sede.id}"
+                                            ></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sexo: </p>
+                                        <select name="sexo" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option value="M" th:selected="${sexo.equalsIgnoreCase('M')}">Masculino</option>
+                                            <option value="F" th:selected="${sexo.equalsIgnoreCase('F')}">Femenino</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Domicilio: </p>
+                                        <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null || domiciliohack!=null?'is-invalid':''}" >
+                                        <div class ="invalid-feedback" th:if="${domicilioError!=null}" th:text="${domicilioError}"></div>
+                                        <div class ="invalid-feedback" th:if="${domiciliohack!=null && domicilioError==null}" th:text="${domiciliohack}"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Correo: </p>
+                                        <input  type="text" class="form-control" name="correo" th:value="${correo}"  th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}" >
+                                        <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
+                                        <div class ="invalid-feedback" th:if="${correoError2!=null && correoError==null}" th:text="${correoError2}"></div>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Seguro:</p>
+                                        <select name="seguroid" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="seguro : ${listaseguros}"
+                                                    th:value="${seguro.id}"
+                                                    th:text="${seguro.nombreSeguro}"
+                                                    th:selected="${seguroid==seguro.id}"
+                                            ></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Telefono celular:  </p>
+                                        <input  type="text" class="form-control" name="celular" th:value="${celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
+                                        <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
+                                        <div class ="invalid-feedback" th:if="${telefonoError2!=null && telefonoError==null}" th:text="${telefonoError2}"></div>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="medicamento" th:value="${medicamento}"  th:classappend="${medicamentosError!=null || medicamentoshack!=null?'is-invalid':''}"></textarea>
+                                        <div class ="invalid-feedback" th:if="${medicamentosError!=null}" th:text="${medicamentosError}"></div>
+                                        <div class ="invalid-feedback" th:if="${medicamentoshack!=null && medicamentosError==null}" th:text="${medicamentoshack}"></div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Alergias: </p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" name="alergia" th:value="${alergia}" th:classappend="${alergiaError!=null || alergiaHack!=null?'is-invalid':''}"></textarea>
+                                        <div class ="invalid-feedback" th:if="${alergiaError!=null}" th:text="${alergiaError}"></div>
+                                        <div class ="invalid-feedback" th:if="${alergiaHack!=null && alergiaError==null}" th:text="${alergiaHack}"></div>
+                                    </div>
+
+
+                                </div>
+                                <div style="height: 20px"></div>
+
+
+
+                                <div class="form-check pb-2">
+                                    <input class="form-check-input" type="checkbox" name="accept">
+                                    <label class="form-check-label">Acepto los terminos y condiciones</label>
+                                </div>
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Terminos y condiciones
+                                </button>
+                                <div class ="invalid-feedback" ></div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Terminos y Condiciones</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    Propósito del registro: El registro del usuario en la clínica tiene como objetivo facilitar la prestación de servicios médicos y administrativos, así como mantener un registro preciso y actualizado de la información del paciente.<br><br>
+
+                                                    Información personal: Al registrarse, el usuario proporciona información personal como nombre completo, fecha de nacimiento, dirección, número de teléfono, dirección de correo electrónico, historial médico, entre otros. El usuario acepta proporcionar información veraz, completa y actualizada.<br><br>
+
+                                                    Confidencialidad de la información: La clínica se compromete a mantener la confidencialidad de la información proporcionada por el usuario. La información personal no se compartirá con terceros, excepto cuando sea requerido por ley o para la prestación de servicios médicos necesarios.<br><br>
+
+                                                    Uso de la información: La información proporcionada por el usuario se utilizará para los siguientes propósitos:<br>
+                                                    a. Administrar y coordinar citas médicas y tratamientos.<br>
+                                                    b. Comunicarse con el usuario sobre su salud, citas y servicios relacionados.<br>
+                                                    c. Realizar análisis y diagnósticos médicos.<br>
+                                                    d. Facturación y procesamiento de pagos.<br>
+                                                    e. Cumplir con los requisitos legales y regulatorios.<br><br>
+
+                                                    Responsabilidad del usuario: El usuario es responsable de mantener la confidencialidad de su información de inicio de sesión, como nombre de usuario y contraseña. El usuario acepta notificar a la clínica de inmediato cualquier acceso no autorizado o uso indebido de su cuenta.<br><br>
+
+                                                    Actualización de la información: El usuario se compromete a mantener actualizada su información personal en caso de cambios. Esto incluye cambios de dirección, número de teléfono, dirección de correo electrónico u otra información relevante.<br><br>
+
+                                                    Derechos de propiedad: Todos los derechos de propiedad intelectual relacionados con la plataforma de registro de la clínica, incluyendo el software, diseño, logotipos y contenido, son propiedad exclusiva de la clínica.<br><br>
+
+                                                    Modificaciones: La clínica se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigencia después de su publicación en la plataforma de registro. El usuario será notificado de cualquier cambio significativo en los términos y condiciones.<br><br>
+
+                                                    Aceptación de los términos y condiciones: Al completar el formulario de registro, el usuario acepta y se compromete a cumplir con todos los términos y condiciones establecidos anteriormente.
+                                                </p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div style="height: 20px"></div>
+                                <div style="text-align: center">
+                                    <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Guardar Cambios</button>
+                                    <a type="button" class="btn btn-secondary" th:href="${'/registro/index'}" style="margin-left: 15px;
+                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</main>
+
+
+
+
+</body>
+
+</html>

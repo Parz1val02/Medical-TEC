@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+  <div class="container" data-layout="container">
+    <nav th:replace="~{fragmentos/sidebaradministrador.html::sideBar}"></nav>
+    <div class="content" >
+      <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
+
+      <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center">
+            <div class="col-md-11">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">
+                Historial Clínico
+              </h1>
+            </div>
+            <div style="padding-left: 15px">
+              <a type="button" class="btn btn-primary" style="text-align: center;background: #3d8af7;
+                                    border-radius: 15px" th:href="@{/administrador/principal}">Volver a la Página Principal</a>
+              <a type="button" class="btn btn-primary" style="text-align: center;background: #b38df7;
+                                    border-radius: 15px" th:href="@{/administrador/usuarios}">Volver a página de usuarios</a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div>
+            <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+              Información del paciente
+            </h5>
+          </div>
+          <br>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Nombre: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Edad: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.edad}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">DNI: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.id}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Sexo: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Dirección: </p>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
+            </div>
+          </div>
+
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Seguro: </p>
+            </div>
+            <div class="col-md-6">
+              <div th:if="${paciente.segurosIdSeguro!=null}">
+                <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+              </div>
+              <div th:if="${paciente.segurosIdSeguro==null}">
+                <p style="font-weight: normal" th:text="${'El paciente no está afiliado a ningún seguro'}"></p>
+              </div>
+            </div>
+          </div>
+
+          <div th:if="${msgSinHistorial==null}">
+            <div class="row" style="width: 60%;">
+              <div class="col-md-6">
+                <p style="font-weight: bold">Alergias: </p>
+              </div>
+              <div class="col-md-6">
+                <div th:if="${#lists.size(listaAlergias)==0}">
+                  <div>
+                    <p style="font-weight: normal"> No tiene alergias registradas</p>
+                  </div>
+                </div>
+                <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
+              </div>
+            </div>
+
+            <div class="row" style="width: 60%;">
+              <div class="col-md-6">
+                <p style="font-weight: bold">Tratamiento: </p>
+              </div>
+              <div class="col-md-6">
+                <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
+              </div>
+            </div>
+
+          </div>
+          <br>
+          <div th:if="${msgSinHistorial!=null}" >
+            <h5 class="mb-2 mb-md-0" th:text="${msgSinHistorial}" style="font-weight: bold"> </h5>
+          </div>
+
+
+          <!--
+          <div class="row" style="width: 60%;">
+            <div class="col-md-6">
+              <p style="font-weight: bold">Nombre: </p>
+              <p style="font-weight: bold">Edad: </p>
+              <p style="font-weight: bold">DNI: </p>
+              <p style="font-weight: bold">Sexo: </p>
+
+              <p style="font-weight: bold">Dirección: </p>
+              <div th:if="${msgSinHistorial==null}">
+                <p style="font-weight: bold">Alergias: </p>
+                <p style="font-weight: bold">Tratamiento: </p>
+                <p style="font-weight: bold">Seguro: </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
+              <p style="font-weight: normal" th:text="${paciente.edad}"></p>
+              <p style="font-weight: normal" th:text="${paciente.id}"></p>
+              <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
+              <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
+              <div th:if="${msgSinHistorial==null}">
+                <div th:if="${#lists.size(listaAlergias)==0}">
+                  <div>
+                    <p style="font-weight: normal"> No tiene alergias registradas</p>
+                  </div>
+                </div>
+                <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
+                <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
+              </div>
+              <div th:if="${msgSinHistorial==null}">
+                <div th:if="${paciente.segurosIdSeguro!=null}">
+                  <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
+                </div>
+              </div>
+            </div>
+
+            <div th:if="${msgSinHistorial!=null}">
+              <h5 th:text="${msgSinHistorial}"> </h5>
+            </div>
+
+
+          </div>-->
+          <br>
+          <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                          border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->
+        </div>
+      </div>
+
+      <div>
+        <div class="card h-100 mb-3">
+          <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+            <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+              Citas/consultas pasadas y bitácora de notas:
+            </h5>
+            <br>
+            <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
+              <div class="card-body">
+                <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
+              </div>
+            </div>
+            <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
+              <div class="col-md">
+                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
+                  <div class="row">
+                    <div class="col-sm">
+                      <b th:text="|${cita.fecha} - ${cita.hora}: ${cita.tipocitaIdtipocita.tipoCita}|"></b>
+                      <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
+                    </div>
+                    <div class="col-sm-2" th:align="right">
+                      <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
+                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans';" data-toggle="modal"
+                              data-target="#exampleModal" th:data-target="'#Reporte' + ${i.index+1}">
+                        <i class="fa fa-file"></i> Ver Reporte
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div th:each="cita, i : ${listaCitasPorUsuario}">
+        <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Reporte' + ${i.index+1}">
+          <div class="modal-dialog" style="max-width: 800px !important;">
+            <div class="modal-content">
+              <!-- Aquí puedes agregar el contenido del modal -->
+              <div class="modal-header">
+                <h5 class="modal-title">Boleta de cita</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+
+                <div class="row">
+                  <div class="col-md-4" >
+                    <p style="font-weight: bold">Diagnóstico: </p>
+                    <p style="font-weight: bold">Bitácora: </p>
+                  </div>
+                  <div class="col-md-8">
+                    <p style="font-weight: normal" th:text="|${#strings.capitalize(cita.informeIdinforme.diagnostico)}|"></p>
+                    <p style="font-weight: normal" th:text="${cita.informeIdinforme.bitacora}"></p>
+                  </div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+  $(document).ready(function () {
+    //Esta busacando por el ID del tah <table>
+    //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+    $('#userList').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  usuarios",
+        zeroRecords: "No se encontraron usuarios",
+        emptyTable: "No hay usuarios",
+        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      lengthMenu: [
+        [10, 25, 50, -1], [10, 25, 50, "Todos"]
+      ],
+      buttons: [
+        {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+        {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+      ]
+    });
+  });
+</script>
+
+
+</body>
+</html>

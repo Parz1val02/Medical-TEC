@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Formulario')}">
+
+
+<body class="">
+
+<main class="main" id="top">
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebaradministrativo.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbaradministrativo.html::topBar}"></nav>
+
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Formulario de Invitacion
+                            </h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                        <div class="card-body" style="background: #FFFFFF">
+                            <h3 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px; text-align: center; text-decoration: underline">
+                                Datos del paciente
+                            </h3>
+                            <br>
+
+
+                            <form method="POST"  th:action="@{'/administrativo/enviarEmail'}">
+                                <input th:value="${correo}" class="form-control" name="correo" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${persona.getNombres()}" class="form-control" name="nombres" style="color: #9da9bb;" type="hidden">
+                                <input th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoPaterno()} |" class="form-control" name="apellidos" style="color: #9da9bb;" type="hidden">
+                                <input th:value="${dni}" class="form-control" name="id" style="color: #9da9bb;" type="hidden">
+
+
+
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Nombres: </p>
+                                        <input type="text" class="form-control" th:value="${persona.getNombres()}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Apellidos: </p>
+                                        <input type="text" class="form-control"  th:value="|${persona.getApellidoPaterno()} ${persona.getApellidoMaterno()} |" style="color: #9da9bb;" disabled>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Edad: </p>
+                                        <input type="text" class="form-control"  name="edad"   >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">DNI: </p>
+                                        <input type="text" class="form-control"  th:value="${dni}" style="color: #9da9bb;" disabled>
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sede:</p>
+                                        <select class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
+                                                    th:text="${sede.nombre}"
+                                                    ></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Sexo: </p>
+                                        <select  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option value="M">Masculino</option>
+                                            <option value="F" >Femenino</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Domicilio: </p>
+                                        <input  type="text" class="form-control"    >
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Correo: </p>
+                                        <input  type="text" class="form-control"    >
+
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Seguro:</p>
+                                        <select class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                            <option th:each="seguro : ${listaseguros}"
+                                                    th:value="${seguro.id}"
+                                                    th:text="${seguro.nombreSeguro}"
+                                                   ></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Telefono celular:  </p>
+                                        <input  type="text" class="form-control"  >
+
+                                    </div>
+                                </div>
+                                <div style="height: 10px"></div>
+                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" ></textarea>
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p style="font-weight: bold; margin: 0px">Alergias: </p>
+                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" ></textarea>
+
+                                    </div>
+
+
+                                </div>
+                                <div style="height: 20px"></div>
+                                <div style="text-align: center">
+                                    <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Enviar Formulario</button>
+                                    <a type="button" class="btn btn-secondary" th:href="${'/administrativo/dashboard'}" style="margin-left: 15px;
+                                    border: 1px solid #9da9bb; background: #9da9bb">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+<!-- Initialize DataTable in JavaScript -->
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList').DataTable({
+            dom: "<'d-flex justify-content-end pb-4'B>\n" +
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_  usuarios",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [10, 25, 50, -1], [10, 25, 50, "Todos"]
+            ],
+            buttons: [
+                {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+                {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+            ]
+        });
+    });
+</script>
+
+
+</body>
+
+</html>
