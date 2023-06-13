@@ -18,6 +18,7 @@
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
 
+            <div id="demo"></div>
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
@@ -171,9 +172,9 @@
                                 Próxima cita
                             </td>
                             <td class="align-middle" style="text-align: center" th:if="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
-                                <input type="hidden" id="fecha" th:value="${cita.fecha}" />
-                                <input type="hidden" id="hora" th:value="${cita.hora}" />
-                                <button id="botonInicioVideo" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
+                                <input type="hidden" th:class="fecha" th:value="${cita.fecha}" />
+                                <input type="hidden" th:class="hora" th:value="${cita.hora}" />
+                                <button type="button" class="btn btn-primary btn-sm botones" style="text-align: center;background: grey;
                                 border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
                             </td>
                             <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
@@ -197,21 +198,74 @@
             </div>
 
             <script>
-                // Obtener la referencia al botón
-                var boton = document.getElementById('miBoton');
+                // Obtener datos y botones
+                var botones = document.getElementsByClassName('botones');
+                var fecha = document.getElementsByClassName('fecha');
+                var hora = document.getElementsByClassName('hora');
 
                 // Obtener la fecha y hora actual
                 var fechaActual = new Date();
 
-                // Crear la fecha y hora objetivo
-                var fecha = document.getElementById('fecha').value;
-                var hora = document.getElementById('hora').value;
-                var fechaObjetivo = new Date(fecha + ' ' + hora);
-                var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
-                var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+                for (var i=0;i<botones.length;i++){
+                    var fechaObjetivo = new Date(fecha[i].value + ' ' + hora[i].value);
+                    var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
 
-                // Verificar si la fecha y hora actual están dentro del rango objetivo
-                boton.disabled = !(fechaActual >= fechaInicio && fechaActual <= fechaFin);
+                    var tiempo=fechaInicio-fechaActual;
+                    console.log(tiempo + 'corresponde a' + i);
+
+                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
+                        mostrarBoton(i);
+                    }
+/*
+                    if(fechaInicio>fechaActual && fechaFin<fechaActual){
+                        mostrarBoton(i);
+                    } else if (fechaActual<fechaInicio){
+                        mostrarBoton2(i);
+                    } else {
+                        console.log("No es tiempo aún"+"corresponde a"+i);
+                    }
+
+                    /*
+                    mostrarBoton(i);
+                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
+                        botones[i].disabled = false;
+                        botones[i].style.background = 'grey';
+                        botones[i].style.borderColor = 'grey';
+                    }
+
+                    var tiempo = fechaObjetivo - fechaActual;
+                    const fecha = setTimeout(
+                        function cambios(i){
+                        botones[i].disabled = false;
+                        botones[i].style.background = 'grey';
+                        botones[i].style.borderColor = 'grey';
+                        }, 5000);
+                    */
+                }
+
+                function accionesBoton(parametro) {
+                    // Código de la función
+                    botones[parametro].disabled = false;
+                    botones[parametro].style.background = '#3d8af7';
+                    botones[parametro].style.borderColor = '#3d8af7';
+                    console.log(botones[parametro]);
+
+                }
+
+                function mostrarBoton(valor) {
+                    setTimeout(function() {
+                        accionesBoton(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+
+
+                function myStopFunction() {
+                    clearTimeout(myTimeout);
+                }
+
+
 
                 function mostrarDiv(numeroDiv) {
                     // Ocultar todos los divs
