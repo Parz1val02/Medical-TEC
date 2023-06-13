@@ -8,6 +8,7 @@ import com.example.medicaltec.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -396,7 +397,7 @@ public class RegistroController {
             usuario.setDireccion(domicilio);
             usuario.setSexo(sexo);
             usuario.setTelefono(celular);
-            usuario.setContrasena(contrasenia);
+            usuario.setContrasena(new BCryptPasswordEncoder().encode(contrasenia));
             usuario.setEmail(correo);
 
             Role role = new Role();

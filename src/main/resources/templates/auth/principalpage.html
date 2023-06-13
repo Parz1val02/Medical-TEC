@@ -5,111 +5,8 @@
 
 <!--</head>-->
 <body>
-    <div class="container" style="background: #FFFFFF">
+    <div style="background: #FFFFFF">
         <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
-
-        <!-- Invitación Registro -->
-        <!--
-        <div style="background: #9da9bb">
-            <div style="height: 50px;"></div>
-            <div class="alert alert-success" role="alert" th:if="${success != null}" th:text="${success}">
-
-            </div>
-            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
-            </div>
-
-
-            <div style="text-align: center">
-                <div class="container" data-layout="container" style="overflow-y: auto">
-                    <div class="content" style="text-align: center">
-                        <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
-                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
-                                <div id="qrcode" ></div>
-                            </div>
-                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
-                                <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
-                                    <div class="card-body" style="padding: 1rem !important;">
-                                        <h4 class="card-subtitle"
-                                            style="color: #3d8af7; font-weight: bold; padding-bottom: 5px">ÚNETE A NOSOTROS</h4>
-                                        <h6 class="card-title"
-                                            style="color: #0032aa; font-weight: bold">Registro de Nuevo usuario</h6>
-                                        <p class="card-text" style="color: #9da9bb; font-weight: bold"> Ve a la página de registro
-                                            escaneando el QR o presionando el botón de abajo</p>
-                                        <a type="button" class="btn btn-light" style="background: #b38df7; color: #FFFFFF"
-                                        th:href="@{/register}">Quiero registrarme</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="height: 50px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-        <!-- Invitación Registro -->
-        <!-- Listar Sedes -->
-        <!--
-        <div style="background: #FFFFFF">
-            <div style="text-align: center">
-                <div class="container" data-layout="container" style="overflow-y: auto">
-                    <div class="content" style="text-align: center">
-                        <div style="height: 30px;"></div>
-                        <h1 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Sedes</h1>
-                        <div style="height: 30px;"></div>
-                        <div style="height: 10px;"></div>
-                        <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
-                            <div class="col-sm-3 mb-1" th:each="sede, i : ${sedeList}" style="margin-bottom: 10px !important;">
-                                <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;
-                                        min-height: 200px">
-                                    <img class="card-img-top img-fluid" th:src="@{/img/clinica.jpg}" alt="...">
-                                    <div class="card-body" style="padding: 1rem !important;">
-                                        <h6 class="card-title" th:text="|N°${i.index+1}|"
-                                            style="color: #3d8af7; font-weight: bold">Número Sede</h6>
-                                        <h4 class="card-subtitle" th:text="${sede.nombre}"
-                                            style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
-                                        <p class="card-text" th:text="|${sede.torre} - ${sede.piso}|"
-                                           style="color: #3d8af7; font-weight: bold">Torre - Piso</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="height: 50px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-        <!-- Listar Sedes -->
-        <!-- Listar Especialidades -->
-        <!--
-        <div style="background: #0032aa">
-            <div style="text-align: center">
-                <div class="container" data-layout="container" style="overflow-y: auto">
-                    <div class="content" style="text-align: center">
-                        <div style="height: 30px;"></div>
-                        <h1 style="color: #FFFFFF; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestras Especialidades</h1>
-                        <div style="height: 30px;"></div>
-                        <div style="height: 10px;"></div>
-                        <div class="row justify-content-center align-items-center" style="margin-left: 15px;margin-right: 15px;">
-                            <div class="col-sm-3 mb-1" th:each="especialidad, i : ${especialidadesList}" style="margin-bottom: 10px !important;">
-                                <div class="card bg-card-gradient align-content-center" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
-                                    <div class="card-body" style="padding: 1rem !important;">
-                                        <h6 class="card-title" th:text="|N°${i.index+1}|"
-                                           style="color: #9da9bb; margin-bottom: 0 !important;">Número Especialidad</h6>
-                                        <h4 class="card-text" th:text="${especialidad.nombreEspecialidad}"
-                                            style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Nombre Especialidad</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="height: 50px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-        <!-- Listar Especialidades -->
 
         <div>
             <img class="card-img-top img-fluid" th:src="@{img/foto_clinica.png}">
@@ -240,12 +137,22 @@
                     <h2 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 25px"> Visitanos</h2>
                     <div class="row">
                         <div class="col-md-5">
-                            Ya no se que poner
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Dirección</h4>
+                            <p style="font-size: 15px;">
+                                Estamos ubicados en [nombre de la calle], [ciudad], [estado], [código postal].
+                                Nuestra clínica se encuentra en una ubicación conveniente y de fácil acceso.
+                            </p>
                         </div>
                         <div class="col-md-7">
-                            Me quede sin ideas
+                            <h4 style="color: #4d5969; padding-bottom: 10px;">Horario de atención:</h4>
+                            <p style="font-size: 15px;">
+                                Lunes a viernes: 08:00am - 10:00pm
+                                Sábados: 11:00am - 7:00pm
+                                Domingos: Cerrado
+                            </p>
                         </div>
                     </div>
+                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=40.7128,-74.0060&zoom=15&size=600x400&markers=40.7128,-74.0060&key=TU_API_KEY" alt="Mapa de ubicación">
                     <div style="height: 30px;"></div>
                 </div>
             </div>

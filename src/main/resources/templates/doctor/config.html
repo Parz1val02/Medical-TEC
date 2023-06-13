@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}"></head>
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Configuracion')}"></head>
 
 <body class="">
 
@@ -10,7 +10,7 @@
 <!-- ===============================================-->
 <main class="main" id="top">
 
-    <div class="container" data-layout="container">
+    <div data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -33,7 +33,7 @@
             </div>
             <div class="card mb-3">
                 <div class="card-header position-relative min-vh-25 mb-7">
-                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/22.png);">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/20.jpg)">
                     </div>
                     <!--/.bg-holder-->
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div>
@@ -197,15 +197,6 @@
                                     <label for="passConfirmar" style="font-weight: bold !important; margin: 0;
                                     font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Confirmar contraseña nueva</label>
                                     <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 90%" required>
-
-                                    <!--
-                                    <label for="contrasena" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba su nueva contraseña:</label>
-                                    <input type="password" class="form-control" id="contrasena" name="contrasena">
-                                    <label for="contrasena_repetida" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba nuevamente su nueva contraseña:</label>
-                                    <input type="password" class="form-control" id="contrasena_repetida" name="contrasena_repetida">
-                                    -->
                                 </div>
                                 <div class="form-group" style="text-align: right;">
                                     <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
@@ -221,6 +212,9 @@
 
                     </div>
                 </div>
+            </div>
+            <div class="container">
+                <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
             </div>
             <script>
                 function toggleInput() {
@@ -241,7 +235,7 @@
                     }
                 }
             </script>
-            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+
         </div>
     </div>
     </div>
