@@ -13,6 +13,46 @@
         </div>
         <div style="height: 60px;"></div>
 
+        <!-- Invitación Registro -->
+
+        <div style="background: #9da9bb">
+            <div style="height: 50px;"></div>
+            <div class="alert alert-success" role="alert" th:if="${success != null}" th:text="${success}">
+
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+            </div>
+
+
+            <div style="text-align: center">
+                <div class="container" data-layout="container" style="overflow-y: auto">
+                    <div class="content" style="text-align: center">
+                        <div class="row justify-content-center" style="margin-left: 15px;margin-right: 15px;">
+                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
+                                <div id="qrcode" ></div>
+                            </div>
+                            <div class="col-sm-5 mb-1" style="margin-bottom: 10px !important;">
+                                <div class="card bg-card-gradient" style="background: #FFFFFF; border: 2px solid #edf2f9 !important;">
+                                    <div class="card-body" style="padding: 1rem !important;">
+                                        <h4 class="card-subtitle"
+                                            style="color: #3d8af7; font-weight: bold; padding-bottom: 5px">ÚNETE A NOSOTROS</h4>
+                                        <h6 class="card-title"
+                                            style="color: #0032aa; font-weight: bold">Registro de Nuevo usuario</h6>
+                                        <p class="card-text" style="color: #9da9bb; font-weight: bold"> Ve a la página de registro
+                                            escaneando el QR o presionando el botón de abajo</p>
+                                        <a type="button" class="btn btn-light" style="background: #b38df7; color: #FFFFFF"
+                                        th:href="@{/register}">Quiero registrarme</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 50px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invitación Registro -->
         <!-- NUESTROS SERVICIOS -->
         <div style="text-align: center">
             <div class="container" data-layout="container" style="overflow-y: auto">
