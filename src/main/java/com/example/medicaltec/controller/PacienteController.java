@@ -141,9 +141,8 @@ public class PacienteController {
             //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
             List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
 
-            for (int j = 0; j < idmed.size(); j++) {
-                medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(j)));
-            }
+            medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(i)));
+
         }
         model.addAttribute("medicamentos", medicamentos);
         model.addAttribute("citas", citas);
@@ -192,15 +191,6 @@ public class PacienteController {
         model.addAttribute("usuario", usuario);
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
         List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
-        /*ArrayList<Usuario> doctores1 =  new ArrayList<>();
-        ArrayList<Usuario> doctores2 =  new ArrayList<>();
-        for(int i=0; i<(doctoresA.size()/2);i++){
-           doctores1.add(doctoresA.get(i));
-           doctores2.add(doctoresA.get(i+doctoresA.size()/2));
-        }
-        model.addAttribute("doctores1", doctores1);
-        model.addAttribute("doctores2", doctores2);
-        */
         model.addAttribute("doctores", doctores);
         return "paciente/listarDoctores";
     }
