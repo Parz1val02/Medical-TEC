@@ -81,13 +81,16 @@
                     <div class="col-sm-6">
                       <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                       <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
-                      <select class="form-control" id="zona">
+                      <select class="form-control" id="zona" >
                         <option  th:each="sede : ${listaSedes1}"
                                  th:value="${sede.idsedes}"
                                  th:text="${sede.nombre}"
                                  th:selected="${sede.idsedes==sedeUsuario.id}"></option>
                       </select>
                     </div>
+                   <div class="col-sm-6">
+                     <button type="button" class="btn btn-info" id="arch" >¿Desea cambiar de sede?</button>
+                   </div>
                   </div>
                 </div>
               </div>
@@ -149,7 +152,6 @@
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script th:inline="javascript">
   $(document).ready(function () {
-
     $('#zona').on('change', function () {
       set_map($(this).val());
     });
@@ -169,8 +171,7 @@
       console.log(clash)
       console.log(clash.idsedes)
       console.log(value)
-
-      var latitud,longitud,nombre
+      var latitud,longitud,nombre;
       // Iterar sobre la lista de zonas
       for (var i = 0; i < arregloSedes.length; i++) {
         var sede = arregloSedes[i];
@@ -199,6 +200,30 @@
 
     set_map($('#zona').val())
     /*]]>*/
+  });
+</script>
+<script>
+  $(document).ready(function(){
+    var sede = $("#zona option:selected").val();
+    $('#zona').on('change', function () {
+      sede = ($(this).val());
+    });
+    $("#arch").click(function (){
+      $.ajax({
+        method: 'POST',
+        data: {
+          id: sede,
+          dni: [[${session.usuario.id}]]
+        },
+        url: 'http://localhost:8081/api/cambioSede'
+      }).done(function (data){
+          alert(data.msg);
+          console.log(data.msg);
+      }).fail(function (err){
+          alert(err);
+          console.log(err);
+      })
+    });
   });
 </script>
 </body>
