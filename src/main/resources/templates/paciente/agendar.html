@@ -82,7 +82,7 @@
                                        <label for="doctor.id">Doctor:</label>
                                        <select th:field="*{doctor.id}" class="form-control" th:classappend="${errorUsuario != null?'is-invalid':''}">>
                                            <option  th:each="Doctor : ${doctores}"
-                                                    th:value="${Doctor.id}"
+                                                    th:value="${Doctor.dni}"
                                                     th:text="|${Doctor.nombre} ${Doctor.apellido}|"></option>
                                        </select>
                                        <div class="invalid-feedback" th:if="${errorUsuario}" th:text="${errorUsuario}"></div>

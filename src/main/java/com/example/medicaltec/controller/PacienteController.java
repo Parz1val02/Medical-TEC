@@ -135,7 +135,7 @@ public class PacienteController {
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
         //recetaHasMedicamentoRepository.listarMedxId(citas.get().getRecetaIdreceta());
-        ArrayList<Medicamento> medicamentos = new ArrayList<>();
+        /*ArrayList<Medicamento> medicamentos = new ArrayList<>();
         for (int i = 0; i < citas.size(); i++) {
             //List<RecetaMedicamentoDto> recetaMedicamentoDtoList = recetaRepository.RecetasxMedicam(citas.get(i).getRecetaIdreceta().getId());
             List<Integer> idmed = recetaHasMedicamentoRepository.listarMedxId(citas.get(i).getRecetaIdreceta().getId());
@@ -143,7 +143,7 @@ public class PacienteController {
             medicamentos.add(medicamentoRepository.obtenerMedicamento(idmed.get(i)));
 
         }
-        model.addAttribute("medicamentos", medicamentos);
+        model.addAttribute("medicamentos", medicamentos);*/
         model.addAttribute("citas", citas);
         return "paciente/consultas";
     }
