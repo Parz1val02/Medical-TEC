@@ -20,6 +20,13 @@
             proporcionando la información necesaria, como tu nombre, fecha de nacimiento, información de contacto y antecedentes
             médicos relevantes. Garantizamos la confidencialidad y seguridad de tus datos, cumpliendo con los más altos estándares de privacidad.
         </p>
+
+        <p>Requisitos para la contraseña, <b> Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+            • Que la contraseña contenga al menos ocho caracteres.<br>
+            • Que la contraseña contenga al menos un número.<br>
+            • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+            • Que la contraseña contenga al menos una mayúscula.</b>.</p>
+
         <h6 class="card-title" style="color: #3d8af7; font-weight: bold;">Completa la siguiente información para llevar a cabo tu autoregistro:</h6>
         <div class="row">
             <div class="col-md-12">
@@ -27,6 +34,11 @@
                     <div class="card-body" style="background: #FFFFFF">
                         <form method="POST" th:action="@{'/registro/autoregistro'}">
                             <!-- DNI -->
+
+                            <input   class="form-control"  th:value="${nombres}" name="nombres" id="nom" type="hidden"/>
+                            <input   class="form-control"  th:value="${apellidos}" name="apellidos" id="lenom" type="hidden"/>
+
+
                             <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">DNI: </p>
@@ -38,11 +50,11 @@
                             <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0" >Nombres: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
-                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${nombres}" id="name" name="nombres">
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${nombres}" id="name" >
                                 </div>
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0">Apellidos: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
-                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${apellidos}" id="surname" name="apellidos">
+                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${apellidos}" id="surname" >
                                 </div>
                             </div>
                             <div style="height: 10px"></div>
@@ -83,7 +95,7 @@
                             <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">Seguro: </p>
-                                    <select name="seguroId" class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                    <select name="seguroId" class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null?'is-invalid':''}">
 
                                         <option th:each="seguro : ${listaseguros}"
                                                 th:value="${seguro.id}"
@@ -91,16 +103,18 @@
                                                 th:selected="${seguroid==seguro.id}"
                                         ></option>
                                     </select>
+                                    <div class ="invalid-feedback" th:if="${seguroIderror!=null}" th:text="${seguroIderror}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">Sede:</p>
-                                    <select name="sedeId" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                    <select name="sedeId" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null ?'is-invalid':''}">
 
                                         <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
                                                 th:text="${sede.nombre}"
                                                 th:selected="${sedeid==sede.id}"
                                         ></option>
                                     </select>
+                                    <div class ="invalid-feedback" th:if="${sedeIderror!=null}" th:text="${sedeIderror}"></div>
                                 </div>
                             </div>
                             <div style="height: 10px"></div>
