@@ -1,11 +1,8 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.dto.Sede1Dto;
-import com.example.medicaltec.dto.SedeDto;
-import com.example.medicaltec.dto.SeguroDto;
+import com.example.medicaltec.dto.*;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
@@ -27,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
+
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -190,7 +189,7 @@ public class PacienteController {
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("usuario", usuario);
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
+        List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
         model.addAttribute("doctores", doctores);
         return "paciente/listarDoctores";
     }
@@ -230,7 +229,7 @@ public class PacienteController {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+        List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         ArrayList<String> modalidad = new ArrayList<>();
         modalidad.add("Presencial");
         modalidad.add("Virtual");
@@ -252,7 +251,7 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         if(bindingResult.hasErrors()){
-            List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+            List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
             ArrayList<String> modalidad = new ArrayList<>();
             modalidad.add("Presencial");
             modalidad.add("Virtual");
@@ -270,7 +269,7 @@ public class PacienteController {
             Usuario paciente = usuarioRepository.findByid(cita.getPaciente().getId());
             Usuario doctor = usuarioRepository.findByid(cita.getDoctor().getId());
             if(paciente == null || doctor == null) {
-                List<Usuario> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
+                List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
                 ArrayList<String> modalidad = new ArrayList<>();
                 modalidad.add("Presencial");
                 modalidad.add("Virtual");

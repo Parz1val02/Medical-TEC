@@ -2,6 +2,7 @@ package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Usuario;
 
+import com.example.medicaltec.dto.DoctorDto;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -67,8 +68,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     Usuario findByid(String id);
 
-    @Query(nativeQuery = true,value = "select * from usuario u where u.roles_idroles = 1 and u.sedes_idsedes = ?1 and u.enabled=1")
-    List<Usuario> obtenerlistaDoctores(Integer idSede);
+    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, edad as `Edad`, telefono as `Telefono`, sexo as `Sexo`, direccion as `Direccion`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
+            "from usuario u \n" +
+            "inner join especialidades e on (u.especialidades_id_especialidad=e.id_especialidad)\n" +
+            "where u.roles_idroles = 1 and u.sedes_idsedes =?1 and u.enabled=1")
+    List<DoctorDto> obtenerlistaDoctores(Integer idSede);
 
     @Modifying
     @Transactional

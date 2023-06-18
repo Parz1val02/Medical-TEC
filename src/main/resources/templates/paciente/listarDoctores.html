@@ -35,9 +35,9 @@
                             </div>
                             <div class="col-auto">
                                 <div class="input-group">
-                                    <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar por especialidad" id="quicksearch">
+                                    <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar por especialidad" id="quickSearch2">
                                     <span class="input-group-append">
-                                            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+                                            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button" id="quicksearch">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </span>
@@ -45,60 +45,67 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" id="contenedorCards">
-                        <!--div class="row"-->
-                            <!-- Aquí se mostrarán las tarjetas -->
-                        <!--/div-->
-                        <div class="row" th:each="i, arch: ${#numbers.sequence(0, doctores.size() - 1, 2)}">
-                            <div class="col-md-6 col-lg-6">
-                                <div class="card doctores" th:if="${i < doctores.size()}" style="margin: 5px">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col" >
-                                                <div class="avatar" style="display: flex; align-items: center">
-                                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                    <div class="card-body" id="contenedorCards" style="align-items: center">
+                        <div id="pagination">
+                            <button id="previousBtn" class="btn btn-secondary" type="button"><span class='fas fa-arrow-left'></span></button>
+                            <button id="nextBtn" class="btn btn-secondary" type="button"><span class='fas fa-arrow-right'></span></button>
+                        </div>
+                        <div id="cardContainer">
+                            <div class="row" th:each="i, arch: ${#numbers.sequence(0, doctores.size() - 1, 2)}">
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="card doctores" th:if="${i < doctores.size()}" style="margin: 5px">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col" >
+                                                    <div class="avatar" style="display: flex; align-items: center">
+                                                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col" style="">
-                                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i].nombre}|">
-                                                </h4>
-                                                <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i].especialidadesIdEspecialidad.nombreEspecialidad}"></h5>
-                                                <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
-                                                    Próximos horarios de disponibilidad:
-                                                </h6>
-                                                <div class="form-group" style="text-align: center">
-                                                    <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                                                    <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                <div class="col" style="">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctora ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='F'}">
+                                                    </h4>
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='M'}">
+                                                    </h4>
+                                                    <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i].especialidad}"></h5>
+                                                    <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                        Próximos horarios de disponibilidad:
+                                                    </h6>
+                                                    <div class="form-group" style="text-align: center">
+                                                        <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                        <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                    </div>
+                                                    <!--Button trigger modal-->
+                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
                                                 </div>
-                                                <!--Button trigger modal-->
-                                                <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6">
-                                <div class="card doctores" th:if="${i + 1 < doctores.size()}" style="margin: 5px">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col" >
-                                                <div class="avatar" style="display: flex; align-items: center">
-                                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="card doctores" th:if="${i + 1 < doctores.size()}" style="margin: 5px">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col" >
+                                                    <div class="avatar" style="display: flex; align-items: center">
+                                                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col" style="">
-                                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i+1].nombre}|">
-                                                </h4>
-                                                <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i+1].especialidadesIdEspecialidad.nombreEspecialidad}"></h5>
-                                                <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
-                                                    Próximos horarios de disponibilidad:
-                                                </h6>
-                                                <div class="form-group" style="text-align: center">
-                                                    <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                                                    <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                <div class="col" style="">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctora ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='F'}">
+                                                    </h4>
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='M'}">
+                                                    </h4>
+                                                    <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i+1].especialidad}"></h5>
+                                                    <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
+                                                        Próximos horarios de disponibilidad:
+                                                    </h6>
+                                                    <div class="form-group" style="text-align: center">
+                                                        <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                        <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                    </div>
+                                                    <!--Button trigger modal-->
+                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+2}">Ver más</button>
                                                 </div>
-                                                <!--Button trigger modal-->
-                                                <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+2}">Ver más</button>
                                             </div>
                                         </div>
                                     </div>
@@ -106,23 +113,24 @@
                             </div>
                         </div>
                     </div>
-                    <!--div id="pagination"></div-->
             </div>
         </div>
+    </div>
 
     <div th:each="doctor, arch : ${doctores}">
         <div class="modal fade" th:id="'PerfilDoctor' + ${arch.index + 1}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil de Doctor ${doctor.nombre}|"></h5>
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil Dr. ${doctor.nombre}|" th:if="${doctor.sexo=='M'}"></h5>
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil Dra. ${doctor.nombre}|" th:if="${doctor.sexo=='F'}"></h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <form th:object="${doctor}">
+                                    <form>
                                         <div class="row" style="display: flex; align-items: center">
                                             <!-- Columna 1 -->
                                             <div class="col-sm-6">
@@ -132,7 +140,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="cedula">Cedula profesional</label>
-                                                    <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.ceduladoctor}" class="form-control" disabled>
+                                                    <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.cedula}" class="form-control" disabled>
                                                 </div>
                                             </div>
                                             <!-- Columna 2 -->
@@ -143,7 +151,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="especialidad">Especialidad</label>
-                                                    <input type="text" id="especialidad" name="especialidad" th:placeholder="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}" class="form-control" disabled>
+                                                    <input type="text" id="especialidad" name="especialidad" th:placeholder="${doctor.especialidad}" class="form-control" disabled>
                                                 </div>
                                             </div>
 
@@ -236,10 +244,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 pl-lg-2 mb-3">
-                                    <div class="card mb-3 h-100">
-                                        <div id="calendar"></div>
-                                    </div>
+                                <div class="col-lg-6 pl-lg-2 mb-3 calendar">
                                 </div>
 
                             </div>
@@ -256,148 +261,100 @@
 <!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->
-
-<!--script th:inline="javascript">
-    //document.addEventListener('DOMContentLoaded', function(){
-        //var doctores = /*[[${doctores}]]*/;
-        /*var cardsPerPage = 4;
-        var totalPages = Math.ceil(doctores.length / cardsPerPage);
-        var currentPage = 1;
-
-        function renderCards() {
-            var startIndex = (currentPage - 1) * cardsPerPage;
-            var endIndex = startIndex + cardsPerPage;
-
-            var container = document.getElementById('contenedorCards');
-            var cardsRow = container.querySelector('.row');
-            cardsRow.innerHTML = '';
-
-            for (var i = startIndex; i < endIndex && i < doctores.length; i += 2) {
-                var doctor1 = doctores[i];
-                var doctor2 = (i + 1 < doctores.length) ? doctores[i + 1] : null;
-
-                var card1 = createCard(doctor1);
-                var card2 = createCard(doctor2);
-
-                cardsRow.appendChild(card1);
-                if (card2 !== null) {
-                    cardsRow.appendChild(card2);
-                }
-            }
-        }
-
-        function createCard(doctor) {
-            if (doctor === null) {
-                return null;
-            }
-
-            var card = document.createElement('div');
-            card.className = 'card mb-3 col-sm-6 doctores';
-
-            var cardBody = document.createElement('div');
-            cardBody.className = 'card-body';
-
-            var row = document.createElement('div');
-            row.className = 'row';
-
-            var col1 = document.createElement('div');
-            col1.className = 'col';
-
-            // Código para crear el contenido de la tarjeta 1
-
-            var col2 = document.createElement('div');
-            col2.className = 'col';
-
-            // Código para crear el contenido de la tarjeta 2
-
-            row.appendChild(col1);
-            row.appendChild(col2);
-            cardBody.appendChild(row);
-            card.appendChild(cardBody);
-
-            return card;
-        }
-
-        function renderPagination() {
-            var pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-
-            for (var i = 1; i <= totalPages; i++) {
-                var pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.addEventListener('click', function() {
-                    currentPage = parseInt(this.textContent);
-                    renderCards();
-                    renderPagination();
-                });
-                pagination.appendChild(pageButton);
-            }
-        }
-
-        renderCards();
-        renderPagination();
-    });*/
-</script-->
-<!--    Scripts de Isotope -->
-<!--script>
-    document.addEventListener('DOMContentLoaded',function(){
-        // Initialize Isotope
-        var $cardContainer = $('#contenedorCards').isotope({
-            itemSelector: '.doctores',
-            layoutMode: 'packery'
-        });
-        // Filter cards based on the input value
-        $('#quicksearch').on('input',
-            function() {
-                var filterValue = this.value.toLowerCase(); // Convert input value to lowercase
-                console.log("filerValue: "+filterValue);
-                $cardContainer.isotope({
-                        filter: function() {
-                            var especialidad =$(this).find('.especialidadDoctor').text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
-                            console.log("especialidad: "+especialidad);
-                            return especialidad.includes(filterValue); // Filter based on card title
-                        }
-                    }
-                );
-            }
-        );
-    });
-</script-->
-<!-- ===============================================-->
-<!--    Scripts de Calendar -->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridWeek',
-            headerToolbar: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'dayGridWeek,dayGridDay' // user can switch between the two
-            },
-            defaultView: 'month',
-            weekday: 'long',
-            selectable: true,
-            height: 650,
-            events: [],
-            eventTextColor: '#ffffff',
-            eventBackgroundColor: '#3d8af7',
-            eventDisplay: 'block',
-            eventTimeFormat:{
-                hour: 'numeric',
-                minute: '2-digit',
-                meridiem: 'short'
-            },
-            firstDay: 1,
-            locale: 'es',
-        });
-        calendar.render();
+    $(document).ready(function() {
+        function renderCalendars() {
+            $('.calendar').each(function(){
+                var calendarEl = this;
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridWeek',
+                    headerToolbar: {
+                        left: 'prev,next',
+                        center: 'title',
+                        right: 'dayGridWeek,dayGridDay' // user can switch between the two
+                    },
+                    defaultView: 'month',
+                    weekday: 'long',
+                    selectable: true,
+                    height: 650,
+                    events: [],
+                    eventTextColor: '#ffffff',
+                    eventBackgroundColor: '#3d8af7',
+                    eventDisplay: 'block',
+                    eventTimeFormat:{
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        meridiem: 'short'
+                    },
+                    firstDay: 1,
+                    locale: 'es',
+                });
+                calendar.render();
+            });
+        }
+        renderCalendars();
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var currentPage = 1;
+        var pageSize = 4; // Number of cards per page (2 rows with 2 cards each)
+        var totalCards = $('.doctores').length; // Total count of cards
+
+
+        function renderCards() {
+            $('.doctores').each(function(index) {
+                var row = Math.floor(index / 2) + 1; // Calculate the row number (1 or 2)
+                if (row >= (currentPage - 1) * 2 + 1 && row <= currentPage * 2) {
+                    $(this).show(); // Display relevant cards
+                } else {
+                    $(this).hide(); // Hide other cards
+                }
+            });
+        }
+
+        function handlePreviousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCards();
+            }
+        }
+
+        function handleNextPage() {
+            var totalPages = Math.ceil(totalCards / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderCards();
+            }
+        }
+
+        // Event listeners for navigation buttons
+        $('#previousBtn').on('click', handlePreviousPage);
+        $('#nextBtn').on('click', handleNextPage);
+
+        // Initial render of cards on the first page
+        renderCards();
+
+
+        // Filter cards based on the input value
+        $('#quicksearch').on('click',
+            function() {
+                var filterValue = $("#quickSearch2").val().toLowerCase(); // Convert input value to lowercase
+                console.log("filerValue: "+filterValue);
+                $('.especialidadDoctor').each(function(){
+                    var especialidad = $(this).text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
+                    console.log("especialidad: "+especialidad);
+                    if(especialidad.includes(filterValue)){
+
+                    }
+                })
+            });
     });
 </script>
 </body>
