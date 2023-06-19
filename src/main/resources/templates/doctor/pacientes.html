@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Paciente')}">
@@ -51,7 +51,7 @@
                                 <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
                                     Nombre Paciente
                                 </td>
-                                <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}|">
+                                <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}hrs|">
                                     00/00/00 - 00:00hrs
                                 </td>
                                 <td th:text="${cita.paciente.email}" class="align-middle" style="text-align: center">

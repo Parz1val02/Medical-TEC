@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Staff Médico')}">
 
-<body>
+<body style="background: white;">
   <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
   <div class="container">
@@ -11,7 +11,7 @@
     <div style="display: flex; flex-wrap: wrap;">
       <div class="card" style="flex: 1 0 300px; margin: 10px; border: 1px solid #b6c1d2; background: #d7e9ff;text-align: center; max-width: 350px "
            th:each="doctor, i : ${doctoresList}" th:if="${i.index &lt; 10}">
-        <img class="card-img-top" src="..." alt="Card image cap" style="margin: 15px;border: 1px solid;height: 300px;width: 91%; margin-bottom: 0; background: #748194;">
+        <img class="card-img-top" th:src="@{'/fotoPerfilDoctor?='+${doctor.id}}" alt="Card image cap" style="margin: 15px;border: 1px solid;height: 300px;width: 91%; margin-bottom: 0; background: #748194;">
         <div class="card-body" style="padding: 15px; text-align: center">
           <h5 class="card-title" th:text="|${doctor.nombre} ${doctor.apellido}|" style="color: #3d8af7;"></h5>
           <h6 class="card-subtitle mb-2 text-muted" th:text="|${doctor.especialidadesIdEspecialidad.nombreEspecialidad} - Sede: ${doctor.sedesIdsedes.nombre}|"
