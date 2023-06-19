@@ -120,4 +120,13 @@ public class GcsController {
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/fotoPerfilDoctor")
+    public ResponseEntity<byte[]> displayItemImageS(@RequestParam ("dni") String dni, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication) throws IOException {
+        String blobName = "fotosPerfil/perfil-" + dni +".jpeg";
+        byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
 }

@@ -2,69 +2,81 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Servicios')}">
-<body>
+<body  style="background: white;">
     <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
     <div class="container">
+        <div style="height: 20px"></div>
         <h1 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px"> Conoce nuestros Servicios Médicos</h1>
-        <h6 class="card-title" style="color: #3d8af7; font-weight: bold; padding-left: 15px;">Seleccione una opción: </h6>
+        <h6 class="card-title" style="color: #0032aa; font-weight: bold; padding-left: 15px;">Seleccione una opción: </h6>
         <div style="display: flex; text-align: center">
             <a style="flex: 1; width: 100%;">
-                <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; width: 95%;
+                <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                     Consulta Médica
                 </button>
             </a>
             <a style="flex: 1; width: 100%;">
-                <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; width: 95%;
+                <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                     Exámenes Médico
                 </button>
             </a>
         </div>
         <div id="consultamedica" style="display: none; margin: 30px">
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
-                <div class="card-body" style="background: #FFFFFF">
-                    <h1 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Consulta Médica</h1>
-                    <p>
-                        ¡Bienvenido a nuestra clínica! En nuestra clínica, ofrecemos servicios de consulta médica personalizada para cuidar de tu salud y bienestar.
-                        Nuestros médicos altamente capacitados y comprometidos se dedican a brindar una atención integral y de calidad a todos nuestros pacientes.
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
+                <div class="card-body" style="background: #FFFFFF; padding: 50px 50px 90px 50px !important">
+                    <div>
+                        <h4 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Consulta Médica</h4>
+                        <p>
+                            ¡Bienvenido a nuestra clínica! En nuestra clínica, ofrecemos servicios de consulta médica personalizada para cuidar de tu salud y bienestar.
+                            Nuestros médicos altamente capacitados y comprometidos se dedican a brindar una atención integral y de calidad a todos nuestros pacientes.
 
-                        Nuestra consulta médica ofrece atención personalizada y de calidad. Nuestros médicos expertos evalúan tus síntomas, brindan diagnósticos precisos
-                        y recomiendan el tratamiento adecuado. Valoramos la comunicación abierta, utilizamos tecnología avanzada y nos esforzamos por ofrecer una experiencia
-                        confiable y compasiva. ¡Agenda una cita y cuida de tu salud con nosotros!
+                            Nuestra consulta médica ofrece atención personalizada y de calidad. Nuestros médicos expertos evalúan tus síntomas, brindan diagnósticos precisos
+                            y recomiendan el tratamiento adecuado. Valoramos la comunicación abierta, utilizamos tecnología avanzada y nos esforzamos por ofrecer una experiencia
+                            confiable y compasiva. ¡Agenda una cita y cuida de tu salud con nosotros!
 
-                        Puedes realizar una consulta médica en cualquiera de nuestras especialidades:
-                    </p>
-                    <div style="display: inline-block" th:each="especialidad : ${especialidadesList}">
-                        <div class="card" style="border: 1px solid #b6c1d2; margin: 10px 5px; background: #d8e2ef;">
-                            <div class="card-body" style="padding: 5px 20px;">
-                                <p th:text="${especialidad.nombreEspecialidad}" style="color: #3d8af7; font-weight: 600; font-size: 18px; margin: 0 !important;"></p>
+                            Puedes realizar una consulta médica en cualquiera de nuestras especialidades:
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img th:src="@{/img/principalpage/consultamedica.jpg}" class="img-fluid rounded-start"
+                                 style="height: 100% !important; object-fit: cover; object-position: center;
+                         width: 100% !important; max-height: 450px;">
+                        </div>
+                        <div class="col-md-7" style="display: flex; flex-wrap: wrap;">
+                            <div th:each="especialidad : ${especialidadesList}" style="width: 50%;">
+                                <div class="card" style="border: 1px solid #b6c1d2; margin: 5px; background: white;">
+                                    <div class="card-body" style="padding: 5px 20px;">
+                                        <p th:text="${especialidad.nombreEspecialidad}" style="color: black; font-weight: 600; font-size: 18px; margin: 0 !important;"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
         <div id="examenmedico" style="display: none; margin: 30px">
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
                 <div class="card-body" style="background: #FFFFFF">
                     <p style="font-size: 18px">
                         En nuestra clínica, nos preocupamos por tu bienestar y ofrecemos una amplia gama de exámenes médicos especializados para evaluar tu salud de manera exhaustiva.
                         Nuestro objetivo es proporcionarte una atención integral y precisa, utilizando tecnología de última generación y contando con un equipo médico altamente capacitado.
                     </p>
                     <div style="display: flex; flex-wrap: wrap;">
-                        <div class="card" style="flex: 1 0 300px; margin: 10px; border: 1px solid #b6c1d2; background: #d7e9ff;"
+                        <div class="card" style="flex: 1 0 300px; margin: 10px; border: 1px solid #b6c1d2; max-width: 310px;
+                         background: white; width: 50%"
                              th:each="examen, i : ${examenesMedicos}" th:if="${i.index &lt; 10}">
                             <div class="card-body" style="padding: 15px; text-align: center">
-                                <h5 class="card-title" th:text="${examen.nombre}" style="color: #3d8af7;font-weight: 600;font-size: 23px;
+                                <h5 class="card-title" th:text="${examen.nombre}" style="color: #0032aa;font-weight: 600;font-size: 23px;
                                 margin: 0 !important; padding-bottom: 10px;"></h5>
                                 <p class="card-text" th:text="${examen.descripcion}"></p>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
