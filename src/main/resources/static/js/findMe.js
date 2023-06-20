@@ -3,6 +3,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name');
     const surnameInput = document.getElementById('surname');
 
+    //validos
+    const nomInput = document.getElementById('nom');
+    const lenomInput=document.getElementById('lenom');
+
+
     dniInput.addEventListener('input', () => {
         const dni = dniInput.value;
         if (dni.length === 8) {
@@ -17,6 +22,12 @@ window.addEventListener('DOMContentLoaded', () => {
                     surnameInput.value = data.apellidoPaterno !== undefined && data.apellidoMaterno !== undefined
                         ? data.apellidoPaterno + ' ' + data.apellidoMaterno
                         : 'Datos no encontrados';
+
+                    nomInput.value = data.nombres!== undefined ? data.nombres : 'Datos no encontrados';
+                    lenomInput.value = data.apellidoPaterno !== undefined && data.apellidoMaterno !== undefined
+                        ? data.apellidoPaterno + ' ' + data.apellidoMaterno
+                        : 'Datos no encontrados';
+
                 })
                 .catch(error => {
                     console.error('Error:', error);

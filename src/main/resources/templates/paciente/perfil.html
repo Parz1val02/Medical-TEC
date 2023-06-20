@@ -157,7 +157,7 @@
                                 <tbody class="bg-white">
                                 <tr th:each="alergia, info : ${alergias}">
                                     <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center"></td>
-                                    <td><a class="btn btn-secondary align-middle" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id}  + '&id2=' +${session.usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
+                                    <td><a class="btn btn-secondary align-middle" style="text-align: center" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id}  + '&id2=' +${session.usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
                                 </tr>
                                 </tbody>
                             </table>

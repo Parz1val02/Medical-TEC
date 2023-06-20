@@ -6,18 +6,13 @@ import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/registro")
@@ -31,10 +26,11 @@ public class RegistroController {
     final FormInvitationRepository formInvitationRepository;
     final UsuarioRepository usuarioRepository;
     final EspecialidadeRepository especialidadeRepository;
+    final FormAutoregistroRepository formAutoregistroRepository;
 
 
     public RegistroController(ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, UsuarioRepository usuarioRepository,
-                              EspecialidadeRepository especialidadeRepository) {
+                              EspecialidadeRepository especialidadeRepository, FormAutoregistroRepository formAutoregistroRepository) {
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
@@ -42,6 +38,7 @@ public class RegistroController {
         this.usuarioRepository = usuarioRepository;
 
         this.especialidadeRepository = especialidadeRepository;
+        this.formAutoregistroRepository = formAutoregistroRepository;
     }
 
     @RequestMapping(value = {"/index"},method = RequestMethod.GET)
@@ -293,6 +290,10 @@ public class RegistroController {
                                @RequestParam("contrasenia") String contrasenia,Model model, RedirectAttributes attr){
 
 
+        int sedeIdInt = 0;
+        int seguroIdInt = 0;
+
+
         int numErrors = 0;
         String domicilioError = null;
         String domiciliohack = null;
@@ -305,6 +306,27 @@ public class RegistroController {
 
         String passwordError = null;
         String passwordValid = null;
+
+
+
+        String sedeIderror = null;
+        String seguroIderror = null;
+        //ID SEDE Y SEGURO
+
+        if(sedeId.equalsIgnoreCase("1") || sedeId.equalsIgnoreCase("2") || sedeId.equalsIgnoreCase("3")){
+            sedeIdInt= Integer.parseInt(sedeId);
+        }else{
+            sedeIderror = "El id de la sede enviado no es correcto";
+            numErrors++;
+        }
+
+        if(seguroId.equalsIgnoreCase("1") || seguroId.equalsIgnoreCase("2") || seguroId.equalsIgnoreCase("3")
+          || seguroId.equalsIgnoreCase("4") || seguroId.equalsIgnoreCase("5") || seguroId.equalsIgnoreCase("6")
+        || seguroId.equalsIgnoreCase("7")){
+            seguroIdInt = Integer.parseInt(seguroId);
+        }else{
+            seguroIderror="El id del seguro enviado no es el correcto";
+        }
 
 
 
@@ -383,12 +405,14 @@ public class RegistroController {
             model.addAttribute("edaderror1",edadError1);
             model.addAttribute("passwordValid",passwordValid);
             model.addAttribute("passwordError",passwordError);
+            model.addAttribute("sedeIderror",sedeIderror);
+            model.addAttribute("seguroIderror",seguroIderror);
 
             return "auth/register";
 
         }else{
 
-            Usuario usuario = new Usuario();
+            /*Usuario usuario = new Usuario();
 
             usuario.setId(dni);
             usuario.setNombre(nombres);
@@ -399,15 +423,36 @@ public class RegistroController {
             usuario.setTelefono(celular);
             usuario.setContrasena(new BCryptPasswordEncoder().encode(contrasenia));
             usuario.setEmail(correo);
-
+            Sede sede = new Sede();
+            sede.setId(sedeIdInt);
+            usuario.setSedesIdsedes(sede);
+            Seguro seguro = new Seguro();
+            seguro.setId(seguroIdInt);
+            usuario.setSegurosIdSeguro(seguro);
             Role role = new Role();
             role.setId(2);
             usuario.setRolesIdroles(role);
             usuarioRepository.save(usuario);
 
-            attr.addFlashAttribute("success","Ha sido registrado en la plataforma con exito");
-            return "redirect:/registro/index";
+            attr.addFlashAttribute("success","Ha sido registrado en la plataforma con exito");*/
 
+
+            FormAutoregistro formAutoregistro = new FormAutoregistro();
+            formAutoregistro.setDni(dni);
+            formAutoregistro.setNombres(nombres);
+            formAutoregistro.setApellidos(apellidos);
+            formAutoregistro.setEdad(Integer.valueOf(edad));
+            formAutoregistro.setDomicilio(domicilio);
+            formAutoregistro.setSexo(sexo);
+            formAutoregistro.setCelular(celular);
+            formAutoregistro.setSeguroid(seguroIdInt);
+            formAutoregistro.setSedeid(sedeIdInt);
+            formAutoregistro.setCorreo(correo);
+
+
+            formAutoregistroRepository.save(formAutoregistro);
+            attr.addFlashAttribute("success","Ha completado con éxito el formulario de autoregistro, pronto le llegará un correo de confirmación");
+            return "redirect:/registro/index";
         }
 
 

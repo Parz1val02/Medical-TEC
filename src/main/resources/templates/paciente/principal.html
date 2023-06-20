@@ -81,12 +81,36 @@
                     <div class="col-sm-6">
                       <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                       <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
-                      <select class="form-control" id="zona">
+                      <select class="form-control" id="zona" >
                         <option  th:each="sede : ${listaSedes1}"
                                  th:value="${sede.idsedes}"
                                  th:text="${sede.nombre}"
                                  th:selected="${sede.idsedes==sedeUsuario.id}"></option>
                       </select>
+                    </div>
+                   <div class="col-sm-6">
+                     <!-- Button trigger modal -->
+                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#cambioSede">¿Desea cambiar de sede?</button>
+                   </div>
+
+                    <!-- Modal -->
+                      <div class="modal fade" id="cambioSede" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <div class="modal-dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title fs-5" id="exampleModalLabel">Cambio de sede</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                              ¿Está seguro que desea cambiar su sede?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-primary" data-dismiss="modal" id="arch">Confirmar</button>
+                            </div>
+                        </div>
+                      </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -149,7 +173,6 @@
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script th:inline="javascript">
   $(document).ready(function () {
-
     $('#zona').on('change', function () {
       set_map($(this).val());
     });
@@ -169,8 +192,7 @@
       console.log(clash)
       console.log(clash.idsedes)
       console.log(value)
-
-      var latitud,longitud,nombre
+      var latitud,longitud,nombre;
       // Iterar sobre la lista de zonas
       for (var i = 0; i < arregloSedes.length; i++) {
         var sede = arregloSedes[i];
@@ -199,6 +221,30 @@
 
     set_map($('#zona').val())
     /*]]>*/
+  });
+</script>
+<script>
+  $(document).ready(function(){
+    var sede = $("#zona option:selected").val();
+    $('#zona').on('change', function () {
+      sede = ($(this).val());
+    });
+    $("#arch").click(function (){
+      $.ajax({
+        method: 'POST',
+        data: {
+          id: sede,
+          dni: [[${session.usuario.id}]]
+        },
+        url: 'http://34.28.24.16:8081/api/cambioSede'
+      }).done(function (data){
+          alert(data.msg);
+          console.log(data.msg);
+      }).fail(function (err){
+          alert(err);
+          console.log(err);
+      })
+    });
   });
 </script>
 </body>
