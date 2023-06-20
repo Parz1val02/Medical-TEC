@@ -86,14 +86,14 @@
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form th:action="@{/cambiarZonaHoraria}" method="post"  class="mt-2">
+                        <form method="post"  class="mt-2">
                         <div class="modal-header">
                             <h1>Cambio de interfaz</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <label for="zonasHorarias">Selecciona una zona horaria:</label>
-                            <select id="zonasHorarias">
+                            <select id="zonasHorarias" name="zonasHorarias">
                                 <option th:each="sede : ${sedesList}"
                                 th:value="${sede.zonaHoraria}">UTC-00:00</option>
                                 <option value="-11">UTC-01:00</option>
@@ -122,7 +122,7 @@
                                 <!-- Agrega más opciones según tus necesidades -->
                             </select>
 
-                            <button onclick="cambiarZonaHoraria()">Cambiar Zona Horaria</button>
+                            <!--<button >Cambiar Zona Horaria</button>-->
                             <div>
                                 <h4>Fecha actual:</h4>
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
@@ -148,7 +148,6 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button class="btn btn-primary" >Guardar cambios</button>
                         </div>
                         </form>
                     </div>
