@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -999,11 +1000,13 @@ public class SuperController {
         httpSession.setAttribute("usuario",superadmin);
         return "cuestionario1";
     }
+    @Autowired
+    CuestionariosRepository cuestionariosRepository;
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
     public String cuestionarios(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        List<Cuestionario> listaCuestionarios = cuestionarioRepository.findAll();
+        List<Cuestionarios> listaCuestionarios = cuestionariosRepository.findAll();
         model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
     }
@@ -1014,10 +1017,10 @@ public class SuperController {
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
 
-        Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
+        Optional<Cuestionarios> optionalCuestionarios = cuestionariosRepository.findById(id);
 
-        if (optionalCuestionario.isPresent() && active) {
-            cuestionarioRepository.updateActivoByActivo(false,id);
+        if (optionalCuestionarios.isPresent() && active) {
+            cuestionariosRepository.updateActivoByActivo(false,id);
             attr.addFlashAttribute("msg","Cuestionario borrado exitosamente");
         }
         return "redirect:/superAdmin/cuestionarios";
@@ -1332,19 +1335,24 @@ public class SuperController {
         return "superAdmin/plantillas";
     }
 
-    @ResponseBody
+    //@ResponseBody
     @PostMapping(value = "/guardarPlantilla")
-    public String guardarPlantilla(@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
+    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
         Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
         int i = 0;
         for (String pregunta : listaPreguntas){
             System.out.println(pregunta);
             i++;
             System.out.println(i);
+            salida = salida+separador+pregunta;
         }
+        System.out.println(salida);
+        cuestionariosRepository.crearCuestionarios(nombre,1,salida);
         //return "redirect:/superAdmin/cuestionarios";
-        return "Hola";
+        return "redirect:/superAdmin/cuestionarios";
     }
 
     @ExceptionHandler(TemplateOutputException.class)
@@ -1352,6 +1360,27 @@ public class SuperController {
     public String gestionException(HttpSession httpSession){
         System.out.println("SE AGARRO EL ERRORRR");
         return "holaaa";
+    }
+
+    @RequestMapping(value = {"/ver/cuestionario"},method = RequestMethod.POST)
+    public String createCuest(Model model, @RequestParam("id") String id
+            ,HttpSession httpSession,Authentication authentication, RedirectAttributes attr){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        int idd = Integer.parseInt(id);
+        Optional<Cuestionarios> optionalCuestionarios = cuestionariosRepository.findById(idd);
+        if (optionalCuestionarios.isPresent()) {
+            Cuestionarios cuestionarios = optionalCuestionarios.get();
+            String entrada = cuestionarios.getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionarios.setListapreguntas(listapreguntas);
+            model.addAttribute("cuestionarios", cuestionarios);
+            return "superAdmin/verplantilla";
+
+        } else {
+            attr.addFlashAttribute("doctor_noexiste","El cuestionario a ver no existe");
+            return "redirect:/superAdmin/dashboard";
+        }
     }
 
 
