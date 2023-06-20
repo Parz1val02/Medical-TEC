@@ -86,12 +86,47 @@
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form method="post"  class="mt-2">
+                        <form th:action="@{/cambiarZonaHoraria}" method="post"  class="mt-2">
                         <div class="modal-header">
                             <h1>Cambio de interfaz</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <label for="zonasHorarias">Selecciona una zona horaria:</label>
+                            <select id="zonasHorarias">
+                                <option th:each="sede : ${sedesList}"
+                                th:value="${sede.zonaHoraria}">UTC-00:00</option>
+                                <option value="-11">UTC-01:00</option>
+                                <option value="-10">UTC-02:00</option>
+                                <option value="-12">UTC-03:00</option>
+                                <option value="-11">UTC-04:00</option>
+                                <option value="-10">UTC-05:00</option>
+                                <option value="-12">UTC-06:00</option>
+                                <option value="-11">UTC-07:00</option>
+                                <option value="-10">UTC-08:00</option>
+                                <option value="-12">UTC-09:00</option>
+                                <option value="-11">UTC-10:00</option>
+                                <option value="-10">UTC-11:00</option>
+                                <option value="-12">UTC-12:00</option>
+                                <option value="-11">UTC-13:00</option>
+                                <option value="-10">UTC-14:00</option>
+                                <option value="-12">UTC-15:00</option>
+                                <option value="-11">UTC-16:00</option>
+                                <option value="-10">UTC-17:00</option>
+                                <option value="-10">UTC-18:00</option>
+                                <option value="-12">UTC-19:00</option>
+                                <option value="-11">UTC-20:00</option>
+                                <option value="-10">UTC-21:00</option>
+                                <option value="-12">UTC-22:00</option>
+                                <option value="-11">UTC-23:00</option>
+                                <!-- Agrega más opciones según tus necesidades -->
+                            </select>
+
+                            <button onclick="cambiarZonaHoraria()">Cambiar Zona Horaria</button>
+                            <div>
+                                <h4>Fecha actual:</h4>
+                                <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
+                            </div>
                                 <p>Seleccione la sede: </p>
                                 <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
                                     <option selected value>------</option>
@@ -813,6 +848,35 @@
         var div1 = document.getElementById("change1");
         var color1 = colorPicker1.value;
         div1.style.backgroundColor = color1;
+    }
+</script>
+<script>
+    function cambiarZonaHoraria() {
+        var select = document.getElementById("zonasHorarias");
+        var selectedValue = select.value;
+
+        // Obtén la fecha y hora actual
+        var fechaActual = new Date();
+
+        // Obtén el desplazamiento horario actual en minutos
+        var desplazamientoHorario = fechaActual.getTimezoneOffset();
+
+        // Convierte el desplazamiento horario a milisegundos
+        var desplazamientoHorarioMilisegundos = desplazamientoHorario * 60 * 1000;
+
+        // Calcula la nueva zona horaria en milisegundos
+        var nuevaZonaHoraria = desplazamientoHorarioMilisegundos + (selectedValue * 60 * 60 * 1000);
+
+        // Calcula la nueva fecha y hora en base a la nueva zona horaria
+        var nuevaFecha = new Date(fechaActual.getTime() + nuevaZonaHoraria);
+
+        // Muestra la nueva fecha y hora
+        console.log(nuevaFecha);
+        // O haz lo que necesites con la nueva fecha y hora
+
+        // También puedes actualizar la visualización en la página
+        // var resultado = document.getElementById("resultado");
+        // resultado.innerHTML = nuevaFecha.toString();
     }
 </script>
 </body>

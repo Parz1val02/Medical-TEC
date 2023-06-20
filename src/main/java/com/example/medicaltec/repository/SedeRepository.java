@@ -19,6 +19,10 @@ public interface SedeRepository extends JpaRepository<Sede,Integer> {
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set  sedes_idsedes=?1 where dni=?2" )
     void cambiarSede(String idSede, String dni);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value ="update sedes set zona_horaria=?1" )
+    void cambiarZonaHoraria(String zonaHoraria);
     @Query(value="SELECT * FROM telesystem_2.sedes s WHERE NOT s.idsedes=?1", nativeQuery = true)
     List<Sede> sedesMenosActual(int sede_actual);
     @Query(nativeQuery = true, value = "SELECT idsedes,nombre,latitud,longitud FROM telesystem_2.sedes")
