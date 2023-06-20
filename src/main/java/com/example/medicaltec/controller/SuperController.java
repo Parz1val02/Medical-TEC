@@ -1383,15 +1383,15 @@ public class SuperController {
         }
     }
 
-    @PostMapping("/cambiarZonaHoraria")
-    public String cambiarZonaHoraria(@RequestParam("zonaHoraria") String zonaHoraria) {
+    /*@PostMapping("/cambiarZonaHoraria")
+    public String cambiarZonaHoraria(@RequestParam("zonasHorarias") String zonaHoraria) {
         // Realiza las acciones necesarias con el valor de la zona horaria
         sedeRepository.cambiarZonaHoraria(zonaHoraria);
         System.out.println("Zona horaria seleccionada: " + zonaHoraria);
 
         // Devuelve la vista o realiza otras operaciones
         return "superAdmin/dashboard";
-    }
+    }*/
 
 
 }
