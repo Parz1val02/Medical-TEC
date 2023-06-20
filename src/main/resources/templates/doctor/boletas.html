@@ -142,44 +142,32 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12">
+                                                    <h4 style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                                        Detalles de Pago:</h4>
                                                     <!-- aquí iría la tabla con los detalles del pago -->
-                                                    <table style="margin-right: 0px;height: 100px;width: 435px;">
-                                                        <thead style="background: #cdeffc">
+                                                    <table style="margin-bottom: 20px;height: 100px;width: 90%;">
+                                                        <thead style="border: 1px solid #b6c1d2; background: #d8e2ef;">
                                                         <tr>
-                                                            <th class="sort align-middle" style="width: 40%">Detalles</th>
-                                                            <th class="sort align-middle" style="width: 30%">Valor Unitario</th>
-                                                            <th class="sort align-middle" style="width: 30%; text-align: center">Valor total</th>
+                                                            <th class="sort align-middle" style="width: 33%; text-align: center">Valor por Cita</th>
+                                                            <th class="sort align-middle" style="width: 33%; text-align: center">Porcentaje para el Doctor</th>
+                                                            <th class="sort align-middle" style="width: 34%; text-align: center">Valor total</th>
                                                         </tr>
                                                         </thead>
-
-                                                        <tbody class="bg-white">
+                                                        <tbody class="bg-white" style="border: 1px solid #d8e2ef;">
                                                         <tr>
-                                                            <td class="align-middle">Consulta Médica</td>
-                                                            <td class="align-middle" style="text-align: center">$ 60</td>
-                                                            <td class="align-middle" style="text-align: center">$ 60
-                                                            </td>
+                                                            <td class="align-middle" style="text-align: center;">60 soles</td>
+                                                            <td class="align-middle" style="text-align: center" th:text="|${cita.paciente.segurosIdSeguro.porcDoctor}%|"></td>
+                                                            <input type="hidden" class="porcentaje" th:value="${cita.paciente.segurosIdSeguro.porcDoctor}"/>
+                                                            <td style="text-align: center" class="align-middle preciofinal"></td>
                                                         </tr>
-
-                                                        <tr>
-                                                            <td class="align-middle"> Consulta Médica </td>
-                                                            <td class="align-middle" style="text-align: center"> $ 60</td>
-                                                            <td class="align-middle" style="text-align: center"> $ 60</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="align-middle"></td>
-                                                            <td class="align-middle"></td>
-                                                            <td class="align-middle"></td>
-                                                        </tr>
-
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="border" style="padding: 10px">
+                                            <div class="border" style="padding: 10px; width: 90%;">
                                                 <div class="row">
                                                     <div class="col-sm-7" align="right"><b> TOTAL A PAGAR:</b></div>
                                                     <div class="col-sm-5" align="left">
-                                                        <p style="margin: 0px"> $ 120 </p>
+                                                        <p style="margin: 0" class="total"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,7 +190,19 @@
                 </div>
             </div>
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+            <script>
+                var porcentaje = document.getElementsByClassName("porcentaje");
+                var divInformacion = document.getElementsByClassName("preciofinal");
+                var totalInformacion = document.getElementsByClassName("total")
 
+                for (var i = 0; i < porcentaje.length; i++) {
+                    var porcentajeElement = porcentaje[i];
+                    var precioFinal = (porcentajeElement.value*60)/100;
+                    divInformacion[i].textContent = precioFinal + " soles";
+                    totalInformacion[i].textContent = precioFinal + " soles";
+                }
+
+            </script>
         </div>
     </div>
 </main>
