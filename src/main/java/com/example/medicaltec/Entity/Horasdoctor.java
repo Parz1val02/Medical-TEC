@@ -32,9 +32,12 @@ public class Horasdoctor {
     @Column(name = "horalibre", nullable = false)
     private LocalTime horalibre;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    @Column(name = "dias", nullable = false, length = 100)
+    private String dias;
+
+    @Column(name = "mes", nullable = false,length = 45)
+    private String mes;
+
     @ManyToOne
     @JoinColumn(name = "doctor_dni", nullable = false)
     private Usuario doctor_dni;

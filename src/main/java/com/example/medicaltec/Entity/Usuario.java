@@ -88,19 +88,12 @@ public class Usuario implements Serializable {
     @Column(name = "modooscuro")
     private Boolean modooscuro;
 
-    @Column(name = "foto")
-    private byte[] foto;
-
     @Column(name = "modoregistro", length = 45)
     private String modoregistro;
 
     @Column(name = "ceduladoctor", length = 45)
     private String ceduladoctor;
 
-    @Column(name = "fotonombre")
-    private String fotonombre;
-    @Column(name = "fotocontenttype")
-    private String fotocontenttype;
 
     @Column(name = "enabled")
     private Boolean enabled;

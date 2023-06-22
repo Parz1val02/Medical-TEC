@@ -34,3 +34,4 @@ build/
 
 #Ignore application properties
 src/main/resources/application.properties
+src/main/resources/glowing-hearth-316315-ab3b49306abe.json

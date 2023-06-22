@@ -40,10 +40,6 @@ public class Cita implements Serializable {
     @JoinColumn(name = "receta_idreceta")
     private Receta recetaIdreceta;
 
-    @ManyToOne
-    @JoinColumn(name = "tarjeta_idtarjetas")
-    private Tarjeta tarjetaIdtarjetas;
-
     @Size(max=45)
     @NotEmpty
     @Column(name = "formapago", nullable = false, length = 45)
@@ -69,6 +65,9 @@ public class Cita implements Serializable {
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
 
+
+    @Column(name = "pagada")
+    private Boolean pagada;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "paciente_dni", referencedColumnName = "dni", nullable = false)

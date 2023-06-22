@@ -17,9 +17,6 @@ public class Informe {
     @Column(name = "diagnostico", nullable = false, length = 200)
     private String diagnostico;
 
-    @Column(name = "firma", nullable = false)
-    private byte[] firma;
-
     @Column(name = "bitacora", length = 500)
     private String bitacora;
 
