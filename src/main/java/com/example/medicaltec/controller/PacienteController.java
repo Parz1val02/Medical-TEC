@@ -95,10 +95,7 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        model.addAttribute("sedes", sedeRepository.findAll());
         model.addAttribute("sedeUsuario", sedeUsuario);
-        List<Sede> listaSedes = sedeRepository.findAll();
-        model.addAttribute("listaSedes",listaSedes);
         List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
         model.addAttribute("listaSedes1",listaSedes1);
         return "paciente/principal";
@@ -210,38 +207,21 @@ public class PacienteController {
        return "paciente/cuestionarios";
     }
 
-    @GetMapping("/sede")
-    public String cambiarSede(@RequestParam("id")String idSede, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
-        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",SPA);
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        String id = sedeRepository.verificaridSede(idSede);
-        if(id!=null){
-            sedeRepository.cambiarSede(idSede, usuario.getId());
-            attr.addFlashAttribute("msg1", "Se cambió la sede exitosamente");
-        }else{
-            attr.addFlashAttribute("msg3", "Error al intentar cambiar la sede");
-        }
-        return "redirect:/paciente/principal";
-    }
     @GetMapping("/agendarCita")
     public String agendarCita(@ModelAttribute("cita")Cita cita,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
         List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
         ArrayList<String> modalidad = new ArrayList<>();
         modalidad.add("Presencial");
         modalidad.add("Virtual");
-        ArrayList<String> formapago = new ArrayList<>();
-        formapago.add("En caja");
-        formapago.add("Virtual");
         model.addAttribute("doctores", doctores);
-        model.addAttribute("sedes", sedeRepository.findAll());
         model.addAttribute("especialidades", especialidadRepository.findAll());
         model.addAttribute("tipos", tipoCitaRepository.findAll());
         model.addAttribute("modalidades", modalidad);
-        model.addAttribute("pagos", formapago);
+        model.addAttribute("sedeUsuario", sedeUsuario);
        return "paciente/agendar";
     }
     @PostMapping("/guardarCita")
@@ -450,6 +430,7 @@ public class PacienteController {
             return "redirect:/paciente/perfil";
         }
     }
+    /*
     @PostMapping("/guardarFoto")
     public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
@@ -490,5 +471,5 @@ public class PacienteController {
         }else{
             return null;
         }
-    }
+    }*/
 }

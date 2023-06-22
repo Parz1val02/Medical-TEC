@@ -32,8 +32,4 @@ public class Boleta {
     @JoinColumn(name = "cita_idcita", nullable = false)
     private Cita citaIdcita;
 
-    @ManyToOne
-    @JoinColumn(name = "examen_medico_idexamen", nullable = false)
-    private ExamenMedico examenMedicoIdexamen;
-
 }

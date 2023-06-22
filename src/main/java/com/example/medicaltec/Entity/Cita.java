@@ -21,7 +21,7 @@ public class Cita implements Serializable {
     @Column(name = "idcita", nullable = false)
     private Integer id;
 
-    @Column(name = "citacancelada")
+    @Column(name = "citacancelada", nullable = false)
     private Boolean citacancelada;
 
     @ManyToOne
@@ -29,11 +29,14 @@ public class Cita implements Serializable {
     private Sede sedesIdsedes;
 
     @ManyToOne
-    @JoinColumn(name = "especialidades_id_especialidad", nullable = false)
+    @JoinColumn(name = "especialidades_id_especialidad")
     private Especialidade especialidadesIdEspecialidad;
 
     @ManyToOne
-    @JoinColumn(name = "estadoscita_idestados")
+    @JoinColumn(name = "examen_medico_idexamen")
+    private ExamenMedico examenMedico;
+    @ManyToOne
+    @JoinColumn(name = "estadoscita_idestados", nullable = false)
     private Estadoscita estadoscitaIdestados;
 
     @ManyToOne
@@ -66,7 +69,7 @@ public class Cita implements Serializable {
     private LocalTime hora;
 
 
-    @Column(name = "pagada")
+    @Column(name = "pagada", nullable = false)
     private Boolean pagada;
 
     @OneToOne(cascade = CascadeType.ALL)

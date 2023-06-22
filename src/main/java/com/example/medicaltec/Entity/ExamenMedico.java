@@ -14,11 +14,11 @@ public class ExamenMedico {
     @Column(name = "idexamen", nullable = false)
     private Integer id;
 
-    @Column(name = "nombre", length = 45)
+    @Column(name = "nombre", length = 45, nullable = false)
     private String nombre;
 
     @Lob
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
 }

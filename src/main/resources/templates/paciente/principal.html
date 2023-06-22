@@ -80,8 +80,6 @@
                 <div class="form-group" style="text-align: center">
                   <div class="row">
                     <div class="col-sm-6">
-                      <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
-                      <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
                       <select class="form-control" id="zona" >
                         <option  th:each="sede : ${listaSedes1}"
                                  th:value="${sede.idsedes}"

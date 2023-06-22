@@ -66,15 +66,6 @@
                                                     th:text="${tipo.tipoCita}"></option>
                                        </select>
                                    </div>
-                                   <div class="form-group">
-                                       <label for="modalidad">Modalidad:</label>
-                                       <select th:field="*{modalidad}" class="form-control" th:classappend="${#fields.hasErrors('modalidad')?'is-invalid':''}">
-                                           <option th:each="arch : ${modalidades}"
-                                                   th:value="${arch}"
-                                                   th:text="${arch}"></option>
-                                       </select>
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></div>
-                                   </div>
                                </div>
                                <!-- columna 2 -->
                                <div class="col-sm-6">
@@ -93,21 +84,13 @@
                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('hora')}" th:errors="*{hora}"></div>
                                    </div>
                                    <div class="form-group">
-                                       <label for="sedesIdsedes">Sede de atencion:</label>
-                                       <select th:field="*{sedesIdsedes}" class="form-control">
-                                           <option  th:each="sede : ${sedes}"
-                                                    th:value="${sede.id}"
-                                                    th:text="${sede.nombre}"></option>
-                                       </select>
-                                   </div>
-                                   <div class="form-group">
-                                       <label for="formapago">Forma de pago:</label>
-                                       <select th:field="*{formapago}" class="form-control" th:classappend="${#fields.hasErrors('formapago')?'is-invalid':''}">
-                                           <option th:each="arch : ${pagos}"
+                                       <label for="modalidad">Modalidad:</label>
+                                       <select th:field="*{modalidad}" class="form-control" th:classappend="${#fields.hasErrors('modalidad')?'is-invalid':''}">
+                                           <option th:each="arch : ${modalidades}"
                                                    th:value="${arch}"
                                                    th:text="${arch}"></option>
                                        </select>
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('formapago')}" th:errors="*{formapago}"></div>
+                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></div>
                                    </div>
                                </div>
                            </div>

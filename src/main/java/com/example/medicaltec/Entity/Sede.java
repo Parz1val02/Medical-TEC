@@ -39,4 +39,7 @@ public class Sede implements Serializable {
 
     @Column(name = "consultorios", nullable = false)
     private Integer consultorios;
+
+    @Column(name = "direccion", nullable = false, length = 90)
+    private String direccion;
 }
