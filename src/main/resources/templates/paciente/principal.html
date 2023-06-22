@@ -10,6 +10,7 @@
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
         crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <style>
   #map {
     height: 300px;
@@ -122,7 +123,8 @@
                   <h5 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
                     Consentimientos:
                   </h5>
-                  <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
+                  <a id="descargarPDF" href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
+
               </div>
             </div>
           </div>
@@ -247,5 +249,192 @@
     });
   });
 </script>
+<!--para descarga de consentimientos en pdf-->
+<script>
+
+  var enlaceDescarga = document.getElementById("descargarPDF");
+
+  enlaceDescarga.addEventListener('click', function () {
+
+    // Crea un nuevo documento PDF
+    var doc = new jspdf.jsPDF();
+    //doc.text("\t\t\tCONSENTIMIENTO INFORMADO\t\t\t\n");
+
+    var consentimiento =`\t\t\tConsentimiento Informado\t\t\t\n
+
+Yo, [Nombre del participante], con DNI número [Número de cédula], declaro que he sido informado(a) y comprendo los siguientes puntos:
+
+1. He sido informado(a) sobre los objetivos, procedimientos y posibles riesgos asociados a [Describir el estudio o procedimiento médico].
+
+2. He tenido la oportunidad de hacer preguntas y se me han proporcionado respuestas satisfactorias.
+
+3. Entiendo que mi participación en [Describir el estudio o procedimiento médico] es voluntaria y que tengo el derecho de retirar mi consentimiento en cualquier momento sin consecuencias negativas para mi atención médica.
+
+4. Soy consciente de que los resultados obtenidos en [Describir el estudio o procedimiento médico] se utilizarán con fines de investigación y podrían ser publicados de forma anónima.
+
+5. Entiendo que se mantendrá la confidencialidad de mi información personal y que solo se utilizará con fines de investigación y atención médica.
+
+6. He recibido una copia de este consentimiento informado y se me ha explicado su contenido de manera clara y comprensible.
+
+Fecha: [Fecha]
+Firma: [Firma]`;
+
+    // Configuración del tamaño de página
+    var textWidth = 170; // Ancho del área de texto en unidades de puntos
+    var textHeight = 250; // Altura del área de texto en unidades de puntos
+
+    // Establecer el tamaño de página personalizado
+
+    // Margen superior e inferior
+    var marginVertical = 20;
+    var marginHorizontal = 20;
+
+    //var fontSize = 11;
+    var tipoLetra = "Helvetica";
+
+    // Tamaño del texto
+    var fontSize = 10;
+    var lineHeight = fontSize * 1.2;
+
+    // Cargar la imagen desde una URL
+    var imageUrl = "static/img/logo.png";
+    var imageWidth = 100; // Ancho de la imagen en unidades de puntos
+    var imageHeight = 60; // Altura de la imagen en unidades de puntos
+
+    // Agregar la imagen en la página actual
+    doc.addImage(imageUrl, "PNG", 10, 10, imageWidth, imageHeight);
+
+    doc.setFont(tipoLetra);
+    doc.setFontSize(fontSize);
+
+    //doc.setFontStyle(tipoLetra);
+
+    // Dividir el texto en líneas
+    var lines = doc.splitTextToSize(consentimiento, textWidth );
+
+    // Calcular el número de páginas necesarias
+    var totalPages = Math.ceil(lines.length / (textHeight / lineHeight));
+    console.log(totalPages);
+
+    // Iterar sobre cada página
+    for (var i = 0; i < totalPages; i++) {
+      // Agregar una nueva página
+      if (i > 0) {
+        doc.addPage();
+      }
+
+      // Imprimir las líneas correspondientes a la página actual
+      var startIndex = i * (textHeight / lineHeight);
+      var endIndex = (i + 1) * (textHeight / lineHeight);
+      var pageLines = lines.slice(startIndex, endIndex);
+
+      // Calcular la posición de inicio del área de texto en la página actual
+      var startX = marginHorizontal;
+      var startY = marginVertical;
+
+      // Imprimir cada línea
+      pageLines.forEach(function (line) {
+        doc.text(line, startX, startY);
+        startY += lineHeight;
+      });
+
+      startY = marginVertical;
+    }
+
+    // Genera los datos del PDF en formato Data URL
+    var dataURL = doc.output("dataurlstring");
+
+    // Establece el contenido del atributo href con los datos del PDF
+    enlaceDescarga.href = dataURL;
+
+    // Establece el nombre del archivo descargado
+    enlaceDescarga.download = "consentimiento.pdf";
+  } );
+</script>
+
+
+<!--<script>
+  //para el enlace de la reunion que se le enviara por correo al cliente
+  const jwt = require('jsonwebtoken');
+  function createScheduledMeeting(date, duration) {
+    const domain = '8x8.vc';
+    const options = {
+      roomName: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly',
+      width: 800,
+      height: 600,
+      parentNode: document.querySelector('#jitsi-container'),
+      configOverwrite: {
+        enableFeaturesBasedOnToken: true,
+      },
+      onload: function () {
+        // Set the scheduled start time and duration
+        const scheduledStart = new Date(date);
+        const scheduledEnd = new Date(date);
+        scheduledEnd.setMinutes(scheduledEnd.getMinutes() + duration);
+
+        // Generate the JWT token with scheduled meeting parameters
+        const token = generateScheduledMeetingToken(scheduledStart, scheduledEnd);
+        console.log(token);
+
+        // Set the JWT token as the JWT parameter for authentication
+        api.executeCommand('authenticate', { jwt: token });
+      },
+    };
+
+    const api = new JitsiMeetExternalAPI(domain, options);
+  }
+
+  function generateScheduledMeetingToken(start, end) {
+    // Implement your logic here to generate a JWT token with scheduled meeting parameters
+    // You'll need to use a JWT library or Jitsi Meet token generator to create the token
+    // Ensure the token includes the scheduled start time and duration
+    // Example: return jwtGenerator.generateToken({ start: start.getTime(), end: end.getTime() });
+
+    const secret = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524'; // Replace with your secret key used for signing the token
+    let duration = end - start;
+    const scheduledStart = Math.floor(start.getTime() / 1000); // Convert to Unix timestamp
+    const scheduledEnd = Math.floor((start.getTime() + duration * 60 * 1000) / 1000); // Convert to Unix timestamp
+
+    const payload = {
+      context: {
+        user: {
+          //avatar: 'your-avatar-url', // Replace with the URL of the user's avatar
+          email: 'luis.ramost@pucp.edu.pe', // Replace with the user's email address
+          name: 'luis.ramost', // Replace with the user's name
+        },
+      },
+      aud: 'jitsi', // Replace with your API domain
+      iss: 'MedicalTec', // Replace with the issuer of the token
+      room: 'scheduled-room-name', // Replace with the scheduled room name
+      sub: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524', // Replace with the subject of the token
+      exp: scheduledEnd, // Set the token expiration time
+      nbf: scheduledStart, // Set the token not-before time
+    };
+
+    const token = jwt.sign(payload, secret);
+
+    return token;
+
+  }
+
+  //para obtener el enlace de una reunion
+  function generateScheduledMeetingLink(apiDomain, roomName) {
+    const link = `https://${apiDomain}/${roomName}`;
+
+    return link;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Trigger scheduled meeting creation on page load
+    createScheduledMeeting('2023-06-30T10:00:00', 60); /// fecha, tiempo en minutos
+  });
+
+
+  const apiDomain = 'your-api-domain.com';
+  const roomName = 'scheduled-room-name';
+  let link = generateScheduledMeetingLink(apiDomain, roomName)
+  console.log(link);
+</script>-->
+
 </body>
 </html>
