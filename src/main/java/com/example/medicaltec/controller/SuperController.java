@@ -1245,8 +1245,11 @@ public class SuperController {
             return "redirect:/404.html"; // Página de no encontrado
         }
     }
+
+
+    //Se comenta esta parte de los logos y foto perfil porque para imagenes ahora solo hay que usar google cloud
     @PostMapping("/guardarFoto")
-    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    /*public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         if(file.isEmpty()){
@@ -1326,7 +1329,7 @@ public class SuperController {
         }else{
             return null;
         }
-    }
+    }*/
 
     @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)
     public String createCuest(HttpSession httpSession,Authentication authentication){

@@ -18,4 +18,8 @@ public class Consultorio {
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "especialidades_id_especialidad", referencedColumnName = "id_especialidad")
+    private Especialidade especialidade;
+
 }
