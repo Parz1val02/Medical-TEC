@@ -9,7 +9,7 @@
         <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
         <div>
-            <img class="card-img-top img-fluid" th:src="@{img/foto_clinica.png}">
+            <img class="card-img-top img-fluid" th:src="@{img/principalpage/foto_clinica.png}">
         </div>
 
         <!-- Invitación Registro -->
@@ -30,7 +30,7 @@
                                 style="color: #0032aa; font-weight: bold; padding-bottom: 5px">ÚNETE A NOSOTROS</h4>
                             <h6 class="card-title"
                                 style="color: #0032aa; font-weight: bold; font-size: 15px;">(Registro de Nuevo usuario)</h6>
-                            <p class="card-text" style="color: #9da9bb; font-weight: bold"> Ve a la página de registro
+                            <p class="card-text" style="color: #5e6e82;"> Ve a la página de registro
                                 escaneando el QR o presionando el botón de abajo</p>
                             <a type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF"
                                th:href="@{/register}">Quiero registrarme</a>
@@ -212,10 +212,13 @@
                     </div>
                     <div style="height: 30px;"></div>
                 </div>
+
             </div>
         </div>
-
-        <div style="height: 100px;"></div>
+        <div style="height: 20px;"></div>
+        <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around;padding: 0;">
+            <div id="map" class="col-sm-12" style="height: 450px;"></div>
+        </div>
         <div class="container">
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
@@ -238,6 +241,58 @@
 
         });
     </script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#zona').on('change', function () {
+                set_map($(this).val());
+            });
+            var map = L.map('map')
 
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var marker;
+
+            function set_map(){
+
+                /*<![CDATA[*/
+                var arregloSedes = [[${sedeList}]];
+                var latitudes = [];
+                var longitudes = [];
+                var nombres = [];
+                // Iterar sobre la lista de zonas
+                var longitud, latitud, nombre, sedeId;
+                for (var i = 0; i < arregloSedes.length; i++) {
+                    var sede = arregloSedes[i];
+                    console.log(sede.idsedes)
+                    console.log(sede)
+                    // Obtén los valores de cada elemento
+                    sedeId = sede.idsedes;
+                    longitud = sede.longitud;
+                    latitud = sede.latitud;
+                    nombre = sede.nombre;
+                    console.log("Latitud: " + latitud + ", Longitud: " + longitud + ", Nombre: " + nombre);
+                    // Agrega los valores a los arreglos correspondientes
+                    latitudes.push(latitud);
+                    longitudes.push(longitud);
+                    nombres.push(nombre);
+                }
+                map.setView([latitudes[0], longitudes[0]], 30);
+
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                for (var i = 0; i < latitudes.length; i++) {
+                    const marker = L.marker([latitudes[i], longitudes[i]]).addTo(map)
+                        .bindPopup(nombres[i])
+                        .openPopup();
+                }
+            }
+
+            set_map($('#zona').val())
+            /*]]>*/
+        });
+    </script>
 </body>
 </html>

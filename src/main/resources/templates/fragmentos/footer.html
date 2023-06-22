@@ -9,5 +9,9 @@
         <div class="col-12 col-sm-auto text-center">
             <p class="mb-0 text-600">v1.0.0</p>
         </div>
+        <h4>Fecha actual:</h4>
+        <div class="col-12 col-sm-auto text-center">
+            <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
+        </div>
     </div>
 </footer>
