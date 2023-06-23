@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dto.*;
+import com.example.medicaltec.funciones.Fechas;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 
 import javax.print.Doc;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,15 +65,14 @@ public class PacienteController {
 
     final RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
     final RecetaRepository recetaRepository;
-
+    final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
+    final ExamenMedicoRepository examenMedicoRepository;
+    final HorasDoctorRepository horasDoctorRepository;
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-
-                              CuestionarioRepository cuestionarioRepository,
-                              RecetaRepository recetaRepository) {
+                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository){
         this.historialMedicoRepository = historialMedicoRepository;
-
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
         this.especialidadRepository = especialidadRepository;
@@ -87,6 +89,9 @@ public class PacienteController {
         this.recetaHasMedicamentoRepository = recetaHasMedicamentoRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.recetaRepository = recetaRepository;
+        this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
+        this.examenMedicoRepository = examenMedicoRepository;
+        this.horasDoctorRepository = horasDoctorRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -208,24 +213,213 @@ public class PacienteController {
     }
 
     @GetMapping("/agendarCita")
-    public String agendarCita(@ModelAttribute("cita")Cita cita,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String agendarCita(@RequestParam(value = "idSede", required = false)String idSede, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(usuario.getSedesIdsedes().getId());
-        ArrayList<String> modalidad = new ArrayList<>();
-        modalidad.add("Presencial");
-        modalidad.add("Virtual");
-        model.addAttribute("doctores", doctores);
-        model.addAttribute("especialidades", especialidadRepository.findAll());
+        SedeDto sede = new SedeDto() {
+            @Override
+            public Integer getId() {
+                return null;
+            }
+
+            @Override
+            public String getNombre() {
+                return null;
+            }
+        };
+        if(idSede!=null){
+            String sedeId=sedeRepository.verificaridSede(idSede);
+            if(sedeId!=null){
+                sede = sedeRepository.getSedeId(Integer.parseInt(sedeId));
+            }else{
+                //REgresar a pagina para elegir
+                sede = sedeRepository.getSede(usuario.getId());
+            }
+        }else{
+            sede = sedeRepository.getSede(usuario.getId());
+        }
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sede.getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+        List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+        model.addAttribute("sedeUsuario", sede);
+        model.addAttribute("especialidades", listaEspecialidades);
         model.addAttribute("tipos", tipoCitaRepository.findAll());
-        model.addAttribute("modalidades", modalidad);
-        model.addAttribute("sedeUsuario", sedeUsuario);
+        model.addAttribute("examenes", examenMedicos);
        return "paciente/agendar";
     }
     @PostMapping("/guardarCita")
-    public String guardarCita(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult,
+    public String guardarCita(@RequestParam("sedeId")String sedeId, @RequestParam("fecha")String fecha,@RequestParam("tipoCitaId") String tipoCitaId,@RequestParam(value = "especialidadId", required = false) String especialidadId, @RequestParam(value = "examenId", required = false)String examenId,
+                              Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Regex regex = new Regex();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(sedeId!=null){
+            String idSede=sedeRepository.verificaridSede(sedeId);
+            if(idSede!=null){
+                SedeDto sedeUsuario = sedeRepository.getSedeId(Integer.parseInt(idSede));
+                if(regex.fechaValid(fecha)){
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    LocalDate parsedDate = LocalDate.parse(fecha, formatter);
+                    LocalDate currentDate = LocalDate.now();
+                    if(parsedDate.isBefore(currentDate)){
+                        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                        for(int i=0;i<especialidadesxSedeId.size();i++){
+                            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                        }
+                        List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                        model.addAttribute("sedeUsuario", sedeUsuario);
+                        model.addAttribute("especialidades", listaEspecialidades);
+                        model.addAttribute("tipos", tipoCitaRepository.findAll());
+                        model.addAttribute("examenes", examenMedicos);
+                        model.addAttribute("errorFecha", "Ingresar una fecha a partir de hoy");
+                        return "paciente/agendar";
+                    }else{
+                        String idTipoCita = tipoCitaRepository.verificarTipoCita(tipoCitaId);
+                        if(idTipoCita!=null){
+                            if(especialidadId!=null){
+                                Fechas fechasFunciones = new Fechas();
+                                String idEspecialidad = especialidadRepository.verificarEspecialidad(especialidadId);
+                                if(idEspecialidad!=null){
+                                    List<DoctorDto> doctores = usuarioRepository.obtenerDoctoresEspecialidad(usuario.getSedesIdsedes().getId(), Integer.parseInt(idEspecialidad));
+                                    ArrayList<DoctorDto> doctoresAtienden = new ArrayList<>();
+                                    ArrayList<Horasdoctor> horasdoctorsAtienden = new ArrayList<>();
+                                    String dayWeek = parsedDate.getDayOfWeek().name();
+                                    String month = parsedDate.getMonth().name();
+                                    String mes = fechasFunciones.traducirMes(month);
+                                    String diaSemana = fechasFunciones.traducirDia(dayWeek);
+                                    for(int i=0; i<doctores.size(); i++){
+                                        Horasdoctor horasdoctors = horasDoctorRepository.DniMes(doctores.get(i).getDni(),mes.toLowerCase());
+                                        String[] values = horasdoctors.getDias().split(",");
+                                        for (String value : values) {
+                                            if(value.equalsIgnoreCase(diaSemana)){
+                                                doctoresAtienden.add(doctores.get(i));
+                                                break;
+                                            }
+                                        }
+                                        horasdoctorsAtienden.add(horasdoctors);
+                                    }
+                                    httpSession.setAttribute("sede1", sedeUsuario);
+                                    httpSession.setAttribute("doctores1", doctoresAtienden);
+                                    httpSession.setAttribute("fecha1", fecha);
+                                    httpSession.setAttribute("tipoCita1", tipoCitaRepository.findById(Integer.parseInt(idTipoCita)));
+                                    httpSession.setAttribute("especialidad1", especialidadRepository.findById(Integer.parseInt(idEspecialidad)));
+                                    return "redirect:/paciente/agendarCita2";
+                                }else{
+                                    List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                                    ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                                    for(int i=0;i<especialidadesxSedeId.size();i++){
+                                        listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                                    }
+                                    List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                                    model.addAttribute("sedeUsuario", sedeUsuario);
+                                    model.addAttribute("especialidades", listaEspecialidades);
+                                    model.addAttribute("tipos", tipoCitaRepository.findAll());
+                                    model.addAttribute("examenes", examenMedicos);
+                                    return "paciente/agendar";
+                                }
+                            } else if (examenId!=null){
+                                String idExamen = examenMedicoRepository.verificarExamen(examenId);
+                                if(idExamen!=null){
+                                    //Logica para examenes medicos gaaaaaaaaaaa
+                                    return "redirect:/paciente/principal";
+                                }else{
+                                    List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                                    ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                                    for(int i=0;i<especialidadesxSedeId.size();i++){
+                                        listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                                    }
+                                    List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                                    model.addAttribute("sedeUsuario", sedeUsuario);
+                                    model.addAttribute("especialidades", listaEspecialidades);
+                                    model.addAttribute("tipos", tipoCitaRepository.findAll());
+                                    model.addAttribute("examenes", examenMedicos);
+                                    return "paciente/agendar";
+                                }
+                            }
+                        }else{
+                            List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                            ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                            for(int i=0;i<especialidadesxSedeId.size();i++){
+                                listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                            }
+                            List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                            model.addAttribute("sedeUsuario", sedeUsuario);
+                            model.addAttribute("especialidades", listaEspecialidades);
+                            model.addAttribute("tipos", tipoCitaRepository.findAll());
+                            model.addAttribute("examenes", examenMedicos);
+                            return "paciente/agendar";
+                        }
+                    }
+                }else{
+                    List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                    ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                    for(int i=0;i<especialidadesxSedeId.size();i++){
+                        listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                    }
+                    List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                    model.addAttribute("sedeUsuario", sedeUsuario);
+                    model.addAttribute("especialidades", listaEspecialidades);
+                    model.addAttribute("tipos", tipoCitaRepository.findAll());
+                    model.addAttribute("examenes", examenMedicos);
+                    model.addAttribute("errorFecha", "Ingresar un formato de fecha correcto");
+                    return "paciente/agendar";
+                }
+            }else{
+                SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+                List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+                ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+                for(int i=0;i<especialidadesxSedeId.size();i++){
+                    listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+                }
+                List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+                model.addAttribute("sedeUsuario", sedeUsuario);
+                model.addAttribute("especialidades", listaEspecialidades);
+                model.addAttribute("tipos", tipoCitaRepository.findAll());
+                model.addAttribute("examenes", examenMedicos);
+                return "paciente/agendar";
+            }
+        }else{
+            SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+            List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sedeUsuario.getId());
+            ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+            for(int i=0;i<especialidadesxSedeId.size();i++){
+                listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+            }
+            List<ExamenMedico> examenMedicos = examenMedicoRepository.findAll();
+            model.addAttribute("sedeUsuario", sedeUsuario);
+            model.addAttribute("especialidades", listaEspecialidades);
+            model.addAttribute("tipos", tipoCitaRepository.findAll());
+            model.addAttribute("examenes", examenMedicos);
+            return "paciente/agendar";
+        }
+        return "ga";
+    }
+    @GetMapping("/agendarCita2")
+    public String agendarCita2(@ModelAttribute("cita")Cita cita,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        ArrayList<String> modalidad = new ArrayList<>();
+        modalidad.add("Presencial");
+        modalidad.add("Virtual");
+        model.addAttribute("modalidades", modalidad);
+        /*model.addAttribute("doctores", (Usuario)httpSession.getAttribute("doctores1"));
+        model.addAttribute("especialidad", (Especialidade)httpSession.getAttribute("especialidad1"));
+        model.addAttribute("tipoCita", (Tipocita)httpSession.getAttribute("tipocita1"));
+        model.addAttribute("sedeUsuario", (SedeDto)httpSession.getAttribute("sede1"));
+        model.addAttribute("fecha", (String)httpSession.getAttribute("fecha1"));
+        return "paciente/agendar2";*/
+        System.out.println((String)httpSession.getAttribute("fecha1"));
+        return "redirect:/paciente/principal";
+    }
+    @PostMapping("/guardarCita2")
+    public String guardarCita2(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult,
                               Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);

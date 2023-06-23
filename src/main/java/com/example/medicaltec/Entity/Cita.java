@@ -59,9 +59,8 @@ public class Cita implements Serializable {
 
     @Future
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha", nullable = false)
-    private LocalDate fecha;
+    private String fecha;
 
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
