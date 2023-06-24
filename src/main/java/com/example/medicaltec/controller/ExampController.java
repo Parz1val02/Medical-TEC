@@ -1,9 +1,6 @@
 package com.example.medicaltec.controller;
 
-        import com.example.medicaltec.Entity.Especialidade;
-        import com.example.medicaltec.Entity.ExamenMedico;
-        import com.example.medicaltec.Entity.Sede;
-        import com.example.medicaltec.Entity.Usuario;
+        import com.example.medicaltec.Entity.*;
         import com.example.medicaltec.repository.*;
         import jakarta.servlet.http.HttpSession;
         import org.springframework.http.ResponseEntity;
@@ -170,14 +167,29 @@ public class ExampController {
     public ResponseEntity<?> checkDniExists(@PathVariable("dni") String dni) {
 
         List<Usuario> listaUsuarios = usuarioRepository.findAll();
+        List<FormInvitacion> invitados = formInvitationRepository.findAll();
+
+        int i = 0;
+
+
         boolean exists=false;
         for(Usuario usuario : listaUsuarios){
             if(dni.equalsIgnoreCase(usuario.getId())){
-                exists=true;
+                i++;
                 break;
             }
         }
 
+        for (FormInvitacion formInvitacion: invitados){
+            if(formInvitacion.getDni().equals(dni)){
+                i++;
+                break;
+            }
+        }
+
+        if(i!=0){
+            exists=true;
+        }
 
         return ResponseEntity.ok(exists);
     }
