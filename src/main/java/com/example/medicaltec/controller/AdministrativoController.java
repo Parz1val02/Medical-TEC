@@ -221,7 +221,7 @@ public class AdministrativoController {
     @RequestMapping(value = {"/mensajeria"},method = RequestMethod.GET)
     public String mensajeria(){
 
-        return "administrativo/mensajeria";
+        return "chatroom/index";
     }
 
     @RequestMapping(value = {"/notificaciones"},method = RequestMethod.GET)
