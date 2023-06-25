@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -43,10 +45,8 @@ public class RegistroController {
 
     @RequestMapping(value = {"/index"},method = RequestMethod.GET)
     public String paginaPrincipalfromRegistro(Model model){
-        List<Usuario> usuarioList = usuarioRepository.listarDoctores();
         List<Especialidade> especialidadeList = especialidadeRepository.findAll();
         List<Sede> sedeList = sedeRepository.findAll();
-        model.addAttribute("usuarioList",usuarioList);
         model.addAttribute("especialidadesList",especialidadeList);
         model.addAttribute("sedeList",sedeList);
         return "auth/principalpage";
@@ -86,7 +86,9 @@ public class RegistroController {
                 model.addAttribute("celular", "");
                 model.addAttribute("medicamento", "");
                 model.addAttribute("alergia", "");
-                model.addAttribute("edad", "");
+                //model.addAttribute("edad", "");
+                model.addAttribute("fecha","");
+
 
                 return "administrativo/registroPaciente";
             }catch(Exception e){
@@ -118,11 +120,12 @@ public class RegistroController {
                               @RequestParam("correo")String correo,
                               @RequestParam("seguroid") String seguroid,
                               @RequestParam("celular") String celular,
-                              @RequestParam("medicamento") String medicamento,
-                              @RequestParam("alergia")String alergia,
-                              @RequestParam("edad")String edad,
+
+                              @RequestParam("fecha")String birthday,
 
                               Model model, RedirectAttributes attr){
+
+        Regex regex = new Regex();
 
         int numErrors = 0;
         String domicilioError = null;
@@ -135,11 +138,11 @@ public class RegistroController {
         String medicamentoshack = null;
         String alergiaError = null;
         String alergiahack = null;
-        String edadError = null;
-        String edadError1 = null;
+        String birthdayerror = null;
+        String birthdayerror1 = null;
 
 
-            if(domicilio.equals("")){
+            if(domicilio.length()==0){
                 numErrors++;
                 domicilioError="El campo domicilio no puede estar vacio";
     }
@@ -148,7 +151,7 @@ public class RegistroController {
                 numErrors++;
             }
 
-            if(correo.equals("")){
+            if(correo.length()==0){
                 numErrors++;
                 correoError="El campo correo no puede estar vacio";
     }
@@ -157,7 +160,7 @@ public class RegistroController {
                 correoError2="El campo correo ingresado no es correcto";
     }
 
-            if(celular.equals("")){
+            if(celular.length()==0){
                 numErrors++;
                 telefonoError="El campo telefono celular no puede estar vacio";
     }
@@ -167,18 +170,18 @@ public class RegistroController {
              telefonoError2="El campo telefono celular debe ser un numero de 9 digitos";
     }
 
-            if(!isValidNumber(edad)){
+            /*if(!isValidNumber(edad)){
                 numErrors++;
                 edadError1 = "la edad debe ser un numero";
             }
             if(edad.equals("")){
                 edadError="El campo de edad no puede estar vacio";
-            }
+            }*/
 
 
 
 
-            if(medicamento.equals("")){
+            /*if(medicamento.length()==0){
                 numErrors++;
         medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba 'ninguno'";
     }
@@ -187,7 +190,7 @@ public class RegistroController {
                 medicamentoshack="El campo medicamento no acepta dichos caracteres";
             }
 
-            if(alergia.equals("")){
+            if(alergia.length()==0){
                 numErrors++;
         alergiaError="El campo alergias no puede estar vacio, si el paciente no presenta alergias escriba 'ninguna'";
     }
@@ -195,12 +198,45 @@ public class RegistroController {
             if(!noScriptPlease(alergia)){
                 numErrors++;
                 alergiahack="El campo alergia no acepta estos caracteres";
-            }
+            }*/
 
             /*if(!checkboxValue){
                 checkBoxError="Debe aceptar los terminos y condiciones";
             }*/
 
+            if(birthday.length()==0){
+                numErrors++;
+                birthdayerror="El campo de fecha de nacimiento no puede ir vacio";
+            }
+
+            if(regex.fechaValid(birthday)){
+
+
+
+                DateTimeFormatter formatter;
+                LocalDate parsedDate;
+                LocalDate currentDate;
+
+
+                formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                parsedDate = LocalDate.parse(birthday, formatter);
+                currentDate = LocalDate.now();
+
+                LocalDate eighteenYearsAgo = currentDate.minusYears(18);
+                if (!(parsedDate.isBefore(eighteenYearsAgo) || parsedDate.isEqual(eighteenYearsAgo))){
+                    birthdayerror1="El usuario debe tener 18 años o más";
+                    numErrors++;
+                }
+
+
+
+
+
+
+            }else{
+                birthdayerror1="Ocurrio un error con la fecha de nacimiento";
+                numErrors++;
+            }
 
 
 
@@ -216,9 +252,10 @@ public class RegistroController {
                 model.addAttribute("correo",correo);
                 model.addAttribute("seguroid",seguroid);
                 model.addAttribute("celular",celular);
-                model.addAttribute("medicamento",medicamento);
-                model.addAttribute("alergia",alergia);
-                model.addAttribute("edad",edad);
+                //model.addAttribute("medicamento",medicamento);
+                //model.addAttribute("alergia",alergia);
+                //model.addAttribute("edad",edad);
+                model.addAttribute("fecha",birthday);
 
                 //msgs
                 model.addAttribute("domicilioError",domicilioError);
@@ -227,12 +264,14 @@ public class RegistroController {
                 model.addAttribute("correoError2",correoError2);
                 model.addAttribute("telefonoError",telefonoError);
                 model.addAttribute("telefonoError2",telefonoError2);
-                model.addAttribute("medicamentosError",medicamentosError);
-                model.addAttribute("medicamentoshack",medicamentoshack);
-                model.addAttribute("alergiaError",alergiaError);
-                model.addAttribute("edaderror",edadError);
-                model.addAttribute("edaderror1",edadError1);
-                model.addAttribute("alergiaHack",alergiahack);
+                model.addAttribute("birthdayerror",birthdayerror);
+                model.addAttribute("birthdayerror1",birthdayerror1);
+                //model.addAttribute("medicamentosError",medicamentosError);
+                //model.addAttribute("medicamentoshack",medicamentoshack);
+                //model.addAttribute("alergiaError",alergiaError);
+                //model.addAttribute("edaderror",edadError);
+                //model.addAttribute("edaderror1",edadError1);
+                //model.addAttribute("alergiaHack",alergiahack);
 
 
 
@@ -247,13 +286,12 @@ public class RegistroController {
                 formInvitacion.setDni(id);
                 formInvitacion.setSexo(sexo);
                 formInvitacion.setDomicilio(domicilio);
-                formInvitacion.setEdad(edad);
+                formInvitacion.setFechanacimiento(birthday);
                 formInvitacion.setIdSede(sedeid);
                 formInvitacion.setCorreo(correo);
                 formInvitacion.setIdSeguro(seguroid);
                 formInvitacion.setCelular(celular);
-                formInvitacion.setMedicamentos(medicamento);
-                formInvitacion.setAlergias(alergia);
+
 
                 //Para el administrador
                 formInvitacion.setPendiente(true);
