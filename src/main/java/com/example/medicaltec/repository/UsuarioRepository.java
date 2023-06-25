@@ -68,13 +68,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     Usuario findByid(String id);
 
-    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, edad as `Edad`, telefono as `Telefono`, sexo as `Sexo`, direccion as `Direccion`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
+    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, sexo as `Sexo`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
             "from usuario u \n" +
             "inner join especialidades e on (u.especialidades_id_especialidad=e.id_especialidad)\n" +
             "where u.roles_idroles = 1 and u.sedes_idsedes =?1 and u.enabled=1")
     List<DoctorDto> obtenerlistaDoctores(Integer idSede);
 
-    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, edad as `Edad`, telefono as `Telefono`, sexo as `Sexo`, direccion as `Direccion`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
+    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, sexo as `Sexo`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
             "            from usuario u \n" +
             "            inner join especialidades e on (u.especialidades_id_especialidad=e.id_especialidad)\n" +
             "            where u.roles_idroles = 1 and u.sedes_idsedes=?1 and u.enabled=1 and u.especialidades_id_especialidad=?2")
