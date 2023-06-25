@@ -856,8 +856,8 @@ public class AdministradorController {
 
 
     @GetMapping("/calendario")
-    public String calendario(){
-
+    public String calendario(HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "administrador/calendario";
     }
 
