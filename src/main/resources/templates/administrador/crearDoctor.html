@@ -39,12 +39,10 @@
 
                             <form method="post" th:action="@{/administrador/crearDoctor}" th:object="${doctor}">
                                 <fieldset >
-                                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">DNI</label>
-                                            <input type="number" th:field="*{id}" class="form-control" th:classappend="${#fields.hasErrors('id')|| dnimsg !=null ?'is-invalid':''}" >
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+                                            <input type="text" maxlength="8" th:field="*{id}" class="form-control"  th:classappend="${dnimsg !=null ?'is-invalid':''}">
                                             <div class="invalid-feedback" th:if="${dnimsg!=null}" th:text="${dnimsg}"></div>
                                         </div>
 
@@ -52,49 +50,56 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label class="form-label">Nombre</label>
-                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" >
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${nombremsg !=null?'is-invalid':''}" >
+                                            <div class="invalid-feedback" th:if="${nombremsg !=null}" th:text="${nombremsg}"></div>
                                         </div>
 
                                     </div>
 
+
+
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Apellido</label>
-                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${#fields.hasErrors('apellido')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${apellidomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${apellidomsg !=null}" th:text="${apellidomsg}"></div>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Direccion</label>
-                                            <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${#fields.hasErrors('direccion')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></div>
+                                            <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${direccionmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${direccionmsg != null}" th:text="${direccionmsg}"></div>
                                         </div>
                                     </div>
+
+
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
-                                            <label for="sexo">Sexo  </label>
-                                            <select class="form-control" name="sexo" id="sexo">
+                                            <label >Sexo  </label>
+                                            <select class="form-control" th:classappend="${sexomsg !=null?'is-invalid':''}" th:field="*{sexo}">
                                                 <option value="M"> Masculino </option>
                                                 <option value="F"> Femenino </option>
                                             </select>
+                                            <div class="invalid-feedback" th:if="${sexomsg !=null}" th:text="${sexomsg}"></div>
                                         </div>
                                     </div>
 
+
                                     <div class="form-group">
-                                        <label >Edad </label>
-                                        <input type="number" th:field="*{edad}" class="form-control" th:classappend="${#fields.hasErrors('edad') || edadmsg !=null ?'is-invalid':''}" >
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"></div>
+                                        <label>Fecha de nacimiento</label>
+                                        <input th:field="*{fechaNacimiento}" class="form-control"  th:classappend="${nacimientomsg !=null?'is-invalid':''}" type="date">
+                                        <div class="invalid-feedback" th:if="${nacimientomsg !=null}" th:text="${nacimientomsg }"></div>
                                     </div>
+
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Email</label>
-                                            <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                                            <input type="email" th:field="*{email}" class="form-control" th:classappend="${emailmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${emailmsg !=null}" th:text="${emailmsg}"></div>
                                         </div>
 
                                     </div>
@@ -102,11 +107,12 @@
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
-                                            <label for="especialidadesIdEspecialidad">Especialidad</label>
-                                            <select class="form-control" name="especialidadesIdEspecialidad" id="especialidadesIdEspecialidad">
+                                            <label for="especialidad">Especialidad</label>
+                                            <select class="form-control form-select" th:classappend="${especialidadmsg !=null?'is-invalid':''}" name="especialidad" id="especialidad">
                                                 <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
                                                         ></option>
                                             </select>
+                                            <div class="invalid-feedback" th:if="${especialidadmsg !=null}" th:text="${especialidadmsg}"></div>
                                         </div>
                                     </div>
 
@@ -115,15 +121,12 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Telefono</label>
-                                            <input type="number" th:field="*{telefono}" class="form-control" th:classappend="${#fields.hasErrors('telefono')|| telefonomsg !=null?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
-                                            <!--<div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>-->
+                                            <input type="text" th:field="*{telefono}" maxlength="9" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${telefonomsg !=null}" th:text="${telefonomsg}"></div>
+                                            <!-- <div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>-->
                                         </div>
 
                                     </div>
-
-
-
 
 
                                 </fieldset>
@@ -168,6 +171,46 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+
+    $(document).ready(function () {
+        var fechaActual = new Date();
+        var fechaMayorEdad = new Date(fechaActual.getFullYear() - 28, fechaActual.getMonth(), fechaActual.getDate());
+
+        var maxYear = fechaMayorEdad.getFullYear();
+        var maxMonth = fechaMayorEdad.getMonth() + 1;
+        var maxDay = fechaMayorEdad.getDate();
+        if (maxMonth < 10) {
+            maxMonth = "0" + maxMonth;
+        }
+        if (maxDay < 10) {
+            maxDay = "0" + maxDay;
+        }
+        var fechaMaxima = maxYear + "-" + maxMonth + "-" + maxDay;
+        $("#fechanacimiento").attr("max", fechaMaxima);
+
+
+
+        $("#telefono").on('input', function (evt) {
+            // Allow only numbers.
+            $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+            var valor = $(this).val();
+            if (valor.length > $(this).attr('maxlength')) {
+                $(this).val(valor.slice(0, $(this).attr('maxlength')));
+            }
+        });
+
+        $("#dni").on('input', function (evt) {
+            // Allow only numbers.
+            $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+            var valor = $(this).val();
+            if (valor.length > $(this).attr('maxlength')) {
+                $(this).val(valor.slice(0, $(this).attr('maxlength')));
+            }
+        });
+
+    });
+
+
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable

@@ -40,17 +40,13 @@
               <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
               <form method="post" th:action="@{/administrador/editarPaciente}" th:object="${paciente}">
                 <fieldset >
-                  <!--<input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
-                  <input type="hidden" th:field="*{direccion}" class="form-control" >
-                  <input type="hidden"  th:field="*{sexo}" class="form-control" >
-                  <input type="hidden"  th:field="*{edad}" class="form-control" >-->
+
                   <div class="row">
                     <div class="col mb-3 form-group">
                       <label  class="form-label">DNI</label>
                       <input type="hidden" th:field="*{id}" class="form-control"  >
                       <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.id}" class="form-control" ></div>
                     </div>
-
                   </div>
                   <div class="row">
                     <div class="col mb-3 form-group">
@@ -70,34 +66,65 @@
 
                   </div>
 
+                  <!--
+                  <div class="row">
+                    <div class="col mb-3 form-group">
+                      <label >Sexo  </label>
+                      <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.sexo}" class="form-control" ></div>
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label>Fecha de nacimiento</label>
+                    <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.fechaNacimiento}" class="form-control" ></div>
+                  </div> -->
+
+
+
                   <div class="row">
                     <div class="col mb-3 form-group">
                       <label  class="form-label">Email</label>
                       <input type="email" th:field="*{email}" class="form-control" th:classappend="${emailmsg !=null?'is-invalid':''}">
                       <div class="invalid-feedback" th:if="${emailmsg !=null}" th:text="${emailmsg}"></div>
                     </div>
+                  </div>
 
+                  <div class="row">
+                    <div class="col mb-3 form-group">
+                      <label  class="form-label">Direccion</label>
+                      <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${direccionmsg !=null?'is-invalid':''}">
+                      <div class="invalid-feedback" th:if="${direccionmsg != null}" th:text="${direccionmsg}"></div>
+                    </div>
                   </div>
 
                   <div class="row">
                     <div class="col mb-3 form-group">
                       <label  class="form-label">Telefono</label>
-                      <input type="number" th:field="*{telefono}" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
+                      <input type="text" th:field="*{telefono}" class="form-control" maxlength="9"  th:classappend="${telefonomsg !=null?'is-invalid':''}">
                       <div class="invalid-feedback" th:if="${telefonomsg !=null}" th:text="${telefonomsg}"></div>
                     </div>
-
                   </div>
 
-
-
                   <!--
-                  <div class="row">
-                    <div class="col mb-3 form-group">
-                      <label  class="form-label">Estado</label>
-                      <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
-                      <div style="background-color: #edf2f9;opacity: 1;" th:text="${#strings.capitalize(paciente.estadosIdestado.nombre)}" class="form-control" ></div>
-                    </div>
-                  </div> -->
+                 <div class="row">
+                   <div class="col mb-3 form-group">
+                     <label  class="form-label">Estado</label>
+                     <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.estadosIdestado.nombre}" class="form-control" ></div>
+                   </div>
+                 </div> -->
+
+
+
+
+                 <!--
+                 <div class="row">
+                   <div class="col mb-3 form-group">
+                     <label  class="form-label">Estado</label>
+                     <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
+                     <div style="background-color: #edf2f9;opacity: 1;" th:text="${#strings.capitalize(paciente.estadosIdestado.nombre)}" class="form-control" ></div>
+                   </div>
+                 </div> -->
 
                 </fieldset>
 
@@ -143,6 +170,18 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+
+  $(document).ready(function () {
+    $("#telefono").on('input', function (evt) {
+      // Allow only numbers.
+      $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+      var valor = $(this).val();
+      if (valor.length > $(this).attr('maxlength')) {
+        $(this).val(valor.slice(0, $(this).attr('maxlength')));
+      }
+    });
+  });
+
   $(document).ready(function () {
     //Esta busacando por el ID del tah <table>
     //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable

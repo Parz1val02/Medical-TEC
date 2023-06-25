@@ -38,12 +38,9 @@ public class Usuario implements Serializable {
     @Size(max = 45, message = "El apellido ingresado es muy extenso. Maximo 45 caracteres")
     private String apellido;
 
-    @Column(name = "edad", nullable = false)
+    @Column(name = "fechanacimiento", nullable = false)
     @NotNull(message = "Es un campo obligatorio")
-    @Digits(integer= 3, fraction= 0, message = "La edad debe ser un numero entero positivo")
-    @Max(value = 120,message = "La edad debe ser un numero entero positivo")
-    @Min(value = 0, message = "La edad debe ser un numero entero positivo")
-    private Integer edad;
+    private String fechaNacimiento;
 
     @Column(name = "telefono", nullable = false, length = 9)
     @NotBlank(message = "Es un campo obligatorio")
