@@ -15,6 +15,8 @@ public interface SedeRepository extends JpaRepository<Sede,Integer> {
     @Query(nativeQuery = true, value = "SELECT S.idsedes as `Id`, S.nombre as `Nombre` FROM usuario U\n" +
             "inner join sedes S on U.sedes_idsedes=S.idsedes where U.dni=?1")
     SedeDto getSede(String dni);
+    @Query(nativeQuery = true, value = "SELECT idsedes as `Id`, nombre as `Nombre` FROM sedes where idsedes=?1")
+    SedeDto getSedeId(Integer id);
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value ="update usuario set  sedes_idsedes=?1 where dni=?2" )

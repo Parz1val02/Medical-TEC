@@ -164,7 +164,7 @@ public class AdministrativoController {
 
 
 
-            if(formInvitacion.getMedicamentos().equals("")){
+            /*if(formInvitacion.getMedicamentos().equals("")){
                 medicamentosError="El campo medicamentos no puede estar vacio, si el paciente no toma medicamentos escriba ninguno";
                 error++;
             }
@@ -180,7 +180,7 @@ public class AdministrativoController {
             if (!noScriptPlease(formInvitacion.getAlergias())) {
                 alergiaHack="El campo alergia no acepta estos caracteres";
                 error++;
-            }
+            }*/
 
 
         if(error>0){

@@ -16,9 +16,6 @@ public class Historialmedico implements Serializable {
     @Column(name = "idhistorialmedico", nullable = false)
     private Integer id;
 
-    @Column(name = "tratamiento", nullable = false, length = 500)
-    private String tratamiento;
-
     @Column(name = "validahistorial", nullable = false)
     private Boolean validahistorial = false;
 

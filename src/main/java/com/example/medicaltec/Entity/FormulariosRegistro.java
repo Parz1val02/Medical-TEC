@@ -26,12 +26,17 @@ public class FormulariosRegistro {
     @Column(name = "password", nullable = false, length = 45)
     private String password;
 
-    @Column(name = "firma")
-    private byte[] firma;
+    @Column(name = "respondido")
+    private Boolean respondido;
+    @Column(name = "activo")
+    private Boolean activo;
 
-    @Column(name = "firmanombre")
-    private String firmanombre;
-    @Column(name = "firmacontenttype")
-    private String firmacontenttype;
+    @Column(name = "nombre", length = 45)
+    private String nomrbe;
 
+    @Column(name = "preguntas")
+    private String preguntas;
+
+    @Column(name = "respuestas")
+    private String respuestas;
 }

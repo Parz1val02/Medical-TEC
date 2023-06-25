@@ -873,8 +873,8 @@ public class AdministradorController {
 
 
     @GetMapping("/calendario")
-    public String calendario(){
-
+    public String calendario(HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "administrador/calendario";
     }
 
@@ -991,7 +991,12 @@ public class AdministradorController {
                 GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
                 String contrasena = generadorDeContrasenha.crearPassword();
                 String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-                usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), formInvitacionOptional.get().getEdad(), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
+
+                //Linea comentada por el cambio de edad a fechanacimiento en forminvitacion
+                //usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
+                                                                                                                                                                                                                                                                                                                                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
                 // Actualizar el estado de pendiente a 0. ya no es pendiente.
                 formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
                 //ENVIAR CORREO CON CONTRASEÑA
