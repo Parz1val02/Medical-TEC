@@ -86,7 +86,7 @@
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form method="post"  class="mt-2">
+                        <form method="post" th:action="@{superAdmin/editarUxUi}" class="mt-2">
                         <div class="modal-header">
                             <h1>Cambio de interfaz</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -119,10 +119,10 @@
                                 <option value="-10">UTC-21:00</option>
                                 <option value="-12">UTC-22:00</option>
                                 <option value="-11">UTC-23:00</option>
-                                <!-- Agrega más opciones según tus necesidades -->
+                                <Agrega más opciones según tus necesidades
                             </select>
 
-                            <!--<button >Cambiar Zona Horaria</button>-->
+                            <button >Cambiar Zona Horaria</button>
                             <div>
                                 <h4>Fecha actual:</h4>
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
@@ -138,13 +138,13 @@
                                 <input type="color" id="colorPicker" onchange="cambiarColor()">
                                 <p>Escoja el color del sidebar </p>
                                 <input type="color" id="colorPicker1" onchange="cambiarColor1()">
-                                <!--<p>Escoja el logo: </p>
+                                <p>Escoja el logo: </p>
                                 <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{sede.logo}" width="200" alt="" /></div>
                                 <div class="col">
                                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
-                                </div>-->
+                                </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
