@@ -1,35 +1,23 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.config.CustomUserDetails;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.medicaltec.controller.ExampController;
 import org.thymeleaf.exceptions.TemplateOutputException;
 
 
-import javax.print.attribute.standard.Sides;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -49,14 +37,14 @@ public class SuperController {
     final EstadoRepository estadoRepository;
     final CitaRepository citaRepository;
     final HistorialMedicoRepository historialMedicoRepository;
-
     final SedeRepository sedeRepository;
+    final UxUiRepository uxUiRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository, UxUiRepository uxUiRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -68,6 +56,7 @@ public class SuperController {
         this.historialMedicoRepository = historialMedicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
     @GetMapping(value = {"/dashboard", ""})
@@ -1395,6 +1384,13 @@ public class SuperController {
         // Devuelve la vista o realiza otras operaciones
         return "superAdmin/dashboard";
     }*/
+    @RequestMapping(value = {"/editarUxUi"},method = RequestMethod.GET)
+    public String editarUxUi(Model model, HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        model.addAttribute("uxUi",uxUiRepository.findAll());
+        return "superAdmin/dashboard";
+    }
 
 
 }
