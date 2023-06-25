@@ -24,6 +24,12 @@ public class Regex {
         return matcher.find();
     }
 
+    public boolean dniValid(String input){
+        String regex = "^(?=.*[0-9]).{8}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
     public boolean fechaValid(String input){
         String regex = "^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(\\d{4})$";
         Pattern pattern = Pattern.compile(regex);

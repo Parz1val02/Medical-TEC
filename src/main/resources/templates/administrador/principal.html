@@ -447,9 +447,11 @@
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -463,9 +465,6 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
-
-
-
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
@@ -631,9 +630,81 @@
             },
             firstDay: 1,
             locale: 'es',
+            eventDidMount: function(info) {
+                tippy(info.el, {
+                    trigger: 'mouseenter',
+                    content: generateTooltipContent(info.event), // call a function to generate the html content
+                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
+                    animation: 'fade',
+                    allowHTML: 'true'
+                })
+            }
+        });
+        // AJAX request to fetch events
+        $.ajax({
+            url: 'http://34.28.24.16:8081/api/citasSede', // Replace with your API endpoint URL
+            type: 'GET',
+            data: {
+                idSede: [[${session.usuario.sedesIdsedes.id}]] // Specify the GET parameter
+            },
+            headers: {
+                'Content-Type': 'application/json' // Set the Content-Type header
+            },
+            success: function(response) {
+                // Parse and format the received data
+                var events = [];
+                response.forEach(function(eventData) {
+                    var dateString = eventData.start;
+                    var date = moment(dateString, 'DD/MM/YYYY');
+                    var fechaFormateada = date.format('YYYY-MM-DD');
+                    var event = {
+                        title: eventData.title,
+                        start: fechaFormateada,
+                        modalidad: eventData.modalidad,
+                        hora: eventData.hora,
+                        paciente: eventData.paciente,
+                        doctor: eventData.doctor,
+                        formaPago: eventData.formaPago,
+                        especialidad: eventData.especialidad,
+                        // Add more properties as needed
+                    };
+                    events.push(event);
+                });
+
+                // Add the events to FullCalendar
+                calendar.addEventSource(events);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
         });
         calendar.render();
     });
+    function generateTooltipContent(event) {
+        // Generate the HTML content for the tooltip
+        // Assuming you have a time string like '14:30'
+        var timeString = event.extendedProps.hora;
+
+        // Parse the time string using Moment.js
+        var time = moment(timeString, 'HH:mm');
+
+        // Format the time as 'h:mm A' (e.g., '2:30 PM')
+        var formattedTime = time.format('h:mm A');
+
+        var dateString = event.start;
+        var date = moment(dateString, 'YYYY-MM-DD');
+        var fechaFormateada = date.format('DD/MM/YYYY');
+
+        var content = '<strong>' + event.title + '</strong>';
+        content += '<br>Paciente: ' + event.extendedProps.paciente;
+        content += '<br>Doctor: ' + event.extendedProps.doctor;
+        content += '<br>Especialidad: ' + event.extendedProps.especialidad;
+        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+        content += '<br>Fecha: ' + fechaFormateada;
+        content += '<br>Hora: ' + formattedTime;
+
+        return content;
+    }
 </script>
 
 
