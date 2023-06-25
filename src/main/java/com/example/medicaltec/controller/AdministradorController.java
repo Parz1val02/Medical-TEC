@@ -258,13 +258,10 @@ public class AdministradorController {
             return "administrador/crearPaciente";
         }*/
         int a = 0;
-        if (doctor.getEdad()!=null){
-            if (doctor.getEdad()<0) {
-                model.addAttribute("edadmsg","La edad debe ser un numero entero positivo");
+        Regex regex = new Regex();
+        if (!regex.fechaValid(doctor.getFechaNacimiento())){
+                model.addAttribute("edadmsg","Formato de fecha incorrecto");
                 a = a+1;
-            }
-
-
         }
 
         try {
@@ -307,7 +304,7 @@ public class AdministradorController {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
+            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getFechaNacimiento(), doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
         }

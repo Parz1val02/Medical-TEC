@@ -85,9 +85,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label >Edad </label>
-                                        <input type="number" th:field="*{edad}" class="form-control" th:classappend="${#fields.hasErrors('edad') || edadmsg !=null ?'is-invalid':''}" >
-                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"></div>
+                                        <label >Fecha nacimiento </label>
+                                        <input type="number" th:field="*{fechaNacimiento}" class="form-control" th:classappend="${#fields.hasErrors('fechaNacimiento') || edadmsg !=null ?'is-invalid':''}" >
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
                                     </div>
 
                                     <div class="row">
