@@ -213,11 +213,11 @@
 
                                 <body>
                                     <h2>Medicamentos Recetados</h2>
-                                    <!--ul th:each="med : ${medicamentos}">
-                                        <li >Nombre del Medicamento: <strong th:text="${med.getNombre()}"></strong> </li>
+                                    <ul th:each="med : ${medicamentos.get(info.index)}">
+                                        <li >Nombre del Medicamento: <strong th:text="${med.medicamentosIdmedicamentos.nombre}"></strong> </li>
                                         <li >Cantidad: <strong th:text="${med.getCantidad()}"></strong></li>
-                                        <li >Frecuencia: <strong th:text="${med.getFrecuencia()}"></strong></li>
-                                    </ul-->
+                                        <li >observaciones: <strong th:text="${med.getObservaciones()}"></strong></li>
+                                    </ul>
 
                                 </body>
 
@@ -403,6 +403,10 @@
         return content;
     }
 </script>
+<script>
 
+
+
+</script>
 </body>
 </html>
