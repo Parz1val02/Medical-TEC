@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -213,5 +214,12 @@ public class GcsController {
         }else{
             return ResponseEntity.notFound().build();
         }
+    }
+    @PostMapping("/guardarColor")
+    public String guardarColor(@RequestParam("colorPicker") String colorPicker) {
+        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
+        assert uxUi != null;
+        uxUi.setColorBar(colorPicker);
+        return "redirect:/";
     }
 }

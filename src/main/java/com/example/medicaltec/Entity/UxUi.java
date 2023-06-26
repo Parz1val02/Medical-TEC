@@ -25,9 +25,9 @@ public class UxUi {
     @Column(name = "zonahoraria")
     private String zonaHoraria;
 
-    @Column(name = "colorsidebar")
-    private String colorSidebar;
+    @Column(name = "colorbar")
+    private String colorBar;
 
-    @Column(name = "colortopbar")
-    private String coorTopbar;
+    @Column(name = "colorback")
+    private String colorBack;
 }
