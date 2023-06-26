@@ -1,21 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.w3.org/1999/xhtml">
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>ERROR 403</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Funciones')}">
+
 <body>
 
-<h1>Acceso denegado</h1>
-
-<p><b><div sec:authorize="isAuthenticated()" th:text="${#authentication.name}"/></b>Usted no tiene permiso para ver este contenido.</p>
-
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/principal'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/dashboard'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'paciente':false}" th:href="@{'/'+'paciente'+'/principal'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/principal'}" class="btn btn-dark">Regresar</a>
-<a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'+'/'}" class="btn btn-dark">Regresar</a>
+<div style="">
+    <div style="position: relative; display: inline-block; width: 100%; height: 977px; ">
+        <img class="card-img-top img-fluid" th:src="@{../img/principalpage/foto_clinica.png}" style="height: 100%; width: 100%; object-fit: cover;">
+        <div style="transform: translate(-50%, -50%); text-align: center;color: #ffffff;top: 50%;left: 50%;position: absolute;">
+            <div class="card bg-card-gradient" style="background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
+                <div class="card-body" style="padding: 2rem !important;">
+                    <h4 class="card-subtitle"
+                        style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Lo sentimos</h4>
+                    <div sec:authorize="isAuthenticated()" th:text="${#authentication.name}"/>
+                    <h5 class="card-title"
+                        style="color: #0032aa; font-weight: bold; font-size: 15px;">Usted no tiene permisos para acceder aquí.</h5>
+                    <p class="card-text" style="color: #5e6e82;"> Por favor inicie sesión de ser necesario o regrese a su flujo correspondiente.</p>
+                    <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/principal'}"
+                       type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
+                    <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/dashboard'}"
+                       type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
+                    <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'paciente':false}" th:href="@{'/'+'paciente'+'/principal'}"
+                       type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
+                    <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/principal'}"
+                       type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
+                    <a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'+'/'}"
+                       type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>

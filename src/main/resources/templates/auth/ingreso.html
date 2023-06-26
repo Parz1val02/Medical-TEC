@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Funciones')}">
+
+<body>
+    <div style="background: white; ">
+        <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
+        <div style="text-align: center">
+            <h1>La diferencia la haces en MedicalTec</h1>
+            <h5>Un grupo exclusivo de profesionales</h5>
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
+        <div style="height: 20px;"></div>
+        <div class="row">
+            <div class="col-md-6" style="height: 400px;padding: 0;">
+                <div style="position: relative; display: inline-block; width: 100%; height: 400px;">
+                    <img th:src="@{img/funcione-usuarios/paciente.jpg}" alt="Descripción de la imagen" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 10px;">
+                        <div style="display: flex; padding: 0 20px;">
+                            <div style="flex: 1;">
+                                <p style="margin: 0;">Portal del Paciente</p>
+                            </div>
+                            <div style="flex: 1; display: flex; justify-content: flex-end;">
+                                <a type="button" th:href="@{'/ingresoUsuario?rol=2'}" class="btn btn-outline-light btn-sm">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="height: 400px;padding: 0;">
+                <div style="position: relative; display: inline-block; width: 100%; height: 400px;">
+                    <img th:src="@{img/funcione-usuarios/doctor.jpg}" alt="Descripción de la imagen" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 10px;">
+                        <div style="display: flex; padding: 0 20px;">
+                            <div style="flex: 1;">
+                                <p style="margin: 0;">Portal del Doctor</p>
+                            </div>
+                            <div style="flex: 1; display: flex; justify-content: flex-end;">
+                                <a type="button" th:href="@{'/ingresoUsuario?rol=1'}" class="btn btn-outline-light btn-sm">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="height: 400px;padding: 0;">
+                <div style="position: relative; display: inline-block; width: 100%; height: 400px;">
+                    <img th:src="@{img/funcione-usuarios/administrador.jpg}" alt="Descripción de la imagen" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 10px;">
+                        <div style="display: flex; padding: 0 20px;">
+                            <div style="flex: 1;">
+                                <p style="margin: 0;">Portal de Administradores</p>
+                            </div>
+                            <div style="flex: 1; display: flex; justify-content: flex-end;">
+                                <a type="button" th:href="@{'/ingresoUsuario?rol=4'}" class="btn btn-outline-light btn-sm">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="height: 400px; padding: 0;">
+                <div style="position: relative; display: inline-block; width: 100%; height: 400px;">
+                    <img th:src="@{img/funcione-usuarios/administrativo.jpg}" alt="Descripción de la imagen" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 10px;">
+                        <div style="display: flex; padding: 0 20px;">
+                            <div style="flex: 1;">
+                                <p style="margin: 0;">Portal de Administrativos</p>
+                            </div>
+                            <div style="flex: 1; display: flex; justify-content: flex-end;">
+                                <a type="button" th:href="@{'/ingresoUsuario?rol=3'}" class="btn btn-outline-light btn-sm">Ingresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 120px;"></div>
+    </div>
+</body>
+</html>

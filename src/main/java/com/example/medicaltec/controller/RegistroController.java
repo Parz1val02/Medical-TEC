@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/registro")
@@ -29,10 +30,10 @@ public class RegistroController {
     final UsuarioRepository usuarioRepository;
     final EspecialidadeRepository especialidadeRepository;
     final FormAutoregistroRepository formAutoregistroRepository;
-
+    final VerificarRepository verificarRepository;
 
     public RegistroController(ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, UsuarioRepository usuarioRepository,
-                              EspecialidadeRepository especialidadeRepository, FormAutoregistroRepository formAutoregistroRepository) {
+                              EspecialidadeRepository especialidadeRepository, FormAutoregistroRepository formAutoregistroRepository, VerificarRepository verificarRepository) {
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
@@ -41,6 +42,7 @@ public class RegistroController {
 
         this.especialidadeRepository = especialidadeRepository;
         this.formAutoregistroRepository = formAutoregistroRepository;
+        this.verificarRepository = verificarRepository;
     }
 
     @RequestMapping(value = {"/index"},method = RequestMethod.GET)
@@ -134,12 +136,30 @@ public class RegistroController {
         String correoError2 = null;
         String telefonoError = null;
         String telefonoError2 = null;
-        String medicamentosError = null;
-        String medicamentoshack = null;
-        String alergiaError = null;
-        String alergiahack = null;
+
         String birthdayerror = null;
         String birthdayerror1 = null;
+
+        String sedeIderror = null;
+        String seguroIderror = null;
+
+        int sedeidInt = 0;
+        int seguroIdInt = 0;
+
+        if(sedeid.equalsIgnoreCase("1") || sedeid.equalsIgnoreCase("2") || sedeid.equalsIgnoreCase("3")){
+            sedeidInt= Integer.parseInt(sedeid);
+        }else{
+            sedeIderror = "El id de la sede enviado no es correcto";
+            numErrors++;
+        }
+
+        if(seguroid.equalsIgnoreCase("1") || seguroid.equalsIgnoreCase("2") || seguroid.equalsIgnoreCase("3")
+                || seguroid.equalsIgnoreCase("4") || seguroid.equalsIgnoreCase("5") || seguroid.equalsIgnoreCase("6")
+                || seguroid.equalsIgnoreCase("7")){
+            seguroIdInt = Integer.parseInt(seguroid);
+        }else{
+            seguroIderror="El id del seguro enviado no es el correcto";
+        }
 
 
             if(domicilio.length()==0){
@@ -266,6 +286,8 @@ public class RegistroController {
                 model.addAttribute("telefonoError2",telefonoError2);
                 model.addAttribute("birthdayerror",birthdayerror);
                 model.addAttribute("birthdayerror1",birthdayerror1);
+                model.addAttribute("sedeIderror",sedeIderror);
+                model.addAttribute("seguroIderror",seguroIderror);
                 //model.addAttribute("medicamentosError",medicamentosError);
                 //model.addAttribute("medicamentoshack",medicamentoshack);
                 //model.addAttribute("alergiaError",alergiaError);
@@ -318,7 +340,7 @@ public class RegistroController {
     public String autoRegistro(@RequestParam("dni") String dni,
                                @RequestParam("nombres") String nombres,
                                @RequestParam("apellidos")String apellidos,
-                               @RequestParam("edad")String edad,
+                               @RequestParam("fecha")String birthday,
                                @RequestParam("domicilio")String domicilio,
                                @RequestParam("sexo")String sexo,
                                @RequestParam("celular") String celular,
@@ -331,6 +353,7 @@ public class RegistroController {
         int sedeIdInt = 0;
         int seguroIdInt = 0;
 
+        Regex regex = new Regex();
 
         int numErrors = 0;
         String domicilioError = null;
@@ -339,13 +362,12 @@ public class RegistroController {
         String correoError2 = null;
         String telefonoError = null;
         String telefonoError2 = null;
-        String edadError = null;
-        String edadError1 = null;
 
         String passwordError = null;
         String passwordValid = null;
 
-
+        String birthdayerror = null;
+        String birthdayerror1 = null;
 
         String sedeIderror = null;
         String seguroIderror = null;
@@ -393,16 +415,41 @@ public class RegistroController {
             numErrors++;
         }
 
-        if(!isValidNumber(edad)){
+        if(birthday.length()==0){
             numErrors++;
-            edadError1 = "la edad debe ser un numero";
+            birthdayerror="El campo de fecha de nacimiento no puede ir vacio";
         }
-        if(edad.equals("")){
-            edadError="El campo de edad no puede estar vacio";
+
+        if(regex.fechaValid(birthday)){
+
+
+
+            DateTimeFormatter formatter;
+            LocalDate parsedDate;
+            LocalDate currentDate;
+
+
+            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            parsedDate = LocalDate.parse(birthday, formatter);
+            currentDate = LocalDate.now();
+
+            LocalDate eighteenYearsAgo = currentDate.minusYears(18);
+            if (!(parsedDate.isBefore(eighteenYearsAgo) || parsedDate.isEqual(eighteenYearsAgo))){
+                birthdayerror1="El usuario debe tener 18 años o más";
+                numErrors++;
+            }
+
+
+
+
+
+
+        }else{
+            birthdayerror1="Ocurrio un error con la fecha de nacimiento";
             numErrors++;
         }
 
-        Regex regex = new Regex();
+
 
         if(!regex.contrasenaisValid(contrasenia)){
             passwordValid="La contraseña no cumple con los parametros establecidos";
@@ -420,7 +467,7 @@ public class RegistroController {
             model.addAttribute("dni",dni);
             model.addAttribute("listaseguros",seguroRepository.findAll());
             model.addAttribute("listasedes",sedeRepository.findAll());
-
+            model.addAttribute("fecha",birthday);
             model.addAttribute("sedeid",sedeId);
             model.addAttribute("sexo",sexo);
             model.addAttribute("domicilio",domicilio);
@@ -429,7 +476,7 @@ public class RegistroController {
             model.addAttribute("celular",celular);
             model.addAttribute("contrasenia",contrasenia);
 
-            model.addAttribute("edad",edad);
+            //model.addAttribute("edad",edad);
 
             //msgs
             model.addAttribute("domicilioError",domicilioError);
@@ -439,12 +486,14 @@ public class RegistroController {
             model.addAttribute("telefonoError",telefonoError);
             model.addAttribute("telefonoError2",telefonoError2);
 
-            model.addAttribute("edaderror",edadError);
-            model.addAttribute("edaderror1",edadError1);
+
             model.addAttribute("passwordValid",passwordValid);
             model.addAttribute("passwordError",passwordError);
             model.addAttribute("sedeIderror",sedeIderror);
             model.addAttribute("seguroIderror",seguroIderror);
+            model.addAttribute("birthdayerror",birthdayerror);
+            model.addAttribute("birthdayerror1",birthdayerror1);
+
 
             return "auth/register";
 
@@ -479,14 +528,17 @@ public class RegistroController {
             formAutoregistro.setDni(dni);
             formAutoregistro.setNombres(nombres);
             formAutoregistro.setApellidos(apellidos);
-            formAutoregistro.setEdad(Integer.valueOf(edad));
+            formAutoregistro.setFechanacimiento(birthday);
             formAutoregistro.setDomicilio(domicilio);
             formAutoregistro.setSexo(sexo);
             formAutoregistro.setCelular(celular);
             formAutoregistro.setSeguroid(seguroIdInt);
             formAutoregistro.setSedeid(sedeIdInt);
             formAutoregistro.setCorreo(correo);
+            formAutoregistro.setContrasenia(new BCryptPasswordEncoder().encode(contrasenia));
 
+            //Para administrador
+            formAutoregistro.setPendiente(true);
 
             formAutoregistroRepository.save(formAutoregistro);
             attr.addFlashAttribute("success","Ha completado con éxito el formulario de autoregistro, pronto le llegará un correo de confirmación");
@@ -496,6 +548,18 @@ public class RegistroController {
 
 
     }
+
+    @PostMapping("/verify")
+    public void handleRequest(@RequestBody Map<String, String> requestParams){
+
+       // verificarRepository.verifyRegistro(requestParams.get("parametro"));
+
+    }
+
+
+
+
+
 
     //verificar numero correcto
     public static boolean isPositiveNumberWith9Digits(String input) {

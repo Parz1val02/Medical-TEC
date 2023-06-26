@@ -1,6 +1,5 @@
 package com.example.medicaltec.controller;
 
-import com.example.medicaltec.Entity.Persona;
 import com.example.medicaltec.dao.PersonaDao;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.EmailSenderService;
@@ -21,10 +20,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequestMapping("/administrativo")
 @Controller
@@ -38,16 +38,19 @@ public class AdministrativoController {
     final SeguroRepository seguroRepository;
     final SedeRepository sedeRepository;
     final FormInvitationRepository formInvitationRepository;
-
+    final VerificarRepository verificarRepository;
     final EmailSenderService senderService;
 
+    @Autowired
+    private HttpServletRequest request;
 
-    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, EmailSenderService senderService) {
+    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, VerificarRepository verificarRepository, EmailSenderService senderService) {
         this.usuarioRepository = usuarioRepository;
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
         this.formInvitationRepository = formInvitationRepository;
+        this.verificarRepository = verificarRepository;
         this.senderService = senderService;
     }
 
@@ -194,10 +197,7 @@ public class AdministrativoController {
             model.addAttribute("correoError2",correoError2);
             model.addAttribute("telefonoError",telefonoError);
             model.addAttribute("telefonoError2",telefonoError2);
-            model.addAttribute("medicamentosError",medicamentosError);
-            model.addAttribute("medicamentoshack",medicamentoshack);
-            model.addAttribute("alergiaError",alergiaError);
-            model.addAttribute("alergiaHack",alergiaHack);
+
 
 
             return "administrativo/formListos";
@@ -344,13 +344,24 @@ public class AdministrativoController {
 
     public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
 
+        // Obtener la fecha actual
+        LocalDate fechaActual = LocalDate.now();
+
+        // Crear un formateador de fecha con el formato deseado (D-M-A)
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy");
+
+        // Formatear la fecha en el formato deseado
+        String fechaFormateada = fechaActual.format(formateador);
+
+        verificarRepository.crearInicioInvitacion(id,fechaFormateada);
+
         String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(id));
 
         senderService.sendEmail(correo,
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
-                "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
-                "35.238.205.255:8080/registro/formPaciente/"+randomNumberStr);
+                "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+request.getRemoteAddr()+
+                ":8080/registro/formPaciente/"+randomNumberStr);
 
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 

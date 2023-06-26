@@ -253,12 +253,11 @@
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
 <!--script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
-<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -356,9 +355,12 @@
                 // Parse and format the received data
                 var events = [];
                 response.forEach(function(eventData) {
+                    var dateString = eventData.start;
+                    var date = moment(dateString, 'DD/MM/YYYY');
+                    var fechaFormateada = date.format('YYYY-MM-DD');
                     var event = {
                         title: eventData.title,
-                        start: eventData.start,
+                        start: fechaFormateada,
                         modalidad: eventData.modalidad,
                         doctor: eventData.doctor,
                         hora: eventData.hora,

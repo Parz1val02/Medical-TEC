@@ -8,6 +8,8 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
 
     <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
 
@@ -46,7 +48,7 @@
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">DNI: </p>
                                     <input type="text" class="form-control" style="color: #9da9bb;" placeholder="Ingrese su DNI" th:value="${dni}" id="dni" name="dni">
-                                    <div class ="invalid-feedback" id="dniValidationMessage"></div>
+                                    <p id="dniValidationMessage"></p>
 
                                 </div>
                             </div>
@@ -65,12 +67,22 @@
                             <div style="height: 10px"></div>
                             <!-- Fecha de nacimiento y Domicilio -->
                             <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
+
+                                <!--<div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">Edad: </p>
                                     <input type="text" class="form-control"  name="edad"  th:value="${edad}" th:classappend="${edaderror!=null || edaderror1!=null?'is-invalid':''}" >
                                     <div class ="invalid-feedback" th:if="${edaderror!=null}" th:text="${edaderror}"></div>
                                     <div class ="invalid-feedback" th:if="${edaderror1!=null && edaderror==null}" th:text="${edaderror1}"></div>
+                                </div>-->
+
+                                <div class="col-md-6">
+                                    <label for="fecha">Fecha de Nacimiento:</label>
+                                    <input type="text" name="fecha" id="fecha" class="form-control" th:value="${fecha}" th:classappend="${birthdayerror != null || birthdayerror1!=null?'is-invalid':''}" placeholder="Seleccione una fecha">
+                                    <div class="invalid-feedback" th:if="${birthdayerror!=null}" th:text="${birthdayerror}"></div>
+                                    <div class ="invalid-feedback" th:if="${birthdayerror1!=null && birthdayerror==null}" th:text="${birthdayerror1}"></div>
+
                                 </div>
+
                                 <div class="col-md-6">
                                     <p style="font-weight: bold; margin: 0px">Domicilio: <span style="color: #b38df7; font-size: small" ></span></p>
                                     <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null || domiciliohack!=null?'is-invalid':''}" >
@@ -231,5 +243,14 @@
     </div>
 
     <script th:src="@{/js/findMe.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr('#fecha', {
+            dateFormat: 'd-m-Y',
+            maxDate: 'today',
+            placeholder: 'Seleccione una fecha'
+        });
+    });
+</script>
 </body>
 </html>
