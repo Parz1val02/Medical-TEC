@@ -127,17 +127,21 @@
                                 <h4>Fecha actual:</h4>
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
                             </div>-->
+                            <div class="modal-body">
                                 <p>Escoja el color del topbar </p>
                                 <input type="color" id="colorPicker" onchange="cambiarColor()">
                                 <p>Escoja el color del sidebar </p>
                                 <input type="color" id="colorPicker1" onchange="cambiarColor1()">
                                 <p>Escoja el logo: </p>
-                                <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/superAdmin/logo}" width="50" alt="" /></div>
+                                <div class="col">
+                                <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/superAdmin/logo}" width="50px" height="50px" /></div>
+                                </div>
                                 <div class="col">
                                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                                 </div>
+                            </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         </div>
