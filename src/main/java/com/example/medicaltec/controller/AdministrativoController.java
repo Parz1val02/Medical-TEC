@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @RequestMapping("/administrativo")
 @Controller
@@ -344,16 +346,17 @@ public class AdministrativoController {
 
     public String enviarEmailPaciente (@RequestParam("id") String id,@RequestParam("nombres")String nombres, @RequestParam("apellidos")String apellidos,@RequestParam("correo")String correo, RedirectAttributes attr){
 
-        // Obtener la fecha actual
-        LocalDate fechaActual = LocalDate.now();
+        // Obtener la fecha y hora actual
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
 
-        // Crear un formateador de fecha con el formato deseado (D-M-A)
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy");
+        // Crear un formateador de fecha y hora con el formato deseado (d M yyyy hh mm)
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy hh-mm");
 
-        // Formatear la fecha en el formato deseado
-        String fechaFormateada = fechaActual.format(formateador);
+        // Formatear la fecha y hora en el formato deseado
+        String fechaHoraFormateada = fechaHoraActual.format(formateador);
 
-        verificarRepository.crearInicioInvitacion(id,fechaFormateada);
+        //guardar fecha-hora, codigo y dni
+        verificarRepository.crearInicioInvitacion(id,fechaHoraFormateada,generateRandomString());
 
         String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(id));
 
@@ -389,5 +392,19 @@ public class AdministrativoController {
         return input.matches(emailRegex);
     }
 
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public static String generateRandomString() {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
+    }
 
 }

@@ -18,7 +18,11 @@ public interface VerificarRepository extends JpaRepository<Verificar,String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value="INSERT INTO `telesystem_2`.`verificar` (`dni`, `fecha`) VALUES (?1, ?2);\n")
-    void crearInicioInvitacion (String id,String fecha);
+    @Query(nativeQuery = true,value="INSERT INTO `telesystem_2`.`verificar` (`dni`, `fecha`,`codigo`) VALUES (?1, ?2,?3);\n")
+    void crearInicioInvitacion (String id,String fecha,String codigo);
+
+    @Query(nativeQuery = true,value="Select codigo from verificar where dni = ?1")
+    String obtenerCodigo (String dni);
+
 
 }

@@ -90,7 +90,7 @@ public class RegistroController {
                 model.addAttribute("alergia", "");
                 //model.addAttribute("edad", "");
                 model.addAttribute("fecha","");
-
+                model.addAttribute("codigo","");
 
                 return "administrativo/registroPaciente";
             }catch(Exception e){
@@ -124,71 +124,74 @@ public class RegistroController {
                               @RequestParam("celular") String celular,
 
                               @RequestParam("fecha")String birthday,
-
+                              @RequestParam("codigo")String codigo,
                               Model model, RedirectAttributes attr){
 
-        Regex regex = new Regex();
-
-        int numErrors = 0;
-        String domicilioError = null;
-        String domiciliohack = null;
-        String correoError = null;
-        String correoError2 = null;
-        String telefonoError = null;
-        String telefonoError2 = null;
-
-        String birthdayerror = null;
-        String birthdayerror1 = null;
-
-        String sedeIderror = null;
-        String seguroIderror = null;
-
-        int sedeidInt = 0;
-        int seguroIdInt = 0;
-
-        if(sedeid.equalsIgnoreCase("1") || sedeid.equalsIgnoreCase("2") || sedeid.equalsIgnoreCase("3")){
-            sedeidInt= Integer.parseInt(sedeid);
-        }else{
-            sedeIderror = "El id de la sede enviado no es correcto";
-            numErrors++;
-        }
-
-        if(seguroid.equalsIgnoreCase("1") || seguroid.equalsIgnoreCase("2") || seguroid.equalsIgnoreCase("3")
-                || seguroid.equalsIgnoreCase("4") || seguroid.equalsIgnoreCase("5") || seguroid.equalsIgnoreCase("6")
-                || seguroid.equalsIgnoreCase("7")){
-            seguroIdInt = Integer.parseInt(seguroid);
-        }else{
-            seguroIderror="El id del seguro enviado no es el correcto";
-        }
+        if(verificarRepository.obtenerCodigo(id).equals(codigo)) {
 
 
-            if(domicilio.length()==0){
-                numErrors++;
-                domicilioError="El campo domicilio no puede estar vacio";
-    }
-            if(!noScriptPlease(domicilio)){
-                domiciliohack ="El campo domicilio no acepta estos caracteres.";
+            Regex regex = new Regex();
+
+            int numErrors = 0;
+            String domicilioError = null;
+            String domiciliohack = null;
+            String correoError = null;
+            String correoError2 = null;
+            String telefonoError = null;
+            String telefonoError2 = null;
+
+            String birthdayerror = null;
+            String birthdayerror1 = null;
+
+            String sedeIderror = null;
+            String seguroIderror = null;
+
+            int sedeidInt = 0;
+            int seguroIdInt = 0;
+
+            if (sedeid.equalsIgnoreCase("1") || sedeid.equalsIgnoreCase("2") || sedeid.equalsIgnoreCase("3")) {
+                sedeidInt = Integer.parseInt(sedeid);
+            } else {
+                sedeIderror = "El id de la sede enviado no es correcto";
                 numErrors++;
             }
 
-            if(correo.length()==0){
-                numErrors++;
-                correoError="El campo correo no puede estar vacio";
-    }
-            if(!isValidEmail(correo)){
-                numErrors++;
-                correoError2="El campo correo ingresado no es correcto";
-    }
+            if (seguroid.equalsIgnoreCase("1") || seguroid.equalsIgnoreCase("2") || seguroid.equalsIgnoreCase("3")
+                    || seguroid.equalsIgnoreCase("4") || seguroid.equalsIgnoreCase("5") || seguroid.equalsIgnoreCase("6")
+                    || seguroid.equalsIgnoreCase("7")) {
+                seguroIdInt = Integer.parseInt(seguroid);
+            } else {
+                seguroIderror = "El id del seguro enviado no es el correcto";
+            }
 
-            if(celular.length()==0){
-                numErrors++;
-                telefonoError="El campo telefono celular no puede estar vacio";
-    }
 
-            if(!isPositiveNumberWith9Digits(celular)){
+            if (domicilio.length() == 0) {
                 numErrors++;
-             telefonoError2="El campo telefono celular debe ser un numero de 9 digitos";
-    }
+                domicilioError = "El campo domicilio no puede estar vacio";
+            }
+            if (!noScriptPlease(domicilio)) {
+                domiciliohack = "El campo domicilio no acepta estos caracteres.";
+                numErrors++;
+            }
+
+            if (correo.length() == 0) {
+                numErrors++;
+                correoError = "El campo correo no puede estar vacio";
+            }
+            if (!isValidEmail(correo)) {
+                numErrors++;
+                correoError2 = "El campo correo ingresado no es correcto";
+            }
+
+            if (celular.length() == 0) {
+                numErrors++;
+                telefonoError = "El campo telefono celular no puede estar vacio";
+            }
+
+            if (!isPositiveNumberWith9Digits(celular)) {
+                numErrors++;
+                telefonoError2 = "El campo telefono celular debe ser un numero de 9 digitos";
+            }
 
             /*if(!isValidNumber(edad)){
                 numErrors++;
@@ -224,13 +227,12 @@ public class RegistroController {
                 checkBoxError="Debe aceptar los terminos y condiciones";
             }*/
 
-            if(birthday.length()==0){
+            if (birthday.length() == 0) {
                 numErrors++;
-                birthdayerror="El campo de fecha de nacimiento no puede ir vacio";
+                birthdayerror = "El campo de fecha de nacimiento no puede ir vacio";
             }
 
-            if(regex.fechaValid(birthday)){
-
+            if (regex.fechaValid(birthday)) {
 
 
                 DateTimeFormatter formatter;
@@ -243,51 +245,46 @@ public class RegistroController {
                 currentDate = LocalDate.now();
 
                 LocalDate eighteenYearsAgo = currentDate.minusYears(18);
-                if (!(parsedDate.isBefore(eighteenYearsAgo) || parsedDate.isEqual(eighteenYearsAgo))){
-                    birthdayerror1="El usuario debe tener 18 años o más";
+                if (!(parsedDate.isBefore(eighteenYearsAgo) || parsedDate.isEqual(eighteenYearsAgo))) {
+                    birthdayerror1 = "El usuario debe tener 18 años o más";
                     numErrors++;
                 }
 
 
-
-
-
-
-            }else{
-                birthdayerror1="Ocurrio un error con la fecha de nacimiento";
+            } else {
+                birthdayerror1 = "Ocurrio un error con la fecha de nacimiento";
                 numErrors++;
             }
 
 
+            if (numErrors > 0) {
 
-            if(numErrors>0){
+                model.addAttribute("api", personaDao.obtenerPersona(id));
+                model.addAttribute("listaseguros", seguroRepository.findAll());
+                model.addAttribute("listasedes", sedeRepository.findAll());
 
-                model.addAttribute("api",personaDao.obtenerPersona(id));
-                model.addAttribute("listaseguros",seguroRepository.findAll());
-                model.addAttribute("listasedes",sedeRepository.findAll());
-
-                model.addAttribute("sedeid",sedeid);
-                model.addAttribute("sexo",sexo);
-                model.addAttribute("domicilio",domicilio);
-                model.addAttribute("correo",correo);
-                model.addAttribute("seguroid",seguroid);
-                model.addAttribute("celular",celular);
+                model.addAttribute("sedeid", sedeid);
+                model.addAttribute("sexo", sexo);
+                model.addAttribute("domicilio", domicilio);
+                model.addAttribute("correo", correo);
+                model.addAttribute("seguroid", seguroid);
+                model.addAttribute("celular", celular);
                 //model.addAttribute("medicamento",medicamento);
                 //model.addAttribute("alergia",alergia);
                 //model.addAttribute("edad",edad);
-                model.addAttribute("fecha",birthday);
+                model.addAttribute("fecha", birthday);
 
                 //msgs
-                model.addAttribute("domicilioError",domicilioError);
-                model.addAttribute("domiciliohack",domiciliohack);
-                model.addAttribute("correoError",correoError);
-                model.addAttribute("correoError2",correoError2);
-                model.addAttribute("telefonoError",telefonoError);
-                model.addAttribute("telefonoError2",telefonoError2);
-                model.addAttribute("birthdayerror",birthdayerror);
-                model.addAttribute("birthdayerror1",birthdayerror1);
-                model.addAttribute("sedeIderror",sedeIderror);
-                model.addAttribute("seguroIderror",seguroIderror);
+                model.addAttribute("domicilioError", domicilioError);
+                model.addAttribute("domiciliohack", domiciliohack);
+                model.addAttribute("correoError", correoError);
+                model.addAttribute("correoError2", correoError2);
+                model.addAttribute("telefonoError", telefonoError);
+                model.addAttribute("telefonoError2", telefonoError2);
+                model.addAttribute("birthdayerror", birthdayerror);
+                model.addAttribute("birthdayerror1", birthdayerror1);
+                model.addAttribute("sedeIderror", sedeIderror);
+                model.addAttribute("seguroIderror", seguroIderror);
                 //model.addAttribute("medicamentosError",medicamentosError);
                 //model.addAttribute("medicamentoshack",medicamentoshack);
                 //model.addAttribute("alergiaError",alergiaError);
@@ -296,11 +293,10 @@ public class RegistroController {
                 //model.addAttribute("alergiaHack",alergiahack);
 
 
-
                 return "administrativo/registroPaciente";
 
 
-            }else{
+            } else {
 
                 FormInvitacion formInvitacion = new FormInvitacion();
                 formInvitacion.setNombres(nombres);
@@ -321,13 +317,32 @@ public class RegistroController {
                 formInvitationRepository.save(formInvitacion);
 
 
-
-                attr.addFlashAttribute("success","Su registro fue exitoso, pronto le llegará un correo con sus credenciales de acceso");
+                attr.addFlashAttribute("success", "Su registro fue exitoso, pronto le llegará un correo con sus credenciales de acceso");
                 return "redirect:/registro/index";
             }
 
 
+        }else{
 
+            model.addAttribute("errorcodigo","El codigo de verificacion es incorrecto");
+            model.addAttribute("api", personaDao.obtenerPersona(id));
+            model.addAttribute("listaseguros", seguroRepository.findAll());
+            model.addAttribute("listasedes", sedeRepository.findAll());
+
+            model.addAttribute("sedeid", 1);
+            model.addAttribute("sexo", "");
+            model.addAttribute("domicilio", "");
+            model.addAttribute("correo", "");
+            model.addAttribute("seguroid", 1);
+            model.addAttribute("celular", "");
+            model.addAttribute("medicamento", "");
+            model.addAttribute("alergia", "");
+            //model.addAttribute("edad", "");
+            model.addAttribute("fecha","");
+            model.addAttribute("codigo","");
+
+            return "administrativo/registroPaciente";
+        }
 
 
 
