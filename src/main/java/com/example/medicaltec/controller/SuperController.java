@@ -1321,13 +1321,14 @@ public class SuperController {
 
     //@ResponseBody
     @PostMapping(value = "/guardarPlantilla")
-    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
+    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
         Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         String salida ="";
         String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
         int i = 0;
-        for (String pregunta : listaPreguntas){
+        for (String pregunta : preguntasSeparadas){
             System.out.println(pregunta);
             System.out.println(i);
             if (i==0){
