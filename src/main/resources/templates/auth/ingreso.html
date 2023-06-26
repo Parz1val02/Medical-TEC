@@ -6,9 +6,9 @@
 <body>
     <div style="background: white; ">
         <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
-        <div style="text-align: center">
-            <h1>La diferencia la haces en MedicalTec</h1>
-            <h5>Un grupo exclusivo de profesionales</h5>
+        <div style="text-align: center;margin-top: 50px;">
+            <h1 style="color: #0032aa; font-weight: bold;">La diferencia la haces en MedicalTec</h1>
+            <h5 style="color: #0032aa; font-weight: bold; padding-bottom: 5px;">Un grupo exclusivo de profesionales</h5>
         </div>
         <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}"></div>
         <div style="height: 20px;"></div>
