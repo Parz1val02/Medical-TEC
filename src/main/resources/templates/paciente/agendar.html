@@ -67,7 +67,7 @@
                                    <div class="form-group">
                                        <input type="text" name="sedeId" id="sede" class="form-control" th:value="${sedeUsuario.id}" hidden="">
                                        <label for="fecha">Fecha:</label>
-                                       <input type="text" name="fecha" id="fecha" class="form-control" th:classappend="${errorFecha != null?'is-invalid':''}" placeholder="Seleccione una fecha">
+                                       <input type="text" name="fecha" id="fecha" class="form-control" th:classappend="${errorFecha != null?'is-invalid':''}" placeholder="Seleccione una fecha" required>
                                        <div class="invalid-feedback" th:if="${errorFecha!=null}" th:text="${errorFecha}"></div>
                                    </div>
                                </div>
