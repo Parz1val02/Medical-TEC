@@ -1221,6 +1221,8 @@ public class SuperController {
             rol = user.getRolesIdroles().getNombreRol();
             switch (rol) {
                 case "paciente":
+                    String dnipaciente = user.getEmail();
+                    httpSession.setAttribute("emailpacienteloginasuser",dnipaciente);
                     return "redirect:/paciente/principal";
                 case "administrativo":
                     return "redirect:/administrativo/dashboard";
