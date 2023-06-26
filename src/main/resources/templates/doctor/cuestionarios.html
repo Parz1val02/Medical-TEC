@@ -58,14 +58,14 @@
                                                 <div style="height: 15px"></div>
                                                 <h6 class="card-subtitle" th:text="|Cuestionario ${i.index+1}|">Cuestionario #</h6>
                                                 <div style="height: 10px"></div>
-                                                <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                                <h5 class="card-title mb-2" th:text="${cuestionario.nombre}">Título de Cuestionario</h5>
                                             </div>
                                             <div class="col-md-6" align="center" style="align-items: center">
                                                 <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
                                                 border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>
                                                 <div style="height: 15px"></div>
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
+                                                <button type="button" th:attr="onclick=|cambiarCuestionario('${cuestionario.id}', '${cuestionario.nombre}')|" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -95,31 +95,14 @@
                                     </div>
                                     <br>
                                     <b>Nombre:  </b>
-                                    <p th:text="|${cuestionario.nombrecuestionario}|">Título del Cuestionario</p>
-
-                                    <b>Pregunta 1</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 2</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 3</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 4</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 5</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
+                                    <p th:text="|${cuestionario.nombre}|">Título del Cuestionario</p>
+                                    <div th:each="pregunta, iterStatus2  : ${cuestionario.listapreguntas}">
+                                        <b th:text="|Pregunta ${i.index+1}|"></b>
+                                        <p style="margin: 0px" th:text="${pregunta}"> Información de Pregunta</p>
+                                        <input disabled>
+                                        <div style="width: 10px;height: 20px;"></div>
+                                    </div>
                                 </div>
-
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
@@ -138,6 +121,8 @@
                     </div>
                 </div>
                 <div th:if="${cuestionario_enviado != null}" th:text="${cuestionario_enviado}" class="alert alert-success" role="alert"
+                     style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
+                <div th:if="${cuestionario_noenviado != null}" th:text="${cuestionario_noenviado}" class="alert alert-danger" role="alert"
                      style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
                 <div th:if="${usuario_vacio != null}" th:text="${usuario_vacio}" class="alert alert-danger" role="alert"
                      style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif">
@@ -163,15 +148,36 @@
                         </div>
                     </div>
                     <div class="form-group" style="text-align: center">
-                        <!-- Button trigger modal -->
-                        <button type="submit" class="btn btn-secondary " style="text-align: center;background: #3d8af7;
+                        <div class="row">
+                            <div class="col-md-8" style="display: flex; flex-direction: column">
+                                <label for="cuestionarioseleccionado" class="mb-2 mb-md-0" style="font-weight: bold;">Cuestionario seleccionado:</label>
+                                <input type="hidden" id="cuest" name="cuest" value="idcuestionario">
+                                <div class="form-control" id="cuestionarioseleccionado" name="cuestionario" style="width: 100%; font-family: 'Open Sans', serif; color: #9da9bb; margin-top: 5px; border: none; background: none; padding: 0;">
+                                    Nombre del cuestionario seleccionado
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary " style="text-align: center;background: #3d8af7;
                                     border-radius: 15px; border-color: #3d8af7;">Enviar Cuestionario </button>
-                        <a th:href="@{/doctor/cuestionarios}" style="padding-left: 5px; color: #3d4858">
-                            <button class="btn btn-secondary" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 110px;">Cancelar</button>
-                        </a>
+                        </div>
+                        <!-- Button trigger modal -->
                     </div>
                     <br>
+                    <script>
+                        function cambiarCuestionario(idCuestionario,nombrecuestionario) {
+                            // Obtener el elemento del nombre del cuestionario
+                            const cuestionarioDisplay = document.getElementById('cuestionarioseleccionado');
+
+                            // Cambiar el nombre del cuestionario
+                            cuestionarioDisplay.textContent = nombrecuestionario;
+                            console.log(idCuestionario);
+                            console.log(nombrecuestionario);
+
+                            // Cambiar el valor del atributo "value" del botón
+                            const inputcuest = document.getElementById('cuest');
+                            inputcuest.value = idCuestionario;
+                        }
+
+                    </script>
                 </form>
             </div>
             <br>
