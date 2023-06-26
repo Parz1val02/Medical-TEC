@@ -6,10 +6,8 @@ package com.example.medicaltec.controller;
         import org.springframework.http.ResponseEntity;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
-        import org.springframework.web.bind.annotation.GetMapping;
-        import org.springframework.web.bind.annotation.PathVariable;
-        import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.RequestMethod;
+        import org.springframework.web.bind.annotation.*;
+        import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
         import java.util.List;
 
@@ -33,24 +31,25 @@ public class ExampController {
         this.formInvitationRepository = formInvitationRepository;
     }
 
-    @RequestMapping(value = {"/"},method = RequestMethod.GET)
-    public String paginaPrincipal(Model model){
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String paginaPrincipal(Model model) {
         List<Especialidade> especialidadeList = especialidadeRepository.findAll();
         List<Sede> sedeList = sedeRepository.findAll();
-        model.addAttribute("especialidadesList",especialidadeList);
-        model.addAttribute("sedeList",sedeList);
+        model.addAttribute("especialidadesList", especialidadeList);
+        model.addAttribute("sedeList", sedeList);
         return "auth/principalpage";
     }
-    @RequestMapping(value = {"/loginA"},method = RequestMethod.GET)
-    public String login(HttpSession session){
+
+    @RequestMapping(value = {"/loginA"}, method = RequestMethod.GET)
+    public String login(HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         //validando por rol para evitar que se escriba la ruta y se vaya manualmente estando autenticado a otra
-        if (usuario ==null){
+        if (usuario == null) {
 
             return "auth/login";
         } else {
-            switch(usuario.getRolesIdroles().getNombreRol()) {
+            switch (usuario.getRolesIdroles().getNombreRol()) {
                 case "paciente":
                     return "redirect:/paciente/principal";
                 case "administrativo":
@@ -75,33 +74,33 @@ public class ExampController {
     }
 
     @GetMapping("/QR")
-    public String qrcode(){
+    public String qrcode() {
         return "/auth/genqr";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String registro(HttpSession session, Model model){
+    public String registro(HttpSession session, Model model) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario ==null){
+        if (usuario == null) {
 
-            model.addAttribute("nombres","");
-            model.addAttribute("apellidos","");
-            model.addAttribute("dni","");
-
-
-            model.addAttribute("sedeid",1);
-            model.addAttribute("sexo","M");
-            model.addAttribute("domicilio","");
-            model.addAttribute("correo","");
-            model.addAttribute("seguroid",1);
-            model.addAttribute("celular","");
-            model.addAttribute("contrasenia","");
-
-            model.addAttribute("edad","");
+            model.addAttribute("nombres", "");
+            model.addAttribute("apellidos", "");
+            model.addAttribute("dni", "");
 
 
-            model.addAttribute("listaseguros",seguroRepository.findAll());
-            model.addAttribute("listasedes",sedeRepository.findAll());
+            model.addAttribute("sedeid", 1);
+            model.addAttribute("sexo", "M");
+            model.addAttribute("domicilio", "");
+            model.addAttribute("correo", "");
+            model.addAttribute("seguroid", 1);
+            model.addAttribute("celular", "");
+            model.addAttribute("contrasenia", "");
+
+            model.addAttribute("edad", "");
+
+
+            model.addAttribute("listaseguros", seguroRepository.findAll());
+            model.addAttribute("listasedes", sedeRepository.findAll());
             return "auth/register";
         } else {
             return "redirect:/auth/principalpage";
@@ -144,21 +143,51 @@ public class ExampController {
     //}
 
     @GetMapping("/servicios")
-    public String servicios(Model model){
+    public String servicios(Model model) {
         List<ExamenMedico> examenMedicoList = examenMedicoRepository.findAll();
-        model.addAttribute("examenesMedicos",examenMedicoList);
-        model.addAttribute("especialidadesList",especialidadeRepository.findAll());
+        model.addAttribute("examenesMedicos", examenMedicoList);
+        model.addAttribute("especialidadesList", especialidadeRepository.findAll());
         return "auth/servicios";
     }
 
     @GetMapping("/staffmedico")
-    public String staffMedico(Model model){
-        model.addAttribute("doctoresList",usuarioRepository.listarDoctores());
-        model.addAttribute("segurosList",seguroRepository.findAll());
-        model.addAttribute("especialidadesList",especialidadeRepository.findAll());
+    public String staffMedico(Model model) {
+        model.addAttribute("doctoresList", usuarioRepository.listarDoctores());
+        model.addAttribute("segurosList", seguroRepository.findAll());
+        model.addAttribute("especialidadesList", especialidadeRepository.findAll());
         return "auth/staffmedico";
     }
 
+    @GetMapping("/ingreso")
+    public String ingreso(Model model) {
+        return "auth/ingreso";
+    }
+
+    @GetMapping("/ingresoUsuario")
+    public String ingresoAdministrativo(@RequestParam("rol") int rolbase, RedirectAttributes attr, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario == null) {
+            return "redirect:/loginA";
+        } else {
+            if (usuario.getRolesIdroles().getId() == rolbase) {
+                switch (rolbase) {
+                    case 2:
+                        return "redirect:/paciente/principal";
+                    case 3:
+                        return "redirect:/administrativo/dashboard";
+                    case 4:
+                        return "redirect:/administrador/principal";
+                    case 5:
+                        return "redirect:/superAdmin/dashboard";
+                    default:
+                        return "redirect:/doctor/principal";
+                }
+            } else {
+                attr.addFlashAttribute("error", "Elección de rol equivocada. Elija una opción correcta");
+                return "redirect:/ingreso";
+            }
+        }
+    }
 
     //Chequear si dni existe
 
