@@ -73,8 +73,9 @@
                   respuestas.push(input.value);
                 });
 
-                document.getElementById('respuestasInput').value = JSON.stringify(respuestas);
+                document.getElementById('respuestasInput').value = respuestas.join(", ");
                 document.getElementById('respuestasInput').form.submit();
+
               }
             </script>
 
