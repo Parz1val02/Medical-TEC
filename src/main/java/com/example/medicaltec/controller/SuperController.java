@@ -1221,6 +1221,8 @@ public class SuperController {
             rol = user.getRolesIdroles().getNombreRol();
             switch (rol) {
                 case "paciente":
+                    String dnipaciente = user.getEmail();
+                    httpSession.setAttribute("emailpacienteloginasuser",dnipaciente);
                     return "redirect:/paciente/principal";
                 case "administrativo":
                     return "redirect:/administrativo/dashboard";
@@ -1308,20 +1310,6 @@ public class SuperController {
                 attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
                 return "redirect:/superAdmin/dashboard";
             }
-    }
-    @GetMapping("/logo")
-    public ResponseEntity<byte[]> mostrarLogo(HttpSession httpSession,Authentication authentication){
-        int id=5;
-        Optional<UxUi> opt = uxUiRepository.findById(id);
-        if(opt.isPresent()){
-            UxUi uxUi= opt.get();
-            byte[] imagenComoBytes = uxUi.getLogo();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(uxUi.getLogoContentType()));
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)

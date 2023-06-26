@@ -10,6 +10,7 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -197,19 +198,25 @@ public class PacienteController {
         return "paciente/listarDoctores";
     }
 
+    @Autowired
+    CuestionariosRepository cuestionariosRepository;
+    @Autowired
+    CuestionariosUsuariosRepository cuestionariosUsuariosRepository;
+
     @RequestMapping("/cuestionarios")
     public String cuestionarios(Model model,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        Cuestionario cuestionario=cuestionarioRepository.cuestionaXPaciente(usuario.getId());
-        //creo que se debe enviar tambien lista de preguntas por cuestionario
-        ArrayList<Pregunta> preguntas = new ArrayList<>();
-
-        /*for (int i = 0; i < cuestionarioList.size(); i++) {
-            preguntas.add(  preguntaRepository.obtenerPreguntas( cuestionarioList.get(i).getId())  );
-        }*/
-        model.addAttribute("cuestionarios",cuestionarioRepository.cuestionaXPaciente(usuario.getId()));
+        List<CuestionariosUsuarios> cuestionariosUsuariosList = cuestionariosUsuariosRepository.cuestionarioXPaciente(usuario.getId());
+        System.out.println(usuario.getId());
+        for (CuestionariosUsuarios cuest : cuestionariosUsuariosList){
+            System.out.println(cuest.getDnidoctor());
+            System.out.println("paciente");
+            System.out.println(cuest.getDnipaciente());
+            System.out.println(cuest.getRespondido());
+        }
+        model.addAttribute("cuestionarios",cuestionariosUsuariosList);
        return "paciente/cuestionarios";
     }
 
@@ -308,52 +315,83 @@ public class PacienteController {
 
     //Adaptarlo para sesiones
     @GetMapping("/responderCuestionario")
-    public String responderCues(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String responderCues(@RequestParam("idCuestionario") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+            RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<CuestionariosUsuarios> optionalCuestionariosUsuarios= cuestionariosUsuariosRepository.findById(id);
+        if (optionalCuestionariosUsuarios.isPresent()) {
+            CuestionariosUsuarios cuestionariosUsuarios= optionalCuestionariosUsuarios.get();
+            String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/responderCuestionario";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/paciente/cuestionarios";
+        }
+    }
 
-        Cuestionario cuestionario = cuestionarioRepository.cuestionaXPaciente(usuario.getId());
-
-        ArrayList<Pregunta> preguntasCuestionario = new ArrayList<>();
-        ArrayList<Cuestionario> cuestionarios1 = new ArrayList<>();
-        /*for (int i = 0; i < ; i++) {
-            cuestionarios1.add(cuestionarios.get(i));
-        }*/
-
-
-        List<Pregunta> preguntas = preguntaRepository.obtenerPreguntas(cuestionario.getId());
-
-
-        //List<Pregunta> preguntas = preguntaRepository.obtenerPreguntas(cuestionarios.get().getId());
-        Respuesta respuesta=new Respuesta();
-        model.addAttribute("preguntas", preguntas);
-        model.addAttribute("respuesta", respuesta);
-        return "paciente/responderCuestionario";
+    @GetMapping("/verRespuestas")
+    public String verRespuestas(@RequestParam("idCuestionario") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+                                RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<CuestionariosUsuarios> optionalCuestionariosUsuarios= cuestionariosUsuariosRepository.findById(id);
+        if (optionalCuestionariosUsuarios.isPresent()) {
+            CuestionariosUsuarios cuestionariosUsuarios= optionalCuestionariosUsuarios.get();
+            String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            String entrada2 = cuestionariosUsuarios.getRespuestas();
+            List<String> listarespuestas = List.of(entrada2.split("#!%&%!#"));
+            cuestionariosUsuarios.setListarespuestas(listarespuestas);
+            model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/verRespuestas";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/paciente/cuestionarios";
+        }
     }
 
 
 
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @ModelAttribute("respuestas")@Valid Respuesta respuesta, BindingResult bindingResult, RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String guardarRptas( @RequestParam("listarespuestas") List<String> respuestas,
+                                @RequestParam("cuestionarioid") String iddelcuestionario,
+                                RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
 
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        //Cuestionario cues = cuestionarioRepository.findById(id);
-
-        if (bindingResult.hasErrors()){
-
-            return "/paciente/responderCuestionario";
-        }else {
-            //model.addAttribute("preguntas");
-
-            attr.addFlashAttribute("msg2", "Se guardaron las respuestas exitosamente");
-            return "redirect:/paciente/cuestionarios";
-
+        int idcues = Integer.parseInt(iddelcuestionario);
+        String salida ="";
+        String separador ="#!%&%!#";
+        int i = 0;
+        for (String respuesta : respuestas){
+            System.out.println(respuesta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+respuesta;
+            }else {
+                salida = salida + separador + respuesta;
+            }
+            i++;
         }
-        //List<Pregunta> preguntas = preguntaRepository.obtenerPreg(id);
-        //rptaRepository.guardarRptas(respuesta);
+        System.out.println(salida);
+        cuestionariosUsuariosRepository.responderCuestionario(salida,idcues);
+        attr.addFlashAttribute("respondido","Cuestionario respondido con éxito");
+        return "redirect:/paciente/cuestionarios";
+
 
     }
 

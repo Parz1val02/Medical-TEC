@@ -22,13 +22,8 @@
             <div class="row justify-content-between align-items-center">
               <div class="col-md-11">
                 <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                  Responder cuestionario
+                  Revise las respuestas de su cuestionario cuestionario
                 </h1>
-              </div>
-              <div class="col-md-11">
-                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                  Responda a las siguientes preguntas.
-                </h5>
               </div>
             </div>
           </div>
@@ -40,7 +35,6 @@
       <div class="card mb-3 bg-card-gradient">
         <div class="card-body" style="background-color: white">
           <div class="container">
-            <form th:action="@{/paciente/guardarRespuestas}" method="post">
               <div class="row">
                 <div class="col-lg-12">
                   <div class="row">
@@ -50,35 +44,14 @@
                     <div class="row">
                       <div class="col mb-3">
                         <label class="form-label" th:text="${pregunta}"></label>
-                        <input type="text" class="form-control" placeholder="Respuesta" th:name="'respuestas'" />
+                        <input type="text" class="form-control" placeholder="Respuesta" th:value="${cuestionario.listarespuestas[status.index]}"  disabled/>
                       </div>
                     </div>
                   </div>
                   <br>
                 </div>
               </div>
-
-              <input type="hidden" id="respuestasInput" name="listarespuestas" />
-              <input type="hidden" id="cuestionarioid" name="cuestionarioid" th:value="${cuestionario.id}"/>
-              <button class="btn btn-primary" type="submit" onclick="enviarRespuestas()">Enviar respuestas</button>
-              <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/cuestionarios}">Cancelar</a>
-            </form>
-
-            <script>
-              function enviarRespuestas() {
-                var respuestas = [];
-                var inputs = document.querySelectorAll('input[name="respuestas"]');
-
-                inputs.forEach(function(input) {
-                  respuestas.push(input.value);
-                });
-
-                document.getElementById('respuestasInput').value = respuestas.join(", ");
-                document.getElementById('respuestasInput').form.submit();
-
-              }
-            </script>
-
+              <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/cuestionarios}">Regresar</a>
           </div>
         </div>
       </div>
@@ -101,5 +74,3 @@
 </body>
 
 </html>>
-
-

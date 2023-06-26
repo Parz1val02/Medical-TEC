@@ -128,48 +128,16 @@
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
                             </div>-->
                             <div class="modal-body">
-                                <p>Escoja el color del topbar </p>
+                                <p>Escoja el color del topbar y sidebar </p>
                                 <input type="color" id="colorPicker" onchange="cambiarColor()">
-                                <p>Escoja el color del sidebar </p>
-                                <input type="color" id="colorPicker1" onchange="cambiarColor1()">
+                                <p>Escoja el color del fondo </p>
+                                <input type="color" id="colorPicker1" onchange="cambiarColor2()">
                                 <p>Escoja el logo: </p>
                                 <div class="col">
-                                <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/superAdmin/logo}" width="50px" height="50px" /></div>
+                                <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/logo}" width="50px" height="50px" /></div>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto" onclick="openModal()" style=" .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }">Cambiar foto</button>
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                                 </div>
@@ -863,13 +831,17 @@
     function cambiarColor() {
         var colorPicker = document.getElementById("colorPicker");
         var div = document.getElementById("change");
-        var color = colorPicker.value;
-        div.style.backgroundColor = color;}
-        function cambiarColor1() {
-        var colorPicker1 = document.getElementById("colorPicker1");
         var div1 = document.getElementById("change1");
-        var color1 = colorPicker1.value;
-        div1.style.backgroundColor = color1;
+        var div2 = document.getElementById("change2");
+        var color = colorPicker.value;
+        div.style.backgroundColor = color;
+        div1.style.backgroundColor = color;
+        div2.style.backgroundColor = color;}
+</script>
+<script>
+    function cambiarColor2() {
+        var colorSeleccionado = document.getElementById("colorPicker").value;
+        document.body.style.backgroundColor = colorSeleccionado;
     }
 </script>
 <script>
