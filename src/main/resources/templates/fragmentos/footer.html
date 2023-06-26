@@ -6,11 +6,9 @@
         <div class="col-12 col-sm-auto text-center">
             <p class="mb-0 text-600">Medictal-Tec <span class="d-none d-sm-inline-block">| </span><br class="d-sm-none" /> 2023 &copy; <span>GTICS</span></p>
         </div>
-        <div class="col-12 col-sm-auto text-center">
+        <div class="col-12 col-sm-auto text-center" style="display: flex;">
             <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
-            <p class="mb-0 text-600">- v1.0.0</p>
-        </div>
-        <div class="col-12 col-sm-auto text-center">
+            <p class="mb-0 text-600"> (Hora Actual) - v1.0.0</p>
         </div>
     </div>
 </footer>
