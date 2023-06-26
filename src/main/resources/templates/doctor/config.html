@@ -36,7 +36,9 @@
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/20.jpg)">
                     </div>
                     <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile">
+                        <img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" />
+                    </div>
                 </div>
                 <br>
                 <div class="card-body">
@@ -110,6 +112,11 @@
                                     </div>
                                 </fieldset>
                             </form>
+                            <div style="display: flex; flex-direction: column;">
+                                <label for="disabledTextInput11" class="form-label">Mi firma digital actual:</label>
+                                <img th:src="@{/fotoFirmaDoctor}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
+                                height: 100px;width: 300px;border: 1px solid #d8e2ef;"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,12 +151,20 @@
                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
                             Firma digital
                         </h4>
-                        <form method="POST" th:action="@{/uploadFirma}"
-                              class="dropzone"
-                              id="myGreatDropzone2" style="margin: 10px 0 15px 0; width: 50%;"></form>
-                        <button class="btn btn-primary btn-sm" type="submit" id="button2">Guardar cambios</button>
                         <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                         <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+                        <div style="display: flex;">
+                            <form method="POST" th:action="@{/uploadFirma}"
+                                  class="dropzone"
+                                  id="myGreatDropzone2" style="margin: 10px 15px; width: 50%; flex: 2;"></form>
+                            <div style="flex: 1; padding-left: 20px;">
+                                <p style="padding: 15px 15px 15px 0;">
+                                    Aquí puedes personalizar tu perfil agregando una foto.
+                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                                </p>
+                                <button class="btn btn-primary btn-sm" type="submit" id="button2">Guardar cambios</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -184,12 +199,20 @@
                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
                             Foto de perfil
                         </h4>
-                        <form method="POST" th:action="@{/uploadDoctor}"
-                              class="dropzone"
-                              id="myGreatDropzone" style="margin: 10px 0 15px 0; width: 50%;"></form>
-                        <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
                         <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                         <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+                        <div style="display: flex;">
+                            <form method="POST" th:action="@{/uploadDoctor}"
+                                  class="dropzone"
+                                  id="myGreatDropzone" style="margin: 10px 15px; width: 50%; flex: 2; "></form>
+                            <div style="flex: 1;    padding-left: 20px;">
+                                <p style="padding: 15px 15px 15px 0;">
+                                    Aquí puedes personalizar tu perfil agregando una foto.
+                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                                </p>
+                                <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
+                            </div>
+                        </div>
                     </div>
                     <!--
                         <div style="height: 30px"></div>
@@ -354,9 +377,9 @@
 -->
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+            <div>
+                <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+            </div>
         </div>
         <script>
             function toggleInput() {

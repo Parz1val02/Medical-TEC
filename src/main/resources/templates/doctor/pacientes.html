@@ -40,21 +40,25 @@
                         <table class="table table-striped" id="userList">
                             <thead style="background: #cdeffc">
                             <tr>
-                                <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
-                                <th class="sort align-middle" style="width: 25%">Fecha de Atención</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Correo</th>
-                                <th class="sort align-middle" style="width: 35%; text-align: center"></th>
+                                <th class="sort align-middle" style="width: 20%">Servicio</th>
+                                <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
+                                <th class="sort align-middle" style="width: 20%">Fecha de Atención</th>
+                                <th class="sort align-middle" style="width: 20%">Correo</th>
+                                <th class="sort align-middle" style="width: 20%; text-align: center"></th>
                             </tr>
                             </thead>
                             <tbody class="bg-white">
                             <tr th:each="cita : ${listaCitas}">
-                                <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
-                                    Nombre Paciente
+                                <td th:text="|${cita.tipocitaIdtipocita.tipoCita}|" class="align-middle">
+                                    Consulta o examen médico
                                 </td>
-                                <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}hrs|">
+                                <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
+                                    Nombre paciente
+                                </td>
+                                <td class="align-middle" th:text="|${cita.fecha} a las ${cita.hora}hrs|">
                                     00/00/00 - 00:00hrs
                                 </td>
-                                <td th:text="${cita.paciente.email}" class="align-middle" style="text-align: center">
+                                <td th:text="${cita.paciente.email}">
                                     correoelectronico@hotmail.com
                                 </td>
                                 <td class="align-middle" align="center">

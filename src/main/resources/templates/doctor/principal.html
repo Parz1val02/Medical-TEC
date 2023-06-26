@@ -67,7 +67,7 @@
                     </h6>
                     <br>
                     <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-6" style="padding: 0">
+                        <div class="col-sm-4" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6" style="padding: 0">
+                        <div class="col-sm-4" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -106,20 +106,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body" style="max-height: 650px">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Calendario
-                                    </h4>
-                                    <div id="calendar"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="card mb-3">
+                        <div class="col-sm-4" style="padding: 0">
+                            <div class="card">
                                 <div class="card-body" >
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
                                         Cuestionarios
@@ -137,6 +125,37 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-sm-12">
+                            <div class="card mb-3">
+                                <div class="card-body" style="max-height: 650px">
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                        Calendario
+                                    </h4>
+                                    <div id="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-6">
+                            <div class="card mb-3">
+                                <div class="card-body" >
+                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                        Cuestionarios
+                                    </h4>
+                                    <div>
+                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
+                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                <b th:text="|${cuestionario.nombre}|"></b>
+                                                <div> Descripción cuestionario respectiva</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -257,42 +276,53 @@
                         // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
                     });
                 });
-
-
             </script>
 
             <script>
                 // Obtener datos y botones
                 var botones = document.getElementsByClassName('botones');
                 var fecha = document.getElementsByClassName('fecha');
-                console.log(fecha)
-                var hora = document.getElementsByClassName('hora');
+                var horas = document.getElementsByClassName('hora');
 
                 // Obtener la fecha y hora actual
                 var fechaActual = new Date();
 
-                for (var i=0;i<botones.length;i++){
-                    var fechaObjetivo = new Date(fecha[i].value + ' ' + hora[i].value);
+                for (var i=0;i<botones.length;i++) {
+
+                    var fechaString = fecha[i].value;
+                    var horaString = horas[i].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes = fechaString.split('-');
+                    var dia = fechaPartes[0];
+                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio = fechaPartes[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes = horaString.split(':');
+                    var hora = horaPartes[0];
+                    var minutos = horaPartes[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
                     var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
-                    console.log(fechaInicio)
                     var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
 
-                    var tiempo=fechaInicio-fechaActual;
-                    console.log(tiempo + 'corresponde a' + i);
+                    //var tiempo=fechaInicio-fechaActual;
 
                     if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
                         mostrarBoton(i);
                     }
-/*
+                    /*
                     if(fechaInicio>fechaActual && fechaFin<fechaActual){
                         mostrarBoton(i);
                     } else if (fechaActual<fechaInicio){
-                        mostrarBoton2(i);
+                        mostrarBoton(i);
                     } else {
                         console.log("No es tiempo aún"+"corresponde a"+i);
                     }
 
-                    /*
+
                     mostrarBoton(i);
                     if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
                         botones[i].disabled = false;
@@ -325,13 +355,9 @@
                     }, 0); // Retraso de 2 segundos (2000 milisegundos)
                 }
 
-
-
                 function myStopFunction() {
                     clearTimeout(myTimeout);
                 }
-
-
 
                 function mostrarDiv(numeroDiv) {
                     // Ocultar todos los divs
