@@ -1,7 +1,9 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.Usuario;
+import com.example.medicaltec.Entity.UxUi;
 import com.example.medicaltec.repository.UsuarioRepository;
+import com.example.medicaltec.repository.UxUiRepository;
 import com.google.cloud.storage.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -22,14 +24,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 public class GcsController {
     @Autowired
     final UsuarioRepository usuarioRepository;
+    final UxUiRepository uxUiRepository;
 
-    public GcsController(UsuarioRepository usuarioRepository) {
+    public GcsController(UsuarioRepository usuarioRepository, UxUiRepository uxUiRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
     @PostMapping("/uploadPaciente")
@@ -193,6 +198,20 @@ public class GcsController {
             e.printStackTrace();
             attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
             return "redirect:/doctor/config";
+        }
+    }
+    @GetMapping("/logo")
+    public ResponseEntity<byte[]> mostrarLogo(){
+        int id=5;
+        Optional<UxUi> opt = uxUiRepository.findById(id);
+        if(opt.isPresent()){
+            UxUi uxUi= opt.get();
+            byte[] imagenComoBytes = uxUi.getLogo();
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(uxUi.getLogoContentType()));
+            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 }

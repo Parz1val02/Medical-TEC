@@ -1310,7 +1310,7 @@ public class SuperController {
             }
     }
     @GetMapping("/logo")
-    public ResponseEntity<byte[]> mostrarLogo(){
+    public ResponseEntity<byte[]> mostrarLogo(HttpSession httpSession,Authentication authentication){
         int id=5;
         Optional<UxUi> opt = uxUiRepository.findById(id);
         if(opt.isPresent()){
