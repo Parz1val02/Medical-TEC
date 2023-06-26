@@ -127,17 +127,53 @@
                                 <h4>Fecha actual:</h4>
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
                             </div>-->
+                            <div class="modal-body">
                                 <p>Escoja el color del topbar </p>
                                 <input type="color" id="colorPicker" onchange="cambiarColor()">
                                 <p>Escoja el color del sidebar </p>
                                 <input type="color" id="colorPicker1" onchange="cambiarColor1()">
                                 <p>Escoja el logo: </p>
-                                <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{sede.logo}" width="200" alt="" /></div>
                                 <div class="col">
-                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                                <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/superAdmin/logo}" width="50px" height="50px" /></div>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto" onclick="openModal()" style=" .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }">Cambiar foto</button>
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                                 </div>
+                            </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         </div>
@@ -603,14 +639,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Cambiar Logo</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true" onclick="closeModal()">&times;</span></button>
             </div>
             <div class="modal-body">
                 <form method="POST" th:action="@{/superAdmin/guardarLogo}" enctype="multipart/form-data">
                         <div class="form-group">
-                            <input type="file" class="form-control" id="file" name="file">
+                            <input type="file" class="form-control" id="archivo" name="archivo">
                         </div>
-                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" onclick="closeModal()">Cerrar</button>
                     <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
                 </form>
             </div>
@@ -863,6 +899,17 @@
         // También puedes actualizar la visualización en la página
         // var resultado = document.getElementById("resultado");
         // resultado.innerHTML = nuevaFecha.toString();
+    }
+</script>
+<script>
+    function openModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    }
+
+    function closeModal() {
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
     }
 </script>
 </body>

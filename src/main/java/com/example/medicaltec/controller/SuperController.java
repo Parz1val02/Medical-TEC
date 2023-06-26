@@ -1282,7 +1282,7 @@ public class SuperController {
         }
     }*/
     @PostMapping("/guardarLogo")
-    public String editarLogo(Model model, @RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    public String editarLogo(Model model, @RequestParam("archivo") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         if(file.isEmpty()){
@@ -1294,13 +1294,13 @@ public class SuperController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/superAdmin/dashboard";
         }
-        UxUi uxUi= uxUiRepository.findById(1).orElse(null);
+        UxUi uxUi= uxUiRepository.findById(5).orElse(null);
             try {
                 assert uxUi != null;
                 uxUi.setLogo(file.getBytes());
                 uxUi.setLogoNombre(filename);
                 uxUi.setLogoContentType(file.getContentType());
-                uxUiRepository.save(uxUi);
+                uxUiRepository.cambiarLogo(file.getBytes(),filename,file.getContentType());
                 attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
                 return "redirect:/superAdmin/dashboard";
             } catch (IOException e) {
@@ -1309,9 +1309,10 @@ public class SuperController {
                 return "redirect:/superAdmin/dashboard";
             }
     }
-    @GetMapping("/logo/{id}")
-    public ResponseEntity<byte[]> mostrarLogo(@PathVariable("id") int id){
-        Optional<UxUi> opt = uxUiRepository.findById(1);
+    @GetMapping("/logo")
+    public ResponseEntity<byte[]> mostrarLogo(){
+        int id=5;
+        Optional<UxUi> opt = uxUiRepository.findById(id);
         if(opt.isPresent()){
             UxUi uxUi= opt.get();
             byte[] imagenComoBytes = uxUi.getLogo();
@@ -1319,7 +1320,7 @@ public class SuperController {
             httpHeaders.setContentType(MediaType.parseMediaType(uxUi.getLogoContentType()));
             return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         }else{
-            return null;
+            return ResponseEntity.notFound().build();
         }
     }
 
