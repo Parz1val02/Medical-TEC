@@ -1,35 +1,28 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.config.CustomUserDetails;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.medicaltec.controller.ExampController;
 import org.thymeleaf.exceptions.TemplateOutputException;
 
 
-import javax.print.attribute.standard.Sides;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -49,14 +42,14 @@ public class SuperController {
     final EstadoRepository estadoRepository;
     final CitaRepository citaRepository;
     final HistorialMedicoRepository historialMedicoRepository;
-
     final SedeRepository sedeRepository;
+    final UxUiRepository uxUiRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository, UxUiRepository uxUiRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -68,6 +61,7 @@ public class SuperController {
         this.historialMedicoRepository = historialMedicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
     @GetMapping(value = {"/dashboard", ""})
@@ -1248,8 +1242,8 @@ public class SuperController {
 
 
     //Se comenta esta parte de los logos y foto perfil porque para imagenes ahora solo hay que usar google cloud
-    @PostMapping("/guardarFoto")
-    /*public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+   /* @PostMapping("/guardarFoto")
+    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         if(file.isEmpty()){
@@ -1262,7 +1256,7 @@ public class SuperController {
             return "redirect:/superAdmin/editarPerfil";
         }
         try{
-            superadmin.setFoto(file.getBytes());
+            superadmin.setlogo(file.getBytes());
             superadmin.setFotonombre(filename);
             superadmin.setFotocontenttype(file.getContentType());
             usuarioRepository.save(superadmin);
@@ -1286,9 +1280,9 @@ public class SuperController {
         }else{
             return null;
         }
-    }
-    @PostMapping("/editarLogo")
-    public String editarLogo(Model model, @ModelAttribute("sede") Sede sede, @RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    }*/
+    @PostMapping("/guardarLogo")
+    public String editarLogo(Model model, @RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         if(file.isEmpty()){
@@ -1300,15 +1294,13 @@ public class SuperController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/superAdmin/dashboard";
         }
+        UxUi uxUi= uxUiRepository.findById(1).orElse(null);
             try {
-                sede.setLogo(file.getBytes());
-                sede.setLogonombre(filename);
-                sede.setLogocontenttype(file.getContentType());
-                //superadmin.setFoto(file.getBytes());
-                //superadmin.setFotonombre(filename);
-                //superadmin.setFotocontenttype(file.getContentType());
-                //usuarioRepository.save(superadmin);
-                sedeRepository.save(sede);
+                assert uxUi != null;
+                uxUi.setLogo(file.getBytes());
+                uxUi.setLogoNombre(filename);
+                uxUi.setLogoContentType(file.getContentType());
+                uxUiRepository.save(uxUi);
                 attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
                 return "redirect:/superAdmin/dashboard";
             } catch (IOException e) {
@@ -1319,17 +1311,17 @@ public class SuperController {
     }
     @GetMapping("/logo/{id}")
     public ResponseEntity<byte[]> mostrarLogo(@PathVariable("id") int id){
-        Optional<Sede> opt = sedeRepository.findById(id);
+        Optional<UxUi> opt = uxUiRepository.findById(1);
         if(opt.isPresent()){
-            Sede sede = opt.get();
-            byte[] imagenComoBytes = sede.getLogo();
+            UxUi uxUi= opt.get();
+            byte[] imagenComoBytes = uxUi.getLogo();
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(sede.getLogocontenttype()));
+            httpHeaders.setContentType(MediaType.parseMediaType(uxUi.getLogoContentType()));
             return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
         }else{
             return null;
         }
-    }*/
+    }
 
     @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)
     public String createCuest(HttpSession httpSession,Authentication authentication){
@@ -1395,6 +1387,13 @@ public class SuperController {
         // Devuelve la vista o realiza otras operaciones
         return "superAdmin/dashboard";
     }*/
+    @RequestMapping(value = {"/editarUxUi"},method = RequestMethod.GET)
+    public String editarUxUi(Model model, HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        model.addAttribute("uxUi",uxUiRepository.findAll());
+        return "superAdmin/dashboard";
+    }
 
 
 }
