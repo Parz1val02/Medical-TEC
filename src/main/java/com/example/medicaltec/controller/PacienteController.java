@@ -409,14 +409,12 @@ public class PacienteController {
         modalidad.add("Presencial");
         modalidad.add("Virtual");
         model.addAttribute("modalidades", modalidad);
-        /*model.addAttribute("doctores", (Usuario)httpSession.getAttribute("doctores1"));
+        model.addAttribute("doctores", (Usuario)httpSession.getAttribute("doctores1"));
         model.addAttribute("especialidad", (Especialidade)httpSession.getAttribute("especialidad1"));
         model.addAttribute("tipoCita", (Tipocita)httpSession.getAttribute("tipocita1"));
         model.addAttribute("sedeUsuario", (SedeDto)httpSession.getAttribute("sede1"));
         model.addAttribute("fecha", (String)httpSession.getAttribute("fecha1"));
-        return "paciente/agendar2";*/
-        System.out.println((String)httpSession.getAttribute("fecha1"));
-        return "redirect:/paciente/principal";
+        return "paciente/agendar2";
     }
     @PostMapping("/guardarCita2")
     public String guardarCita2(@ModelAttribute("cita")@Valid Cita cita, BindingResult bindingResult,

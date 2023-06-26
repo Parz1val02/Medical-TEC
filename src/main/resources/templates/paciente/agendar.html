@@ -61,7 +61,7 @@
             <div class="card mb-3 bg-card-gradient">
                <div class="card-body" style="background-color: white">
                    <div class="container">
-                       <form th:action="@{/paciente/guardarCita}" method="post">
+                       <div id="original-form" class="form-container">
                            <div class="row">
                                <div class="col-sm-6">
                                    <div class="form-group">
@@ -82,7 +82,7 @@
                                    </div>
                                </div>
                            </div>
-                           <div class="row">
+                           <div class="row" >
                                <div class="col-sm-12">
                                    <div class="form-group" id="especialidad">
                                        <label for="inputEspecialidad">Especialidad:</label>
@@ -103,9 +103,11 @@
                                </div>
                            </div>
                            <!-- botón de envío -->
-                           <button class="btn btn-primary submit">Continuar</button>
-                           <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/principal}">Cancelar</a>
-                       </form>
+                           <button class="btn btn-primary submit" id="arch">Continuar</button>
+                           <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/principal}" id="arch2">Cancelar</a>
+                       </div>
+                       <div id="next-form" class="form-container" style="display: none">
+                       </div>
                    </div>
                </div>
             </div>
@@ -125,8 +127,8 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-</body>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:inline="javascript">
     $(document).ready(function(){
         flatpickr('#fecha', {
             dateFormat: 'd-m-Y',
@@ -135,9 +137,8 @@
         });
         $('#examen').hide();
         $('#inputExamen').prop("disabled", true);
-
         $('#tipo').on('change', function () {
-            tipo = ($(this).val());
+            var tipo = ($(this).val());
             if(tipo=='1'){
                 $('#especialidad').show();
                 $('#inputEspecialidad').prop("disabled", false);
@@ -154,6 +155,152 @@
 
     });
 </script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        $("#arch").click(function (){
+            var sedeId = $("#sede").val();
+            var fecha = $("#fecha").val();
+            var tipoCitaId = $("#tipo").val();
+            var especialidadId;
+            var examenId;
+            if(tipoCitaId=='1'){
+                especialidadId = $("#inputEspecialidad option:selected").val();
+            }
+            if(tipoCitaId=='2'){
+                examenId = $("#inputExamen option:selected").val();
+            }
+            $.ajax({
+                method: 'GET',
+                data: {
+                    sedeId: sedeId,
+                    fecha: fecha,
+                    tipoCitaId: tipoCitaId,
+                    especialidadId: especialidadId,
+                    examenId: examenId
+                },
+                url: 'http://34.28.24.16:8081/api/agendar1',
+                dataType: 'json',
+                success: function(response) {
+                    var infoDoctores = response.infoDoctores;
+                    var modalidades = response.modalidades;
+                    $.ajax({
+                        url: 'http://34.28.24.16:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
+                        type: 'GET',
+                        dataType: 'html',
+                        success: function(response) {
+                            // 'response' contains the received HTML content
+                            // Further processing of the HTML content
+                            $('#next-form').html(response);
+                            $(".form-container").toggle("slide", { direction: "left" }, 500);
+                            $('#arch').hide();
+                            $('#arch2').hide();
+                            $('#fecha').prop("disabled", true);
+                            $('#tipo').prop("disabled", true);
+                            $('#inputEspecialidad').prop("disabled", true);
+                            $('#inputExamen').prop("disabled", true);
+                            var select = $('#modalidad');
+                            // Option 1
+                            var option1 = $('<option>', {
+                                value: modalidades[0],
+                                text: modalidades[0]
+                            });
+                            select.append(option1);
+                            // Option 2
+                            var option2 = $('<option>', {
+                                value: modalidades[1],
+                                text: modalidades[1]
+                            });
+                            select.append(option2);
+                            for (var i = 0; i < infoDoctores.length; i++) {
+                                var info = infoDoctores[i];
+                                var doctor = info.doctorDto;
+                                var select2 = $('#doctor');
+                                var option = $('<option>', {
+                                    value: doctor.dni,
+                                    text:  doctor.nombre + ' ' + doctor.apellido
+                                });
+                                select2.append(option);
+                                if(i==0){
+                                    var horas = info.horas;
+                                    var select3 = $('#hora');
+                                    select3.empty();
+                                    for (var j = 0; j<horas.length; j++){
+                                        var time = horas[j];
+                                        var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
+                                        var option = $('<option>', {
+                                            value: time,
+                                            text: formattedTime
+                                        });
+                                        select3.append(option);
+                                    }
+                                }
+                            }
+                            $('#doctor').on('change', function () {
+                                var doc = ($(this).val());
+                                for (var i = 0; i < infoDoctores.length; i++) {
+                                    var info = infoDoctores[i];
+                                    var doctor = info.doctorDto;
+                                    if(doc==doctor.dni){
+                                        var horas = info.horas;
+                                        var select3 = $('#hora');
+                                        select3.empty();
+                                        for (var j = 0; j<horas.length; j++){
+                                            var time = horas[j];
+                                            var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
+                                            var option = $('<option>', {
+                                                value: time,
+                                                text: formattedTime
+                                            });
+                                            select3.append(option);
+                                        }
+                                    }
+                                }
+                            });
+                            $('#clash').on('click', function (){
+                                var modalidad = $("#modalidad") .val();
+                                var doctorDni = $("#doctor").val();
+                                var hora = $("#hora").val();
+                                var pacienteDni = [[${session.usuario.id}]];
+                                console.log(modalidad + ' ' + doctorDni + ' ' + hora + ' ' + pacienteDni);
+                                $.ajax({
+                                    method: 'POST',
+                                    data: {
+                                        sedeId: sedeId,
+                                        fecha: fecha,
+                                        tipoCitaId: tipoCitaId,
+                                        especialidadId: especialidadId,
+                                        examenId: examenId,
+                                        modalidad: modalidad,
+                                        doctorDni: doctorDni,
+                                        hora: hora,
+                                        pacienteDni: pacienteDni
+                                    },
+                                    url: 'http://34.28.24.16:8081/api/agendar2',
+                                    success: function(response) {
+                                        alert(response.msg);
+                                        location.reload();
+                                    },
+                                    error: function(xhr, status, error) {
+                                        // Error handling
+                                        console.log(error);
+                                    }
+                                });
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Error handling
+                            console.log(error);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+</body>
 </html>>
 
 
