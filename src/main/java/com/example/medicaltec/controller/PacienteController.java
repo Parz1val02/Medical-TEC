@@ -214,6 +214,7 @@ public class PacienteController {
             System.out.println(cuest.getDnidoctor());
             System.out.println("paciente");
             System.out.println(cuest.getDnipaciente());
+            System.out.println(cuest.getRespondido());
         }
         model.addAttribute("cuestionarios",cuestionariosUsuariosList);
        return "paciente/cuestionarios";
@@ -334,7 +335,32 @@ public class PacienteController {
             attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
             return "redirect:/paciente/cuestionarios";
         }
+    }
 
+    @GetMapping("/verRespuestas")
+    public String verRespuestas(@RequestParam("idCuestionario") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+                                RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<CuestionariosUsuarios> optionalCuestionariosUsuarios= cuestionariosUsuariosRepository.findById(id);
+        if (optionalCuestionariosUsuarios.isPresent()) {
+            CuestionariosUsuarios cuestionariosUsuarios= optionalCuestionariosUsuarios.get();
+            String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            String entrada2 = cuestionariosUsuarios.getRespuestas();
+            List<String> listarespuestas = List.of(entrada2.split("#!%&%!#"));
+            cuestionariosUsuarios.setListarespuestas(listarespuestas);
+            model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/verRespuestas";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/paciente/cuestionarios";
+        }
     }
 
 

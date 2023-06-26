@@ -72,12 +72,10 @@
                                                 border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>-->
                                                     <div style="height: 15px"></div>
                                                     <!-- Si cuestionario.respondido == 1, muestra el botón "Responder" -->
-                                                    <a th:if="${cuestionario.respondido == 1}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                                    border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario(idCuestionario=${cuestionario.id})}">Responder</a>
+                                                    <a th:if="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario(idCuestionario=${cuestionario.id})}">Responder</a>
 
                                                     <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
-                                                    <a th:if="${cuestionario.respondido == 0}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                                     border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/verRespuestas(idCuestionario=${cuestionario.id})}">Ver respuestas</a>
+                                                    <a th:unless="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/verRespuestas(idCuestionario=${cuestionario.id})}">Ver respuestas</a>
 
                                                 </div>
                                             </div>
