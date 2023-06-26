@@ -8,15 +8,15 @@
          aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
  <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
      <li class="nav-item">
-         <div class="col-md">
-             <h5 class="mb-0" id="top_navbar_name" style="font-size: 1rem">Doctor/a</h5>
+         <div class="col-md" style="text-align: right;">
+             <h5 class="mb-0" id="top_navbar_name" style="font-size: 1rem">Doctor</h5>
              <p style="margin: 0" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|">  </p>
          </div>
      </li>
      <li class="nav-item dropdown">
          <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
              <div class="avatar avatar-xl">
-                 <img class="rounded-circle" th:src="@{/img/team/3-thumb.png}" alt="" />
+                 <img class="rounded-circle" th:src="@{/fotoPerfil}" alt="" />
 
              </div>
          </a>

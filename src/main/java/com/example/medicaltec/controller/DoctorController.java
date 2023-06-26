@@ -125,6 +125,7 @@ public class DoctorController {
             usuario.setSexo("Femenino");
         }
 
+
         List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);
         return "doctor/config";
