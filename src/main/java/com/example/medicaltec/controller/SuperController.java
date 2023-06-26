@@ -1309,20 +1309,6 @@ public class SuperController {
                 return "redirect:/superAdmin/dashboard";
             }
     }
-    @GetMapping("/logo")
-    public ResponseEntity<byte[]> mostrarLogo(HttpSession httpSession,Authentication authentication){
-        int id=5;
-        Optional<UxUi> opt = uxUiRepository.findById(id);
-        if(opt.isPresent()){
-            UxUi uxUi= opt.get();
-            byte[] imagenComoBytes = uxUi.getLogo();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(uxUi.getLogoContentType()));
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)
     public String createCuest(HttpSession httpSession,Authentication authentication){
