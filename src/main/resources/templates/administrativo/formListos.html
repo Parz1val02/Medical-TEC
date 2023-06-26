@@ -5,7 +5,10 @@
 
 
 <body class="">
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
 <main class="main" id="top">
 
     <div class="container" data-layout="container">
@@ -41,7 +44,7 @@
                                     <input  class="form-control"  th:field="*{nombres}" type="hidden"/>
                                     <input   class="form-control"  th:field="*{apellidos}" type="hidden"/>
                                     <input   class="form-control"  th:field="*{dni}" type="hidden"/>
-                                    <input   class="form-control"  th:field="*{edad}"  type="hidden"/>
+                                    <input   class="form-control"  th:field="*{fechanacimiento}"  type="hidden"/>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">Nombres: </p>
                                         <input type="text" class="form-control" th:value="${formInvitacion.nombres}" style="color: #9da9bb;" disabled>
@@ -54,8 +57,8 @@
                                 <div style="height: 10px"></div>
                                 <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
                                     <div class="col-md-6">
-                                        <p style="font-weight: bold; margin: 0px">Edad: </p>
-                                        <input type="text" class="form-control"  th:value="${formInvitacion.edad}" style="color: #9da9bb;" disabled>
+                                        <p style="font-weight: bold; margin: 0px">Fecha de nacimiento: </p>
+                                        <input type="text" class="form-control"  th:value="${formInvitacion.fechanacimiento}" style="color: #9da9bb;" disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <p style="font-weight: bold; margin: 0px">DNI: </p>
@@ -116,23 +119,7 @@
                                     </div>
                                 </div>
                                 <div style="height: 10px"></div>
-                                <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                    <div class="col-md-6">
-                                        <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{medicamentos}" th:classappend="${medicamentosError!=null || medicamentoshack!=null?'is-invalid':''}"></textarea>
-                                        <div class ="invalid-feedback" th:if="${medicamentosError!=null}" th:text="${medicamentosError}"></div>
-                                        <div class ="invalid-feedback" th:if="${medicamentoshack!=null && medicamentosError==null}" th:text="${medicamentoshack}"></div>
 
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p style="font-weight: bold; margin: 0px">Alergias: <span style="color: #3d8af7; font-size: small">(editable)</span></p>
-                                        <textarea class="form-control" placeholder="Ingrese su respuesta aqui" th:field="*{alergias}" th:classappend="${alergiaError!=null || alergiaHack!=null?'is-invalid':''}"></textarea>
-                                        <div class ="invalid-feedback" th:if="${alergiaError!=null}" th:text="${alergiaError}"></div>
-                                        <div class ="invalid-feedback" th:if="${alergiaHack!=null && alergiaError==null}" th:text="${alergiaHack}"></div>
-                                    </div>
-
-
-                                </div>
                                 <div style="height: 20px"></div>
                                 <div style="text-align: center">
                                     <button type="submit" class="btn btn-primary" style="background: #b38df7; border: 5px solid #b38df7; padding: 2px">Guardar Cambios</button>
@@ -198,6 +185,10 @@
             ]
         });
     });
+
+
+
+
 </script>
 
 

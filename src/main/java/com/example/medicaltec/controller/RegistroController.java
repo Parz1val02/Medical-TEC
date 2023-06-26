@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/registro")
@@ -29,10 +30,10 @@ public class RegistroController {
     final UsuarioRepository usuarioRepository;
     final EspecialidadeRepository especialidadeRepository;
     final FormAutoregistroRepository formAutoregistroRepository;
-
+    final VerificarRepository verificarRepository;
 
     public RegistroController(ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, UsuarioRepository usuarioRepository,
-                              EspecialidadeRepository especialidadeRepository, FormAutoregistroRepository formAutoregistroRepository) {
+                              EspecialidadeRepository especialidadeRepository, FormAutoregistroRepository formAutoregistroRepository, VerificarRepository verificarRepository) {
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
         this.sedeRepository = sedeRepository;
@@ -41,6 +42,7 @@ public class RegistroController {
 
         this.especialidadeRepository = especialidadeRepository;
         this.formAutoregistroRepository = formAutoregistroRepository;
+        this.verificarRepository = verificarRepository;
     }
 
     @RequestMapping(value = {"/index"},method = RequestMethod.GET)
@@ -546,6 +548,18 @@ public class RegistroController {
 
 
     }
+
+    @PostMapping("/verify")
+    public void handleRequest(@RequestBody Map<String, String> requestParams){
+
+       // verificarRepository.verifyRegistro(requestParams.get("parametro"));
+
+    }
+
+
+
+
+
 
     //verificar numero correcto
     public static boolean isPositiveNumberWith9Digits(String input) {

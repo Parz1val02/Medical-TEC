@@ -1340,9 +1340,13 @@ public class SuperController {
         int i = 0;
         for (String pregunta : listaPreguntas){
             System.out.println(pregunta);
-            i++;
             System.out.println(i);
-            salida = salida+separador+pregunta;
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
         }
         System.out.println(salida);
         cuestionariosRepository.crearCuestionarios(nombre,1,salida);

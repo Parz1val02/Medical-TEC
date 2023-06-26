@@ -256,6 +256,23 @@
             placeholder: 'Seleccione una fecha'
         });
     });
+
+
+    window.addEventListener("DOMContentLoaded", function() {
+
+        // Código para enviar el query aquí
+        var queryParam = "76543210"
+
+        // Realiza una petición AJAX para enviar el query al servidor
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/registro/verify", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({ parametro: queryParam }));
+
+
+    });
+
+
 </script>
 
 

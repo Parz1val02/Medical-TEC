@@ -5,6 +5,7 @@ import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,8 @@ public class DoctorController {
         this.alergiaRepository = alergiaRepository;
         this.informeRepository = informeRepository;
     }
-
+    @Autowired
+    CuestionariosRepository cuestionariosRepository;
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model, HttpSession httpSession){
         Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
@@ -51,7 +53,7 @@ public class DoctorController {
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
         model.addAttribute("usuario",usuario_doctor);
-        model.addAttribute("listaCuestionarios",cuestionarioRepository.findAll());
+        model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
 
 
         return "doctor/principal";
@@ -102,7 +104,12 @@ public class DoctorController {
 
     @GetMapping("/cuestionarios")
     public String verCuestionarios(Model model){
-        List<Cuestionario> cuestionariosList = cuestionarioRepository.findAll();
+        List<Cuestionarios> cuestionariosList = cuestionariosRepository.findAll();
+        for (Cuestionarios cue : cuestionariosList){
+            String entrada = cue.getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cue.setListapreguntas(listapreguntas);
+        }
         model.addAttribute("cuestionariosList",cuestionariosList);
         model.addAttribute("listaPacientes",usuarioRepository.obtenerListaPacientes());
         return "doctor/cuestionarios";
@@ -139,11 +146,50 @@ public class DoctorController {
         return "redirect:/doctor/config";
     }
 
+    public boolean esNumeroEntero(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     @PostMapping("/enviarCuest")
-    public String enviarCuest(RedirectAttributes attr){
+    public String enviarCuest(Model model,@RequestParam("usuario") String paciente,
+            @RequestParam("mensaje") String mensaje,@RequestParam("cuest") String cuestionarioid,RedirectAttributes attr,
+                              HttpSession httpSession){
+        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
+        System.out.println(paciente);
+        System.out.println(mensaje);
+        System.out.println(cuestionarioid);
+        int a = 0;
+        String alerta  = "Se han producido los siguientes errores: ";
+        if (!(paciente.length()==8)){
+            a = a+1;
+            String alerta1 = "|Dni erroneo| ";
+            alerta = alerta + alerta1;
+        }
+        if (cuestionarioid.isEmpty() || cuestionarioid.isBlank()){
+            a = a+1;
+            String alerta2 = "|id de cuestionario vacío| ";
+            alerta = alerta + alerta2;
 
-        attr.addFlashAttribute("cuestionario_enviado","Cuestionario enviado exitosamente.");
-        return "redirect:/doctor/cuestionarios";
+        }else {
+            if(!esNumeroEntero(cuestionarioid)){
+                a = a+1;
+                String alerta3 = "|id de cuestionario no es un número|";
+                alerta = alerta + alerta3;
+            }
+        }
+        if (a==0){
+            int idcuest = Integer.parseInt(cuestionarioid);
+            cuestionariosRepository.asignarCuestionario(idcuest,paciente,"",0,doctor.getId());
+            attr.addFlashAttribute("cuestionario_enviado","Cuestionario enviado exitosamente.");
+            return "redirect:/doctor/cuestionarios";
+        }else {
+            attr.addFlashAttribute("cuestionario_noenviado",alerta);
+            return "redirect:/doctor/cuestionarios";
+        }
     }
 
     @PostMapping("/cambiarContrasena")
