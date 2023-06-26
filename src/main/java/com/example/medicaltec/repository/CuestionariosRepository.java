@@ -15,6 +15,11 @@ public interface CuestionariosRepository extends JpaRepository<Cuestionarios,Int
             "VALUES (?1, ?2, ?3);",nativeQuery = true)
     void crearCuestionarios(String nombre, int activo,String preguntas);
 
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO `telesystem_2`.`cuestionarios_usuarios` (`idcuestionario`, `dnipaciente`, `respuestas`,`respondido`,`dnidoctor`) " +
+            "VALUES (?1, ?2, ?3,?4,?5);",nativeQuery = true)
+    void asignarCuestionario(int cuestionario, String paciente,String respuestas,int respondido,String doctor);
 
     @Transactional
     @Modifying

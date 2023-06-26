@@ -27,8 +27,8 @@ public class FormAutoregistro {
     @Column(name = "apellidos", length = 45)
     private String apellidos;
 
-    @Column(name = "edad")
-    private Integer edad;
+    @Column(name = "fechanacimiento")
+    private String fechanacimiento;
 
     @Size(max = 45)
     @Column(name = "domicilio", length = 45)
@@ -52,4 +52,8 @@ public class FormAutoregistro {
     @Column(name = "correo", length = 45)
     private String correo;
 
+    @Column(name = "contrasenia", nullable = false, length = 100)
+    private String contrasenia;
+
+    private boolean pendiente;
 }

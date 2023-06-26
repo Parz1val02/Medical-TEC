@@ -55,21 +55,18 @@
               <div class="row">
               <h3 th:text="${cuestionarios.nombre}"></h3>
             </div>
-              <form>
                 <div th:each="pregunta : ${cuestionarios.listapreguntas}">
                   <div class="row">
                     <div class="col mb-3">
                       <label class="form-label" th:text="${pregunta}"></label>
-                      <input type="text" class="form-control" th:placeholder="${pregunta}">
+                      <input type="text" class="form-control" placeholder="Aquí va la respuesta">
                     </div>
                   </div>
                 </div>
                 <br>
                 <a th:href="@{/superAdmin/cuestionarios}">
-                  <button type="button" class="btn btn-danger mx-2">Cancelar</button>
+                  <button type="button" class="btn btn-danger mx-2">Regresar</button>
                 </a>
-                <button type="submit" class="btn btn-primary">Enviar cuestionario</button>
-              </form>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ public interface RecetaMedicamentoDto {
 
     int getCantidad();
 
-    String getFrecuencia();
+    String getObservaciones();
 
 
 }

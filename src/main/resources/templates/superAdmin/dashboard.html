@@ -91,7 +91,7 @@
                             <h1>Cambio de interfaz</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <!--<div class="modal-body">
                             <label for="zonasHorarias">Selecciona una zona horaria:</label>
                             <select id="zonasHorarias" name="zonasHorarias">
                                 <option th:each="sede : ${sedesList}"
@@ -126,14 +126,7 @@
                             <div>
                                 <h4>Fecha actual:</h4>
                                 <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
-                            </div>
-                                <p>Seleccione la sede: </p>
-                                <select class="form-select" aria-label="Default select example" style="margin-bottom: 20px">
-                                    <option selected value>------</option>
-                                    <option value="1">San Miguel</option>
-                                    <option value="2">Jesús María</option>
-                                    <option value="3">Lince</option>
-                                </select>
+                            </div>-->
                                 <p>Escoja el color del topbar </p>
                                 <input type="color" id="colorPicker" onchange="cambiarColor()">
                                 <p>Escoja el color del sidebar </p>
@@ -145,7 +138,6 @@
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                                 </div>
-                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         </div>
@@ -614,18 +606,13 @@
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form method="POST" th:action="@{/superAdmin/guardarLogo}"
-                      class="dropzone"
-                      id="myGreatDropzone"></form>
-                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
-                <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
-                <!--form  method="POST" th:action="@{/paciente/guardarFoto}" enctype="multipart/form-data">
+                <form method="POST" th:action="@{/superAdmin/guardarLogo}" enctype="multipart/form-data">
                         <div class="form-group">
                             <input type="file" class="form-control" id="file" name="file">
                         </div>
                     <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
                     <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
-                </form-->
+                </form>
             </div>
         </div>
     </div>

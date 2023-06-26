@@ -11,15 +11,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     dniInput.addEventListener('input', () => {
         const dni = dniInput.value;
+        dniValidationMessage.textContent = '';
         if (dni.length === 8) {
             // Make API request to retrieve data
-            const url1 = '/dni/${dni}';
+            const url1 = '/dni/'+dni;
 
             fetch(url1)
             .then(response => response.json())
                     .then(data => {
                         if (data) {
-                            nameInput.value = 'DNI already exists in the database';
+                            //nameInput.value = 'DNI already exists in the database';
+                            dniValidationMessage.textContent="El dni ya se encuentra la base de datos o en proceso de registro";
 
                         }else{
                             const url = `https://dniruc.apisperu.com/api/v1/dni/${dni}?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVkdXBpc2NvdGUuY2VwdEBnbWFpbC5jb20ifQ.EBZ7aEbbb51PcGiWtZwV1RopnJsYV3m8XqyRv4xotok`;
