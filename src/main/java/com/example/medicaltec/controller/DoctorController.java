@@ -86,7 +86,10 @@ public class DoctorController {
     public String verNotificaciones(){return "doctor/notificaciones";}
 
     @GetMapping("/calendario")
-    public String verCalendario(){return "doctor/calendario";}
+    public String verCalendario(HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        return "doctor/calendario";
+    }
 
     @GetMapping("/mensajeria")
     public String verMensajes(){return "doctor/mensajeria";}

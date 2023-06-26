@@ -195,6 +195,8 @@ public class ExampController {
     @GetMapping("/dni/{dni}")
     public ResponseEntity<?> checkDniExists(@PathVariable("dni") String dni) {
 
+
+        System.out.println(dni);
         List<Usuario> listaUsuarios = usuarioRepository.findAll();
         List<FormInvitacion> invitados = formInvitationRepository.findAll();
 

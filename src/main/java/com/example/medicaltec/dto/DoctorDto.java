@@ -5,10 +5,7 @@ public interface DoctorDto {
     String getEmail();
     String getNombre();
     String getApellido();
-    Integer getEdad();
-    String getTelefono();
     String getSexo();
-    String getDireccion();
     String getEspecialidad();
     String getCedula();
 }

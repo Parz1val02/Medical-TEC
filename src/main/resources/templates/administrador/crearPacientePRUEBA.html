@@ -44,7 +44,7 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">DNI</label>
-                                            <input type="text" th:field="*{id}" class="form-control"  th:classappend="${dnimsg !=null ?'is-invalid':''}">
+                                            <input type="text" maxlength="8" th:field="*{id}" class="form-control"  th:classappend="${dnimsg !=null ?'is-invalid':''}">
                                             <div class="invalid-feedback" th:if="${dnimsg!=null}" th:text="${dnimsg}"></div>
                                         </div>
 
@@ -85,11 +85,14 @@
                                         </div>
                                     </div>
 
+
                                     <div class="form-group">
-                                        <label >Edad </label>
-                                        <input type="number" name="edadParam" class="form-control" th:classappend="${edadmsg !=null?'is-invalid':''}" >
-                                        <div class="invalid-feedback" th:if="${edadmsg !=null}" th:text="${edadmsg }"></div>
+                                        <label>Fecha de nacimiento</label>
+                                        <input th:field="*{fechaNacimiento}" class="form-control"  type="date" th:classappend="${nacimientomsg !=null?'is-invalid':''}">
+                                        <div class="invalid-feedback" th:if="${nacimientomsg !=null}" th:text="${nacimientomsg }"></div>
                                     </div>
+
+
 
 
                                     <div class="row">
@@ -105,7 +108,7 @@
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">Telefono</label>
-                                            <input type="number" th:field="*{telefono}" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
+                                            <input type="text" th:field="*{telefono}" maxlength="9" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
                                             <div class="invalid-feedback" th:if="${telefonomsg !=null}" th:text="${telefonomsg}"></div>
                                             <!-- <div class="invalid-feedback" th:if="${telefonomsg!=null}" th:text="${telefonomsg}"></div>-->
                                         </div>
@@ -141,6 +144,7 @@
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 
 <!--    Scripts de DataTable -->
+<script th:src="@{/lib/flatpickr/flatpickr.min.js}"></script>
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
 <script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
@@ -153,6 +157,31 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+
+    $(document).ready(function () {
+        var fechaActual = new Date().toISOString().split("T")[0];
+        $("#fechanacimiento").attr("max", fechaActual);
+
+        $("#telefono").on('input', function (evt) {
+            // Allow only numbers.
+            $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+            var valor = $(this).val();
+            if (valor.length > $(this).attr('maxlength')) {
+                $(this).val(valor.slice(0, $(this).attr('maxlength')));
+            }
+        });
+
+        $("#dni").on('input', function (evt) {
+            // Allow only numbers.
+            $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+            var valor = $(this).val();
+            if (valor.length > $(this).attr('maxlength')) {
+                $(this).val(valor.slice(0, $(this).attr('maxlength')));
+            }
+        });
+    });
+
+
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable

@@ -45,6 +45,8 @@ public class FormInvitacion {
     @Column(name = "id_seguro", length = 45)
     private String idSeguro;
 
+
+
     @NotBlank
     @Min(value=100000000)
     @Max(value=999999999)

@@ -58,7 +58,7 @@
                                             <div class="row">
                                                 <div class="col" >
                                                     <div class="avatar" style="display: flex; align-items: center">
-                                                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i].dni}}" alt="" style=""/>
                                                     </div>
                                                 </div>
                                                 <div class="col" style="">
@@ -87,7 +87,7 @@
                                             <div class="row">
                                                 <div class="col" >
                                                     <div class="avatar" style="display: flex; align-items: center">
-                                                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style=""/>
+                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i+1].dni}}" alt="" style=""/>
                                                     </div>
                                                 </div>
                                                 <div class="col" style="">

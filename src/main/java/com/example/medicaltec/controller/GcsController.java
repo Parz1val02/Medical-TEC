@@ -33,7 +33,7 @@ public class GcsController {
     }
 
     @PostMapping("/uploadPaciente")
-    public String guardarImagenEvento(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+    public String guardarPerfilPaciente(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
@@ -45,7 +45,7 @@ public class GcsController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/paciente/perfil";
         }
-        if(checkFileExtension(file.getOriginalFilename())){
+        if(!checkFileExtension(file.getOriginalFilename())){
             attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
             return "redirect:/paciente/perfil";
         }
@@ -128,5 +128,71 @@ public class GcsController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
+    @PostMapping("/uploadFirma")
+    public String guardarFirmDoctor(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/doctor/config";
+        }
+        if(file.getOriginalFilename().contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/doctor/config";
+        }
+        if(!checkFileExtension(file.getOriginalFilename())){
+            attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
+            return "redirect:/doctor/config";
+        }
+        String id = usuario.getId();
+        String nombreArchivo= "fotosFirma/firma-" + id;
+        try{
+            uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
+            attr.addFlashAttribute("fotoSiu", "Firma actualizada de manera exitosa");
+            return "redirect:/doctor/config";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar firma");
+            return "redirect:/doctor/config";
+        }
+    }
+    @GetMapping("/fotoFirmaDoctor")
+    public ResponseEntity<byte[]> displayItemImageSS(@RequestParam ("dni") String dni, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication) throws IOException {
+        String blobName = "fotosFirma/firma-" + dni +".jpeg";
+        byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
+    @PostMapping("/uploadDoctor")
+    public String guardarPerfilDoctor(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/doctor/config";
+        }
+        if(file.getOriginalFilename().contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/doctor/config";
+        }
+        if(!checkFileExtension(file.getOriginalFilename())){
+            attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
+            return "redirect:/doctor/config";
+        }
+        String id = usuario.getId();
+        String nombreArchivo= "fotosPerfil/perfil-" + id;
+        try{
+            uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/doctor/config";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/doctor/config";
+        }
     }
 }
