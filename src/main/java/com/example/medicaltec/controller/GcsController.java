@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -215,11 +218,17 @@ public class GcsController {
             return ResponseEntity.notFound().build();
         }
     }
-    @PostMapping("/guardarColor")
-    public String guardarColor(@RequestParam("colorPicker") String colorPicker) {
-        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
+
+    @GetMapping("/color")
+    public ResponseEntity<Map<String, String>> getColor() {
+        UxUi uxUi = uxUiRepository.findById(5).orElse(null); // Obtener el último color guardado desde la base de datos
+
+        Map<String, String> colorMap = new HashMap<>();
         assert uxUi != null;
-        uxUi.setColorBar(colorPicker);
-        return "redirect:/";
+        colorMap.put("color1", uxUi.getColorBar());
+        colorMap.put("color2", uxUi.getColorBack());
+
+        return ResponseEntity.ok(colorMap);
     }
+
 }

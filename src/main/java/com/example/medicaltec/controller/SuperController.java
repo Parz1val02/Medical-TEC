@@ -1381,13 +1381,14 @@ public class SuperController {
         // Devuelve la vista o realiza otras operaciones
         return "superAdmin/dashboard";
     }*/
-    @RequestMapping(value = {"/editarUxUi"},method = RequestMethod.GET)
-    public String editarUxUi(Model model, HttpSession httpSession,Authentication authentication){
-        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",superadmin);
-        model.addAttribute("uxUi",uxUiRepository.findAll());
-        return "superAdmin/dashboard";
+    @PostMapping("/editarUxUi")
+    public String guardarColor(@RequestParam("colorPicker") String colorPicker, @RequestParam("colorPicker1") String colorPicker1) {
+        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
+        assert uxUi != null;
+        uxUi.setColorBar(colorPicker);
+        uxUi.setColorBack(colorPicker1);
+        uxUiRepository.editarUxUi(colorPicker,colorPicker1);
+        return "redirect:/superAdmin/dashboard";
     }
-
 
 }
