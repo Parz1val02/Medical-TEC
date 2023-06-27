@@ -32,5 +32,19 @@
             }
         })
     </script>
+    <script>
+        $(document).ready(function() {
+            $.get("/color", function(data) {
+                var color1 = data.color1;
+                var color2 = data.color2;
+
+                // Aplicar los valores recibidos según sea necesario
+                $("body").css("background-color", color1);
+                $("#change").css("background-color", color2);
+                $("#change1").css("background-color", color2);
+                $("#change2").css("background-color", color2);
+            });
+        });
+    </script>
 
 </div>
