@@ -124,7 +124,8 @@
                                     <div class="col-sm-12">
                                         <input type="hidden" th:name="usuarioid" th:value="${paciente.id}" />
                                         <input type="text" style="font-family: 'Open Sans',serif;
-                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" name="bitacora" placeholder="Agregue notas o comentarios personales">
+                                        width: 100%;border: 1px solid #9da9bb;border-radius: 0.375rem;" name="bitacora"
+                                               placeholder="Agregue notas o comentarios personales">
                                         <button type="submit" class="btn btn-outline-secondary btn-sm" style="border-radius: 0.375rem; float: right;
                                         margin-top: 10px; background: #b38df7; border-color: white; color: white" >Guardar</button>
                                     </div>
@@ -151,7 +152,7 @@
                     }
                 </script>
 
-                <div th:each="cita, i : ${listaCitasPorUsuario}">
+                <div th:each="informe, i : ${informesPorUsuario}">
                     <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Informe' + ${i.index+1}">
                         <div class="modal-dialog" style="max-width: 800px !important;">
                             <div class="modal-content">
@@ -168,7 +169,8 @@
                                             <p style="font-weight: bold">Bitácora: </p>
                                         </div>
                                         <div class="col-md-8">
-
+                                            <p style="font-weight: bold" th:text="${informe.diagnostico}">Diagnóstico: </p>
+                                            <p style="font-weight: bold" th:text="${informe.bitacora}">Bitácora: </p>
                                         </div>
                                     </div>
 
