@@ -62,8 +62,13 @@
                 correoelectronico@hotmail.com
               </td>
               <td class="align-middle" align="center">
-                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">LLenar informe</a>
+                <a th:if="${cita.informeNuevo.id == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idCita=${cita.id})}">Llenar informe</a>
+
+                <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
+                <a th:unless="${cita.informeNuevo.id == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver  informe</a>
+
               </td>
             </tr>
 
