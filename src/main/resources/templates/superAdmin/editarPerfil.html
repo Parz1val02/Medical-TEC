@@ -87,15 +87,6 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col mb-3">
-                      <div class="form-group">
-                        <div th:if="${dnimsg != null}" th:text="${dnimsg}" class="alert alert-danger" role="alert"></div>
-                        <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dni" name="dni" class="form-control" th:value="${superadmin.id}">
-                      </div>
-                    </div>
-                  </div>
                 <br>
                 <a th:href="@{/superAdmin/confSup}" class="btn btn-secondary" style="text-align: center;background: #748194;
           border-radius: 15px; border-color: #FFFFFF">Cancelar</a>
