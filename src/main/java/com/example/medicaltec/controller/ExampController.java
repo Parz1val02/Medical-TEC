@@ -3,6 +3,7 @@ package com.example.medicaltec.controller;
         import com.example.medicaltec.Entity.*;
         import com.example.medicaltec.repository.*;
         import jakarta.servlet.http.HttpSession;
+        import org.springframework.boot.Banner;
         import org.springframework.http.ResponseEntity;
         import org.springframework.stereotype.Controller;
         import org.springframework.ui.Model;
@@ -103,7 +104,7 @@ public class ExampController {
             model.addAttribute("listasedes", sedeRepository.findAll());
             return "auth/register";
         } else {
-            return "redirect:/auth/principalpage";
+            return "redirect:/";
         }
 
     }
@@ -187,6 +188,11 @@ public class ExampController {
                 return "redirect:/ingreso";
             }
         }
+    }
+
+    @GetMapping("/cambiarcontrasena")
+    public String cambiarContrasena(Model model){
+        return "auth/cambiarcontrasena";
     }
 
     //Chequear si dni existe

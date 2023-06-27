@@ -95,8 +95,7 @@
             <tbody class="bg-white">
             <tr th:each="informe, info : ${informeList} "th:if="${informe.getId()!= null && informe.getActivo() == true}">
               <td th:text="${info.index+1}"></td>
-              <td th:text="${informe.getPaciente().getNombre()}"></td>
-              <td th:text="${informe.getDiagnostico()}"></td>
+              <td th:text="${informe.nombre}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">

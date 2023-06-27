@@ -31,4 +31,10 @@ public interface InformeRepository extends JpaRepository<Informe,Integer> {
     @Query(value = "SELECT * FROM telesystem_2.informe WHERE usuario_dni=?1",nativeQuery = true)
     List<Informe> listarInformesPorPaciente(String usuario_id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO `telesystem_2`.`informe` (`idcuestionario`, `dnipaciente`, `respuestas`,`respondido`,`dnidoctor`) " +
+            "VALUES (?1, ?2, ?3,?4,?5);",nativeQuery = true)
+    void asignarCuestionario(int cuestionario, String paciente,String respuestas,int respondido,String doctor);
+
 }

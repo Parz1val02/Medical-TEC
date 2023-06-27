@@ -11,236 +11,224 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
 
-    <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
-
-    <div class="container" style="background: white;">
-        <h1 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Registro de nuevo usuario:</h1>
-        <p>
-            ¡Regístrate y comienza tu camino hacia una mejor salud!
-
-            En nuestra clínica, nos complace ofrecerte la oportunidad de registrarte como nuevo paciente. Al registrarte,
-            tendrás acceso a una amplia gama de servicios médicos y atención personalizada para satisfacer tus necesidades de salud.
-
-            Nuestro proceso de registro es rápido y sencillo. Solo tienes que completar nuestro formulario de registro en línea,
-            proporcionando la información necesaria, como tu nombre, fecha de nacimiento, información de contacto y antecedentes
-            médicos relevantes. Garantizamos la confidencialidad y seguridad de tus datos, cumpliendo con los más altos estándares de privacidad.
-        </p>
-
-        <p>Requisitos para la contraseña, <b> Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
-            • Que la contraseña contenga al menos ocho caracteres.<br>
-            • Que la contraseña contenga al menos un número.<br>
-            • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
-            • Que la contraseña contenga al menos una mayúscula.</b>.</p>
-
-        <h6 class="card-title" style="color: #3d8af7; font-weight: bold;">Completa la siguiente información para llevar a cabo tu autoregistro:</h6>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
-                    <div class="card-body" style="background: #FFFFFF">
-                        <form method="POST" th:action="@{'/registro/autoregistro'}">
-                            <!-- DNI -->
-
-                            <input   class="form-control"  th:value="${nombres}" name="nombres" id="nom" type="hidden"/>
-                            <input   class="form-control"  th:value="${apellidos}" name="apellidos" id="lenom" type="hidden"/>
-
-
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">DNI: </p>
-                                    <input type="text" class="form-control" style="color: #9da9bb;" placeholder="Ingrese su DNI" th:value="${dni}" id="dni" name="dni">
-                                    <p id="dniValidationMessage"></p>
-
-                                </div>
+<div style="">
+    <div style="position: relative; display: inline-block; width: 100%; height: 977px; ">
+        <img class="card-img-top img-fluid" th:src="@{../img/principalpage/clinica_difuminada.png}" style="height: 100%; width: 100%; object-fit: cover;">
+        <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
+            <div class="card bg-card-gradient" style="width: 1300px; background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
+                <div class="card-body" style="padding: 2rem !important;">
+                    <div style="text-align: center;">
+                        <h4 class="card-subtitle"
+                            style="color: #0032aa; font-weight: bold; padding-bottom: 5px">REGISTRO DE NUEVO USUARIO</h4>
+                        <h6 class="card-title"
+                            style="color: #0032aa; font-weight: bold; font-size: 15px;">Completa la siguiente información para llevar a cabo tu autoregistro:</h6>
+                    </div>
+                    <div style="display: flex; justify-content: center; width: 100%;">
+                        <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
+                            <div class="card-body" style="padding: 25px;">
+                                <label style="margin: 0;"> Requisitos para la contraseña,<br>
+                                    Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+                                    • Que la contraseña contenga al menos ocho caracteres.<br>
+                                    • Que la contraseña contenga al menos un número.<br>
+                                    • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+                                    • Que la contraseña contenga al menos una mayúscula.
+                                </label>
                             </div>
-                            <div style="height: 10px"></div>
-                            <!-- Nombre y apellidos -->
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0" >Nombres: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
-                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${nombres}" id="name" >
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0">Apellidos: <span style="color: #b38df7; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></p>
-                                    <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${apellidos}" id="surname" >
-                                </div>
+                        </div>
+                    </div>
+                    <form method="POST" th:action="@{'/registro/autoregistro'}">
+                        <!-- DNI -->
+                        <input  class="form-control"  th:value="${nombres}" name="nombres" id="nom" type="hidden"/>
+                        <input  class="form-control"  th:value="${apellidos}" name="apellidos" id="lenom" type="hidden"/>
+
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <label for="fecha">DNI:</label>
+                                <input type="text" class="form-control" style="color: #344050;" placeholder="Ingrese su DNI" th:value="${dni}" id="dni" name="dni">
+                                <p id="dniValidationMessage"></p>
                             </div>
-                            <div style="height: 10px"></div>
-                            <!-- Fecha de nacimiento y Domicilio -->
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-
-                                <!--<div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Edad: </p>
-                                    <input type="text" class="form-control"  name="edad"  th:value="${edad}" th:classappend="${edaderror!=null || edaderror1!=null?'is-invalid':''}" >
-                                    <div class ="invalid-feedback" th:if="${edaderror!=null}" th:text="${edaderror}"></div>
-                                    <div class ="invalid-feedback" th:if="${edaderror1!=null && edaderror==null}" th:text="${edaderror1}"></div>
-                                </div>-->
-
-                                <div class="col-md-6">
-                                    <label for="fecha">Fecha de Nacimiento:</label>
-                                    <input type="text" name="fecha" id="fecha" class="form-control" th:value="${fecha}" th:classappend="${birthdayerror != null || birthdayerror1!=null?'is-invalid':''}" placeholder="Seleccione una fecha">
-                                    <div class="invalid-feedback" th:if="${birthdayerror!=null}" th:text="${birthdayerror}"></div>
-                                    <div class ="invalid-feedback" th:if="${birthdayerror1!=null && birthdayerror==null}" th:text="${birthdayerror1}"></div>
-
-                                </div>
-
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Domicilio: <span style="color: #b38df7; font-size: small" ></span></p>
-                                    <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null || domiciliohack!=null?'is-invalid':''}" >
-                                    <div class ="invalid-feedback" th:if="${domicilioError!=null}" th:text="${domicilioError}"></div>
-                                    <div class ="invalid-feedback" th:if="${domiciliohack!=null && domicilioError==null}" th:text="${domiciliohack}"></div>
-                                </div>
+                        </div>
+                        <div style="height: 10px"></div>
+                        <!-- Nombre y apellidos -->
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <label for="fecha">Nombres: <span style="color: #00a9b1; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></label>
+                                <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${nombres}" id="name" >
                             </div>
-                            <div style="height: 10px"></div>
-                            <!-- Sexo y Telefono -->
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0">Sexo: <span style="color: #b38df7; font-size: small"></span></p>
-                                    <select name="sexo"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
-                                        <option value="M" th:selected="${sexo.equalsIgnoreCase('M')}">Masculino</option>
-                                        <option value="F" th:selected="${sexo.equalsIgnoreCase('F')}">Femenino</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0">Telefono celular: <span style="color: #b38df7; font-size: small"></span></p>
-                                    <input  type="text" class="form-control" name="celular" th:value="${celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
-                                    <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
-                                    <div class ="invalid-feedback" th:if="${telefonoError2!=null && telefonoError==null}" th:text="${telefonoError2}"></div>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="fecha">Apellidos: <span style="color: #00a9b1; font-size: small">(INFORMACIÓN OBTENIDA POR DNI)</span></label>
+                                <input type="text" class="form-control" style="color: #9da9bb; background: #9da9bb66;" th:value="${apellidos}" id="surname" >
                             </div>
-                            <div style="height: 10px"></div>
-                            <!-- Seguro y Sede -->
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Seguro: </p>
-                                    <select name="seguroId" class="form-select"  style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null?'is-invalid':''}">
-
-                                        <option th:each="seguro : ${listaseguros}"
-                                                th:value="${seguro.id}"
-                                                th:text="${seguro.nombreSeguro}"
-                                                th:selected="${seguroid==seguro.id}"
-                                        ></option>
-                                    </select>
-                                    <div class ="invalid-feedback" th:if="${seguroIderror!=null}" th:text="${seguroIderror}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Sede:</p>
-                                    <select name="sedeId" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null ?'is-invalid':''}">
-
-                                        <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
-                                                th:text="${sede.nombre}"
-                                                th:selected="${sedeid==sede.id}"
-                                        ></option>
-                                    </select>
-                                    <div class ="invalid-feedback" th:if="${sedeIderror!=null}" th:text="${sedeIderror}"></div>
-                                </div>
+                        </div>
+                        <div style="height: 10px"></div>
+                        <!-- Fecha de nacimiento y Domicilio -->
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <!--<div class="col-md-6">
+                                <p style="font-weight: bold; margin: 0px">Edad: </p>
+                                <input type="text" class="form-control"  name="edad"  th:value="${edad}" th:classappend="${edaderror!=null || edaderror1!=null?'is-invalid':''}" >
+                                <div class ="invalid-feedback" th:if="${edaderror!=null}" th:text="${edaderror}"></div>
+                                <div class ="invalid-feedback" th:if="${edaderror1!=null && edaderror==null}" th:text="${edaderror1}"></div>
+                            </div>-->
+                            <div class="col-md-6">
+                                <label for="fecha">Fecha de Nacimiento:</label>
+                                <input type="text" name="fecha" id="fecha" class="form-control" th:value="${fecha}" th:classappend="${birthdayerror != null || birthdayerror1!=null?'is-invalid':''}" placeholder="Seleccione una fecha">
+                                <div class="invalid-feedback" th:if="${birthdayerror!=null}" th:text="${birthdayerror}"></div>
+                                <div class ="invalid-feedback" th:if="${birthdayerror1!=null && birthdayerror==null}" th:text="${birthdayerror1}"></div>
                             </div>
-                            <div style="height: 10px"></div>
-                            <!-- Correo y Contraseña -->
-                            <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Correo:</p>
-                                    <input  type="text" class="form-control" name="correo" th:value="${correo}"  th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}" >
-                                    <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
-                                    <div class ="invalid-feedback" th:if="${correoError2!=null && correoError==null}" th:text="${correoError2}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Contraseña:</p>
-                                    <input type="password" class="form-control" name="contrasenia" th:value="${contrasenia}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
-                                    <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
-                                    <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="fecha">Dirección: <span style="color: #00a9b1; font-size: small"></span></label>
+                                <input  type="text" class="form-control"  name="domicilio" th:value="${domicilio}" th:classappend="${domicilioError!=null || domiciliohack!=null?'is-invalid':''}" >
+                                <div class ="invalid-feedback" th:if="${domicilioError!=null}" th:text="${domicilioError}"></div>
+                                <div class ="invalid-feedback" th:if="${domiciliohack!=null && domicilioError==null}" th:text="${domiciliohack}"></div>
                             </div>
-                            <div style="height: 10px"></div>
-
-
-                            <!-- Weas -->
-                            <!--<div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
-                                        <textarea class="form-control" placeholder="Ingrese el nombre de los medicamentos" ></textarea>
-                                    <div class ="invalid-feedback"></div>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <p style="font-weight: bold; margin: 0px">Alergias: </p>
-                                    <textarea class="form-control" placeholder="Ingrese en caso tenga alergias, caso contrario, ingrese '-'."></textarea>
-                                    <div class ="invalid-feedback" ></div>
-                                </div>
+                        </div>
+                        <div style="height: 10px"></div>
+                        <!-- Sexo y Telefono -->
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <label for="fecha">Sexo: <span style="color: #00a9b1; font-size: small"></span></label>
+                                <select name="sexo" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;">
+                                    <option value="M" th:selected="${sexo.equalsIgnoreCase('M')}">Masculino</option>
+                                    <option value="F" th:selected="${sexo.equalsIgnoreCase('F')}">Femenino</option>
+                                </select>
                             </div>
-                            <div style="height: 20px"></div>-->
-
-                            <div class="form-check pb-2" style="margin-left: 13px;">
-                                <input class="form-check-input" type="checkbox" name="accept">
-                                <label class="form-check-label">Acepto los terminos y condiciones</label>
+                            <div class="col-md-6">
+                                <label for="fecha">Teléfono celular: <span style="color: #00a9b1; font-size: small"></span></label>
+                                <input  type="text" class="form-control" name="celular" th:value="${celular}" th:classappend="${telefonoError!=null || telefonoError2!=null?'is-invalid':''}" >
+                                <div class ="invalid-feedback" th:if="${telefonoError!=null}" th:text="${telefonoError}"></div>
+                                <div class ="invalid-feedback" th:if="${telefonoError2!=null && telefonoError==null}" th:text="${telefonoError2}"></div>
                             </div>
+                        </div>
+                        <div style="height: 10px"></div>
+                        <!-- Seguro y Sede -->
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <label for="fecha">Seguro:</label>
+                                <select name="seguroId" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null?'is-invalid':''}">
 
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-left: 13px;">
-                                Terminos y condiciones
-                            </button>
-                            <div class ="invalid-feedback" ></div>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Terminos y Condiciones</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                Propósito del registro: El registro del usuario en la clínica tiene como objetivo facilitar la prestación de servicios médicos y administrativos, así como mantener un registro preciso y actualizado de la información del paciente.<br><br>
-
-                                                Información personal: Al registrarse, el usuario proporciona información personal como nombre completo, fecha de nacimiento, dirección, número de teléfono, dirección de correo electrónico, historial médico, entre otros. El usuario acepta proporcionar información veraz, completa y actualizada.<br><br>
-
-                                                Confidencialidad de la información: La clínica se compromete a mantener la confidencialidad de la información proporcionada por el usuario. La información personal no se compartirá con terceros, excepto cuando sea requerido por ley o para la prestación de servicios médicos necesarios.<br><br>
-
-                                                Uso de la información: La información proporcionada por el usuario se utilizará para los siguientes propósitos:<br>
-                                                a. Administrar y coordinar citas médicas y tratamientos.<br>
-                                                b. Comunicarse con el usuario sobre su salud, citas y servicios relacionados.<br>
-                                                c. Realizar análisis y diagnósticos médicos.<br>
-                                                d. Facturación y procesamiento de pagos.<br>
-                                                e. Cumplir con los requisitos legales y regulatorios.<br><br>
-
-                                                Responsabilidad del usuario: El usuario es responsable de mantener la confidencialidad de su información de inicio de sesión, como nombre de usuario y contraseña. El usuario acepta notificar a la clínica de inmediato cualquier acceso no autorizado o uso indebido de su cuenta.<br><br>
-
-                                                Actualización de la información: El usuario se compromete a mantener actualizada su información personal en caso de cambios. Esto incluye cambios de dirección, número de teléfono, dirección de correo electrónico u otra información relevante.<br><br>
-
-                                                Derechos de propiedad: Todos los derechos de propiedad intelectual relacionados con la plataforma de registro de la clínica, incluyendo el software, diseño, logotipos y contenido, son propiedad exclusiva de la clínica.<br><br>
-
-                                                Modificaciones: La clínica se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigencia después de su publicación en la plataforma de registro. El usuario será notificado de cualquier cambio significativo en los términos y condiciones.<br><br>
-
-                                                Aceptación de los términos y condiciones: Al completar el formulario de registro, el usuario acepta y se compromete a cumplir con todos los términos y condiciones establecidos anteriormente.
-                                            </p>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                    <option th:each="seguro : ${listaseguros}"
+                                            th:value="${seguro.id}"
+                                            th:text="${seguro.nombreSeguro}"
+                                            th:selected="${seguroid==seguro.id}"
+                                    ></option>
+                                </select>
+                                <div class ="invalid-feedback" th:if="${seguroIderror!=null}" th:text="${seguroIderror}"></div>
                             </div>
+                            <div class="col-md-6">
+                                <label for="fecha">Sede:</label>
+                                <select name="sedeId" class="form-select" style="border: 2px solid #d8e2ef; width: 100%; height: 35px;margin-top: 5px; padding-left: 16px;" th:classappend="${seguroIderror!=null ?'is-invalid':''}">
 
-                            <div style="height: 20px"></div>
+                                    <option th:each="sede : ${listasedes}" th:value="${sede.getId()}"
+                                            th:text="${sede.nombre}"
+                                            th:selected="${sedeid==sede.id}"
+                                    ></option>
+                                </select>
+                                <div class ="invalid-feedback" th:if="${sedeIderror!=null}" th:text="${sedeIderror}"></div>
+                            </div>
+                        </div>
+                        <div style="height: 10px"></div>
+                        <!-- Correo y Contraseña -->
+                        <div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <label for="fecha">Correo:</label>
+                                <input  type="text" class="form-control" name="correo" th:value="${correo}"  th:classappend="${correoError!=null || correoError2!=null?'is-invalid':''}" >
+                                <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
+                                <div class ="invalid-feedback" th:if="${correoError2!=null && correoError==null}" th:text="${correoError2}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fecha">Contraseña:</label>
+                                <input type="password" class="form-control" name="contrasenia" th:value="${contrasenia}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
+                                <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
+                                <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
+                            </div>
+                        </div>
+                        <div style="height: 10px"></div>
 
-                            <!-- Botón -->
-                            <div style="text-align: center">
-                                <a type="button" class="btn btn-secondary" th:href="@{'/'}" style="margin-left: 15px;
+                        <!-- Weas -->
+                        <!--<div class="row justify-content-between align-items-center" style="padding-left: 15px; ">
+                            <div class="col-md-6">
+                                <p style="font-weight: bold; margin: 0px">Medicamentos que toma actualmente: </p>
+                                    <textarea class="form-control" placeholder="Ingrese el nombre de los medicamentos" ></textarea>
+                                <div class ="invalid-feedback"></div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <p style="font-weight: bold; margin: 0px">Alergias: </p>
+                                <textarea class="form-control" placeholder="Ingrese en caso tenga alergias, caso contrario, ingrese '-'."></textarea>
+                                <div class ="invalid-feedback" ></div>
+                            </div>
+                        </div>
+                        <div style="height: 20px"></div>-->
+
+                        <div class="form-check pb-2" style="margin-left: 13px;">
+                            <input class="form-check-input" type="checkbox" name="accept">
+                            <label class="form-check-label">Acepto los terminos y condiciones</label>
+                        </div>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-left: 13px;">
+                            Terminos y condiciones
+                        </button>
+                        <div class ="invalid-feedback" ></div>
+                        <div style="height: 20px"></div>
+
+                        <!-- Botón -->
+                        <div style="text-align: center">
+                            <a type="button" class="btn btn-secondary" th:href="@{'/'}" style="margin-left: 15px;
                                     border: 1px solid #9da9bb; background: #9da9bb">Cancelar</a>
-                                <button type="submit" class="btn btn-primary">Registrarme</button>
+                            <button type="submit" class="btn btn-primary" style="background: #00a9b1; border: 1px solid #00a9b1;">Registrarme</button>
 
-                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 800px !important;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Terminos y Condiciones</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Propósito del registro: El registro del usuario en la clínica tiene como objetivo facilitar la prestación de servicios médicos y administrativos, así como mantener un registro preciso y actualizado de la información del paciente.<br><br>
 
-                        </form>
+                            Información personal: Al registrarse, el usuario proporciona información personal como nombre completo, fecha de nacimiento, dirección, número de teléfono, dirección de correo electrónico, historial médico, entre otros. El usuario acepta proporcionar información veraz, completa y actualizada.<br><br>
+
+                            Confidencialidad de la información: La clínica se compromete a mantener la confidencialidad de la información proporcionada por el usuario. La información personal no se compartirá con terceros, excepto cuando sea requerido por ley o para la prestación de servicios médicos necesarios.<br><br>
+
+                            Uso de la información: La información proporcionada por el usuario se utilizará para los siguientes propósitos:<br>
+                            a. Administrar y coordinar citas médicas y tratamientos.<br>
+                            b. Comunicarse con el usuario sobre su salud, citas y servicios relacionados.<br>
+                            c. Realizar análisis y diagnósticos médicos.<br>
+                            d. Facturación y procesamiento de pagos.<br>
+                            e. Cumplir con los requisitos legales y regulatorios.<br><br>
+
+                            Responsabilidad del usuario: El usuario es responsable de mantener la confidencialidad de su información de inicio de sesión, como nombre de usuario y contraseña. El usuario acepta notificar a la clínica de inmediato cualquier acceso no autorizado o uso indebido de su cuenta.<br><br>
+
+                            Actualización de la información: El usuario se compromete a mantener actualizada su información personal en caso de cambios. Esto incluye cambios de dirección, número de teléfono, dirección de correo electrónico u otra información relevante.<br><br>
+
+                            Derechos de propiedad: Todos los derechos de propiedad intelectual relacionados con la plataforma de registro de la clínica, incluyendo el software, diseño, logotipos y contenido, son propiedad exclusiva de la clínica.<br><br>
+
+                            Modificaciones: La clínica se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigencia después de su publicación en la plataforma de registro. El usuario será notificado de cualquier cambio significativo en los términos y condiciones.<br><br>
+
+                            Aceptación de los términos y condiciones: Al completar el formulario de registro, el usuario acepta y se compromete a cumplir con todos los términos y condiciones establecidos anteriormente.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+
                     </div>
                 </div>
             </div>
         </div>
 
-
     </div>
+</div>
+
 
     <script th:src="@{/js/findMe.js}"></script>
 <script>

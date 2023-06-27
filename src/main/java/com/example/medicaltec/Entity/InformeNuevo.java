@@ -7,20 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "informe")
-public class Informe {
+@Table(name = "informe_nuevo")
+public class InformeNuevo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idinforme", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_dni", referencedColumnName = "dni")
-    private Usuario paciente;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cita_idcita", referencedColumnName = "idcita")
-    private Cita cita;
     @Column(name = "diagnostico", length = 200)
     private String diagnostico;
 
@@ -29,16 +23,14 @@ public class Informe {
 
     @Column(name = "tratamiento", length = 100)
     private String tratamiento;
-    @ManyToOne
-    @JoinColumn(name = "receta_idreceta", nullable = false)
-    private Receta receta;
 
     @Column(name = "activo")
     private Boolean activo;
 
+    @Column(name = "nombre")
+    private String nombre;
+
     @Column(name = "campos")
     private String campos;
-
-
 
 }
