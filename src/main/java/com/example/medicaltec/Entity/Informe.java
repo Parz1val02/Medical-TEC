@@ -14,15 +14,24 @@ public class Informe {
     @Column(name = "idinforme", nullable = false)
     private Integer id;
 
-    @Column(name = "diagnostico", nullable = false, length = 200)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_dni", referencedColumnName = "dni")
+    private Usuario paciente;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cita_idcita", referencedColumnName = "idcita")
+    private Cita cita;
+    @Column(name = "diagnostico", length = 200)
     private String diagnostico;
 
     @Column(name = "bitacora", length = 500)
     private String bitacora;
 
+    @Column(name = "tratamiento", length = 100)
+    private String tratamiento;
     @ManyToOne
-    @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
-    private Historialmedico historialmedicoIdhistorialmedico;
+    @JoinColumn(name = "receta_idreceta", nullable = false)
+    private Receta receta;
 
     @Column(name = "activo")
     private Boolean activo;
