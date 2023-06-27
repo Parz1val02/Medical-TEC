@@ -134,11 +134,11 @@ public class GcsController {
             for (String extension : extensionList) {
                 if (fileName.endsWith(extension)) {
 //                    LOGGER.debug("Accepted file type : {}", extension);
-                    return present;
+                    return !present;
                 }
             }
         }
-        return !present;
+        return present;
     }
     public static byte[] downloadObject
             (String projectId, String bucketName, String blobName) throws IOException {
@@ -212,6 +212,64 @@ public class GcsController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
+    @PostMapping("/uploadSuper")
+    public String guardarPerfilSuper(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/superAdmin/confSup";
+        }
+        if(file.getOriginalFilename().contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/superAdmin/confSup";
+        }
+        if(!checkFileExtension(file.getOriginalFilename())){
+            attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
+            return "redirect:/superAdmin/confSup";
+        }
+        String id = usuario.getId();
+        String nombreArchivo= "fotosPerfil/perfil-" + id;
+        try{
+            uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/superAdmin/confSup";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/superAdmin/confSup";
+        }
+    }
+    @PostMapping("/uploadAdministrador")
+    public String guardarPerfilAdministrador(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/administrador/settings";
+        }
+        if(file.getOriginalFilename().contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/administrador/settings";
+        }
+        if(!checkFileExtension(file.getOriginalFilename())){
+            attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
+            return "redirect:/administrador/settings";
+        }
+        String id = usuario.getId();
+        String nombreArchivo= "fotosPerfil/perfil-" + id;
+        try{
+            uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/administrador/settings";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/administrador/settings";
+        }
     }
     @PostMapping("/uploadDoctor")
     public String guardarPerfilDoctor(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {

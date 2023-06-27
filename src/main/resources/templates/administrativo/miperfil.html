@@ -35,11 +35,12 @@
                 <div class="card-header position-relative min-vh-25 mb-7">
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
-                    <!--/.bg-holder-->
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" /></div>
                 </div>
                 <br>
                 <div class="col">
+                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                 </div>
                 <div class="card-body">
@@ -141,13 +142,6 @@
                       id="myGreatDropzone"></form>
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
                 <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
-                <!--form  method="POST" th:action="@{/paciente/guardarFoto}" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="file" class="form-control" id="file" name="file">
-                        </div>
-                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
-                    <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
-                </form-->
             </div>
         </div>
     </div>
