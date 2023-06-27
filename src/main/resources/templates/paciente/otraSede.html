@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Agendar Cita')}">
+</head>
+
+
+<body class="">
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
+        <div class="content">
+            <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
+            <div class="content">
+                <div class="card mb-3 bg-card-gradient">
+                    <div class="card-body" style="background: white;">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-md-11">
+                                <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                    Agendar cita
+                                </h1>
+                            </div>
+                            <div class="col-md-11">
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                    Agende sus futuras consultas médicas.
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+            <div class="card mb-3 bg-card-gradient">
+                <div class="card-body ">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md">
+                            <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
+                                Sedes
+                            </h4>
+                            <div class="row">
+                                <div class="col-sm-6" th:each="sede : ${sedes}" th:if="${sede.id!=session.usuario.sedesIdsedes.id}">
+                                    <a type="button" th:href="@{'/paciente/agendarCita' + '?idSede=' + ${sede.id}}">
+                                        <div style="display: flex; align-items: center; justify-content: space-around">
+                                            <div class="card" style="flex: 1 0 300px; margin: 10px; border: 1px solid #b6c1d2; background: #edf2f9;text-align: center; max-width: 350px ">
+                                                <img class="card-img-top" th:src="@{'/fotoSede?idSede='+${sede.id}}" alt="Card image cap" style="margin: 15px;border: 1px solid;height: 350px;width: 91%; margin-bottom: 0; background: #748194;">
+                                                <div class="card-body" style="padding: 15px; text-align: center">
+                                                    <h5 class="card-title" th:text="|${sede.nombre}|" style="color: #00a9b1;"></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
+
+
+
+
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+</body>
+</html>>
+
+
