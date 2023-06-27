@@ -870,7 +870,7 @@ public class SuperController {
     public String informes(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        model.addAttribute("informeList", informeRepository.listarInforme());
+        model.addAttribute("informeList", informeRepository.findAll());
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")

@@ -35,9 +35,7 @@
                 <div class="card-header position-relative min-vh-25 mb-7">
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
-                    <!--/.bg-holder-->
                     <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" /></div>
-                    <!--div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div-->
                 </div>
                 <br>
                 <div class="col">
@@ -157,7 +155,7 @@
                                 <tbody class="bg-white">
                                 <tr th:each="alergia, info : ${alergias}">
                                     <td th:text="${alergia.nombre}" class="align-middle" style="text-align: center"></td>
-                                    <td><a class="btn btn-secondary align-middle" style="text-align: center" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id}  + '&id2=' +${session.usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
+                                    <td><a class="btn btn-secondary align-middle" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{'/paciente/borrarAlergia' + '?id=' + ${alergia.id}  + '&id2=' +${session.usuario.historialmedicoIdhistorialmedico.id}}">Borrar</a>
                                 </tr>
                                 </tbody>
                             </table>
