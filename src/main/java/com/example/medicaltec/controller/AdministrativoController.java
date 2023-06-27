@@ -1,6 +1,8 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dao.PersonaDao;
+import com.example.medicaltec.dto.Sede1Dto;
+import com.example.medicaltec.dto.SedeDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
@@ -74,6 +76,8 @@ public class AdministrativoController {
 
         model.addAttribute("listaUsuarios",listaUsuarios);
 
+        Sede sede = sedeRepository.findById(usuarioSession.getSedesIdsedes().getId()).orElse(null);
+        model.addAttribute("sede",sede);
         //System.out.println(listaUsuarios.get(0).getEstadosIdestado().getNombre());
 
         return "administrativo/dashboard";
