@@ -269,7 +269,7 @@
                     nuevaPestana.document.close();
 
                     const api = new JitsiMeetExternalAPI("8x8.vc", {
-                        roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly",
+                        roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal",
                         parentNode: nuevaPestana.document.querySelector('#jaas-container'),
                         // Make sure to include a JWT if you intend to record,
                         // make outbound calls or use any other premium features!
@@ -523,10 +523,12 @@
         var fechaFormateada = date.format('DD/MM/YYYY');
 
         var content = '<strong>' + event.title + '</strong>';
+        content += '<br>' + event.extendedProps.especialidad;
         content += '<br>Paciente: ' + event.extendedProps.paciente;
         content += '<br>Modalidad: ' + event.extendedProps.modalidad;
         content += '<br>Fecha: ' + fechaFormateada;
         content += '<br>Hora: ' + formattedTime;
+        content += '<br>Sede: ' + event.extendedProps.sede;
 
         return content;
     }
