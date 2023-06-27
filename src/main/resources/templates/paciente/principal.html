@@ -428,9 +428,9 @@ Yo,  declaro que he sido informado(a) y comprendo los siguientes puntos:
 <script>
   //para el enlace de la reunion que se le enviara por correo al cliente
 
-  import jwt from 'jsonwebtoken';
+  //import jwt from 'jsonwebtoken';
   //const jwt = require('jsonwebtoken');
-  function createScheduledMeeting(date, duration) {
+  /*function createScheduledMeeting(date, duration) {
     const domain = '8x8.vc';
     const options = {
       roomName: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly',
@@ -490,7 +490,7 @@ Yo,  declaro que he sido informado(a) y comprendo los siguientes puntos:
     return token;
 
 
-  }
+  }*/
   //console.log(token)
   //para obtener el enlace de una reunion
   function generateScheduledMeetingLink(apiDomain, roomName) {
@@ -499,15 +499,15 @@ Yo,  declaro que he sido informado(a) y comprendo los siguientes puntos:
     return link;
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  /*document.addEventListener('DOMContentLoaded', () => {
     // Trigger scheduled meeting creation on page load
     createScheduledMeeting('2023-06-30T10:00:00', 60); /// fecha, tiempo en minutos
-  });
+  });*/
 
 
   const apiDomain = '8x8.vc';
-  const roomName = 'scheduled-room-name';
-  let link = generateScheduledMeetingLink(apiDomain, roomName)
+  const roomName = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal';
+  let link = generateScheduledMeetingLink(apiDomain, roomName);
   console.log(link);
 </script>
 </body>

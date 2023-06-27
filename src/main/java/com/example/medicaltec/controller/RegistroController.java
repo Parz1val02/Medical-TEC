@@ -12,8 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -55,10 +59,11 @@ public class RegistroController {
     }
 
     @GetMapping("/formPaciente/{id}")
-    public String formPaciente (@PathVariable("id") String id, Model model, RedirectAttributes attr){
+    public String formPaciente (@PathVariable("id") String id, Model model, RedirectAttributes attr) throws ParseException {
 
         long idLong = RandomLineGenerator.convertToNumber(id);
         String idLongStr = String.valueOf(idLong);
+
 
         boolean existe = false;
         List<FormInvitacion> formInvitacionList = formInvitationRepository.findAll();
@@ -71,32 +76,43 @@ public class RegistroController {
         //valido si el usuario no fue invitado antes
         if(!existe){
 
-            //valido si el dni brindado se encuentra en la tabla api
-            try {
+
+            String fecha = verificarRepository.obtenerFecha(idLongStr);
+
+            if(!haPasadoMasDe30Minutos(fecha)){
+
+                //valido si el dni brindado se encuentra en la tabla api
+                try {
 
 
 
-                model.addAttribute("api",personaDao.obtenerPersona(idLongStr) );
-                model.addAttribute("listaseguros", seguroRepository.findAll());
-                model.addAttribute("listasedes", sedeRepository.findAll());
+                    model.addAttribute("api",personaDao.obtenerPersona(idLongStr) );
+                    model.addAttribute("listaseguros", seguroRepository.findAll());
+                    model.addAttribute("listasedes", sedeRepository.findAll());
 
-                model.addAttribute("sedeid", 1);
-                model.addAttribute("sexo", "");
-                model.addAttribute("domicilio", "");
-                model.addAttribute("correo", "");
-                model.addAttribute("seguroid", 1);
-                model.addAttribute("celular", "");
-                model.addAttribute("medicamento", "");
-                model.addAttribute("alergia", "");
-                //model.addAttribute("edad", "");
-                model.addAttribute("fecha","");
-                model.addAttribute("codigo","");
+                    model.addAttribute("sedeid", 1);
+                    model.addAttribute("sexo", "");
+                    model.addAttribute("domicilio", "");
+                    model.addAttribute("correo", "");
+                    model.addAttribute("seguroid", 1);
+                    model.addAttribute("celular", "");
+                    model.addAttribute("medicamento", "");
+                    model.addAttribute("alergia", "");
+                    //model.addAttribute("edad", "");
+                    model.addAttribute("fecha","");
+                    //model.addAttribute("codigo","");
 
-                return "administrativo/registroPaciente";
-            }catch(Exception e){
-                attr.addFlashAttribute("error","ha ocurrido un error");
+                    return "administrativo/registroPaciente";
+                }catch(Exception e){
+                    attr.addFlashAttribute("error","ha ocurrido un error");
+                    return "redirect:/registro/index";
+                }
+            }else{
+                attr.addFlashAttribute("error","Han pasado mas de 30 minutos desde que la invitacion fue enviadada");
                 return "redirect:/registro/index";
             }
+
+
 
         }else{
             attr.addFlashAttribute("error","el usuario ya fue invitado a la plataforma");
@@ -124,10 +140,10 @@ public class RegistroController {
                               @RequestParam("celular") String celular,
 
                               @RequestParam("fecha")String birthday,
-                              @RequestParam("codigo")String codigo,
-                              Model model, RedirectAttributes attr){
+                              //@RequestParam("codigo")String codigo,
+                              Model model, RedirectAttributes attr) throws ParseException {
 
-        if(verificarRepository.obtenerCodigo(id).equals(codigo)) {
+
 
 
             Regex regex = new Regex();
@@ -298,51 +314,39 @@ public class RegistroController {
 
             } else {
 
-                FormInvitacion formInvitacion = new FormInvitacion();
-                formInvitacion.setNombres(nombres);
-                formInvitacion.setApellidos(apellidos);
-                formInvitacion.setDni(id);
-                formInvitacion.setSexo(sexo);
-                formInvitacion.setDomicilio(domicilio);
-                formInvitacion.setFechanacimiento(birthday);
-                formInvitacion.setIdSede(sedeid);
-                formInvitacion.setCorreo(correo);
-                formInvitacion.setIdSeguro(seguroid);
-                formInvitacion.setCelular(celular);
+                String fecha = verificarRepository.obtenerFecha(id);
+                if(!haPasadoMasDe30Minutos(fecha)){
+                    FormInvitacion formInvitacion = new FormInvitacion();
+                    formInvitacion.setNombres(nombres);
+                    formInvitacion.setApellidos(apellidos);
+                    formInvitacion.setDni(id);
+                    formInvitacion.setSexo(sexo);
+                    formInvitacion.setDomicilio(domicilio);
+                    formInvitacion.setFechanacimiento(birthday);
+                    formInvitacion.setIdSede(sedeid);
+                    formInvitacion.setCorreo(correo);
+                    formInvitacion.setIdSeguro(seguroid);
+                    formInvitacion.setCelular(celular);
 
 
-                //Para el administrador
-                formInvitacion.setPendiente(true);
+                    //Para el administrador
+                    formInvitacion.setPendiente(true);
 
-                formInvitationRepository.save(formInvitacion);
+                    formInvitationRepository.save(formInvitacion);
 
 
-                attr.addFlashAttribute("success", "Su registro fue exitoso, pronto le llegará un correo con sus credenciales de acceso");
-                return "redirect:/registro/index";
+                    attr.addFlashAttribute("success", "Su registro fue exitoso, pronto le llegará un correo con sus credenciales de acceso");
+                    return "redirect:/registro/index";
+                }else{
+                    attr.addFlashAttribute("error", "Han pasado mas de 30 minutos desde la invitacion por correo");
+                    return "redirect:/registro/index";
+                }
+
+
             }
 
 
-        }else{
 
-            model.addAttribute("errorcodigo","El codigo de verificacion es incorrecto");
-            model.addAttribute("api", personaDao.obtenerPersona(id));
-            model.addAttribute("listaseguros", seguroRepository.findAll());
-            model.addAttribute("listasedes", sedeRepository.findAll());
-
-            model.addAttribute("sedeid", 1);
-            model.addAttribute("sexo", "");
-            model.addAttribute("domicilio", "");
-            model.addAttribute("correo", "");
-            model.addAttribute("seguroid", 1);
-            model.addAttribute("celular", "");
-            model.addAttribute("medicamento", "");
-            model.addAttribute("alergia", "");
-            //model.addAttribute("edad", "");
-            model.addAttribute("fecha","");
-            model.addAttribute("codigo","");
-
-            return "administrativo/registroPaciente";
-        }
 
 
 
@@ -539,6 +543,8 @@ public class RegistroController {
             attr.addFlashAttribute("success","Ha sido registrado en la plataforma con exito");*/
 
 
+
+
             FormAutoregistro formAutoregistro = new FormAutoregistro();
             formAutoregistro.setDni(dni);
             formAutoregistro.setNombres(nombres);
@@ -558,6 +564,11 @@ public class RegistroController {
             formAutoregistroRepository.save(formAutoregistro);
             attr.addFlashAttribute("success","Ha completado con éxito el formulario de autoregistro, pronto le llegará un correo de confirmación");
             return "redirect:/registro/index";
+
+
+
+
+
         }
 
 
@@ -600,6 +611,27 @@ public class RegistroController {
         return input.matches(emailRegex);
     }
 
+    public static boolean haPasadoMasDe30Minutos(String fechaHoraFormateada) throws ParseException {
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
 
+        // Crear un formateador de fecha y hora con el formato deseado (d M yyyy hh mm)
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy hh-mm");
+
+        // Formatear la fecha y hora en el formato deseado
+        String fechaActualFormateada = fechaHoraActual.format(formateador);
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("d-M-yyyy HH-mm");
+
+        boolean late;
+        // Calcular la diferencia en minutos entre la fecha y hora actual y la fecha y hora formateada
+        if((formatoFecha.parse(fechaActualFormateada).getTime() - formatoFecha.parse(fechaHoraFormateada).getTime())/(60*1000)>=30){
+            late=true;
+        }else{
+            late=false;
+        }
+
+        // Verificar si han pasado más de 30 minutos
+        return late;
+    }
 
 }

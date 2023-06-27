@@ -14,9 +14,6 @@ public class Boleta {
     @Column(name = "idboletas", nullable = false)
     private Integer id;
 
-    @Column(name = "conceptopago", nullable = false, length = 100)
-    private String conceptopago;
-
     @Column(name = "monto", nullable = false)
     private Double monto;
 
