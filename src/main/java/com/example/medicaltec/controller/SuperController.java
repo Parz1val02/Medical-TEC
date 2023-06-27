@@ -1374,13 +1374,18 @@ public class SuperController {
 
     //@ResponseBody
     @PostMapping(value = "/guardarPlantilla")
-    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+    public String guardarPlantilla(Model model, RedirectAttributes attr, @RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
         Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         String salida ="";
         String separador ="#!%&%!#";
         String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
         int i = 0;
+        int c = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            c = c+1;
+        }
         for (String pregunta : preguntasSeparadas){
             System.out.println(pregunta);
             System.out.println(i);
@@ -1391,10 +1396,15 @@ public class SuperController {
             }
             i++;
         }
-        System.out.println(salida);
-        cuestionariosRepository.crearCuestionarios(nombre,1,salida);
-        //return "redirect:/superAdmin/cuestionarios";
-        return "redirect:/superAdmin/cuestionarios";
+        if(c==0){
+            System.out.println(salida);
+            cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+            //return "redirect:/superAdmin/cuestionarios";
+            return "redirect:/superAdmin/cuestionarios";
+        }else {
+            return "redirect:/superAdmin/crear/cuestionario";
+        }
+
     }
 
     @ExceptionHandler(TemplateOutputException.class)
