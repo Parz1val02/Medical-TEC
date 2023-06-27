@@ -101,18 +101,18 @@
                         Citas/consultas pasadas y bitácora de notas:
                     </h5>
                     <br>
-                    <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
+                    <div class="card" th:if="${#lists.size(informesPorUsuario)==0}">
                         <div class="card-body">
                             <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
                         </div>
                     </div>
-                    <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
+                    <div class="row no-gutters" th:each="informe, i : ${informesPorUsuario}">
                         <div class="col-md-12">
                             <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <b th:text="|${cita.fecha} - ${cita.hora}hrs: ${#strings.capitalize(cita.tipocitaIdtipocita.tipoCita)}|"></b>
-                                        <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
+                                        <b th:text="|${informe.cita.fecha} - ${informe.cita.hora}hrs: ${#strings.capitalize(informe.cita.tipocitaIdtipocita.tipoCita)}|"></b>
+                                        <p th:text="|${informe.cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${informe.cita.sedesIdsedes.nombre}|">
                                     </div>
                                     <div class="col-sm-2" th:align="right">
                                         <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
