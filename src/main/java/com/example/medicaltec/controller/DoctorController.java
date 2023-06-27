@@ -63,24 +63,30 @@ public class DoctorController {
 
     @GetMapping("/historial")
     public String verHistorial(Model model, @RequestParam("id") String id){
+        // Obtener paciente
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         Usuario paciente = optionalUsuario.get();
         model.addAttribute("paciente",paciente);
 
-        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(paciente.getHistorialmedicoIdhistorialmedico().getId());
-        ArrayList<Alergia> listaAlergias = new ArrayList<>();
-        for (Integer idAlergia : idAlergias) {
-            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
-        }
-        model.addAttribute("listaAlergias",listaAlergias);
-        List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-        model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
-
+        // Nombre completo del sexo de la persona
         if(paciente.getSexo().equals("M")){
             paciente.setSexo("Masculino");
         }else if (paciente.getSexo().equals("F")){
             paciente.setSexo("Femenino");
         }
+
+        // Obtener alergias
+        int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
+        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
+        ArrayList<Alergia> listaAlergias = new ArrayList<>();
+        for (Integer idAlergia : idAlergias) {
+            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+        }
+        model.addAttribute("listaAlergias",listaAlergias);
+
+        // Obtener informes y citas por usuario
+        model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
+
 
         return "doctor/historial";
     }

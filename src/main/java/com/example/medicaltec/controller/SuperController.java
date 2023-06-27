@@ -870,7 +870,7 @@ public class SuperController {
     public String informes(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        model.addAttribute("informeList", informeRepository.listarInforme());
+        model.addAttribute("informeList", informeRepository.findAll());
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
@@ -1046,20 +1046,6 @@ public class SuperController {
                               @RequestParam("dni") String dni, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        /*public String editSuperAdmin(@ModelAttribute("sA") @Valid Usuario sA,BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr,
-                                 HttpServletRequest httpServletRequest){
-        *//*
-        if(bindingResult.hasErrors()){
-            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/confSup";
-        }
-        else {
-            usuarioRepository.editSuperAdmin(sA.getNombre(),sA.getApellido(),sA.getEmail(),sA.getTelefono(),sA.getId(),superadmin.getId());
-            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
-            return "redirect:/superAdmin/confSup";
-        }
-        }*/
         int c = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -1242,6 +1228,73 @@ public class SuperController {
         }
     }
 
+    @RequestMapping(value = {"/crear/formulario"},method = RequestMethod.GET)
+    public String crearFormulario(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaFormulario";
+    }
+
+    @RequestMapping(value = {"/crear/informe"},method = RequestMethod.GET)
+    public String crearInforme(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme";
+    }
+
+    @RequestMapping(value = {"/crear/informe2"},method = RequestMethod.GET)
+    public String crearInforme2(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme2";
+    }
+
+    @PostMapping(value = "/guardarFormulario")
+    public String guardarFormulario(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/forms";
+    }
+
+    @PostMapping(value = "/guardarInforme")
+    public String guardarInforme(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/informes";
+    }
+
 
     //Se comenta esta parte de los logos y foto perfil porque para imagenes ahora solo hay que usar google cloud
    /* @PostMapping("/guardarFoto")
@@ -1321,13 +1374,14 @@ public class SuperController {
 
     //@ResponseBody
     @PostMapping(value = "/guardarPlantilla")
-    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
+    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
         Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         String salida ="";
         String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
         int i = 0;
-        for (String pregunta : listaPreguntas){
+        for (String pregunta : preguntasSeparadas){
             System.out.println(pregunta);
             System.out.println(i);
             if (i==0){
@@ -1380,13 +1434,14 @@ public class SuperController {
         // Devuelve la vista o realiza otras operaciones
         return "superAdmin/dashboard";
     }*/
-    @RequestMapping(value = {"/editarUxUi"},method = RequestMethod.GET)
-    public String editarUxUi(Model model, HttpSession httpSession,Authentication authentication){
-        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",superadmin);
-        model.addAttribute("uxUi",uxUiRepository.findAll());
-        return "superAdmin/dashboard";
+    @PostMapping("/editarUxUi")
+    public String guardarColor(@RequestParam("colorPicker") String colorPicker, @RequestParam("colorPicker1") String colorPicker1) {
+        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
+        assert uxUi != null;
+        uxUi.setColorBar(colorPicker);
+        uxUi.setColorBack(colorPicker1);
+        uxUiRepository.editarUxUi(colorPicker,colorPicker1);
+        return "redirect:/superAdmin/dashboard";
     }
-
 
 }

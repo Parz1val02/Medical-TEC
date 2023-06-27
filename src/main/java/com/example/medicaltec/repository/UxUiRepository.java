@@ -11,4 +11,8 @@ public interface UxUiRepository extends JpaRepository<UxUi, Integer> {
     @Transactional
     @Query(nativeQuery = true, value ="update ux_ui set logo=?1, logonombre=?2, logocontenttype=?3 where id=5")
     void cambiarLogo(byte[] logo, String nombre, String content);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value ="update ux_ui set colorbar=?1, colorback=?2 where id=5")
+    void editarUxUi(String colorbar, String colorback);
 }

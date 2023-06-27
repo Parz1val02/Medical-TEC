@@ -1,5 +1,6 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dto.FinanzasDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CorreoConEstilos;
@@ -40,6 +41,8 @@ public class AdministradorController {
     final AlergiaRepository alergiaRepository;
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final FormInvitationRepository formInvitationRepository;
+
+    final BoletaRepository boletaRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -47,7 +50,8 @@ public class AdministradorController {
             AlergiaRepository alergiaRepository,
             HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2,
             FormInvitationRepository formInvitationRepository,
-            CorreoConEstilos correoConEstilos
+            CorreoConEstilos correoConEstilos,
+            BoletaRepository boletaRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -56,6 +60,7 @@ public class AdministradorController {
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.formInvitationRepository = formInvitationRepository;
         this.correoConEstilos = correoConEstilos;
+        this.boletaRepository = boletaRepository;
     }
 
 
@@ -879,10 +884,76 @@ public class AdministradorController {
     }
 
     @GetMapping("/finanzas")
-    public String finanzas(){
-
+    public String finanzas(Model model){
+        model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasPrincipal());
         return "administrador/finanzas";
     }
+
+    @PostMapping("/filtrarFinanzas")
+    public String filtrarFinanzas(Model model,
+                                  @RequestParam("tipoFiltro") String tipoFiltro,
+                                  @RequestParam("filtrado") String filtrado,
+                                  RedirectAttributes attr){
+
+        //validamos segun el filtro padre : tipoFiltro
+        if (tipoFiltro!=null && !tipoFiltro.isBlank()) {
+            try {
+                int filtradoValidado = Integer.parseInt(filtrado);
+                System.out.println(filtradoValidado);
+                System.out.println(Integer.valueOf(filtradoValidado).getClass());
+                switch (tipoFiltro){
+                    case "1":
+                        if ( filtradoValidado>=1 && filtradoValidado<=19) {
+                            model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasEspecialidad(filtradoValidado));
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "2":
+                        if ( filtradoValidado>=1 && filtradoValidado<=7) {
+                            model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasSeguro(filtradoValidado));
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "3":
+                        if ( filtradoValidado>=1 && filtradoValidado<=12) {
+                            List<FinanzasDto> tablaFinanzasPorMes = new ArrayList<>();
+                            List<FinanzasDto> tablaFinanzasPrincipal = boletaRepository.tablaFinanzasPrincipal();
+                            for ( FinanzasDto boleta : tablaFinanzasPrincipal  ) {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                LocalDate fechaLocalDate = LocalDate.parse(boleta.getFecha(), formatter);
+                                int mes = fechaLocalDate.getMonthValue();
+                                if (mes == filtradoValidado) {
+                                    tablaFinanzasPorMes.add(boleta);
+                                }
+                            }
+                            model.addAttribute("listaBoletasDto", tablaFinanzasPorMes);
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "0":
+                    default:
+                        attr.addFlashAttribute("msgError","Seleccione un tipo de filtro valido.");
+                        return "redirect:/administrador/finanzas";
+                }
+            } catch (NumberFormatException e) {
+                attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                return "redirect:/administrador/finanzas";
+            }
+        } else {
+            attr.addFlashAttribute("msgError","Seleccione un tipo de filtro valido.");
+            return "redirect:/administrador/finanzas";
+        }
+
+
+
+    }
+
 
     @GetMapping("/mensajeria")
     public String mensajeria(){

@@ -2,17 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<nav th:fragment="sideBar" class="navbar navbar-vertical navbar-expand-xl navbar-light">
+<nav th:fragment="sideBar" id="change" class="navbar navbar-vertical navbar-expand-xl navbar-light">
      <div class="d-flex align-items-center">
        <div class="toggle-icon-wrapper">
          <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-toggle="tooltip" data-placement="left" title="Opciones"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
        </div>
        <a class="navbar-brand" th:href="@{/paciente/principal}">
-         <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/logo}" alt="Logo" width="50px" height="50px"/><span class="text-sans-serif" style="font-size: x-large">MedicalTec</span>
+         <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/logo}" alt="" width="50px" height="50px"/><span class="text-sans-serif" style="font-size: large">MedicalTec</span>
          </div>
        </a>
      </div>
-     <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+     <div class="collapse navbar-collapse" id="change1">
        <div class="navbar-vertical-content perfect-scrollbar scrollbar">
          <ul class="navbar-nav flex-column">
            <li class="nav-item">

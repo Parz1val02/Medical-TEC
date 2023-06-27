@@ -106,7 +106,7 @@
                                             <input type="text" id="disabledTextInput11" class="form-control" th:placeholder="${session.usuario.especialidadesIdEspecialidad.nombreEspecialidad}">
                                         </div>
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput12" class="form-label">Cédula</label>
+                                            <label for="disabledTextInput12" class="form-label">Nro. de Colegiatura</label>
                                             <input type="text" id="disabledTextInput12" class="form-control" th:placeholder="${session.usuario.ceduladoctor}">
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                             </form>
                             <div style="display: flex; flex-direction: column;">
                                 <label for="disabledTextInput11" class="form-label">Mi firma digital actual:</label>
-                                <img th:src="@{/fotoFirmaDoctor}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
+                                <img th:src="@{'/fotoFirmaDoctor?dni='+${session.usuario.id}}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
                                 height: 100px;width: 300px;border: 1px solid #d8e2ef;"/>
                             </div>
                         </div>
@@ -159,10 +159,10 @@
                                   id="myGreatDropzone2" style="margin: 10px 15px; width: 50%; flex: 2;"></form>
                             <div style="flex: 1; padding-left: 20px;">
                                 <p style="padding: 15px 15px 15px 0;">
-                                    Aquí puedes personalizar tu perfil agregando una foto.
+                                    Aquí puedes personalizar tu firma agregando una foto.
                                     Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
                                 </p>
-                                <button class="btn btn-primary btn-sm" type="submit" id="button2">Guardar cambios</button>
+                                <button class="btn btn-primary btn-sm" type="submit" id="clash">Guardar cambios</button>
                             </div>
                         </div>
                     </div>
@@ -210,7 +210,7 @@
                                     Aquí puedes personalizar tu perfil agregando una foto.
                                     Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
                                 </p>
-                                <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
+                                <button class="btn btn-primary btn-sm" type="submit" id="arch">Guardar cambios</button>
                             </div>
                         </div>
                     </div>
@@ -451,7 +451,55 @@
         init:function(){
             var self = this;
             // Update selector to match your button
-            $("#button").click(function (e) {
+            $("#arch").click(function (e) {
+                e.preventDefault();
+                self.processQueue();
+                // config
+                self.options.addRemoveLinks = true;
+                self.options.dictRemoveFile = "Delete";
+                //New file added
+                self.on("addedfile", function (file) {
+                    console.log('new file added ', file);
+                });
+                // Send file starts
+                self.on("sending", function (file) {
+                    console.log('upload started', file);
+                    $('.meter').show();
+                });
+
+                // File upload Progress
+                self.on("totaluploadprogress", function (progress) {
+                    console.log("progress ", progress);
+                    $('.roller').width(progress + '%');
+                });
+
+                self.on("queuecomplete", function (progress) {
+                    $('.meter').delay(999).slideUp(999);
+                });
+
+                // On removing file
+                self.on("removedfile", function (file) {
+                    console.log(file);
+                });
+            });
+            this.on("queuecomplete", function(progress) {
+                // File upload is complete
+                location.reload();
+            });
+        }
+    };
+    Dropzone.options.myGreatDropzone2 = { // camelized version of the `id`
+        paramName: "file", // The name that will be used to transfer the file
+        maxFiles: 1,
+        autoProcessQueue: false,
+        acceptedFiles: ".jpg,.jpeg",
+        maxFilesize: 2,
+        addRemoveLinks: true,
+        dictResponseError: 'Server not Configured',
+        init:function(){
+            var self = this;
+            // Update selector to match your button
+            $("#clash").click(function (e) {
                 e.preventDefault();
                 self.processQueue();
                 // config

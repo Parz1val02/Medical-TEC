@@ -22,7 +22,13 @@ public interface InformeRepository extends JpaRepository<Informe,Integer> {
     @Query(value="update Informe c set c.activo = ?1 where c.id = ?2", nativeQuery = true)
     int updateActivoByActivo(Boolean activoNuevo, int id);
 
-    @Query(value = "SELECT a.idinforme, a.diagnostico, a.activo, c.dni, concat(c.nombre, \" \", c.apellido) as \"nombre\" FROM telesystem_2.informe a Inner Join historialmedico b on a.historialmedico_idhistorialmedico=b.idhistorialmedico Inner Join usuario c on b.idhistorialmedico=c.historialmedico_idhistorialmedico",
+    @Query(value = "SELECT a.idinforme, a.diagnostico, a.activo, c.dni, concat(c.nombre, \" \", c.apellido) as \"nombre\" " +
+            "FROM telesystem_2.informe a Inner Join historialmedico b on a.historialmedico_idhistorialmedico=b.idhistorialmedico " +
+            "Inner Join usuario c on b.idhistorialmedico=c.historialmedico_idhistorialmedico",
             nativeQuery = true)
     List<InformePacienteDto> listarInforme();
+
+    @Query(value = "SELECT * FROM telesystem_2.informe WHERE usuario_dni=?1",nativeQuery = true)
+    List<Informe> listarInformesPorPaciente(String usuario_id);
+
 }

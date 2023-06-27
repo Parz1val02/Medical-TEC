@@ -35,11 +35,12 @@
                 <div class="card-header position-relative min-vh-25 mb-7">
                     <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
                     </div>
-                    <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/img/team/avatar.png}" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" /></div>
                 </div>
                 <br>
                 <div class="col">
+                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
                 </div>
                 <div class="card-body">
@@ -102,7 +103,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Advertencia</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel1">Advertencia</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
@@ -128,37 +129,19 @@
 
 
 <!-- Modal-->
-<div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelA" aria-hidden="true">
+<div class="modal fade" id="CambiarFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabelA">Cambiar foto de perfil</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar foto de perfil</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form class="form-group" method="post" th:action="@{/guardarFoto}" enctype="multipart/form-data">
-                    <div class="row dz-clickable" data-dropzone="data-dropzone" data-options="{&quot;maxFiles&quot;:1,&quot;data&quot;:[{&quot;name&quot;:&quot;avatar.png&quot;,&quot;size&quot;:&quot;54kb&quot;,&quot;url&quot;:&quot;/img/team&quot;}]}">
-                        <div class="col-md-auto">
-                            <div class="dz-preview dz-preview-single">
-                                <div class="dz-preview-cover d-flex align-items-center justify-content-center mb-3 mb-md-0 dz-image-preview">
-                                    <div class="avatar avatar-4xl"><img class="rounded-circle" src="/img/team/avatar.png" alt="avatar.png" data-dz-thumbnail="data-dz-thumbnail"></div>
-                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress=""></span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md">
-                            <div class="dz-message dropzone-area px-2 py-3" data-dz-message="data-dz-message">
-                                <div class="text-center"><img class="mr-2" src="/img/icons/cloud-upload.svg" alt="" width="25">Upload your profile picture
-                                    <p class="mb-0 fs--1 text-400">Upload a 300x300 jpg image with <br>a maximum size of 400KB</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
+                <form method="POST" th:action="@{/uploadAdministrativo}"
+                      class="dropzone"
+                      id="myGreatDropzone"></form>
                 <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cerrar</button>
-                <button class="btn btn-primary btn-sm" type="button">Guardar cambios</button>
+                <button class="btn btn-primary btn-sm" type="submit" id="button">Guardar cambios</button>
             </div>
         </div>
     </div>
@@ -172,6 +155,56 @@
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <!--    Scripts de Dropzone -->
 <script th:src="@{/lib/dropzone/dropzone.min.js}"></script>
+<script>
+    Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+        paramName: "file", // The name that will be used to transfer the file
+        maxFiles: 1,
+        autoProcessQueue: false,
+        acceptedFiles: ".jpg,.jpeg",
+        maxFilesize: 2,
+        addRemoveLinks: true,
+        dictResponseError: 'Server not Configured',
+        init:function(){
+            var self = this;
+            // Update selector to match your button
+            $("#button").click(function (e) {
+                e.preventDefault();
+                self.processQueue();
+                // config
+                self.options.addRemoveLinks = true;
+                self.options.dictRemoveFile = "Delete";
+                //New file added
+                self.on("addedfile", function (file) {
+                    console.log('new file added ', file);
+                });
+                // Send file starts
+                self.on("sending", function (file) {
+                    console.log('upload started', file);
+                    $('.meter').show();
+                });
+
+                // File upload Progress
+                self.on("totaluploadprogress", function (progress) {
+                    console.log("progress ", progress);
+                    $('.roller').width(progress + '%');
+                });
+
+                self.on("queuecomplete", function (progress) {
+                    $('.meter').delay(999).slideUp(999);
+                });
+
+                // On removing file
+                self.on("removedfile", function (file) {
+                    console.log(file);
+                });
+            });
+            this.on("queuecomplete", function(progress) {
+                // File upload is complete
+                location.reload();
+            });
+        }
+    };
+</script>
 </body>
 
 </html>

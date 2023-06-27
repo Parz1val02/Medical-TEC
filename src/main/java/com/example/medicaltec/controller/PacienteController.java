@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -220,6 +221,15 @@ public class PacienteController {
        return "paciente/cuestionarios";
     }
 
+    @GetMapping("/otraSede")
+    public String otraSede(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Sede> sedes = sedeRepository.findAll();
+        model.addAttribute("sedes", sedes);
+        return "paciente/otraSede";
+    }
     @GetMapping("/agendarCita")
     public String agendarCita(@RequestParam(value = "idSede", required = false)String idSede, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
@@ -366,7 +376,7 @@ public class PacienteController {
 
 
     @PostMapping("/guardarRespuestas")
-    public String guardarRptas( @RequestParam("listarespuestas") List<String> respuestas,
+    public String guardarRptas( @RequestParam("listarespuestas") String respuestas,
                                 @RequestParam("cuestionarioid") String iddelcuestionario,
                                 RedirectAttributes attr, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
 
@@ -374,10 +384,11 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int idcues = Integer.parseInt(iddelcuestionario);
+        String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
         String salida ="";
         String separador ="#!%&%!#";
         int i = 0;
-        for (String respuesta : respuestas){
+        for (String respuesta : respuestasSeparadas){
             System.out.println(respuesta);
             System.out.println(i);
             if (i==0){

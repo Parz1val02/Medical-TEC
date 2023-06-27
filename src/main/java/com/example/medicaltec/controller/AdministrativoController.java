@@ -1,6 +1,8 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dao.PersonaDao;
+import com.example.medicaltec.dto.Sede1Dto;
+import com.example.medicaltec.dto.SedeDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.EmailSenderService;
 import com.example.medicaltec.Entity.*;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -74,6 +77,8 @@ public class AdministrativoController {
 
         model.addAttribute("listaUsuarios",listaUsuarios);
 
+        Sede sede = sedeRepository.findById(usuarioSession.getSedesIdsedes().getId()).orElse(null);
+        model.addAttribute("sede",sede);
         //System.out.println(listaUsuarios.get(0).getEstadosIdestado().getNombre());
 
         return "administrativo/dashboard";
@@ -96,7 +101,9 @@ public class AdministrativoController {
 
         formInvitacion=formInvitationRepository.findFormbyPacient(dni);
 
-        model.addAttribute("formInvitacion",formInvitacion);
+
+
+        model.addAttribute("FormInvitacion",formInvitacion);
         model.addAttribute("listaseguros",seguroRepository.findAll());
         model.addAttribute("listasedes",sedeRepository.findAll());
 
@@ -112,7 +119,7 @@ public class AdministrativoController {
 
         int error = 0;
 
-
+        //System.out.println(formInvitacion.getId());
 
 
             String domicilioError=null;
@@ -121,13 +128,10 @@ public class AdministrativoController {
             String correoError2=null;
             String telefonoError=null;
             String telefonoError2=null;
-            String medicamentosError=null;
-            String medicamentoshack=null;
-            String alergiaError=null;
-            String alergiaHack=null;
 
 
-            if(formInvitacion.getDomicilio().equals("")){
+
+            if(formInvitacion.getDomicilio().length()==0){
                domicilioError= "El campo domicilio no puede estar vacio.";
                error++;
             }
@@ -136,7 +140,7 @@ public class AdministrativoController {
                 error++;
             }
 
-            if(formInvitacion.getCorreo().equals("")){
+            if(formInvitacion.getCorreo().length()==0){
                 correoError="El campo correo no puede estar vacio";
                 error++;
                 model.addAttribute("correoLleno",false);
@@ -151,7 +155,7 @@ public class AdministrativoController {
                 error++;
             }
 
-            if(formInvitacion.getCelular().equals("")){
+            if(formInvitacion.getCelular().length()==0){
                 telefonoError="El campo telefono celular no puede estar vacio";
                 error++;
                 model.addAttribute("numeroLleno",false);
@@ -189,7 +193,7 @@ public class AdministrativoController {
 
 
         if(error>0){
-            model.addAttribute("formInvitacion",formInvitacion);
+            model.addAttribute("FormInvitacion",formInvitacion);
             model.addAttribute("listaseguros",seguroRepository.findAll());
             model.addAttribute("listasedes",sedeRepository.findAll());
 
@@ -205,7 +209,7 @@ public class AdministrativoController {
             return "administrativo/formListos";
         }else{
             attr.addFlashAttribute("msg","Formulario editado correctamente");
-            formInvitationRepository.save(formInvitacion);
+           formInvitationRepository.save(formInvitacion);
             return"redirect:/administrativo/dashboard";
         }
 
@@ -356,7 +360,7 @@ public class AdministrativoController {
         String fechaHoraFormateada = fechaHoraActual.format(formateador);
 
         //guardar fecha-hora, codigo y dni
-        verificarRepository.crearInicioInvitacion(id,fechaHoraFormateada,generateRandomString());
+        verificarRepository.crearInicioInvitacion(id,fechaHoraFormateada);
 
         String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(id));
 
@@ -364,7 +368,8 @@ public class AdministrativoController {
                 "Invitacion paciente para la clínica telesystem" ,
                 "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
                 "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+request.getRemoteAddr()+
-                ":8080/registro/formPaciente/"+randomNumberStr);
+                ":8080/registro/formPaciente/"+randomNumberStr +"\n"+
+                "Usted tiene 30 minutos desde el momento que se ha enviado este correo. Fecha Envio: "+fechaHoraFormateada);
 
                 attr.addFlashAttribute("envio","El correo de invitacion fue enviado correctamente");
 
@@ -392,19 +397,5 @@ public class AdministrativoController {
         return input.matches(emailRegex);
     }
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    public static String generateRandomString() {
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-
-        for (int i = 0; i < 6; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            sb.append(randomChar);
-        }
-
-        return sb.toString();
-    }
 
 }

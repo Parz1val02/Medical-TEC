@@ -16,7 +16,6 @@ public class Boleta {
 
     @Column(name = "conceptopago", nullable = false, length = 100)
     private String conceptopago;
-
     @Column(name = "monto", nullable = false)
     private Double monto;
 
