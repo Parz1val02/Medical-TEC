@@ -93,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <!-- aquí iría el logo de la empresa -->
-                                            <img class="mr-2" th:src="@{/img/illustrations/shield.png}" alt="" width="50">
+                                            <img class="mr-2" th:src="@{/logo}" alt="" width="50">
                                         </div>
 
                                     </div>
@@ -126,10 +126,10 @@
                                                 <tr>
                                                     <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
                                                     </td>
-                                                    <td th:if="${boletas[info.index].conceptopago!=null}" th:text="${boletas[info.index].conceptopago}" class="align-middle">
+                                                    <!--td th:text="${boletas[info.index].conceptopago}" class="align-middle">
                                                     </td>
-                                                    <td th:if="${boletas[info.index].monto!=null}" th:text="${boletas[info.index].monto}" class="align-middle" >
-                                                    </td>
+                                                    <td th:text="${boletas[info.index].monto}" class="align-middle" >
+                                                    </td-->
                                                 </tr>
 
                                             </table>
