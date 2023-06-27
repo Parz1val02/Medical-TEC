@@ -54,9 +54,21 @@
             <div class="col-lg-12">
               <form th:action="@{/superAdmin/guardarInforme}" method="post">
                 <div class="row">
-                  <label for="nombre">Nombre del Informe</label>
+                  <label for="nombre">Nombre del informe</label>
                   <input type="text" class="form-control"  th:classappend="${nombremsg!=null?'is-invalid':''}" id="nombre" name="nombre" required>
                   <div class="invalid-feedback" th:if="${nombremsg!=null}" th:text="${nombremsg}"></div>
+                </div>
+                <div class="row">
+                  <label>Diagnostico</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="row">
+                  <label>Bitácora</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="row">
+                  <label>Tratamiento</label>
+                  <input type="text" class="form-control">
                 </div>
                 <div class="row">
                   <div id="preguntas-adicionales"></div>
@@ -66,7 +78,7 @@
                 </div>
                 <div class="row">
                   <div class="container-fluid mt-3 mb-3">
-                    <button type="button" class="btn btn-secondary" style="background-color: #06ff97" onclick="agregarPregunta()">Agregar campo de informe</button>
+                    <button type="button" class="btn btn-secondary" style="background-color: #06ff97" onclick="agregarPregunta()">Agregar campo extra al informe</button>
                   </div>
                 </div>
                 <a th:href="@{/superAdmin/informes}">
@@ -89,7 +101,7 @@
                 var label = document.createElement('label');
                 label.setAttribute('for', 'pregunta-' + contadorPreguntas);
                 label.classList.add('form-label');
-                label.innerText = 'Redacte su pregunta ' + contadorPreguntas;
+                label.innerText = 'Redacte el nombre del campo extra ' + contadorPreguntas;
 
                 var input = document.createElement('input');
                 input.setAttribute('type', 'text');
@@ -103,7 +115,7 @@
                 var btnBorrar = document.createElement('button');
                 btnBorrar.setAttribute('type', 'button');
                 btnBorrar.classList.add('btn', 'btn-danger', 'btn-sm','mt-3');
-                btnBorrar.innerText = 'Borrar pregunta';
+                btnBorrar.innerText = 'Borrar campo extra';
                 btnBorrar.addEventListener('click', function () {
                   divPregunta.remove();
                   preguntasAdicionales.splice(contadorPreguntas - 1, 1);

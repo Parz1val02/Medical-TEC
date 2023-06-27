@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Estructure las preguntas cómo mejor lo crea cconveniente
+                Estructure las preguntas cómo mejor lo crea conveniente
               </h5>
             </div>
           </div>
@@ -54,9 +54,9 @@
             <div class="col-lg-12">
               <form th:action="@{/superAdmin/guardarPlantilla}" method="post">
                 <div class="row">
-                  <label for="nombre">Nombre del cuestionario</label>
-                  <input type="text" class="form-control"  th:classappend="${nombremsg!=null?'is-invalid':''}" id="nombre" name="nombre" required>
-                  <div class="invalid-feedback" th:if="${nombremsg!=null}" th:text="${nombremsg}"></div>
+                  <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
+                  <label for="nombre" class="form-label">Nombre del cuestionario</label>
+                  <input type="text" id="nombre" name="nombre" class="form-control">
                 </div>
                 <div class="row">
                   <div id="preguntas-adicionales"></div>
@@ -69,9 +69,8 @@
                     <button type="button" class="btn btn-secondary" style="background-color: #06ff97" onclick="agregarPregunta()">Agregar pregunta</button>
                   </div>
                 </div>
-                <a th:href="@{/superAdmin/cuestionarios}">
-                  <button type="submit" class="btn btn-danger mx-2">Cancelar</button>
-                </a>
+                <a th:href="@{/superAdmin/cuestionarios}" class="btn btn-danger" style="text-align: center;background: #748194;
+          border-radius: 15px; border-color: #FFFFFF">Cancelar</a>
                 <button type="submit" class="btn btn-primary">Registrar cuestionario</button>
               </form>
             </div>
