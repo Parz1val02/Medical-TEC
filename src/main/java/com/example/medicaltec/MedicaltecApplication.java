@@ -6,12 +6,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @SpringBootApplication
 public class MedicaltecApplication {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         SpringApplication.run(MedicaltecApplication.class, args);
+
+
+
     }
+
+
+
 
 }

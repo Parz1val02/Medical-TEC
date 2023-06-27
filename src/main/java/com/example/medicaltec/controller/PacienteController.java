@@ -221,6 +221,15 @@ public class PacienteController {
        return "paciente/cuestionarios";
     }
 
+    @GetMapping("/otraSede")
+    public String otraSede(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Sede> sedes = sedeRepository.findAll();
+        model.addAttribute("sedes", sedes);
+        return "paciente/otraSede";
+    }
     @GetMapping("/agendarCita")
     public String agendarCita(@RequestParam(value = "idSede", required = false)String idSede, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());

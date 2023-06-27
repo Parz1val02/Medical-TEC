@@ -71,6 +71,36 @@ public class GcsController {
         }
     }
 
+    @PostMapping("/uploadAdministrativo")
+    public String guardarPerfilAdministrativo(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        if(file.isEmpty()){
+            attr.addFlashAttribute("foto", "Debe subir un archivo");
+            return "redirect:/administrativo/perfil";
+        }
+        if(file.getOriginalFilename().contains("..")){
+            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
+            return "redirect:/administrativo/perfil";
+        }
+        if(!checkFileExtension(file.getOriginalFilename())){
+            attr.addFlashAttribute("foto", "No se permiten archivos diferentes a .jpeg o .jpg");
+            return "redirect:/administrativo/perfil";
+        }
+        String id = usuario.getId();
+        String nombreArchivo= "fotosPerfil/perfil-" + id;
+        try{
+            uploadObject(file,nombreArchivo, "glowing-hearth-316315 ", "wenas");
+            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
+            return "redirect:/administrativo/perfil";
+        } catch (Exception e) {
+            e.printStackTrace();
+            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
+            return "redirect:/administrativo/perfil";
+        }
+    }
+
     public static void uploadObject
             (MultipartFile multipartFile, String fileName, String projectId, String gcpBucketId) {
         try {
@@ -130,8 +160,16 @@ public class GcsController {
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/fotoSede")
+    public ResponseEntity<byte[]> displayItemImageSede(@RequestParam("idSede")String idSede) throws IOException {
+        String blobName = "fotosSede/sede" + idSede +".jpeg";
+        byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
     @GetMapping("/fotoPerfilDoctor")
-    public ResponseEntity<byte[]> displayItemImageS(@RequestParam ("dni") String dni, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication) throws IOException {
+    public ResponseEntity<byte[]> displayItemImageS(@RequestParam ("dni") String dni) throws IOException {
         String blobName = "fotosPerfil/perfil-" + dni +".jpeg";
         byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
         HttpHeaders headers = new HttpHeaders();
@@ -168,7 +206,7 @@ public class GcsController {
         }
     }
     @GetMapping("/fotoFirmaDoctor")
-    public ResponseEntity<byte[]> displayItemImageSS(@RequestParam ("dni") String dni, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication) throws IOException {
+    public ResponseEntity<byte[]> displayItemImageSS(@RequestParam ("dni") String dni) throws IOException {
         String blobName = "fotosFirma/firma-" + dni +".jpeg";
         byte[] image = downloadObject("glowing-hearth-316315 ", "wenas", blobName);
         HttpHeaders headers = new HttpHeaders();
