@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+    <title>Crear Plantilla de Informe</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+<style>
+    .bloque {
+        width: 100px;
+        height: 100px;
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .bloque:active {
+        opacity: 0.5;
+    }
+
+    #zonaDestino {
+        width: 400px;
+        height: 300px;
+        border: 2px dashed #ccc;
+        padding: 10px;
+    }
+    </style>
+
+</style>
+<body>
+
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+<main class="main" id="top">
+
+
+    <div class="container" data-layout="container">
+        <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
+        <div class="content" >
+            <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+                <div class="card-body" style="background: #FFFFFF">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-11">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                                Formato del Informe
+                            </h1>
+                        </div>
+                        <div class="col-md-11">
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                                Estructure las preguntas cómo mejor lo crea conveniente
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card mb-3">
+                <div class="card-header position-relative min-vh-25 mb-7">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
+                    </div>
+                    <!--/.bg-holder-->
+                </div>
+                <div class="card-body" style="margin-top: -70px">
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+                            <div id="bloque1" class="bloque" draggable="true">Bloque 1</div>
+                            <div id="bloque2" class="bloque" draggable="true">Bloque 2</div>
+                            <div id="bloque3" class="bloque" draggable="true">Bloque 3</div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div id="zonaDestino"></div>
+                        </div>
+                    </div>
+
+
+
+                    <script>
+                        const bloques = document.querySelectorAll('.bloque');
+
+                        bloques.forEach(bloque => {
+                            bloque.addEventListener('dragstart', dragStart);
+                            bloque.addEventListener('dragend', dragEnd);
+                        });
+
+                        function dragStart(event) {
+                            event.dataTransfer.setData('text/plain', event.target.id);
+                            event.target.classList.add('dragging');
+                        }
+
+                        function dragEnd(event) {
+                            event.target.classList.remove('dragging');
+                        }
+
+                        const zonaDestino = document.getElementById('zonaDestino');
+
+                        zonaDestino.addEventListener('dragover', dragOver);
+                        zonaDestino.addEventListener('drop', drop);
+
+                        function dragOver(event) {
+                            event.preventDefault();
+                        }
+
+                        function drop(event) {
+                            event.preventDefault();
+                            const bloqueId = event.dataTransfer.getData('text/plain');
+                            const bloque = document.getElementById(bloqueId);
+                            event.target.appendChild(bloque);
+                        }
+                    </script>
+            </div>
+
+
+            <!-- ===============================================-->
+            <!--    static Content-->
+            <!-- ===============================================-->
+
+            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+
+
+
+
+</body>
+</html>

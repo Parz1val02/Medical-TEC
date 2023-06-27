@@ -1046,20 +1046,6 @@ public class SuperController {
                               @RequestParam("dni") String dni, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        /*public String editSuperAdmin(@ModelAttribute("sA") @Valid Usuario sA,BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr,
-                                 HttpServletRequest httpServletRequest){
-        *//*
-        if(bindingResult.hasErrors()){
-            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/confSup";
-        }
-        else {
-            usuarioRepository.editSuperAdmin(sA.getNombre(),sA.getApellido(),sA.getEmail(),sA.getTelefono(),sA.getId(),superadmin.getId());
-            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
-            return "redirect:/superAdmin/confSup";
-        }
-        }*/
         int c = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -1240,6 +1226,73 @@ public class SuperController {
             // Manejar el caso cuando no se encuentra el usuario
             return "redirect:/404.html"; // Página de no encontrado
         }
+    }
+
+    @RequestMapping(value = {"/crear/formulario"},method = RequestMethod.GET)
+    public String crearFormulario(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaFormulario";
+    }
+
+    @RequestMapping(value = {"/crear/informe"},method = RequestMethod.GET)
+    public String crearInforme(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme";
+    }
+
+    @RequestMapping(value = {"/crear/informe2"},method = RequestMethod.GET)
+    public String crearInforme2(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme2";
+    }
+
+    @PostMapping(value = "/guardarFormulario")
+    public String guardarFormulario(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/forms";
+    }
+
+    @PostMapping(value = "/guardarInforme")
+    public String guardarInforme(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/informes";
     }
 
 
