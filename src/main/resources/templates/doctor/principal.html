@@ -169,8 +169,6 @@
                         Visualiza información de tus próximas citas
                     </h6>
 
-                    <button id="jitsi-button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
-                                border-radius: 15px; border-color: grey"> prueba videollamada </button>
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
                         <tr>
@@ -225,9 +223,9 @@
 
             <script type="text/javascript">
 
-                var elemento = document.getElementById('jitsi-button');
-                //var botones = document.getElementsByClassName('botones');
-                /*for (var i = 0; i < botones.length; i++) {
+                //var elemento = document.getElementById('jitsi-button');
+                var botones = document.getElementsByClassName('botones');
+                for (var i = 0; i < botones.length; i++) {
                     var boton = botones[i];
 
                     // Agregar el evento de clic a cada botón
@@ -245,17 +243,17 @@
                         nuevaPestana.document.close();
 
                         const api = new JitsiMeetExternalAPI("8x8.vc", {
-                            roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly",
+                            roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal",
                             parentNode: nuevaPestana.document.querySelector('#jaas-container'),
                             // Make sure to include a JWT if you intend to record,
                             // make outbound calls or use any other premium features!
                             // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
                         });
                     });
-                }*/
+                }
 
                 //para iniciar la reunion con boton
-                elemento.addEventListener('click', () => {
+                /*elemento.addEventListener('click', () => {
                     //var appURL = window.location.href;
                     //console.log(appURL);
                     var nuevaPestana = window.open("","reunion de jitsi");
@@ -275,7 +273,7 @@
                         // make outbound calls or use any other premium features!
                         // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
                     });
-                });
+                });*/
             </script>
 
             <script>
