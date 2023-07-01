@@ -34,13 +34,20 @@
                                 <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualice la información de los doctores de su sede</h5>
                             </div>
                             <div class="col-auto">
-                                <div class="input-group">
-                                    <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar por especialidad" id="quickSearch2">
-                                    <span class="input-group-append">
-                                            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button" id="quicksearch">
-                                                <i class="fas fa-search"></i>
+                                <br>
+                                <div>
+                                    <div class="form-group">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                Filtrar por especialidad
                                             </button>
-                                        </span>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" th:each="especialidad : ${especialidades}"
+                                                       th:href="@{'/paciente/listaDoctores?idEspecialidad=' + ${especialidad.id}}"
+                                                       th:text="${especialidad.nombreEspecialidad}"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -48,6 +55,7 @@
                     <div class="card-body" id="contenedorCards" style="align-items: center">
                         <div id="pagination">
                             <button id="previousBtn" class="btn btn-secondary" type="button"><span class='fas fa-arrow-left'></span></button>
+                            <button type="button" class="btn page-item"><a class="page-link" id="pageNumber">1</a></button>
                             <button id="nextBtn" class="btn btn-secondary" type="button"><span class='fas fa-arrow-right'></span></button>
                         </div>
                         <div id="cardContainer">
@@ -58,13 +66,13 @@
                                             <div class="row">
                                                 <div class="col" >
                                                     <div class="avatar" style="display: flex; align-items: center">
-                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i].dni}}" alt="" style=""/>
+                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i].dni}}" alt="" style="max-height: 200px; max-width: 200px"/>
                                                     </div>
                                                 </div>
                                                 <div class="col" style="">
-                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctora ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='F'}">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Dra. ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='F'}">
                                                     </h4>
-                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='M'}">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Dr. ${doctores[i].nombre}|" th:if="${doctores[i].sexo=='M'}">
                                                     </h4>
                                                     <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i].especialidad}"></h5>
                                                     <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
@@ -75,7 +83,7 @@
                                                         <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
                                                     </div>
                                                     <!--Button trigger modal-->
-                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
+                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${doctores[i].dni}">Ver más</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,13 +95,13 @@
                                             <div class="row">
                                                 <div class="col" >
                                                     <div class="avatar" style="display: flex; align-items: center">
-                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i+1].dni}}" alt="" style=""/>
+                                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctores[i+1].dni}}" alt="" style="max-height: 200px; max-width: 200px"/>
                                                     </div>
                                                 </div>
                                                 <div class="col" style="">
-                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctora ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='F'}">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Dra. ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='F'}">
                                                     </h4>
-                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='M'}">
+                                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Dr. ${doctores[i+1].nombre}|" th:if="${doctores[i+1].sexo=='M'}">
                                                     </h4>
                                                     <h5 class="mb-2 mb-md-0 especialidadDoctor" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctores[i+1].especialidad}"></h5>
                                                     <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
@@ -104,7 +112,7 @@
                                                         <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
                                                     </div>
                                                     <!--Button trigger modal-->
-                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+2}">Ver más</button>
+                                                    <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${doctores[i+1].dni}">Ver más</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,8 +125,8 @@
         </div>
     </div>
 
-    <div th:each="doctor, arch : ${doctores}">
-        <div class="modal fade" th:id="'PerfilDoctor' + ${arch.index + 1}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div th:each="doctor, arch: ${doctores}">
+        <div class="modal fade" th:if="${i < doctores.size()}" th:id="'PerfilDoctor' + ${doctor.dni}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -139,7 +147,7 @@
                                                     <input type="text" id="nombres" name="nombres" th:placeholder="${doctor.nombre}" class="form-control" disabled>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="cedula">Cedula profesional</label>
+                                                    <label for="cedula">Nro. de Colegiatura</label>
                                                     <input type="text" id="cedula" name="cedula" th:placeholder="${doctor.cedula}" class="form-control" disabled>
                                                 </div>
                                             </div>
@@ -163,88 +171,13 @@
                                 </div>
                                 <div class="col">
                                     <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
-                                        <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                                        <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctor.dni}}" alt="" style="max-height: 200px; max-width: 200px"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row no-gutters">
-                                <div class="col-lg-6 pl-lg-2 mb-3">
-                                    <div class="card mb-3 h-100">
-                                        <div class="card-header bg-light" style="text-align: center;">
-                                            <h5 class="mb-0">Horarios de disponibilidad</h5>
-                                        </div>
-                                        <div class="card-body fs--1">
-                                            <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                                                <div class="row" style="display: flex; align-items: center">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">10:00 - 10:30 am</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">10:30 - 11:00 am</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">11:30 - 12:00 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">12:00 - 12:30 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">13:30 - 14:00 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">14:30 - 15:00 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center; margin-bottom: 5px;margin-top: 5px;">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">15:30 - 16:00 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="display: flex; align-items: center">
-                                                    <div class="col" style="text-align: center;">
-                                                        <p class="text-1000 mb-0">16:00 - 16:30 pm</p>
-                                                    </div>
-                                                    <div class="col" style="text-align: center">
-                                                        <button class="btn btn-primary" type="button" data-dismiss="modal" data-toggle="modal" data-target="#AgendarCita">Agendar cita</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 pl-lg-2 mb-3 calendar">
+                                <div class="col-lg-12 pl-lg-2 mb-3 calendar">
                                 </div>
 
                             </div>
@@ -265,7 +198,6 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-<script th:src="@{/lib/isotope/isotope.pkgd.js}"></script>
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <script th:inline="javascript">
     $(document).ready(function() {
@@ -303,6 +235,7 @@
 </script>
 <script>
     $(document).ready(function() {
+        var boton = $("#pageNumber");
         var currentPage = 1;
         var pageSize = 4; // Number of cards per page (2 rows with 2 cards each)
         var totalCards = $('.doctores').length; // Total count of cards
@@ -323,6 +256,7 @@
             if (currentPage > 1) {
                 currentPage--;
                 renderCards();
+                boton.text(currentPage);
             }
         }
 
@@ -331,6 +265,7 @@
             if (currentPage < totalPages) {
                 currentPage++;
                 renderCards();
+                boton.text(currentPage);
             }
         }
 
@@ -341,20 +276,6 @@
         // Initial render of cards on the first page
         renderCards();
 
-
-        // Filter cards based on the input value
-        $('#quicksearch').on('click',
-            function() {
-                var filterValue = $("#quickSearch2").val().toLowerCase(); // Convert input value to lowercase
-                console.log("filerValue: "+filterValue);
-                $('.especialidadDoctor').each(function(){
-                    var especialidad = $(this).text().toLowerCase(); // Get the card title and convert to lowercasecardTitle
-                    console.log("especialidad: "+especialidad);
-                    if(especialidad.includes(filterValue)){
-
-                    }
-                })
-            });
     });
 </script>
 </body>

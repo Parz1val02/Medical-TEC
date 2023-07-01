@@ -188,14 +188,30 @@ public class PacienteController {
     }
 
     @RequestMapping("/listaDoctores")
-    public String doctores(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String doctores(@RequestParam(value = "idEspecialidad", required = false)String idEspecialidad,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("usuario", usuario);
-        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
+        SedeDto sede = sedeRepository.getSede(usuario.getId());
+        List<DoctorDto> doctores = null;
+        if(idEspecialidad==null){
+            doctores = usuarioRepository.obtenerlistaDoctores(sede.getId());
+        }else{
+            Integer especialidadId = sedeHasEspecialidadeRepository.verficarEspecialidadSede(sede.getId(), Integer.parseInt(idEspecialidad));
+            if(especialidadId!=null) {
+                doctores = usuarioRepository.obtenerDoctoresEspecialidad(sede.getId(), especialidadId);
+            }else{
+                doctores = usuarioRepository.obtenerlistaDoctores(sede.getId());
+            }
+        }
         model.addAttribute("doctores", doctores);
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sede.getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+        model.addAttribute("especialidades", listaEspecialidades);
         return "paciente/listarDoctores";
     }
 
