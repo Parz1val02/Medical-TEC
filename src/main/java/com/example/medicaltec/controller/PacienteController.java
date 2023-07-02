@@ -198,7 +198,7 @@ public class PacienteController {
         if(idEspecialidad==null){
             doctores = usuarioRepository.obtenerlistaDoctores(sede.getId());
         }else{
-            Integer especialidadId = sedeHasEspecialidadeRepository.verficarEspecialidadSede(sede.getId(), Integer.parseInt(idEspecialidad));
+            Integer especialidadId = sedeHasEspecialidadeRepository.verficarEspecialidadSede(sede.getId(), idEspecialidad);
             if(especialidadId!=null) {
                 doctores = usuarioRepository.obtenerDoctoresEspecialidad(sede.getId(), especialidadId);
             }else{
@@ -265,7 +265,7 @@ public class PacienteController {
         if(idSede!=null){
             String sedeId=sedeRepository.verificaridSede(idSede);
             if(sedeId!=null){
-                sede = sedeRepository.getSedeId(Integer.parseInt(sedeId));
+                sede = sedeRepository.getSedeId(sedeId);
             }else{
                 //REgresar a pagina para elegir
                 sede = sedeRepository.getSede(usuario.getId());

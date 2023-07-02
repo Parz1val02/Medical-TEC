@@ -177,7 +177,7 @@
                             </div>
 
                             <div class="row no-gutters">
-                                <div class="col-lg-12 pl-lg-2 mb-3 calendar">
+                                <div class="col-lg-12 pl-lg-2 mb-3 calendar"  th:id="${doctor.dni}">
                                 </div>
 
                             </div>
@@ -198,39 +198,103 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script th:inline="javascript">
     $(document).ready(function() {
-        function renderCalendars() {
-            $('.calendar').each(function(){
-                var calendarEl = this;
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridWeek',
-                    headerToolbar: {
-                        left: 'prev,next',
-                        center: 'title',
-                        right: 'dayGridWeek,dayGridDay' // user can switch between the two
-                    },
-                    defaultView: 'month',
-                    weekday: 'long',
-                    selectable: true,
-                    height: 650,
-                    events: [],
-                    eventTextColor: '#ffffff',
-                    eventBackgroundColor: '#3d8af7',
-                    eventDisplay: 'block',
-                    eventTimeFormat:{
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        meridiem: 'short'
-                    },
-                    firstDay: 1,
-                    locale: 'es',
+        var doctores = [[${doctores}]];
+        $.ajax({
+            method: 'POST',
+            data: {
+                listaDocs: doctores
+            },
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            url: 'http://localhost:8081/api/doctores',
+            success: function(response) {
+                var modalidades = response.modalidades;
+                console.log(modalidades[0]);
+                var horariosDoctores = response.horariosDoctores;
+                horariosDoctores.forEach(function(wenas) {
+                    var doctorDni = wenas.doctorDni;
+                    var events = [];
+                    var diasDelMes = wenas.diasDelMes;
+                    diasDelMes.forEach(function (arch){
+                        var fecha = arch.dia;
+                        var horas = arch.horas;
+                        horas.forEach(function (eventData){
+                            var event = {
+                                title: eventData,
+                                start: fecha,
+                            };
+                            console.log(event.title);
+                            console.log(event.start);
+                            events.push(event);
+                        });
+                    });
+                    // Add the events to FullCalendar
+                    //calendar.addEventSource(events);
                 });
-                calendar.render();
+            },
+            error: function(xhr, status, error) {
+                // Error handling
+                console.log(error);
+            }
+        });
+        $('.calendar').each(function(){
+            var calendarEl = this;
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridWeek',
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'dayGridWeek,dayGridDay' // user can switch between the two
+                },
+                defaultView: 'month',
+                weekday: 'long',
+                selectable: true,
+                height: 650,
+                events: [],
+                eventTextColor: '#ffffff',
+                eventBackgroundColor: '#3d8af7',
+                eventDisplay: 'block',
+                eventTimeFormat:{
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: 'short'
+                },
+                firstDay: 1,
+                locale: 'es',
             });
+            calendar.render();
+        });
+        function generateTooltipContent(event) {
+            // Generate the HTML content for the tooltip
+            // Assuming you have a time string like '14:30'
+            var timeString = event.extendedProps.hora;
+
+            // Parse the time string using Moment.js
+            var time = moment(timeString, 'HH:mm');
+
+            // Format the time as 'h:mm A' (e.g., '2:30 PM')
+            var formattedTime = time.format('h:mm A');
+
+            var dateString = event.start;
+            var date = moment(dateString, 'YYYY-MM-DD');
+            var fechaFormateada = date.format('DD/MM/YYYY');
+
+            var content = '<strong>' + event.title + '</strong>';
+            content += '<br>Doctor: ' + event.extendedProps.doctor;
+            content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+            content += '<br>Fecha: ' + fechaFormateada;
+            content += '<br>Hora: ' + formattedTime;
+            content += '<br>Sede: ' + event.extendedProps.sede;
+
+            return content;
         }
-        renderCalendars();
     });
 </script>
 <script>
@@ -276,6 +340,10 @@
         // Initial render of cards on the first page
         renderCards();
 
+    });
+</script>
+<script th:inline="javascript">
+    $(document).ready(function (){
     });
 </script>
 </body>

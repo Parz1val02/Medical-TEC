@@ -13,5 +13,5 @@ public interface SedeHasEspecialidadeRepository extends JpaRepository<SedeHasEsp
     List<Integer> listarEspecialidadesPorId(Integer id);
 
     @Query(nativeQuery = true, value = "SELECT especialidades_id_especialidad FROM sedes_has_especialidades where sedes_idsedes=?1 and especialidades_id_especialidad=?2")
-    Integer verficarEspecialidadSede(Integer idSede, Integer isEspecialidad);
+    Integer verficarEspecialidadSede(Integer idSede, String isEspecialidad);
 }
