@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Editar Paciente')}">
 
 </head>
 
@@ -66,22 +66,6 @@
 
                   </div>
 
-                  <!--
-                  <div class="row">
-                    <div class="col mb-3 form-group">
-                      <label >Sexo  </label>
-                      <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.sexo}" class="form-control" ></div>
-                    </div>
-                  </div>
-
-
-                  <div class="form-group">
-                    <label>Fecha de nacimiento</label>
-                    <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.fechaNacimiento}" class="form-control" ></div>
-                  </div> -->
-
-
-
                   <div class="row">
                     <div class="col mb-3 form-group">
                       <label  class="form-label">Email</label>
@@ -106,25 +90,6 @@
                     </div>
                   </div>
 
-                  <!--
-                 <div class="row">
-                   <div class="col mb-3 form-group">
-                     <label  class="form-label">Estado</label>
-                     <div style="background-color: #edf2f9;opacity: 1;" th:text="${paciente.estadosIdestado.nombre}" class="form-control" ></div>
-                   </div>
-                 </div> -->
-
-
-
-
-                 <!--
-                 <div class="row">
-                   <div class="col mb-3 form-group">
-                     <label  class="form-label">Estado</label>
-                     <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
-                     <div style="background-color: #edf2f9;opacity: 1;" th:text="${#strings.capitalize(paciente.estadosIdestado.nombre)}" class="form-control" ></div>
-                   </div>
-                 </div> -->
 
                 </fieldset>
 
