@@ -271,7 +271,7 @@
                 data: {
                     dni: doctores[i].dni,
                 },
-                url: 'http://localhost:8081/api/doctores',
+                url: 'http://34.28.24.16:8081/api/doctores',
                 headers: {
                     'Content-Type': 'application/json' // Set the Content-Type header
                 },
@@ -363,7 +363,7 @@
                                                     hora: info.event.title,
                                                     pacienteDni: pacienteDni
                                                 },
-                                                url: 'http://localhost:8081/api/agendar2',
+                                                url: 'http://34.28.24.16:8081/api/agendar2',
                                                 success: function(response) {
                                                     alert(response.msg);
                                                     location.reload();
