@@ -21,22 +21,7 @@
 
 
                 <div class="row no-gutters">
-                    <div class="col-lg-6 pr-lg-2" style="padding-top: 25px">
-                        <div class="card h-100 bg-gradient">
-                            <div class="card-header bg-transparent">
-                                <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
-                                    Finanzas
-                                </h4>
-                            </div>
-
-                            <div class="card-body border-top d-flex justify-content-center" >
-                                <div style="width: 100%; height: 20rem " id="chart_div" ></div> <!--chart_div--> <!--curve_chart-->
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 pl-lg-2" style="padding-top: 25px">
+                    <div class="col-lg-12 pl-lg-2" style="padding-top: 25px">
                         <div class="card h-100 mb-3">
                             <div class="card-header h-100  bg-light py-2">
                                 <div class="row flex-between-center">
@@ -45,16 +30,6 @@
                                             Calendario
                                         </h4>
                                         <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6">
-                                        <div class="input-group">
-                                            <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
-                                            <span class="input-group-append">
-                                              <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
-                                                <i class="fas fa-search"></i>
-                                              </button>
-                                            </span>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="row flex-between-center">
@@ -66,13 +41,13 @@
 
                         </div>
                     </div>
-
                 </div>
 
 
                 <!--SEGUNDO ROW -->
 
                 <div class="row no-gutters" >
+
                     <div class="col-lg-6 pr-lg-2" style="padding-top: 25px">
                         <div class="card h-100 ">
                             <div class="card-header bg-transparent">
@@ -85,53 +60,59 @@
                                 <table class="table table-striped" id="userList">
                                     <thead style="background: #cdeffc">
                                     <tr>
-                                        <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
-                                        <th class="sort align-middle" style="width: 30%; text-align: center">Correo</th>
-                                        <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
-                                        <th class="no-sort" style="width: 25%;" ></th> <!--style="width: 35%"-->
+                                        <th class="sort align-middle" style="width: 30%;">Nombre Completo</th>
+                                        <th class="sort align-middle" style="width: 25%; text-align: center">Correo</th>
+                                        <th class="sort align-middle" style="width: 25%; text-align: center">Estado</th>
+                                        <th class="no-sort" style="width: 20%;" ></th> <!--style="width: 35%"-->
+                                    </tr>
+                                    </thead>
+                                    <tbody class="bg-white">
+                                        <tr th:each="paciente, vEstado : ${listaPacientes}">
+                                            <td class="align-middle"  style="width: 30%;" th:text="${#strings.capitalize(paciente.nombre)} + ' ' + ${#strings.capitalize(paciente.apellido)} "></td>
+                                            <td class="align-middle" style="width: 25%;text-align: center" th:text="${paciente.email}"></td>
+                                            <td class="align-middle" style="width: 25%;text-align: center" th:text="${paciente.estadosIdestado.nombre}"></td>
+                                            <td class="align-middle"  style="width: 20%;" align="center">
+                                                <a th:href="@{'/administrador/historialPaciente' + '?id=' + ${paciente.id}}" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                                                    border-radius: 15px; font-size: 14px" >Historial Médico</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 pr-lg-2" style="padding-top: 25px">
+                        <div class="card h-100 ">
+                            <div class="card-header bg-transparent">
+                                <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
+                                    Doctores
+                                </h4>
+                            </div>
+                            <div class="card-body border-top fs--1" >  <!--style="display: flex; justify-content: space-around; overflow-x: auto"-->
+
+                                <table class="table table-striped" id="userList3">
+                                    <thead style="background: #cdeffc">
+                                    <tr>
+                                        <th class="sort align-middle" style="width: 30%">Nombre Completo</th>
+                                        <th class="sort align-middle" style="width: 25%; text-align: center">Correo</th>
+                                        <th class="sort align-middle" style="width: 25%; text-align: center">Especialidad</th>
+                                        <th class="no-sort" style="width: 20%;" ></th> <!--style="width: 35%"-->
 
                                     </tr>
                                     </thead>
                                     <tbody class="bg-white">
-                                    <tr th:each="paciente, vEstado : ${listaPacientes}">
+                                    <tr th:each="doctor, vEstado : ${listaDoctores}">
 
-                                        <td th:text="${paciente.nombre} + ' ' + ${paciente.apellido} "></td>
-
-                                        <td th:text="${paciente.email}"></td>
-                                        <td style="text-align: center" th:text="${paciente.estadosIdestado.nombre}"></td>
-
-                                        <td class="align-middle" align="center">
-                                            <a th:href="@{'/administrador/historialPaciente' + '?id=' + ${paciente.id}}" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                                border-radius: 15px" >Ver Historial Médico</a>
-                                        </td>
-
-
-                                        <!--<td><a class="btn btn-primary" th:href="@{'/paciente/editarPaciente' + '?id=' + ${paciente.id}} "> Editar paciente</a></td>-->
-                                        <!--<td><a class="btn btn-danger" th:href="@{'/paciente/derivarPaciente' + '?id=' + ${paciente.id}}">Derivar Paciente</a></td>-->
-                                    </tr>
-
-
-                                    <!--
-                                    <tr>
-                                        <td class="align-middle">
-                                            Leonardo Abanto
-                                        </td>
-                                        <td class="align-middle" style="text-align: center">
-                                            leo.abanto@hotmail.com
-                                        </td>
-                                        <td class="align-middle">
-                                            Activo
-                                        </td>
-                                        <td class="align-middle" align="center">
+                                        <td class="align-middle"  style="width: 30%" th:text="${#strings.capitalize(doctor.nombre)} + ' ' + ${#strings.capitalize(doctor.apellido)} "></td>
+                                        <td class="align-middle" style="width: 25%;text-align: center" th:text="${doctor.email}"></td>
+                                        <td class="align-middle" style="width: 25%;text-align: center" th:text="${#strings.capitalize(doctor.especialidadesIdEspecialidad.nombreEspecialidad)}"></td>
+                                        <td class="align-middle"  style="width: 20%;" align="center">
                                             <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px">Historial clínico</button>
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
                                         </td>
-
                                     </tr>
 
-
-
-                                    -->
                                     </tbody>
                                 </table>
 
@@ -140,147 +121,12 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 pl-lg-2" style="padding-top: 25px">
-                        <div class="card h-100 mb-3">
-                            <div class="card-header bg-light py-2">
-                                <div class="row flex-between-center">
-                                    <div class="col-md-6 col-lg-6">
-                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                                            Doctores
-                                        </h4>
-                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Visualiza la información de los doctores</h5>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6">
-                                        <div class="input-group">
-                                            <input class="form-control border-end-0 border rounded-pill" type="search" placeholder="Buscar" id="example-search-input">
-                                            <span class="input-group-append">
-                          <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-3" th:each="doctor, arch : ${listaDoctores}">
-                                        <div class="card" style="min-height: 20rem">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col" style="display: flex; align-items: center">
-                                                        <div class="avatar avatar-2x1">
-                                                            <img class="rounded-circle" src="/img/team/avatar.png" alt="" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col" style="">
-                                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;" th:text="|Doctor ${doctor.nombre}|">
-                                                        </h4>
-                                                        <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem" th:text="${doctor.especialidadesIdEspecialidad.nombreEspecialidad}"></h5>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <h6 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; margin-top: 20px;">
-                                                            Próximos horarios de disponibilidad:
-                                                        </h6>
-                                                        <div class="form-group" style="text-align: center">
-                                                            <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                                                            <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
-                                                        </div>
-                                                        <!-- Button trigger modal-->
-                                                        <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${arch.index+1}">Ver más</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-
-                <!-- TERCER ROW -->
-
-                        <div class="" style="padding-top: 25px">
-                            <div class="card h-100 ">
-                                <div class="card-header bg-transparent">
-                                    <h4 class="mb-2 mb-md-0 " style="font-weight: bold; color: #0032aa">
-                                        Reportes
-                                    </h4>
-                                </div>
+                <!--TERCER ROW -->
 
 
-                                <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                                    <table class="table table-striped" id="userList2">
-                                        <thead style="background: #cdeffc">
-                                        <tr>
-                                            <th class="sort align-middle" style="width: 33%">Nombre de reporte</th>
-                                            <th class="sort align-middle" style="width: 33%;text-align: center">Fecha de creacion</th>
-                                            <th class="sort align-middle" style="width: 33%; text-align: center">Descargar reporte</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="bg-white">
-                                        <tr>
-                                            <td class="align-middle">
-                                                documento1.pdf
-                                            </td>
-                                            <td class="align-middle" style="text-align: center">
-                                                12345678
-                                            </td>
-                                            <td class="align-middle" align="center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                                border-radius: 15px">Descargar</button>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td class="align-middle">
-                                                documento2.pdf
-                                            </td>
-                                            <td class="align-middle" style="text-align: center">
-                                                12345678
-                                            </td>
-                                            <td class="align-middle" align="center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                                border-radius: 15px">Descargar</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="align-middle">
-                                                documento3.pdf
-                                            </td>
-                                            <td class="align-middle" style="text-align: center">
-                                                12345678
-                                            </td>
-                                            <td class="align-middle" align="center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                                border-radius: 15px">Descargar</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="align-middle">
-                                                documento4.pdf
-                                            </td>
-                                            <td class="align-middle" style="text-align: center">
-                                                12345678
-                                            </td>
-                                            <td class="align-middle" align="center">
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                                border-radius: 15px">Descargar</button>
-                                            </td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
+                <!-- CUARTO ROW -->
 
             </div>
 
@@ -507,6 +353,49 @@
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        //Esta busacando por el ID del tah <table>
+        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        $('#userList3').DataTable({
+            dom:
+                "<'row align-items-center'<'d-flex justify-content-center col-sm-12 col-md-12 col-12'l><'d-flex justify-content-center col-sm-12 col-md-12 col-12'f>>\n" +
+                "<'table-responsive'tr>\n" +
+                "<'row align-items-center'<'col-sm-12 col-md-12 d-flex justify-content-center'i><'col-sm-12 col-md-12 d-flex justify-content-center'p>>",
+            language: {
+                processing: "Procesando...",
+                lengthMenu: "Mostrar  _MENU_ usuarios ",
+                zeroRecords: "No se encontraron usuarios",
+                emptyTable: "No hay usuarios",
+                info: "Usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
+                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
+                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                loadingRecords: "Cargando...",
+                search: "Buscar:",
+                paginate: {
+                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+                }
+            },
+            autoWidth: false,
+            lengthMenu: [
+                [3], [3]
+            ],
+            buttons: [
+
+            ]
+        });
+    });
+
+    $(document).ready(function () {
+        $('.dataTables_filter input[type="search"]').css(
+            {'max-width':'8rem','display':'inline-block'}
+        );
+    });
+
+
+</script>
+
 
 <script>
     $(document).ready(function () {
@@ -611,6 +500,7 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridWeek',
+            height: '500px',
             headerToolbar: {
                 left: 'prev,next',
                 center: 'title',

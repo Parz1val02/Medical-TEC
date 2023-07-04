@@ -43,6 +43,8 @@ public class AdministradorController {
     final FormInvitationRepository formInvitationRepository;
 
     final BoletaRepository boletaRepository;
+
+    final InformeRepository informeRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -51,7 +53,8 @@ public class AdministradorController {
             HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2,
             FormInvitationRepository formInvitationRepository,
             CorreoConEstilos correoConEstilos,
-            BoletaRepository boletaRepository
+            BoletaRepository boletaRepository,
+            InformeRepository informeRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -61,6 +64,7 @@ public class AdministradorController {
         this.formInvitationRepository = formInvitationRepository;
         this.correoConEstilos = correoConEstilos;
         this.boletaRepository = boletaRepository;
+        this.informeRepository = informeRepository;
     }
 
 
@@ -853,23 +857,41 @@ public class AdministradorController {
         Usuario usuario = optionalUsuario.get();
         model.addAttribute("paciente",usuario);
 
+        // Nombre completo del sexo de la persona
+        if(usuario.getSexo().equals("M")){
+            usuario.setSexo("Masculino");
+        }else if (usuario.getSexo().equals("F")){
+            usuario.setSexo("Femenino");
+        }
 
         if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
+
+            // Obtener alergias
             List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
             ArrayList<Alergia> listaAlergias = new ArrayList<>();
             for (Integer idAlergia : idAlergias) {
                 listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
             }
             model.addAttribute("listaAlergias",listaAlergias);
-            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+            // Obtener informes y citas por usuario
+            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+
+            // List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+            // model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
 
             return "administrador/historial";
 
         } else {
+
             model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
-            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+            //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+            //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+            // Obtener informes y citas por usuario
+            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+
             return "administrador/historial";
         }
 
