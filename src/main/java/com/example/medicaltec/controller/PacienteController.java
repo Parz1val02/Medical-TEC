@@ -211,6 +211,7 @@ public class PacienteController {
         for(int i=0;i<especialidadesxSedeId.size();i++){
             listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
         }
+        model.addAttribute("sede", sede);
         model.addAttribute("especialidades", listaEspecialidades);
         return "paciente/listarDoctores";
     }

@@ -4,7 +4,6 @@
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Doctores')}">
 </head>
 
-
 <body class="">
 
 <!-- ===============================================-->
@@ -79,8 +78,8 @@
                                                         Próximos horarios de disponibilidad:
                                                     </h6>
                                                     <div class="form-group" style="text-align: center">
-                                                        <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                                                        <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        <input class="form-control col text-black inputHoras" th:id="|hora1${doctores[i].dni}|" type="text" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                        <input class="form-control col text-black inputHoras" th:id="|hora2${doctores[i].dni}|" type="text" readonly="" style="text-align: center">
                                                     </div>
                                                     <!--Button trigger modal-->
                                                     <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${doctores[i].dni}">Ver más</button>
@@ -108,8 +107,8 @@
                                                         Próximos horarios de disponibilidad:
                                                     </h6>
                                                     <div class="form-group" style="text-align: center">
-                                                        <input class="form-control col text-black" id="" type="text" placeholder="Sábado 30/Marzo - 10:00hrs" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
-                                                        <input class="form-control col text-black" id="" type="text" placeholder="Lunes 01/Abril - 08:00hrs" readonly="" style="text-align: center">
+                                                        <input class="form-control col text-black inputHoras" th:id="|hora1${doctores[i+1].dni}|" type="text" readonly="" style="text-align: center; margin-top: 5px;margin-bottom: 5px;">
+                                                        <input class="form-control col text-black inputHoras" th:id="|hora2${doctores[i+1].dni}|" type="text" readonly="" style="text-align: center">
                                                     </div>
                                                     <!--Button trigger modal-->
                                                     <button class="btn btn-info" type="button" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${doctores[i+1].dni}">Ver más</button>
@@ -126,12 +125,14 @@
     </div>
 
     <div th:each="doctor, arch: ${doctores}">
-        <div class="modal fade" th:if="${i < doctores.size()}" th:id="'PerfilDoctor' + ${doctor.dni}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="modal fade modalDoctor" th:id="'PerfilDoctor' + ${doctor.dni}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil Dr. ${doctor.nombre}|" th:if="${doctor.sexo=='M'}"></h5>
-                        <h5 class="modal-title" id="exampleModalLabel" th:text="|Perfil Dra. ${doctor.nombre}|" th:if="${doctor.sexo=='F'}"></h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Agendar Cita</h5>
+                        <br>
+                        <h5 class="modal-title" id="exampleModalLabel1" th:text="|Dr. ${doctor.nombre}|" th:if="${doctor.sexo=='M'}"></h5>
+                        <h5 class="modal-title" id="exampleModalLabel2" th:text="|Dra. ${doctor.nombre}|" th:if="${doctor.sexo=='F'}"></h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
@@ -177,7 +178,7 @@
                             </div>
 
                             <div class="row no-gutters">
-                                <div class="col-lg-12 pl-lg-2 mb-3 calendar"  th:id="${doctor.dni}">
+                                <div class="col-lg-12 pl-lg-2 mb-3 calendar " th:id="${doctor.dni}">
                                 </div>
 
                             </div>
@@ -191,6 +192,67 @@
         </div>
     </div>
 </main>
+<div class="modal fade" id="agendarCita" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModal1Label">Agendar Cita</h1>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="especialidadId">Especialidad:</label>
+                                <input type="text" name="especialidadId" id="especialidadId" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha:</label>
+                                <input type="text" name="fecha" id="fecha" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipocitaId">Tipo de cita: </label>
+                                <input type="text" name="tipocitaId" id="tipocitaId" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="doctorDni">Doctor:</label>
+                                <input type="text" name="doctorDni" id="doctorDni" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="hora">Hora:</label>
+                                <input type="text" name="hora" id="hora" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sedeId">Sede:</label>
+                                <input type="text" name="sedeId" id="sedeId" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height: 1px; background-color: #333; border: none">
+                    <div class="row">
+                        <div class="form-group col-sm-12">
+                            <label for="modalidadId">Modalidad:</label>
+                            <select  class="form-control" name="modalidadId" id="modalidadId">
+                                <option selected>Elegir modalidad de la cita...</option>
+                                <option value="Presencial">Presencial</option>
+                                <option value="Virtual">Virtual</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <a type="button" class="btn btn-primary" id="clash">Agendar cita</a>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->
@@ -199,102 +261,177 @@
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script th:inline="javascript">
     $(document).ready(function() {
         var doctores = [[${doctores}]];
-        $.ajax({
-            method: 'POST',
-            data: {
-                listaDocs: doctores
-            },
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            url: 'http://localhost:8081/api/doctores',
-            success: function(response) {
-                var modalidades = response.modalidades;
-                console.log(modalidades[0]);
-                var horariosDoctores = response.horariosDoctores;
-                horariosDoctores.forEach(function(wenas) {
-                    var doctorDni = wenas.doctorDni;
-                    var events = [];
-                    var diasDelMes = wenas.diasDelMes;
-                    diasDelMes.forEach(function (arch){
-                        var fecha = arch.dia;
-                        var horas = arch.horas;
-                        horas.forEach(function (eventData){
-                            var event = {
-                                title: eventData,
-                                start: fecha,
-                            };
-                            console.log(event.title);
-                            console.log(event.start);
-                            events.push(event);
-                        });
+        $.each(doctores, function (i){
+            $.ajax({
+                method: 'GET',
+                data: {
+                    dni: doctores[i].dni,
+                },
+                url: 'http://localhost:8081/api/doctores',
+                headers: {
+                    'Content-Type': 'application/json' // Set the Content-Type header
+                },
+                success: function(response) {
+                    var horariosMes = response.horariosMes;
+                    $('.calendar').each(function(){
+                        var calendarEl = this;
+                        var elementId = calendarEl.id;
+                        if(elementId===horariosMes.doctorDni){
+                            var calendar = new FullCalendar.Calendar(calendarEl, {
+                                initialView: 'dayGridWeek',
+                                headerToolbar: {
+                                    left: 'prev,next',
+                                    center: 'title',
+                                    right: 'dayGridWeek,dayGridDay' // user can switch between the two
+                                },
+                                defaultView: 'month',
+                                weekday: 'long',
+                                selectable: true,
+                                height: 650,
+                                events: [],
+                                eventTextColor: '#ffffff',
+                                eventBackgroundColor: '#3d8af7',
+                                eventDisplay: 'block',
+                                eventTimeFormat:{
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    meridiem: 'short'
+                                },
+                                firstDay: 1,
+                                locale: 'es',
+                                eventClick: function(info) {
+                                    $(".modalDoctor").each(function (){
+                                        var modal = this;
+                                        var idmodal = modal.id;
+                                        var compare = "PerfilDoctor";
+                                        compare += horariosMes.doctorDni;
+                                        if(idmodal===compare){
+                                            $(this).modal('hide');
+                                        }
+                                    });
+                                    let modalA = $('#agendarCita');
+                                    modalA.modal('show');
+                                    modalA.on('shown.bs.modal', function() {
+                                        var doctores = [[${doctores}]];
+                                        var pacienteDni = [[${session.usuario.id}]];
+                                        var especialidades = [[${especialidades}]];
+                                        let especialidadId;
+                                        $.each(doctores, function (k, doctor){
+                                            if(doctor.dni===horariosMes.doctorDni){
+                                                let doctorcito = $("#doctorDni");
+                                                doctorcito.attr('placeholder', doctor.nombre + " " + doctor.apellido);
+                                                $.each(especialidades, function (z, especialidad){
+                                                    if(doctor.especialidad===especialidad.nombreEspecialidad){
+                                                        let specialty = $("#especialidadId");
+                                                        specialty.attr('placeholder', doctor.especialidad);
+                                                        especialidadId = especialidad.id;
+                                                    }
+                                                })
+                                            }
+                                        })
+                                        let fecha = $("#fecha");
+                                        let hora = $("#hora");
+                                        let tipocita = $("#tipocitaId");
+                                        let sede = $("#sedeId");
+                                        let sedeNombre = [[${sede.nombre}]];
+                                        let sedeId = [[${sede.id}]];
+                                        var time = moment(info.event.title, 'HH:mm');
+                                        var formattedTime = time.format('h:mm A');
+                                        var date = moment(info.event.start, 'YYYY-MM-DD');
+                                        var formattedDate = date.format('DD-MM-YYYY');
+                                        hora.attr('placeholder', formattedTime);
+                                        fecha.attr('placeholder', formattedDate);
+                                        tipocita.attr('placeholder', 'Consulta médica');
+                                        sede.attr('placeholder', sedeNombre);
+                                        $("#clash").on('click', function (){
+                                            let modalidad = $("#modalidadId option:selected").val();
+                                            console.log(modalidad + ' ' + formattedDate + ' ' + info.event.title + ' ' + pacienteDni);
+                                            $.ajax({
+                                                method: 'POST',
+                                                data: {
+                                                    sedeId: sedeId,
+                                                    fecha: formattedDate,
+                                                    tipoCitaId: 1,
+                                                    especialidadId: especialidadId,
+                                                    examenId: null,
+                                                    modalidad: modalidad,
+                                                    doctorDni: horariosMes.doctorDni,
+                                                    hora: info.event.title,
+                                                    pacienteDni: pacienteDni
+                                                },
+                                                url: 'http://localhost:8081/api/agendar2',
+                                                success: function(response) {
+                                                    alert(response.msg);
+                                                    location.reload();
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    // Error handling
+                                                    console.log(error);
+                                                }
+                                            });
+                                        })
+                                    });
+                                }
+                            });
+                            var diasDelMes = horariosMes.diasDelMes;
+                            $.each(diasDelMes,function(i, object) {
+                                var dia = object.dia;
+                                var horas = object.horas;
+                                var events = [];
+                                $.each(horas, function (j, hora){
+                                    var event = {
+                                        title: hora,
+                                        start: dia,
+
+                                    };
+                                    events.push(event);
+                                    if(i===0 && j===0){
+                                       $(".inputHoras").each(function (){
+                                           var input = this;
+                                           var idInput = input.id;
+                                           var compare = "hora1";
+                                           compare += horariosMes.doctorDni;
+                                           if(idInput===compare){
+                                               var time = moment(hora, 'HH:mm');
+                                               var formattedTime = time.format('h:mm A');
+                                               var date = moment(dia, 'YYYY-MM-DD');
+                                               var formattedDate = date.format('DD/MM/YYYY');
+                                               input.placeholder = formattedDate + ' ' + formattedTime;
+                                           }
+                                       })
+                                    }
+                                    if(i===0 && j===1){
+                                        $(".inputHoras").each(function (){
+                                            var input = this;
+                                            var idInput = input.id;
+                                            var compare = "hora2";
+                                            compare += horariosMes.doctorDni;
+                                            if(idInput===compare){
+                                                var time = moment(hora, 'HH:mm');
+                                                var formattedTime = time.format('h:mm A');
+                                                var date = moment(dia, 'YYYY-MM-DD');
+                                                var formattedDate = date.format('DD/MM/YYYY');
+                                                input.placeholder = formattedDate + ' ' + formattedTime;
+                                            }
+                                        })
+                                    }
+                                });
+                                calendar.addEventSource(events);
+                            });
+                            calendar.render();
+                        }
                     });
-                    // Add the events to FullCalendar
-                    //calendar.addEventSource(events);
-                });
-            },
-            error: function(xhr, status, error) {
-                // Error handling
-                console.log(error);
-            }
-        });
-        $('.calendar').each(function(){
-            var calendarEl = this;
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridWeek',
-                headerToolbar: {
-                    left: 'prev,next',
-                    center: 'title',
-                    right: 'dayGridWeek,dayGridDay' // user can switch between the two
                 },
-                defaultView: 'month',
-                weekday: 'long',
-                selectable: true,
-                height: 650,
-                events: [],
-                eventTextColor: '#ffffff',
-                eventBackgroundColor: '#3d8af7',
-                eventDisplay: 'block',
-                eventTimeFormat:{
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    meridiem: 'short'
-                },
-                firstDay: 1,
-                locale: 'es',
+                error: function(xhr, status, error) {
+                    // Error handling
+                    console.log(error);
+                }
             });
-            calendar.render();
         });
-        function generateTooltipContent(event) {
-            // Generate the HTML content for the tooltip
-            // Assuming you have a time string like '14:30'
-            var timeString = event.extendedProps.hora;
-
-            // Parse the time string using Moment.js
-            var time = moment(timeString, 'HH:mm');
-
-            // Format the time as 'h:mm A' (e.g., '2:30 PM')
-            var formattedTime = time.format('h:mm A');
-
-            var dateString = event.start;
-            var date = moment(dateString, 'YYYY-MM-DD');
-            var fechaFormateada = date.format('DD/MM/YYYY');
-
-            var content = '<strong>' + event.title + '</strong>';
-            content += '<br>Doctor: ' + event.extendedProps.doctor;
-            content += '<br>Modalidad: ' + event.extendedProps.modalidad;
-            content += '<br>Fecha: ' + fechaFormateada;
-            content += '<br>Hora: ' + formattedTime;
-            content += '<br>Sede: ' + event.extendedProps.sede;
-
-            return content;
-        }
     });
 </script>
 <script>
@@ -340,10 +477,6 @@
         // Initial render of cards on the first page
         renderCards();
 
-    });
-</script>
-<script th:inline="javascript">
-    $(document).ready(function (){
     });
 </script>
 </body>
