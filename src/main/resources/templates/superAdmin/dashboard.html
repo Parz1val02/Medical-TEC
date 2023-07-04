@@ -617,6 +617,7 @@
                         </div>
                     <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" onclick="closeModal()">Cerrar</button>
                     <button class="btn btn-primary btn-sm" type="submit">Guardar cambios</button>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                 </form>
             </div>
         </div>

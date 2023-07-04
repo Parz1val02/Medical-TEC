@@ -1239,6 +1239,10 @@ public class SuperController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/superAdmin/dashboard";
         }
+        if(filename.length() > 100){
+            attr.addFlashAttribute("foto", "Nombre de la imagen excede límite de 100 carácteres");
+            return "redirect:/superAdmin/dashboard";
+        }
         UxUi uxUi= uxUiRepository.findById(5).orElse(null);
             try {
                 assert uxUi != null;
