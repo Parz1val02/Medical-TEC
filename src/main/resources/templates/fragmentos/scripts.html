@@ -5,7 +5,6 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:fragment="scripts">
-    <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/lib/@fortawesome/all.min.js}"></script>
@@ -21,7 +20,6 @@
     <script th:src="@{/lib/fancybox/jquery.fancybox.min.js}"></script>
     <script th:src="@{/lib/flatpickr/flatpickr.min.js}"></script>
     <script th:src="@{/js/theme.js}"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
     <script>
         const activePage = window.location.pathname;
@@ -32,19 +30,4 @@
             }
         })
     </script>
-    <script>
-        $(document).ready(function() {
-            $.get("/color", function(data) {
-                var color1 = data.color1;
-                var color2 = data.color2;
-
-                // Aplicar los valores recibidos según sea necesario
-                $("body").css("background-color", color1);
-                $("#change").css("background-color", color2);
-                $("#change1").css("background-color", color2);
-                $("#change2").css("background-color", color2);
-            });
-        });
-    </script>
-
 </div>

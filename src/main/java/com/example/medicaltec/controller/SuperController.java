@@ -1314,14 +1314,5 @@ public class SuperController {
         }
     }
 
-    @PostMapping("/editarUxUi")
-    public String guardarColor(@RequestParam("colorPicker") String colorPicker, @RequestParam("colorPicker1") String colorPicker1) {
-        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
-        assert uxUi != null;
-        uxUi.setColorBar(colorPicker);
-        uxUi.setColorBack(colorPicker1);
-        uxUiRepository.editarUxUi(colorPicker,colorPicker1);
-        return "redirect:/superAdmin/dashboard";
-    }
 
 }
