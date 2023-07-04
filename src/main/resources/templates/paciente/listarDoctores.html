@@ -272,9 +272,6 @@
                     dni: doctores[i].dni,
                 },
                 url: 'http://34.28.24.16:8081/api/doctores',
-                headers: {
-                    'Content-Type': 'application/json' // Set the Content-Type header
-                },
                 success: function(response) {
                     var horariosMes = response.horariosMes;
                     $('.calendar').each(function(){

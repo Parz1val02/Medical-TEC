@@ -227,8 +227,10 @@
 <script>
   $(document).ready(function(){
     var sede = $("#zona option:selected").val();
+    console.log("Sede valor: " + sede);
     $('#zona').on('change', function () {
       sede = ($(this).val());
+      console.log("Sede valor: " + sede);
     });
     $("#arch").click(function (){
       $.ajax({
@@ -241,9 +243,9 @@
       }).done(function (data){
           alert(data.msg);
           console.log(data.msg);
-      }).fail(function (err){
-          alert(err);
-          console.log(err);
+      }).fail(function (error){
+          alert(error.msg);
+          console.log(error.msg);
       })
     });
   });
