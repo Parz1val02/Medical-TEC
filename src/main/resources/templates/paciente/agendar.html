@@ -50,7 +50,9 @@
                                         <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${sedeUsuario.nombre}" disabled readonly>
                                     </div>
                                     <div class="col-sm-6">
-                                        <a type="button" class="btn btn-info" th:href="@{/paciente/otraSede}">Agendar cita en otra sede</a>
+                                        <a type="button" class="btn btn-info" th:href="@{'/paciente/otraSede?sedeId='+${sedeUsuario.id}}">Agendar cita en otra sede</a>
+                                        <br>
+                                        <div th:if="${error != null}" th:text="${error}" class="alert alert-warning" role="alert"></div>
                                     </div>
                                 </div>
                             </div>

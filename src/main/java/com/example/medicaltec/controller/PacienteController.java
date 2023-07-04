@@ -239,11 +239,27 @@ public class PacienteController {
     }
 
     @GetMapping("/otraSede")
-    public String otraSede(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String otraSede(@RequestParam("sedeId")String sedeId, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication, RedirectAttributes attr){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Sede> sedes = sedeRepository.findAll();
+        Sede sedeActual = null;
+        String idSede = sedeRepository.verificaridSede(sedeId);
+        try{
+            Optional<Sede> sedeOptional = sedeRepository.findById(Integer.parseInt(idSede));
+            if(sedeOptional.isPresent()){
+                sedeActual = sedeOptional.get();
+            }else{
+                attr.addFlashAttribute("error","Error en el parámetro enviado");
+                return "redirect:/paciente/agendarCita";
+            }
+        }catch (NumberFormatException e){
+            System.out.println("Arch");
+            attr.addFlashAttribute("error","Error en el parámetro enviado");
+            return "redirect:/paciente/agendarCita";
+        }
+        model.addAttribute("sedeActual", sedeActual);
         model.addAttribute("sedes", sedes);
         return "paciente/otraSede";
     }
