@@ -49,6 +49,4 @@ public class RestController {
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
     }*/
-
-
 }
