@@ -214,12 +214,14 @@
                                         text: modalidades[0]
                                     });
                                     select.append(option1);
-                                    // Option 2
-                                    var option2 = $('<option>', {
-                                        value: modalidades[1],
-                                        text: modalidades[1]
-                                    });
-                                    select.append(option2);
+                                    if(tipoCitaId=='1'){
+                                        // Option 2
+                                        var option2 = $('<option>', {
+                                            value: modalidades[1],
+                                            text: modalidades[1]
+                                        });
+                                        select.append(option2);
+                                    }
                                     for (var i = 0; i < infoDoctores.length; i++) {
                                         var info = infoDoctores[i];
                                         var doctor = info.doctorDto;
