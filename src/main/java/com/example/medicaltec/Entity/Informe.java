@@ -36,7 +36,7 @@ public class Informe {
     @Column(name = "activo")
     private Boolean activo;
 
-    @Column(name = "campos")
+    @Column(name = "camposllenados")
     private String campos;
 
 

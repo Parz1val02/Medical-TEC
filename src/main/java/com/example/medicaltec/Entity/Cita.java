@@ -79,4 +79,7 @@ public class Cita implements Serializable {
     @JoinColumn(name = "doctor_dni1", referencedColumnName = "dni", nullable = false)
     private Usuario doctor;
 
+    @Column(name = "informe_nuevo_idinforme")
+    private Integer idinforme;
+
 }

@@ -62,12 +62,17 @@
                 correoelectronico@hotmail.com
               </td>
               <td class="align-middle" align="center">
-                <a th:if="${cita.informeNuevo.id == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idCita=${cita.id})}">Llenar informe</a>
+                <!--*<a th:if="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idCita=${cita.id})}">Llenar informe</a>-->
 
                 <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
-                <a th:unless="${cita.informeNuevo.id == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                <a th:unless="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                  border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver  informe</a>
+
+                <button th:if="${cita.idinforme == null}" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                         data-target="#Informe">
+                  Llenar informe
+                </button>
 
               </td>
             </tr>
@@ -77,6 +82,45 @@
         </div>
       </div>
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+
+      <div class="modal fade"  aria-labelledby="exampleModalLabel" id="Informe">
+        <div class="modal-dialog" style="max-width: 800px !important;">
+          <div class="modal-content">
+            <!-- Aquí puedes agregar el contenido del modal -->
+            <div class="modal-header">
+              <h5 class="modal-title">Elija el formato de informe a llenar</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+              <div>
+                <table class="table table-striped">
+                  <thead class="bg-200">
+                  <tr>
+                    <th class="sort align-middle" style="width: 30%">N° Informe</th>
+                    <th class="sort align-middle" style="width: 20%">Nombre</th>
+                    <th class="sort align-middle" style="width: 20%">Elegir</th>
+                  </tr>
+                  </thead>
+                  <tbody class="bg-white">
+                  <tr th:each="informe, info : ${tiposdeinformes} "th:if="${informe.getId()!= null && informe.getActivo() == true}">
+                    <td th:text="${info.index+1}"></td>
+                    <td th:text="${informe.nombre}"></td>
+                    <td class="align-middle">
+                      <!-- A esto me referia con opciones-->
+                      <a class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme}">Llenar informe</a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -140,4 +184,4 @@
 
 </body>
 
-</html
+</html>

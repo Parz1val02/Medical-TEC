@@ -55,16 +55,9 @@
             <div class="col-md-8">
               <div class="row">
                 <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center; font-weight: 600">
-                  Crea un nuevo informe:
+                  Seleccionar Informe:
                 </div>
-                <div class="col-sm-4" style="display: flex; padding: 0; text-align: center">
-                  <a th:href="@{/superAdmin/crear/informe}" style="flex: 1">
-                    <button type="submit" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa;
-                                        margin-right: 5px; margin-left: 5px; padding: 2px !important;">
-                      Crear informe
-                    </button>
-                  </a>
-                </div>
+
                 <div class="col-sm-4" style="display: flex; padding: 0; text-align: center">
                 </div>
               </div>
@@ -81,8 +74,6 @@
             <tr>
               <th class="sort align-middle" style="width: 30%">N° Informe</th>
               <th class="sort align-middle" style="width: 20%">Nombre</th>
-              <th class="sort align-middle" style="width: 20%">Descargar</th>
-              <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
@@ -93,37 +84,11 @@
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
                   <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #0275d8;
-                                border-radius: 15px; border-color: #FFFFFF; width: 90%">Descargar</button>
-                  </div>
-                </div>
-              </td>
-              <td class="align-middle">
-                <!-- A esto me referia con opciones-->
-                <div class="dropdown font-sans-serif">
-                  <div class="form-group" align="center">
-                    <button type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
-                                border-radius: 15px; border-color: #FFFFFF; width: 100px"  data-toggle="modal" th:data-target="'#modalBorrar-' + ${info.index + 1}">Borrar</button>
-                    <div class="modal fade" th:id="'modalBorrar-' + ${info.index + 1}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Borrar informe</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <div class="modal-body">
-                            ¿Está seguro de querer borrar este informe?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${informe.getId()} + '&active='+ ${informe.getActivo()}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
-          border-radius: 15px; border-color: #FFFFFF">Borrar informe</a>
-                          </div>
-                        </div>
-                      </div>
+                      <a th:href="@{'/doctor/seleccionarInforme?id=' + ${informe.getId()} + '&active='+ ${informe.getActivo()}}"  class="btn btn-secondary" style="text-align: center;background: #0eb4fd;
+          border-radius: 15px; border-color: #FFFFFF">Seleccionar informe</a>
+                    </div>
                     </div>
                   </div>
-                </div>
               </td>
             </tr>
             </tbody>
