@@ -1,16 +1,17 @@
 package com.example.medicaltec.controller;
 
-        import com.example.medicaltec.Entity.*;
-        import com.example.medicaltec.repository.*;
-        import jakarta.servlet.http.HttpSession;
-        import org.springframework.boot.Banner;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.stereotype.Controller;
-        import org.springframework.ui.Model;
-        import org.springframework.web.bind.annotation.*;
-        import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.repository.*;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.boot.Banner;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-        import java.util.List;
+import java.util.List;
 
 @Controller
 public class ExampController {
@@ -190,9 +191,62 @@ public class ExampController {
         }
     }
 
+
+    //para la vista de la pagina de cambiar contraseña
     @GetMapping("/cambiarcontrasena")
-    public String cambiarContrasena(Model model){
-        return "auth/cambiarcontrasena";
+    public String cambiarContrasena(HttpSession session,Model model){
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        if (usuario == null) {
+
+            model.addAttribute("contrasenia", "");
+            model.addAttribute("contraseniaConfirma", "");
+
+            return "auth/cambiarcontrasena";
+
+        } else {
+
+            return "redirect:/auth/loginA";
+        }
+
+    }
+
+    //para la validacion de los campos de la contraseña y la nueva
+    @PostMapping("/validacionCambiar")
+    public String autoRegistro(@RequestParam("contrasenia") String contrasenia, @RequestParam("contraseniaConfirma") String contraseniaConfirma ,Model model, RedirectAttributes attr){
+
+        Regex regex = new Regex();
+
+        boolean contraValida = regex.contrasenaisValid(contrasenia);
+        boolean contraConfValida = regex.contrasenaisValid(contraseniaConfirma);
+
+        String passwordError;
+        String passwordValid;
+
+        if(contrasenia.equalsIgnoreCase("")){
+            passwordError="El campo contraseña no puede estar vacio";
+            //numErrors++;
+            model.addAttribute("msgError", passwordError);
+        }
+
+        if (!contraValida || !contraConfValida){
+            passwordValid="La contraseña no cumple con los parametros establecidos";
+            model.addAttribute("msgError", passwordValid);
+            //numErrors++;
+
+        } else {
+            String passwordDif = "Las contraseñas no son iguales";
+            if ( contrasenia != contraseniaConfirma){
+                model.addAttribute("passwordDif", passwordDif );
+
+            }else {
+                attr.addFlashAttribute("success","Contraseña cambiada. A continuacion deberá acceder a su cuenta con la nueva contraseña");
+            }
+        }
+
+        //le faltan los return y redirect en los casos
+        return "redirect:/cambiarcontrasena";
     }
 
     //Chequear si dni existe
