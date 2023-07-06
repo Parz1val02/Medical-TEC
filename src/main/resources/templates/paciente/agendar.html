@@ -50,7 +50,9 @@
                                         <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${sedeUsuario.nombre}" disabled readonly>
                                     </div>
                                     <div class="col-sm-6">
-                                        <a type="button" class="btn btn-info" th:href="@{/paciente/otraSede}">Agendar cita en otra sede</a>
+                                        <a type="button" class="btn btn-info" th:href="@{'/paciente/otraSede?sedeId='+${sedeUsuario.id}}">Agendar cita en otra sede</a>
+                                        <br>
+                                        <div th:if="${error != null}" th:text="${error}" class="alert alert-warning" role="alert"></div>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +134,7 @@
     $(document).ready(function(){
         flatpickr('#fecha', {
             dateFormat: 'd-m-Y',
-            minDate: 'today',
+            minDate: new Date().fp_incr(1),
             placeholder: 'Seleccionar una fecha'
         });
         $('#examen').hide();
@@ -185,65 +187,49 @@
                     dataType: 'json',
                     success: function(response) {
                         var infoDoctores = response.infoDoctores;
-                        var modalidades = response.modalidades;
-                        $.ajax({
-                            url: 'http://34.28.24.16:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
-                            type: 'GET',
-                            dataType: 'html',
-                            success: function(response) {
-                                // 'response' contains the received HTML content
-                                // Further processing of the HTML content
-                                $('#next-form').html(response);
-                                $(".form-container").toggle("slide", { direction: "left" }, 500);
-                                $('#arch').hide();
-                                $('#arch2').hide();
-                                $('#fecha').prop("disabled", true);
-                                $('#tipo').prop("disabled", true);
-                                $('#inputEspecialidad').prop("disabled", true);
-                                $('#inputExamen').prop("disabled", true);
-                                var select = $('#modalidad');
-                                // Option 1
-                                var option1 = $('<option>', {
-                                    value: modalidades[0],
-                                    text: modalidades[0]
-                                });
-                                select.append(option1);
-                                // Option 2
-                                var option2 = $('<option>', {
-                                    value: modalidades[1],
-                                    text: modalidades[1]
-                                });
-                                select.append(option2);
-                                for (var i = 0; i < infoDoctores.length; i++) {
-                                    var info = infoDoctores[i];
-                                    var doctor = info.doctorDto;
-                                    var select2 = $('#doctor');
-                                    var option = $('<option>', {
-                                        value: doctor.dni,
-                                        text:  doctor.nombre + ' ' + doctor.apellido
+                        console.log(infoDoctores);
+                        if(infoDoctores.length===0){
+                            alert("Por el momento no contamos con horarios disponibles para esa fecha. Por favor, pruebe otra o intente en otra sede.")
+                        }else{
+                            var modalidades = response.modalidades;
+                            $.ajax({
+                                url: 'http://34.28.24.16:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
+                                type: 'GET',
+                                dataType: 'html',
+                                success: function(response) {
+                                    // 'response' contains the received HTML content
+                                    // Further processing of the HTML content
+                                    $('#next-form').html(response);
+                                    $(".form-container").toggle("slide", { direction: "left" }, 500);
+                                    $('#arch').hide();
+                                    $('#arch2').hide();
+                                    $('#fecha').prop("disabled", true);
+                                    $('#tipo').prop("disabled", true);
+                                    $('#inputEspecialidad').prop("disabled", true);
+                                    $('#inputExamen').prop("disabled", true);
+                                    var select = $('#modalidad');
+                                    // Option 1
+                                    var option1 = $('<option>', {
+                                        value: modalidades[0],
+                                        text: modalidades[0]
                                     });
-                                    select2.append(option);
-                                    if(i==0){
-                                        var horas = info.horas;
-                                        var select3 = $('#hora');
-                                        select3.empty();
-                                        for (var j = 0; j<horas.length; j++){
-                                            var time = horas[j];
-                                            var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
-                                            var option = $('<option>', {
-                                                value: time,
-                                                text: formattedTime
-                                            });
-                                            select3.append(option);
-                                        }
-                                    }
-                                }
-                                $('#doctor').on('change', function () {
-                                    var doc = ($(this).val());
+                                    select.append(option1);
+                                    // Option 2
+                                    var option2 = $('<option>', {
+                                        value: modalidades[1],
+                                        text: modalidades[1]
+                                    });
+                                    select.append(option2);
                                     for (var i = 0; i < infoDoctores.length; i++) {
                                         var info = infoDoctores[i];
                                         var doctor = info.doctorDto;
-                                        if(doc==doctor.dni){
+                                        var select2 = $('#doctor');
+                                        var option = $('<option>', {
+                                            value: doctor.dni,
+                                            text:  doctor.nombre + ' ' + doctor.apellido
+                                        });
+                                        select2.append(option);
+                                        if(i==0){
                                             var horas = info.horas;
                                             var select3 = $('#hora');
                                             select3.empty();
@@ -258,43 +244,64 @@
                                             }
                                         }
                                     }
-                                });
-                                $('#clash').on('click', function (){
-                                    var modalidad = $("#modalidad") .val();
-                                    var doctorDni = $("#doctor").val();
-                                    var hora = $("#hora").val();
-                                    var pacienteDni = [[${session.usuario.id}]];
-                                    console.log(modalidad + ' ' + doctorDni + ' ' + hora + ' ' + pacienteDni);
-                                    $.ajax({
-                                        method: 'POST',
-                                        data: {
-                                            sedeId: sedeId,
-                                            fecha: fecha,
-                                            tipoCitaId: tipoCitaId,
-                                            especialidadId: especialidadId,
-                                            examenId: examenId,
-                                            modalidad: modalidad,
-                                            doctorDni: doctorDni,
-                                            hora: hora,
-                                            pacienteDni: pacienteDni
-                                        },
-                                        url: 'http://34.28.24.16:8081/api/agendar2',
-                                        success: function(response) {
-                                            alert(response.msg);
-                                            location.reload();
-                                        },
-                                        error: function(xhr, status, error) {
-                                            // Error handling
-                                            console.log(error);
+                                    $('#doctor').on('change', function () {
+                                        var doc = ($(this).val());
+                                        for (var i = 0; i < infoDoctores.length; i++) {
+                                            var info = infoDoctores[i];
+                                            var doctor = info.doctorDto;
+                                            if(doc==doctor.dni){
+                                                var horas = info.horas;
+                                                var select3 = $('#hora');
+                                                select3.empty();
+                                                for (var j = 0; j<horas.length; j++){
+                                                    var time = horas[j];
+                                                    var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
+                                                    var option = $('<option>', {
+                                                        value: time,
+                                                        text: formattedTime
+                                                    });
+                                                    select3.append(option);
+                                                }
+                                            }
                                         }
                                     });
-                                });
-                            },
-                            error: function(xhr, status, error) {
-                                // Error handling
-                                console.log(error);
-                            }
-                        });
+                                    $('#clash').on('click', function (){
+                                        var modalidad = $("#modalidad") .val();
+                                        var doctorDni = $("#doctor").val();
+                                        var hora = $("#hora").val();
+                                        var pacienteDni = [[${session.usuario.id}]];
+                                        console.log(modalidad + ' ' + fecha + ' ' + hora + ' ' + pacienteDni);
+                                        $.ajax({
+                                            method: 'POST',
+                                            data: {
+                                                sedeId: sedeId,
+                                                fecha: fecha,
+                                                tipoCitaId: tipoCitaId,
+                                                especialidadId: especialidadId,
+                                                examenId: examenId,
+                                                modalidad: modalidad,
+                                                doctorDni: doctorDni,
+                                                hora: hora,
+                                                pacienteDni: pacienteDni
+                                            },
+                                            url: 'http://34.28.24.16:8081/api/agendar2',
+                                            success: function(response) {
+                                                alert(response.msg);
+                                                location.reload();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                // Error handling
+                                                console.log(error);
+                                            }
+                                        });
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    // Error handling
+                                    console.log(error);
+                                }
+                            });
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.log('Error:', error);

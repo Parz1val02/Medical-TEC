@@ -1239,6 +1239,10 @@ public class SuperController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/superAdmin/dashboard";
         }
+        if(filename.length() > 100){
+            attr.addFlashAttribute("foto", "Nombre de la imagen excede límite de 100 carácteres");
+            return "redirect:/superAdmin/dashboard";
+        }
         UxUi uxUi= uxUiRepository.findById(5).orElse(null);
             try {
                 assert uxUi != null;
@@ -1314,14 +1318,5 @@ public class SuperController {
         }
     }
 
-    @PostMapping("/editarUxUi")
-    public String guardarColor(@RequestParam("colorPicker") String colorPicker, @RequestParam("colorPicker1") String colorPicker1) {
-        UxUi uxUi = uxUiRepository.findById(5).orElse(null);
-        assert uxUi != null;
-        uxUi.setColorBar(colorPicker);
-        uxUi.setColorBack(colorPicker1);
-        uxUiRepository.editarUxUi(colorPicker,colorPicker1);
-        return "redirect:/superAdmin/dashboard";
-    }
 
 }

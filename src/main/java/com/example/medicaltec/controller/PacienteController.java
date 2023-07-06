@@ -188,14 +188,31 @@ public class PacienteController {
     }
 
     @RequestMapping("/listaDoctores")
-    public String doctores(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String doctores(@RequestParam(value = "idEspecialidad", required = false)String idEspecialidad,Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         model.addAttribute("usuario", usuario);
-        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        List<DoctorDto> doctores = usuarioRepository.obtenerlistaDoctores(sedeUsuario.getId());
+        SedeDto sede = sedeRepository.getSede(usuario.getId());
+        List<DoctorDto> doctores = null;
+        if(idEspecialidad==null){
+            doctores = usuarioRepository.obtenerlistaDoctores(sede.getId());
+        }else{
+            Integer especialidadId = sedeHasEspecialidadeRepository.verficarEspecialidadSede(sede.getId(), idEspecialidad);
+            if(especialidadId!=null) {
+                doctores = usuarioRepository.obtenerDoctoresEspecialidad(sede.getId(), especialidadId);
+            }else{
+                doctores = usuarioRepository.obtenerlistaDoctores(sede.getId());
+            }
+        }
         model.addAttribute("doctores", doctores);
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(sede.getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+        model.addAttribute("sede", sede);
+        model.addAttribute("especialidades", listaEspecialidades);
         return "paciente/listarDoctores";
     }
 
@@ -222,11 +239,27 @@ public class PacienteController {
     }
 
     @GetMapping("/otraSede")
-    public String otraSede(Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+    public String otraSede(@RequestParam("sedeId")String sedeId, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication, RedirectAttributes attr){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Sede> sedes = sedeRepository.findAll();
+        Sede sedeActual = null;
+        String idSede = sedeRepository.verificaridSede(sedeId);
+        try{
+            Optional<Sede> sedeOptional = sedeRepository.findById(Integer.parseInt(idSede));
+            if(sedeOptional.isPresent()){
+                sedeActual = sedeOptional.get();
+            }else{
+                attr.addFlashAttribute("error","Error en el parámetro enviado");
+                return "redirect:/paciente/agendarCita";
+            }
+        }catch (NumberFormatException e){
+            System.out.println("Arch");
+            attr.addFlashAttribute("error","Error en el parámetro enviado");
+            return "redirect:/paciente/agendarCita";
+        }
+        model.addAttribute("sedeActual", sedeActual);
         model.addAttribute("sedes", sedes);
         return "paciente/otraSede";
     }
@@ -249,7 +282,7 @@ public class PacienteController {
         if(idSede!=null){
             String sedeId=sedeRepository.verificaridSede(idSede);
             if(sedeId!=null){
-                sede = sedeRepository.getSedeId(Integer.parseInt(sedeId));
+                sede = sedeRepository.getSedeId(sedeId);
             }else{
                 //REgresar a pagina para elegir
                 sede = sedeRepository.getSede(usuario.getId());
