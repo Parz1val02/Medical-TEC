@@ -75,10 +75,10 @@ public class ExampController {
         return "/denegado";
     }
 
-    @GetMapping("/QR")
+    /*@GetMapping("/QR")
     public String qrcode() {
         return "/auth/genqr";
-    }
+    }*/
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registro(HttpSession session, Model model) {
@@ -207,7 +207,7 @@ public class ExampController {
 
         } else {
 
-            return "redirect:/auth/loginA";
+            return "redirect:/loginA";
         }
 
     }
