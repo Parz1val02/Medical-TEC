@@ -26,6 +26,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true)
     List<Cita> pacientesAtendidos();
 
+    @Query(value = "SELECT paciente_dni from telesystem_2.cita where doctor_dni1=\"12345678\"" +
+            " AND estadoscita_idestados=3 group by paciente_dni",nativeQuery = true)
+    List<String> pacientesdeldoctor();
+
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=\"12345678\" " +
             "AND estadoscita_idestados=1 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)

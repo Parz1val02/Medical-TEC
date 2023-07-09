@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-md-11">
                             <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                                Visualiza tus citas ya finalizadas con información del paciente
+                                Visualiza a los pacientes que has atendido
                             </h5>
                         </div>
                     </div>
@@ -40,30 +40,22 @@
                         <table class="table table-striped" id="userList">
                             <thead style="background: #cdeffc">
                             <tr>
-                                <th class="sort align-middle" style="width: 20%">Servicio</th>
                                 <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
-                                <th class="sort align-middle" style="width: 20%">Fecha de Atención</th>
                                 <th class="sort align-middle" style="width: 20%">Correo</th>
                                 <th class="sort align-middle" style="width: 20%; text-align: center"></th>
                             </tr>
                             </thead>
                             <tbody class="bg-white">
-                            <tr th:each="cita : ${listaCitas}">
-                                <td th:text="|${cita.tipocitaIdtipocita.tipoCita}|" class="align-middle">
-                                    Consulta o examen médico
-                                </td>
-                                <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
+                            <tr th:each="paciente : ${listapaciente}">
+                                <td th:text="|${paciente.nombre} ${paciente.apellido}|" class="align-middle">
                                     Nombre paciente
                                 </td>
-                                <td class="align-middle" th:text="|${cita.fecha} a las ${cita.hora}hrs|">
-                                    00/00/00 - 00:00hrs
-                                </td>
-                                <td th:text="${cita.paciente.email}">
+                                <td th:text="${paciente.email}">
                                     correoelectronico@hotmail.com
                                 </td>
                                 <td class="align-middle" align="center">
                                     <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">Ver historial clínico</a>
+                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial' + '?id=' + ${paciente.id}}">Ver historial clínico</a>
                                 </td>
                             </tr>
 
@@ -71,6 +63,9 @@
                         </table>
                     </div>
                 </div>
+
+
+
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
     </div>

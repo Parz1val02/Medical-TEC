@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -15,15 +17,6 @@ public class InformeNuevo {
     @Column(name = "idinforme", nullable = false)
     private Integer id;
 
-    @Column(name = "diagnostico", length = 200)
-    private String diagnostico;
-
-    @Column(name = "bitacora", length = 500)
-    private String bitacora;
-
-    @Column(name = "tratamiento", length = 100)
-    private String tratamiento;
-
     @Column(name = "activo")
     private Boolean activo;
 
@@ -32,5 +25,8 @@ public class InformeNuevo {
 
     @Column(name = "campos")
     private String campos;
+
+    @Transient
+    private List<String> listacampos;
 
 }

@@ -25,7 +25,7 @@
                        type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
                     <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'doctor':false}" th:href="@{'/'+'doctor'+'/principal'}"
                        type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
-                    <a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'+'/'}"
+                    <a th:if="${session.usuario == null || session.usuario.getRolesIdroles().getNombreRol() == null}" th:href="@{'/'+'loginA'}"
                        type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Iniciar sesión</a>
                 </div>
             </div>

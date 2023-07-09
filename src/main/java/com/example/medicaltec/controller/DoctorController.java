@@ -6,6 +6,7 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -62,33 +63,34 @@ public class DoctorController {
 
 
     @GetMapping("/historial")
-    public String verHistorial(Model model, @RequestParam("id") String id){
+    public String verHistorial(Model model, @RequestParam("id") String id, RedirectAttributes attr){
         // Obtener paciente
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario paciente = optionalUsuario.get();
-        model.addAttribute("paciente",paciente);
-
-        // Nombre completo del sexo de la persona
-        if(paciente.getSexo().equals("M")){
-            paciente.setSexo("Masculino");
-        }else if (paciente.getSexo().equals("F")){
-            paciente.setSexo("Femenino");
+        if (optionalUsuario.isPresent()){
+            Usuario paciente = optionalUsuario.get();
+            model.addAttribute("paciente",paciente);
+            // Nombre completo del sexo de la persona
+            if(paciente.getSexo().equals("M")){
+                paciente.setSexo("Masculino");
+            }else if (paciente.getSexo().equals("F")){
+                paciente.setSexo("Femenino");
+            }
+            // Obtener alergias
+            int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
+            List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
+            ArrayList<Alergia> listaAlergias = new ArrayList<>();
+            for (Integer idAlergia : idAlergias) {
+                listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+            }
+            model.addAttribute("listaAlergias",listaAlergias);
+            // Obtener informes y citas por usuario
+            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
+            return "doctor/historial";
+        }else {
+            attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+            return "redirect:/doctor/pacientes";
         }
 
-        // Obtener alergias
-        int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
-        List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
-        ArrayList<Alergia> listaAlergias = new ArrayList<>();
-        for (Integer idAlergia : idAlergias) {
-            listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
-        }
-        model.addAttribute("listaAlergias",listaAlergias);
-
-        // Obtener informes y citas por usuario
-        model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
-
-
-        return "doctor/historial";
     }
 
     @GetMapping("/notificaciones")
@@ -103,10 +105,30 @@ public class DoctorController {
     @GetMapping("/mensajeria")
     public String verMensajes(){return "doctor/mensajeria";}
 
+
     @GetMapping("/pacientes")
     public String verPacientes(Model model){
         model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+        List<String> listadepacientesstring = citaRepository.pacientesdeldoctor();
+        List<Usuario> listapaciente = new ArrayList<>();
+        for (String dnipaciente : listadepacientesstring){
+            Usuario pacientedentro = usuarioRepository.findByid(dnipaciente);
+            listapaciente.add(pacientedentro);
+        }
+        //System.out.println(listadepacientesstring);
+        //System.out.println(listapaciente);
+        model.addAttribute("listapaciente",listapaciente);
         return "doctor/pacientes";
+    }
+
+    @Autowired
+    InformeNuevoRepository informeNuevoRepository;
+
+    @GetMapping("/citas")
+    public String verCitas(Model model){
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+        model.addAttribute("tiposdeinformes", informeNuevoRepository.findAll());
+        return "doctor/citas";
     }
 
     @GetMapping("/cuestionarios")
@@ -236,4 +258,80 @@ public class DoctorController {
         return "redirect:/doctor/principal";
     }
 
+
+
+    //Adaptarlo para sesiones
+    /*@GetMapping("/llenarInforme")
+    public String llenarInforme(@RequestParam("idCita") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+                                RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<Cita> optionalCita= citaRepository.findById(id);
+        if (optionalCita.isPresent()) {
+            Cita cciiitaassss= optionalCita.get();
+            String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/responderCuestionario";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/doctor/cuestionarios";
+        }
+    }
+    @GetMapping("/llenarInforme2")
+    public String llenarInforme2(@RequestParam("idCita") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+                                RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<Cita> optionalCita= citaRepository.findById(id);
+        if (optionalCita.isPresent()) {
+            Cita cciiitaassss= optionalCita.get();
+            //String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            //List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            //cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            //model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/responderCuestionario";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/paciente/cuestionarios";
+        }
+    }
+
+    @Autowired
+    InformeNuevoRepository informeNuevoRepository;
+    /**@GetMapping("/verInforme")
+    public String verRespuestas(@RequestParam("idCuestionario") String idcuestionario,Model model,
+                                HttpServletRequest httpServletRequest,
+                                RedirectAttributes attr, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        System.out.println(idcuestionario);
+        int id  = Integer.parseInt(idcuestionario);
+        Optional<CuestionariosUsuarios> optionalCuestionariosUsuarios= cuestionariosUsuariosRepository.findById(id);
+        if (optionalCuestionariosUsuarios.isPresent()) {
+            CuestionariosUsuarios cuestionariosUsuarios= optionalCuestionariosUsuarios.get();
+            String entrada = cuestionariosUsuarios.getIdcuestionario().getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionariosUsuarios.getIdcuestionario().setListapreguntas(listapreguntas);
+            String entrada2 = cuestionariosUsuarios.getRespuestas();
+            List<String> listarespuestas = List.of(entrada2.split("#!%&%!#"));
+            cuestionariosUsuarios.setListarespuestas(listarespuestas);
+            model.addAttribute("cuestionario", cuestionariosUsuarios);
+            return "paciente/verRespuestas";
+        } else {
+            attr.addFlashAttribute("cuestionario_noexiste","El cuestionario a responder no existe");
+            return "redirect:/paciente/cuestionarios";
+        }
+    }
+*/
 }
