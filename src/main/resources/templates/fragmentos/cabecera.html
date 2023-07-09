@@ -6,6 +6,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- cometchat links para funciones en frontend del chat-->
+    <script type="text/javascript"
+            src="https://unpkg.com/@cometchat-pro/chat@3.0.12/CometChat.js">
+    </script>
+    <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
+
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
           integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
           crossorigin=""/>
@@ -14,7 +22,7 @@
             crossorigin=""></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <script src="../../js/colores.js" defer async></script>
+    <script src="../../js/colores.js" defer></script>
     <style>
         #map {
             height: 400px;

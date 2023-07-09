@@ -3,6 +3,7 @@ import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.FinanzasDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.more.CometChatApi;
 import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -491,8 +493,20 @@ public class AdministradorController {
             String fechaFormateada = fechaRecibidaDate.format(formatter);
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
+            System.out.println("contrasena creada para doctor de id " + doctor.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
             usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  Integer.parseInt(especialidad),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
+            CometChatApi cometChatApi = new CometChatApi();
+            String dniAPI = doctor.getId();
+            String nameAPI = doctor.getNombre() + " " + doctor.getApellido();
+            try {
+                cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN LA CREACION DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
+                throw new RuntimeException(e);
+            }
+
+
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
@@ -677,7 +691,7 @@ public class AdministradorController {
             Model model,
             HttpServletRequest httpServletRequest
 
-    ){
+    ) {
         Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int a = 0;
@@ -842,8 +856,20 @@ public class AdministradorController {
         } else {
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
+            System.out.println("contrasena creada para paciente de id " + paciente.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
             usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
+            CometChatApi cometChatApi = new CometChatApi();
+            String dniAPI = paciente.getId();
+            String nameAPI = paciente.getNombre() + " " + paciente.getApellido();
+
+            try {
+                cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR PACIENTE");
+                throw new RuntimeException(e);
+            }
+
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
         }

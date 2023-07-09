@@ -354,7 +354,7 @@ public class AdministrativoController {
         LocalDateTime fechaHoraActual = LocalDateTime.now();
 
         // Crear un formateador de fecha y hora con el formato deseado (d M yyyy hh mm)
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy hh-mm");
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH-mm");
 
         // Formatear la fecha y hora en el formato deseado
         String fechaHoraFormateada = fechaHoraActual.format(formateador);

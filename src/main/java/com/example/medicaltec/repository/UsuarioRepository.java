@@ -14,6 +14,24 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     Usuario findByEmail(String email);
+    /*
+    @Query(nativeQuery = true, value = "select contrasena from usuario where email = ?1")
+    String buscarPasswordPorCorreo(String correo);
+    /*Change password hacing email
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value="UPDATE usuario SET contrasena = ?1 WHERE (correo = ?2)")
+    void changePasswordUsuario(String pass,String correo);
+    /*Password from correo*/
+
+    //Dni from correo
+    @Query(nativeQuery = true, value = "select dni from usuario where email = ?1")
+    String dniFromCorreo(String correo);
+    //Correo from dni
+    @Query(nativeQuery = true, value = "select email from usuario where dni = ?1")
+    String correoFromDni(String id);
+
+
 
 
     /*QUERYS USADOOS POR ADMINISTRADOR*/
