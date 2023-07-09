@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cambioContrasenia")
+@Table(name = "cambio_contrasenia")
 public class CambioContrasenia {
 
     @Id
@@ -20,5 +20,8 @@ public class CambioContrasenia {
 
     @Column(name = "fecha", nullable = false, length = 45)
     private String fecha;
+
+    @Column(name = "codigo", nullable = false, length = 45)
+    private String codigo;
 
 }
