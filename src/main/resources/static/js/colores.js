@@ -1,4 +1,4 @@
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function() {
     // Función para obtener y mostrar los colores
     function obtenerColores() {
         console.log("clash3")
@@ -13,9 +13,7 @@ $(document).ready(function() {
 
                 // Aplicar los valores recibidos según sea necesario
                 $("body").css("background-color", color1);
-                $("#change").css("background-color", color2);
-                $("#change1").css("background-color", color2);
-                $("#change2").css("background-color", color2);
+                $("#change, #change1, #change2").css("background-color", color2);
 
                 // Guardar los colores en el almacenamiento local como un objeto JSON
                 var colors = {
@@ -38,9 +36,7 @@ $(document).ready(function() {
         console.log("clash2")
         // Aplicar los colores almacenados a los elementos necesarios
         $("body").css("background-color", storedColorsObj.color1);
-        $("#change").css("background-color", storedColorsObj.color2);
-        $("#change1").css("background-color", storedColorsObj.color2);
-        $("#change2").css("background-color", storedColorsObj.color2);
+        $("#change, #change1, #change2").css("background-color", storedColorsObj.color2);
 
         // Actualizar los colores en la caché del navegador si han cambiado en la base de datos
         obtenerColores();
