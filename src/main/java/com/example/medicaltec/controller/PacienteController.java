@@ -181,7 +181,7 @@ public class PacienteController {
             boletas.add(boletaRepository.obtenerCitaxBoleta(citaspas.get(i).getId()));
         }
         model.addAttribute("boletas", boletas);
-        model.addAttribute("citas", citaRepository.historialCitas2(usuario.getId()));
+        model.addAttribute("citas", citaspas);
         model.addAttribute("medicamentos", medicamentoRepository.findAll());
        return "paciente/pagos";
     }

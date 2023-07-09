@@ -53,7 +53,7 @@ public class DoctorController {
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
-        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
+        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas(usuario_doctor.getId()));
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
 
@@ -107,9 +107,10 @@ public class DoctorController {
 
 
     @GetMapping("/pacientes")
-    public String verPacientes(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
-        List<String> listadepacientesstring = citaRepository.pacientesdeldoctor();
+    public String verPacientes(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
+        List<String> listadepacientesstring = citaRepository.pacientesdeldoctor(usuario_doctor.getId());
         List<Usuario> listapaciente = new ArrayList<>();
         for (String dnipaciente : listadepacientesstring){
             Usuario pacientedentro = usuarioRepository.findByid(dnipaciente);
@@ -125,8 +126,9 @@ public class DoctorController {
     InformeNuevoRepository informeNuevoRepository;
 
     @GetMapping("/citas")
-    public String verCitas(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+    public String verCitas(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
         model.addAttribute("tiposdeinformes", informeNuevoRepository.findAll());
         return "doctor/citas";
     }
@@ -145,8 +147,9 @@ public class DoctorController {
     }
 
     @GetMapping("/boletas")
-    public String verBoletas(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+    public String verBoletas(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
         return "doctor/boletas";
     }
 

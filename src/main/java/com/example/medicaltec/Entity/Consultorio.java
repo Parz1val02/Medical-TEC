@@ -18,4 +18,7 @@ public class Consultorio {
     @JoinColumn(name = "sedes_idsedes", nullable = false)
     private Sede sedesIdsedes;
 
+    @ManyToOne
+    @JoinColumn(name = "horasdoctor_idhorasdoctor", nullable = false)
+    private Horasdoctor horasdoctor;
 }

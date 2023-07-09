@@ -21,4 +21,6 @@ public class ExamenMedico {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
+    @Column(name = "precio", nullable = false)
+    private Double precio;
 }
