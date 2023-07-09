@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Funciones')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cambiara Contraseña')}">
 
 <body>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -29,15 +29,13 @@
 
             <form method="POST" th:action="@{'/validacionCambiar'}">
               <label >Contraseña nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" th:value="${contrasenia}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
-              <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
-              <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
+              <input type="password" class="form-control" name="contrasenia" >
+
 
 
               <label >Confirmar Contraseña Nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" th:value="${contraseniaConfirma}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
-              <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
-              <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
+              <input type="password" class="form-control" name="contrasenia" >
+
             </form>
 
           </div>

@@ -12,8 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -258,7 +261,7 @@ public class ExampController {
             DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
             String fechaHoraFormateada = fechaHoraActual.format(formateador);
             cambioContrasenia.setFecha(fechaHoraFormateada);
-
+            cambioContrasenia.setCodigo(codigo);
             cambioContraseniaRepository.save(cambioContrasenia);
 
             try {
@@ -402,13 +405,69 @@ public class ExampController {
             return "redirect:/cambiarcontrasena";
         }
 
-
+        model.addAttribute("correo",correo);
          return "auth/codigoFromCorreo";
         }else{
             model.addAttribute("correoError",correoError);
             model.addAttribute("correoExisteMsg",correoExisteMsg);
             return "auth/correoForContrasenia";
         }
+
+
+    }
+
+    @PostMapping("/codigoCorreo")
+    public String codigoFromCorreoValidation (@RequestParam("correo") String correo,
+                                              @RequestParam("codigo") String codigo,
+                                              RedirectAttributes attr,
+                                              Model model){
+
+        String codigoValidoMsg = null;
+
+
+        List<CambioContrasenia> cambioContraseniaList = cambioContraseniaRepository.findAll();
+
+        ArrayList<String> fechasCorreo = new ArrayList<>();
+        for(CambioContrasenia cambioContrasenia : cambioContraseniaList){
+            if(cambioContrasenia.getCorreo().equals(correo)){
+                fechasCorreo.add(cambioContrasenia.getFecha());
+            }
+        }
+        LocalDateTime fechaMasReciente = null;
+
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
+        for (String fechaString : fechasCorreo) {
+            LocalDateTime fecha = LocalDateTime.parse(fechaString, formateador);
+            if (fechaMasReciente == null || fecha.isAfter(fechaMasReciente)) {
+                fechaMasReciente = fecha;
+            }
+        }
+
+        String fechaMasRecienteFormateada = fechaMasReciente.format(formateador);
+        LocalDateTime fechaHora = parseFechaHora(fechaMasRecienteFormateada);
+
+
+
+        if(!(hanPasadoMasDe30Minutos(fechaHora))){
+            if(codigo.equals(cambioContraseniaRepository.codigoByFecha(fechaMasRecienteFormateada))){
+                model.addAttribute("correo",correo);
+
+                return "auth/cambiarcontrasena";
+
+            }else{
+                codigoValidoMsg = "El codigo no es válido, recuerde que la validez del codigo es de 30min, de lo contrario vuelva a solicitar el cambio de contraseña";
+                model.addAttribute("codigoValidoMsg",codigoValidoMsg);
+                return "auth/codigoFromCorreo";
+            }
+        }else {
+            attr.addFlashAttribute("minutos","Han pasado mas de 30 minutos desde el envio del codigo a su correo, por favor solicite uno nuevo");
+            return "redirect:/cambiarcontrasena";
+
+        }
+
+
+
+
 
 
     }
@@ -509,7 +568,15 @@ public class ExampController {
             return randomCode.toString();
         }
 
+    public static LocalDateTime parseFechaHora(String fechaHoraString) {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
+        return LocalDateTime.parse(fechaHoraString, formateador);
+    }
 
-
+    public static boolean hanPasadoMasDe30Minutos(LocalDateTime fechaHora) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fechaHoraMas30Minutos = fechaHora.plusMinutes(30);
+        return ahora.isAfter(fechaHoraMas30Minutos);
+    }
 
 }

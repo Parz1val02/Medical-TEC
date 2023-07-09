@@ -18,6 +18,9 @@
         <div style="display: flex; justify-content: center; width: 100%;">
             <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
                 <div class="card-body" style="padding: 25px;">
+                    <div class="alert alert-success" role="alert" th:if="${minutos != null}" th:text="${minutos}">
+
+                    </div>
                     <label style="margin: 0;"> Para poder continuar con el cambio de su contraseña <br>
                         Debe cambiar ingresar su correo <br>
                         A este correo le llegará un código para validar su identificación
