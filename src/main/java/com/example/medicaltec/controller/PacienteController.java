@@ -146,7 +146,6 @@ public class PacienteController {
             }else{
                 medicamentos.add(new ArrayList<RecetaHasMedicamento>());
             }
-
         }
         model.addAttribute("medicamentos", medicamentos);
         model.addAttribute("citas", citas);
