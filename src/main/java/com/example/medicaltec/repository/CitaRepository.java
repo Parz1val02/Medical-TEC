@@ -1,6 +1,7 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Cita;
+import com.example.medicaltec.dto.CitaxReunionDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,5 +39,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
     List<Cita> citasPorUsuario(String id_paciente);
+
+
+    //para videollamada
+    @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
+    List<CitaxReunionDto> citasxEnlace();
 
 }

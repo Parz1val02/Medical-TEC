@@ -6,7 +6,6 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -32,8 +31,9 @@ public class DoctorController {
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final AlergiaRepository alergiaRepository;
     final InformeRepository informeRepository;
+    final ReunionVirtualRepository reunionVirtualRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -43,6 +43,7 @@ public class DoctorController {
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.alergiaRepository = alergiaRepository;
         this.informeRepository = informeRepository;
+        this.reunionVirtualRepository = reunionVirtualRepository;
     }
     @Autowired
     CuestionariosRepository cuestionariosRepository;
@@ -57,6 +58,8 @@ public class DoctorController {
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
 
+        //aqui corrijes esto carlos
+        model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
 
         return "doctor/principal";
     }
