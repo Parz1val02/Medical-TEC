@@ -4,9 +4,12 @@ import com.example.medicaltec.dto.*;
 import com.example.medicaltec.funciones.Fechas;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.more.RutaTiempo;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -25,10 +28,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 
 import javax.print.Doc;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -107,6 +114,27 @@ public class PacienteController {
         model.addAttribute("listaSedes1",listaSedes1);
         return "paciente/principal";
    }
+    @RequestMapping(value = "/tracking")
+    public String tracking(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
+        model.addAttribute("sedeUsuario", sedeUsuario);
+        List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
+        model.addAttribute("listaSedes1",listaSedes1);
+
+        Sede sede = sedeRepository.findById(SPA.getSedesIdsedes().getId()).orElse(null);
+        model.addAttribute("sede",sede);
+
+        RutaTiempo rutaTiempo = ruta();
+        String rutaOptima = rutaTiempo.getRutaOptima();
+        String tiempoDemora = rutaTiempo.getTiempoDemora();
+        model.addAttribute("ruta",rutaOptima);
+        model.addAttribute("tiempo",tiempoDemora);
+
+        return "paciente/tracking";
+    }
 
     @RequestMapping("/perfil")
     public String perfilpaciente(@ModelAttribute("alergia")Alergia alergia, Model model, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
@@ -526,4 +554,52 @@ public class PacienteController {
             return null;
         }
     }*/
+    public RutaTiempo ruta() {
+        String origen = "-12.05314868427954,-77.03782872298778";
+        String destino = "-12.143227773094788,-76.99973085549144";
+        String apiKey = "AIzaSyC2fZLkVLhfgmyjt4sC_c4E61ibz_fa7yQ";
+        String rutaOptima = "";
+        String tiempoDemora = "";
+
+        try {
+            // Construye la URL de la solicitud
+            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origen +
+                    "&destination=" + destino + "&key=" + apiKey;
+
+            // Envía la solicitud y obtén la respuesta
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Analiza la respuesta
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode data = objectMapper.readTree(response.toString());
+
+            if (data.get("status").asText().equals("OK")) {
+                JsonNode routes = data.get("routes");
+                JsonNode route = routes.get(0);
+                rutaOptima = route.get("overview_polyline").get("points").asText();
+                tiempoDemora = route.get("legs").get(0).get("duration").get("text").asText();
+
+                System.out.println("Ruta óptima: " + rutaOptima);
+                System.out.println("Tiempo de demora: " + tiempoDemora);
+            } else {
+                System.out.println("No se pudo encontrar una ruta óptima.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new RutaTiempo(rutaOptima, tiempoDemora);
+    }
+
 }
