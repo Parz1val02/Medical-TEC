@@ -172,8 +172,9 @@ public class DoctorController {
 
     @PostMapping("/cambiarSede")
     public String cambiarSede(RedirectAttributes attr,
-                              @RequestParam("id") int id){
-        usuarioRepository.actualizarSede(id);
+                              @RequestParam("id") int id, HttpSession httpSession){
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+        usuarioRepository.actualizarSede2(id, usuario.getId() );
         attr.addFlashAttribute("msg", "Se actualizó la sede del usuario");
         return "redirect:/doctor/config";
     }
