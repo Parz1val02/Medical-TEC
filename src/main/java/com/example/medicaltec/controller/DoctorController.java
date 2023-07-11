@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +61,7 @@ public class DoctorController {
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
 
         //aqui corrijes esto carlos
-        model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
+        //model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
 
         return "doctor/principal";
     }
@@ -95,6 +97,25 @@ public class DoctorController {
         }
 
     }
+
+
+    //videollamada
+    @GetMapping("/videollamada")
+    public RedirectView videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+        // Obtener paciente
+
+        ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(reu.getEnlace());
+        return redirectView;
+
+
+    }
+
+
+
+
 
     @GetMapping("/notificaciones")
     public String verNotificaciones(){return "doctor/notificaciones";}

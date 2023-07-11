@@ -89,6 +89,12 @@ public class ExampController {
         return "/denegado";
     }
 
+    @RequestMapping("/error404")
+    public String pagenotfound404(Model model) {
+        // Add model attributes
+        return "/error404";
+    }
+
     /*@GetMapping("/QR")
     public String qrcode() {
         return "/auth/genqr";
