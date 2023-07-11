@@ -114,6 +114,46 @@ public class PacienteController {
         model.addAttribute("listaSedes1",listaSedes1);
         return "paciente/principal";
    }
+
+
+   //para cambio sede
+    @GetMapping(value = "/escogerSede")
+    public String escogerSede(Model model, HttpSession session, Authentication authentication, HttpServletRequest httpServletRequest){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        session.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        model.addAttribute("sedes", sedeRepository.findAll());
+
+        if (usuario.getSedesIdsedes().getId()==null){
+
+            return "/paciente/sedeInicial";
+        } else {
+
+            return "redirect:/paciente/principal";
+        }
+
+        //return "/paciente/sedeInicial";
+    }
+
+    @PostMapping(value = "/escogerSede")
+    public String sedeEscogida(Sede sede, @RequestParam("idSede") String sedeId, HttpSession session, Authentication authentication, HttpServletRequest httpServletRequest){
+
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        session.setAttribute("usuario",SPA);
+        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+
+
+        sede.setId(Integer.parseInt(sedeId));
+        sedeRepository.verificaridSede(sedeId);
+
+
+        usuarioRepository.actualizarSede2(Integer.parseInt(sedeId), usuario.getId() );
+
+        return "redirect:/paciente/principal";
+    }
+
+
+
     @RequestMapping(value = "/tracking")
     public String tracking(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
