@@ -40,6 +40,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -551,6 +552,71 @@ public class PacienteController {
             return "redirect:/paciente/perfil";
         }
     }
+
+    @GetMapping("/cancelarCita")
+    public String cancelarCita(@RequestParam("citaId") String citaId,
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        try{
+            Optional<Cita> cita = citaRepository.findById(Integer.parseInt(citaId));
+            if(cita.isPresent()){
+                Cita citaA = cita.get();
+                if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
+                    citaRepository.cancelarCita(citaA.getId());
+                    attr.addFlashAttribute("exitoCancelar", "Su cita se canceló de manera exitosa");
+                }else{
+                    attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
+                }
+            }
+        }catch (NumberFormatException e){
+            System.out.printf(e.getMessage());
+            attr.addFlashAttribute("errorCancelar", "Id erróneo de cita");
+        }
+        return "redirect:/paciente/consultas";
+    }
+
+    @PostMapping("/pagosTarjeta")
+    public String pagosTarjeta(@RequestParam("citaId") String citaId,
+                               @RequestParam("precio") String precio,
+                               @RequestParam("cardNumber") String cardNumber,
+                               @RequestParam("expDate")String expDate,
+                               @RequestParam("cvv") String cvv,
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Regex regex = new Regex();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        try{
+            Optional<Cita> cita = citaRepository.findById(Integer.parseInt(citaId));
+            if(cita.isPresent()){
+                Cita citaA = cita.get();
+                if(regex.cardNumberValid(cardNumber) && regex.expDateValid(expDate) && regex.cvvValid(cvv)){
+                    if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
+                        citaRepository.pagarCita(citaA.getId());
+                        String concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
+                        try{
+                            boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId());
+                            attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
+                        }catch (NumberFormatException e){
+                            attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
+                        }
+                    }else{
+                        attr.addFlashAttribute("errorPagar", "Error al intentar pagar la cita");
+                    }
+                }else{
+                    attr.addFlashAttribute("errorPagar", "Error en el ingreso de datos de la tarjeta");
+                }
+            }
+        }catch (NumberFormatException e){
+            System.out.printf(e.getMessage());
+            attr.addFlashAttribute("errorPagar", "Id erróneo de cita");
+        }
+        return "redirect:/paciente/consultas";
+    }
+
+
     /*
     @PostMapping("/guardarFoto")
     public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
