@@ -594,10 +594,10 @@ public class PacienteController {
                 Cita citaA = cita.get();
                 if(regex.cardNumberValid(cardNumber) && regex.expDateValid(expDate) && regex.cvvValid(cvv)){
                     if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
-                        citaRepository.pagarCita(citaA.getId());
-                        String concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
                         try{
+                            String concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
                             boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId(), usuarioSession.getSegurosIdSeguro().getId());
+                            citaRepository.pagarCita(citaA.getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
