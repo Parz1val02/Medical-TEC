@@ -36,4 +36,25 @@ public class Regex {
         Matcher matcher = pattern.matcher(input);
         return matcher.find();
     }
+
+    public boolean cardNumberValid(String input){
+        String regex = "^(?:\\d{4}[- ]){3}\\d{4}|\\d{16}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+
+    public boolean expDateValid(String input){
+        String regex = "^(0[1-9]|1[0-2])\\/?(0[1-9]|1[0-9]|2[0-9]|3[0-1])$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+
+    public boolean cvvValid(String input){
+        String regex = "^\\d{3,4}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
 }

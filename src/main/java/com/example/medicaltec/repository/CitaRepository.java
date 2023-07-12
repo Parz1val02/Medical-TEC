@@ -29,5 +29,13 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             nativeQuery = true)
     List<Cita> proximasCitasAgendadas(String dni);
 
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set citacancelada=1 where idcita=?1")
+    void cancelarCita(Integer id);
 
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set pagada=1 where idcita=?1")
+    void pagarCita(Integer id);
 }
