@@ -18,5 +18,7 @@ public class Tipocita implements Serializable {
 
     @Column(name = "tipo_cita", nullable = false, length = 45)
     private String tipoCita;
+    @Column(name = "precio")
+    private Double precio;
 
 }

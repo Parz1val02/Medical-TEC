@@ -13,33 +13,32 @@ import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where citacancelada=0 and paciente_dni=?1")
-    List<Cita> historialCitas(String dniPaciente);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where fecha < current_date() and citacancelada=0 and estadoscita_idestados=3 and paciente_dni=?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where str_to_date(fecha, '%d-%m-%Y') < current_date() and citacancelada=0 and pagada=1 and estadoscita_idestados=3 and paciente_dni=?1")
     List<Cita> historialCitas2(String dniPaciente);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where fecha >= current_date() and citacancelada=0 and paciente_dni=?1")
-    List<Cita> historialCitasAgendadas(String dniPaciente);
-
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=\"12345678\" " +
+    @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=?1 " +
             "AND estadoscita_idestados=3 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
-    List<Cita> pacientesAtendidos();
+    List<Cita> pacientesAtendidos(String dni);
 
-    @Query(value = "SELECT paciente_dni from telesystem_2.cita where doctor_dni1=\"12345678\"" +
+    @Query(value = "SELECT paciente_dni from telesystem_2.cita where doctor_dni1=?1" +
             " AND estadoscita_idestados=3 group by paciente_dni",nativeQuery = true)
-    List<String> pacientesdeldoctor();
+    List<String> pacientesdeldoctor(String dni);
 
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=?1 " +
             "AND estadoscita_idestados=1 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
     List<Cita> proximasCitasAgendadas(String dni);
 
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
-            nativeQuery = true)
-    List<Cita> citasPorUsuario(String id_paciente);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set citacancelada=1 where idcita=?1")
+    void cancelarCita(Integer id);
 
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set pagada=1 where idcita=?1")
+    void pagarCita(Integer id);
 
     //para videollamada
     @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
