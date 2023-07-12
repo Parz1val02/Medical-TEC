@@ -31,10 +31,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             " AND estadoscita_idestados=3 group by paciente_dni",nativeQuery = true)
     List<String> pacientesdeldoctor();
 
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=\"12345678\" " +
+    @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=?1 " +
             "AND estadoscita_idestados=1 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
-    List<Cita> proximasCitasAgendadas();
+    List<Cita> proximasCitasAgendadas(String dni);
 
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE paciente_dni=?1 AND fecha<now() ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
@@ -44,5 +44,11 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     //para videollamada
     @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
     List<CitaxReunionDto> citasxEnlace();
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=?1 where idcita=?2 ")
+    void cambiarEstadoCita( int idEstado , int idCita);
+
 
 }

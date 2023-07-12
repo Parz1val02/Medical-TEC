@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.net.http.HttpClient;
 import java.util.ArrayList;
@@ -56,13 +55,9 @@ public class DoctorController {
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
-        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
+        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas(usuario_doctor.getId()));
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
-
-        //aqui corrijes esto carlos
-        //model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
-
         return "doctor/principal";
     }
 
@@ -101,14 +96,26 @@ public class DoctorController {
 
     //videollamada
     @GetMapping("/videollamada")
-    public RedirectView videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+    public String videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
         // Obtener paciente
 
         ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl(reu.getEnlace());
-        return redirectView;
+        /*for (Cita c:citaRepository.proximasCitasAgendadas()) {
+            c.getId();
+            citaRepository.cambiarEstadoCita(2 , Integer.parseInt(id) );
+
+        }*/
+
+        model.addAttribute("reu",reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) ) );
+
+
+        //RedirectView redirectView = new RedirectView();
+        //redirectView.setUrl(reu.getEnlace());
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("enlace",reu.getEnlace() );
+        //modelAndView.setViewName("redirect:" +  );
+        return "";
 
 
     }
