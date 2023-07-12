@@ -17,7 +17,10 @@
     <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
       <div style="display: flex; justify-content: center; width: 100%;">
         <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
-          <div class="card-body" style="padding: 25px;">
+          <div class="card-body" style="padding: 25px;">+
+            <div class="alert alert-success" role="alert" th:if="${errorPass != null}" th:text="${errorPass}">
+
+            </div>
             <label style="margin: 0;"> Requisitos para la contraseña,<br>
               Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
               • Que la contraseña contenga al menos ocho caracteres.<br>
@@ -28,13 +31,20 @@
 
 
             <form method="POST" th:action="@{'/validacionCambiar'}">
-              <label >Contraseña nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" >
 
+              <input th:value="${dni}" name="dni" type="hidden">
+              <label for="passActual" class="form-label">Contraseña actual</label>
+              <input type="password" class="form-control" id="passActual" placeholder="Contraseña actual" name="pass1" required>
 
+              <label for="passNueva" class="form-label">Contraseña nueva</label>
+              <input type="password" class="form-control" id="passNueva" placeholder="Contraseña nueva" name="pass2" required>
 
-              <label >Confirmar Contraseña Nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" >
+              <label for="passConfirmar" class="form-label">Confirmar contraseña nueva</label>
+              <input type="password" class="form-control" id="passConfirmar" placeholder="Confirmar contraseña nueva" name="pass3" required>
+
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              <a class="btn btn-light" th:href="@{/loginA}">Cancelar</a>
+
 
             </form>
 

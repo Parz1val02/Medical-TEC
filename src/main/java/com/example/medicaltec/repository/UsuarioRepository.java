@@ -14,6 +14,24 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     Usuario findByEmail(String email);
+    /*
+    @Query(nativeQuery = true, value = "select contrasena from usuario where email = ?1")
+    String buscarPasswordPorCorreo(String correo);
+    /*Change password hacing email
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value="UPDATE usuario SET contrasena = ?1 WHERE (correo = ?2)")
+    void changePasswordUsuario(String pass,String correo);
+    /*Password from correo*/
+
+    //Dni from correo
+    @Query(nativeQuery = true, value = "select dni from usuario where email = ?1")
+    String dniFromCorreo(String correo);
+    //Correo from dni
+    @Query(nativeQuery = true, value = "select email from usuario where dni = ?1")
+    String correoFromDni(String id);
+
+
 
 
     /*QUERYS USADOOS POR ADMINISTRADOR*/
@@ -95,6 +113,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Transactional
     @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
     void actualizarSede(int id_nuevo);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=?2", nativeQuery = true)
+    void actualizarSede2(int id_nuevo, String dni);
     @Modifying
     @Transactional
     @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")

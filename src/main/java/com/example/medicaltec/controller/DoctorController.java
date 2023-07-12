@@ -6,14 +6,15 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,9 @@ public class DoctorController {
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final AlergiaRepository alergiaRepository;
     final InformeRepository informeRepository;
+    final ReunionVirtualRepository reunionVirtualRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -43,6 +45,7 @@ public class DoctorController {
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.alergiaRepository = alergiaRepository;
         this.informeRepository = informeRepository;
+        this.reunionVirtualRepository = reunionVirtualRepository;
     }
     @Autowired
     CuestionariosRepository cuestionariosRepository;
@@ -57,6 +60,8 @@ public class DoctorController {
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
 
+        //aqui corrijes esto carlos
+        //model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
 
         return "doctor/principal";
     }
@@ -92,6 +97,25 @@ public class DoctorController {
         }
 
     }
+
+
+    //videollamada
+    @GetMapping("/videollamada")
+    public RedirectView videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+        // Obtener paciente
+
+        ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(reu.getEnlace());
+        return redirectView;
+
+
+    }
+
+
+
+
 
     @GetMapping("/notificaciones")
     public String verNotificaciones(){return "doctor/notificaciones";}
@@ -172,8 +196,9 @@ public class DoctorController {
 
     @PostMapping("/cambiarSede")
     public String cambiarSede(RedirectAttributes attr,
-                              @RequestParam("id") int id){
-        usuarioRepository.actualizarSede(id);
+                              @RequestParam("id") int id, HttpSession httpSession){
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+        usuarioRepository.actualizarSede2(id, usuario.getId() );
         attr.addFlashAttribute("msg", "Se actualizó la sede del usuario");
         return "redirect:/doctor/config";
     }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cambiar Contraseña')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Escoja sede')}">
 
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -18,20 +18,30 @@
         <div style="display: flex; justify-content: center; width: 100%;">
             <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
                 <div class="card-body" style="padding: 25px;">
-                    <label style="margin: 0;"> A continuacion debe ingresar el codigo enviado a su correo <br>
-                        De esa manera se podra confirmar su identidad <br>
-                        Posteriormente podra cambiar su contraseña
+                    <div class="alert alert-success" role="alert" th:if="${minutos != null}" th:text="${minutos}">
+
+                    </div>
+                    <label style="margin: 0;"> Para poder continuar con el ingreso a la pagina <br>
+                        Debe escoger su sede mas cercana  <br>
                     </label>
 
 
-                    <form method="POST" th:action="@{'/codigoCorreo'}" >
-                        <input th:value="${dni}" name="dni" type="hidden">
-                        <label >Codigo recibido : </label>
-                        <input type="text" name = "codigo" class="form-control" th:classappend="${codigoValidoMsg!=null?'is-invalid':''}">
-                        <div class ="invalid-feedback" th:if="${codigoValidoMsg!=null}" th:text="${codigoValidoMsg}"></div>
-
-                        <button type="submit" class="btn btn-primary">Confirmar</button>
-                        <a th:href="@{'/loginA'}" class="btn btn-danger">Cancelar</a>
+                    <form method="POST" th:action="@{'/escogerSede'}" >
+                        <label >Escoger sede: </label>
+                        <div class="row">
+                            <div class="col-sm-6" th:each="sede : ${sedes}" th:if="${sede.id==null}">
+                                <a type="button" th:href="@{'/paciente/principal' + '?idSede=' + ${sede.id}}">
+                                    <div style="display: flex; align-items: center; justify-content: space-around">
+                                        <select class="form-control" id="zona" >
+                                            <option  th:each="sede : ${sedes}"
+                                                     th:value="${sede.id}"
+                                                     th:text="${sede.nombre}"
+                                                     ></option>
+                                        </select>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </form>
 
                 </div>
