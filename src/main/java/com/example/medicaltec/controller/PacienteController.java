@@ -597,7 +597,7 @@ public class PacienteController {
                         citaRepository.pagarCita(citaA.getId());
                         String concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
                         try{
-                            boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId());
+                            boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId(), usuarioSession.getSegurosIdSeguro().getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");

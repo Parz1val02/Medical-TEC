@@ -19,12 +19,12 @@ public interface BoletaRepository extends JpaRepository<Boleta,Integer> {
     //paciente
     @Transactional
     @Modifying
-    @Query(value = "insert into boletas (conceptopago, montototal, receta_idreceta, cita_idcita,pagocompletado) values (?1,?2,null,?3,0)", nativeQuery = true)
-    void crearBoletaCita(String concepto, Double monto, Integer idcita);
+    @Query(value = "insert into boletas (conceptopago, monto_cita, cita_idcita, seguros_id_seguro, receta_idreceta, monto_Receta) values (?1,?2,?3,?4,null,null)", nativeQuery = true)
+    void crearBoletaCita(String concepto, Double monto, Integer idcita, Integer idseguro);
 
     //querys administrador  finanzas
 
-    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
+    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto_cita, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
             "paciente.dni as 'dnipaciente', paciente.nombre as 'nombrepaciente', paciente.apellido as 'apellidopaciente',\n" +
             "doctor.dni as 'dnidoctor', doctor.nombre as 'nombredoctor', doctor.apellido as 'apellidodoctor'\n" +
             "FROM telesystem_2.boletas b \n" +
@@ -37,7 +37,7 @@ public interface BoletaRepository extends JpaRepository<Boleta,Integer> {
             "order by b.idboletas ")
     List<FinanzasDto> tablaFinanzasPrincipal();
 
-    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
+    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto_cita, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
             "paciente.dni as 'dnipaciente', paciente.nombre as 'nombrepaciente', paciente.apellido as 'apellidopaciente',\n" +
             "doctor.dni as 'dnidoctor', doctor.nombre as 'nombredoctor', doctor.apellido as 'apellidodoctor'\n" +
             "FROM telesystem_2.boletas b \n" +
@@ -52,7 +52,7 @@ public interface BoletaRepository extends JpaRepository<Boleta,Integer> {
     List<FinanzasDto> tablaFinanzasEspecialidad(int idEspecialidad);
 
 
-    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
+    @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto_cita, c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
             "paciente.dni as 'dnipaciente', paciente.nombre as 'nombrepaciente', paciente.apellido as 'apellidopaciente',\n" +
             "doctor.dni as 'dnidoctor', doctor.nombre as 'nombredoctor', doctor.apellido as 'apellidodoctor'\n" +
             "FROM telesystem_2.boletas b \n" +

@@ -14,10 +14,10 @@ public class Boleta {
     @Column(name = "idboletas", nullable = false)
     private Integer id;
 
-    @Column(name = "conceptopago", length = 100)
+    @Column(name = "conceptopago", length = 100, nullable = false)
     private String conceptopago;
-    @Column(name = "montototal", nullable = false)
-    private Double montototal;
+    @Column(name = "monto_cita", nullable = false)
+    private Double montoCita;
 
     @ManyToOne
     @JoinColumn(name = "receta_idreceta")
@@ -27,6 +27,9 @@ public class Boleta {
     @JoinColumn(name = "cita_idcita")
     private Cita citaIdcita;
 
-    @Column(name = "pagocompletado")
-    private Boolean pagoCompletado;
+    @Column(name = "monto_receta")
+    private Double montoReceta;
+    @ManyToOne
+    @JoinColumn(name = "seguros_id_seguro")
+    private Seguro seguro;
 }
