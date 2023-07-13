@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
 @Controller
 @RequestMapping("/doctor")
@@ -49,6 +50,7 @@ public class DoctorController {
     }
     @Autowired
     CuestionariosRepository cuestionariosRepository;
+
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model, HttpSession httpSession){
         Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
@@ -56,7 +58,7 @@ public class DoctorController {
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
-        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas(usuario_doctor.getId()));
+        model.addAttribute("listaProximasCitas",citaRepository.citasParaVer(usuario_doctor.getId()));
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
         return "doctor/principal";
@@ -98,19 +100,17 @@ public class DoctorController {
     //videollamada
     @GetMapping("/videollamada")
     public String videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+        // Cambiamos el estado de cita a 'En consulta'
+        citaRepository.cambiarEstadoCita(5, Integer.parseInt(id));
+
         // Obtener paciente
-
         ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
-
         /*for (Cita c:citaRepository.proximasCitasAgendadas()) {
             c.getId();
             citaRepository.cambiarEstadoCita(2 , Integer.parseInt(id) );
 
         }*/
-
         model.addAttribute("reu",reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) ) );
-
-
         //RedirectView redirectView = new RedirectView();
         //redirectView.setUrl(reu.getEnlace());
 //        ModelAndView modelAndView = new ModelAndView();

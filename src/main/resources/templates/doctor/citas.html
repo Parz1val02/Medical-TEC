@@ -67,7 +67,7 @@
 
                 <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
                 <a th:unless="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver  informe</a>
+                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver informe</a>
 
                 <a th:if="${cita.idinforme == null}" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                  border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/elegirInforme(idCita=${cita.id})}">
