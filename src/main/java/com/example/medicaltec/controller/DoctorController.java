@@ -6,13 +6,13 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.net.http.HttpClient;
 import java.util.ArrayList;
@@ -59,10 +59,6 @@ public class DoctorController {
         model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas(usuario_doctor.getId()));
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
-
-        //aqui corrijes esto carlos
-        //model.addAttribute("videollamadas",  citaRepository.citasxEnlace());
-
         return "doctor/principal";
     }
 
@@ -101,14 +97,26 @@ public class DoctorController {
 
     //videollamada
     @GetMapping("/videollamada")
-    public RedirectView videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+    public String videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
         // Obtener paciente
 
         ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl(reu.getEnlace());
-        return redirectView;
+        /*for (Cita c:citaRepository.proximasCitasAgendadas()) {
+            c.getId();
+            citaRepository.cambiarEstadoCita(2 , Integer.parseInt(id) );
+
+        }*/
+
+        model.addAttribute("reu",reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) ) );
+
+
+        //RedirectView redirectView = new RedirectView();
+        //redirectView.setUrl(reu.getEnlace());
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("enlace",reu.getEnlace() );
+        //modelAndView.setViewName("redirect:" +  );
+        return "";
 
 
     }
@@ -155,6 +163,81 @@ public class DoctorController {
         model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
         model.addAttribute("tiposdeinformes", informeNuevoRepository.findAll());
         return "doctor/citas";
+    }
+
+    @GetMapping("/elegirInforme")
+    public String elegirInforme (@RequestParam("idCita") String idCita,Model model,RedirectAttributes attr,HttpSession httpSession){
+        if (esNumeroEntero(idCita)){
+            Integer iddecita = Integer.parseInt(idCita);
+            Optional<Cita> optionalCita = citaRepository.findById(iddecita);
+            if (optionalCita.isPresent()){
+                Cita citas = optionalCita.get();
+                httpSession.removeAttribute("idcitaparainforme");
+                httpSession.setAttribute("idcitaparainforme",citas.getId());
+                List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
+                for (InformeNuevo informes : listainformes){
+                    String entrada1 = informes.getCampos();
+                    List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
+                    informes.setListacampos((listacampos));
+                }
+                model.addAttribute("informeList", listainformes);
+                return "doctor/eleccionInforme";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @GetMapping("/llenarInforme")
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
+                                HttpSession httpSession,Model model){
+        if(esNumeroEntero(idinforme)){
+            Integer iddinforme = Integer.parseInt(idinforme);
+            Optional<InformeNuevo> optionalInformeNuevo = informeNuevoRepository.findById(iddinforme);
+            if(optionalInformeNuevo.isPresent()){
+                httpSession.removeAttribute("iddelinforme");
+                httpSession.setAttribute("iddelinforme",iddinforme);
+                InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                String campostexto = informeNuevo.getCampos();
+                List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
+                informeNuevo.setListacampos(listadecampos);
+                model.addAttribute("informe",informeNuevo);
+                return "doctor/llenarInforme";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @PostMapping("/rellenarInforme")
+    public String rellenarInforme(@RequestParam("bitacora") String bitacora,
+                                  @RequestParam("diagnostico") String diagnostico,
+                                  @RequestParam("tratamiento") String tratamiento,@RequestParam("listarespuestas") String respuestas,
+                                RedirectAttributes attr, Model model, HttpSession httpSession){
+        int iddelinforme = (int) httpSession.getAttribute("iddelinforme");
+        int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
+        String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
+        String salida ="";
+        String separador ="#!%&%!#";
+        int i = 0;
+        for (String respuesta : respuestasSeparadas){
+            System.out.println(respuesta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+respuesta;
+            }else {
+                salida = salida + separador + respuesta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+        return "redirect:/doctor/citas";
     }
 
     @GetMapping("/cuestionarios")

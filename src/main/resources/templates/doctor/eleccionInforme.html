@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Elección de Informe')}">
 </head>
 
 
@@ -23,12 +23,12 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
               <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Citas Recientes
+                Plantillas de Informes
               </h1>
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Visualiza tus citas ya finalizadas con información del paciente
+                Previsualiza y elija el informe que considere más conveniente
               </h5>
             </div>
           </div>
@@ -40,45 +40,74 @@
           <table class="table table-striped" id="userList">
             <thead style="background: #cdeffc">
             <tr>
-              <th class="sort align-middle" style="width: 20%">Servicio</th>
-              <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
-              <th class="sort align-middle" style="width: 20%">Fecha de Atención</th>
-              <th class="sort align-middle" style="width: 20%">Correo</th>
-              <th class="sort align-middle" style="width: 20%; text-align: center"></th>
+              <th class="sort align-middle" style="width: 20%">Nombre</th>
+              <th class="sort align-middle" style="width: 20%">Previsualizar</th>
+              <th class="sort align-middle" style="width: 20%"></th>
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="cita : ${listaCitas}">
-              <td th:text="|${cita.tipocitaIdtipocita.tipoCita}|" class="align-middle">
-                Consulta o examen médico
+            <tr th:each="informe : ${informeList}">
+              <td th:text="|${informe.nombre}|" class="align-middle">
+                Sin Nombre
               </td>
-              <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
-                Nombre paciente
-              </td>
-              <td class="align-middle" th:text="|${cita.fecha} a las ${cita.hora}hrs|">
-                00/00/00 - 00:00hrs
-              </td>
-              <td th:text="${cita.paciente.email}">
-                correoelectronico@hotmail.com
+              <td class="align-middle">
+                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                 border-radius: 15px; border-color: #b38df7;" data-toggle="modal"
+                        data-target="#exampleModal" th:data-target="'#Informe' + ${informe.id+1}">
+                  Previsualizar
+                </button>
               </td>
               <td class="align-middle" align="center">
-                <!--*<a th:if="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idCita=${cita.id})}">Llenar informe</a>-->
-
-                <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
-                <a th:unless="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver  informe</a>
-
-                <a th:if="${cita.idinforme == null}" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/elegirInforme(idCita=${cita.id})}">
-                  Llenar informe
+                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
+                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idInforme=${informe.id})}">
+                  Elegir Informe
                 </a>
-
               </td>
             </tr>
-
             </tbody>
           </table>
+        </div>
+      </div>
+      <div th:each="informe, i : ${informeList}">
+        <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Informe' + ${informe.id+1}">
+          <div class="modal-dialog" style="max-width: 800px !important;">
+            <div class="modal-content">
+              <!-- Aquí puedes agregar el contenido del modal -->
+              <div class="modal-header">
+                <h5 class="modal-title">Previsualización del Modal</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body" style="padding: 30px;">
+                <div class="row">
+                  <h4 th:text="${informe.nombre}">
+                  </h4>
+                </div>
+                <div class="row">
+                  <label>Diagnostico</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="row">
+                  <label>Bitácora</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div class="row">
+                  <label>Tratamiento</label>
+                  <input type="text" class="form-control">
+                </div>
+                <div th:each="campo : ${informe.listacampos}">
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label class="form-label" th:text="${campo}"></label>
+                      <input type="text" class="form-control" placeholder="Aquí va la respuesta">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>

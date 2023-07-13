@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:util="urn:java.util">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Página Principal')}">
 
@@ -213,7 +213,7 @@
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
                             <td class="align-middle" style="text-align: center">
-                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">
+                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}" target="_blank">
                                     <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                                 border-radius: 15px; border-color: #b38df7">Historial Clínico</button>
                                 </a>
@@ -228,7 +228,7 @@
             <script type="text/javascript">
 
                 //var elemento = document.getElementById('jitsi-button');
-                /*var botones = document.getElementsByClassName('botones');
+                var botones = document.getElementsByClassName('botones');
                 for (var i = 0; i < botones.length; i++) {
                     var boton = botones[i];
 
@@ -236,11 +236,11 @@
                     boton.addEventListener("click", function () {
                         // Tu código de manejo de eventos aquí
 
-                        var nuevaPestana = window.open("","reunion de jitsi");
+                        //window.open("/videollamada", "_blank");
 
                         //let contenidoDiv = document.getElementById('jaas-container').innerHTML ;
 
-                        var contenidoHTML = '<div id="jaas-container"></div>';
+                        /*var contenidoHTML = '<div id="jaas-container"></div>';
 
                         nuevaPestana.document.open();
                         nuevaPestana.document.write(contenidoHTML);
@@ -252,7 +252,7 @@
                             // Make sure to include a JWT if you intend to record,
                             // make outbound calls or use any other premium features!
                             // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
-                        });
+                        });*/
                     });
                 }
 
