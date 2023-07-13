@@ -17,9 +17,6 @@ public class ReunionVirtual {
     @Column(name = "idreunion_virtual", nullable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "cita_idcita")
-    private Cita cita;
 
 
     @Column(name = "enlace",  length = 500)

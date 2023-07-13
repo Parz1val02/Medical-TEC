@@ -82,4 +82,7 @@ public class Cita implements Serializable {
     @Column(name = "informe_nuevo_idinforme")
     private Integer idinforme;
 
+    @ManyToOne
+    @JoinColumn(name = "id_reunion")
+    private ReunionVirtual reunionVirtual;
 }
