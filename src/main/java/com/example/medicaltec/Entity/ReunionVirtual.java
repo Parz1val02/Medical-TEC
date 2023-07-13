@@ -17,6 +17,8 @@ public class ReunionVirtual {
     @Column(name = "idreunion_virtual", nullable = false)
     private Integer id;
 
+
+
     @Column(name = "enlace",  length = 500)
     private String enlace;
 

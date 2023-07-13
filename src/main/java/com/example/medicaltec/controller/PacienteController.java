@@ -566,6 +566,7 @@ public class PacienteController {
                 if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
                     citaRepository.cancelarCita(citaA.getId());
                     attr.addFlashAttribute("exitoCancelar", "Su cita se canceló de manera exitosa");
+                    //Enviar correo cita cancelada
                 }else{
                     attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
                 }
@@ -598,7 +599,9 @@ public class PacienteController {
                             String concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
                             boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId(), usuarioSession.getSegurosIdSeguro().getId());
                             citaRepository.pagarCita(citaA.getId());
+                            citaRepository.estadoPagada(citaA.getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
+                            //Enviar correo pago con tarjeta correcto
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
                         }

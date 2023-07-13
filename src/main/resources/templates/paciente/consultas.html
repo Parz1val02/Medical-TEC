@@ -251,7 +251,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title fs-5" id="exampleModalLabel">Información Cita Virtual Agendada</h2>
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita Virtual Agendada</h3>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -287,10 +287,14 @@
                                 <input type="text" name="sedeId" id="sedeVirtual" class="form-control" readonly="" placeholder="">
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="estadoVirtual">Estado de la cita:</label>
+                                <input type="text" name="estado" id="estadoVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
                     </div>
                     <hr style="height: 1px; background-color: #333; border: none">
-                    <div class="row">
-                    </div>
                     <div class="row">
                         <div class="form-group col-sm-4">
                             <a id="enlace" href="" type="button" class="btn btn-success" target="_blank">Ingresar Cita</a>
@@ -314,7 +318,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModal1Label">Información Cita Presencial Agendada</h1>
+                <h3 class="modal-title fs-5" id="exampleModal1Label">Información Cita Presencial Agendada</h3>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -348,6 +352,12 @@
                             <div class="form-group">
                                 <label for="sedePresencial">Sede:</label>
                                 <input type="text" name="sedeId" id="sedePresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="estadoPresencial">Estado de la cita:</label>
+                                <input type="text" name="estado" id="estadoPresencial" class="form-control" readonly="" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -556,7 +566,7 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
-            eventDidMount: function(info) {
+            /*eventDidMount: function(info) {
                 tippy(info.el, {
                     trigger: 'mouseenter',
                     content: generateTooltipContent(info.event), // call a function to generate the html content
@@ -564,7 +574,7 @@
                     animation: 'fade',
                     allowHTML: 'true'
                 })
-            },
+            },*/
             eventClick: function(info) {
                 if(info.event.extendedProps.modalidad==="Virtual"){
                     let modalA = $('#modalVirtual');
@@ -578,10 +588,12 @@
                         let hora = $("#horaVirtual");
                         let tipocita = $("#tipocitaVirtual");
                         let sede = $("#sedeVirtual");
+                        let estado = $("#estadoVirtual");
                         let time = moment(info.event.extendedProps.hora, 'HH:mm');
                         let formattedTime = time.format('h:mm A');
                         let date = moment(info.event.start, 'YYYY-MM-DD');
                         let formattedDate = date.format('DD-MM-YYYY');
+                        estado.attr('placeholder', info.event.extendedProps.estado);
                         hora.attr('placeholder', formattedTime);
                         fecha.attr('placeholder', formattedDate);
                         tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
@@ -592,6 +604,9 @@
                         if(info.event.extendedProps.pagada==='true'){
                             $("#pagarVirtual").hide();
                             $("#cancelarVirtual").hide();
+                        }else if(info.event.extendedProps.pagada==='false'){
+                            $("#pagarVirtual").show();
+                            $("#cancelarVirtual").show();
                         }
 
                         $('#cancelarVirtual').on('click', function (){
@@ -628,10 +643,12 @@
                         let hora = $("#horaPresencial");
                         let tipocita = $("#tipocitaPresencial");
                         let sede = $("#sedePresencial");
+                        let estado = $("#estadoPresencial");
                         let time = moment(info.event.extendedProps.hora, 'HH:mm');
                         let formattedTime = time.format('h:mm A');
                         let date = moment(info.event.start, 'YYYY-MM-DD');
                         let formattedDate = date.format('DD-MM-YYYY');
+                        estado.attr('placeholder', info.event.extendedProps.estado);
                         hora.attr('placeholder', formattedTime);
                         fecha.attr('placeholder', formattedDate);
                         tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
@@ -640,6 +657,11 @@
                         let consultorio = $("#consultorio");
                         direccion.attr('placeholder', info.event.extendedProps.direccion);
                         consultorio.attr('placeholder', info.event.extendedProps.extra);
+                        if(info.event.extendedProps.pagada==='true'){
+                            $("#cancelarPresencial").hide();
+                        }else if(info.event.extendedProps.pagada==='false'){
+                            $("#cancelarPresencial").show();
+                        }
                         $('#cancelarPresencial').on('click', function (){
                             modalA.modal('hide');
                             let modalb = $('#cancelarCita');
@@ -682,7 +704,8 @@
                         extra: eventData.extra,
                         precio: eventData.precio,
                         direccion: eventData.direccion,
-                        citaid: eventData.citaid
+                        citaid: eventData.citaid,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -697,7 +720,7 @@
         });
         calendar.render();
     });
-    function generateTooltipContent(event) {
+    /*function generateTooltipContent(event) {
         // Generate the HTML content for the tooltip
         // Assuming you have a time string like '14:30'
         var timeString = event.extendedProps.hora;
@@ -720,7 +743,7 @@
         content += '<br>Sede: ' + event.extendedProps.sede;
 
         return content;
-    }
+    }*/
 </script>
 <script>
 
