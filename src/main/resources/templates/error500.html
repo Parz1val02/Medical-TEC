@@ -12,9 +12,9 @@
             <div class="card bg-card-gradient" style="background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
                 <div class="card-body" style="padding: 2rem !important;">
                     <h4 class="card-subtitle"
-                        style="color: #0032aa; font-weight: bold; padding-bottom: 5px">OOPS</h4>
+                        style="color: #0032aa; font-weight: bold; padding-bottom: 5px">Internal Server Error</h4>
                     <h5 class="card-title"
-                        style="color: #0032aa; font-weight: bold; font-size: 15px;">Pagina no encontrada</h5>
+                        style="color: #0032aa; font-weight: bold; font-size: 15px;">Algo salio mal y el servidor no pudo procesar la solicitud</h5>
                     <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrador':false}" th:href="@{'/'+'administrador'+'/principal'}"
                        type="button" class="btn btn-light" style="background: #00a9b1; color: #FFFFFF">Regresar a mi página principal</a>
                     <a th:if="${session.usuario != null?session.usuario.getRolesIdroles().nombreRol == 'administrativo':false}" th:href="@{'/'+'administrativo'+'/dashboard'}"
