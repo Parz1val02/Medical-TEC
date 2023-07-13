@@ -21,6 +21,6 @@ public interface RecetaRepository extends JpaRepository<Receta, Integer> {
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "insert into receta (comentario) values ('?1')")
-    void crearReceta( String comentario);
+    @Query(nativeQuery = true, value = "insert into receta (comentario, deliverymedicamentos_iddeliverymedicamentos) values ('?1', ?2)")
+    void crearReceta( String comentario, int idDelivery);
 }
