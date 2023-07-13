@@ -40,7 +40,7 @@ public class CitaController {
                     citaRepository.cambiarEstadoCita(4,cita.getId());
                 }else if (horas == 0 && minutos == -30 && segundos == 0){
                     // Estado 3: Culminada
-                    citaRepository.cambiarEstadoCita(5,cita.getId());
+                    citaRepository.cambiarEstadoCita(3,cita.getId());
                 }
                 // Estado 5: En consulta
                 // Se cambia al dar clic en iniciar video
