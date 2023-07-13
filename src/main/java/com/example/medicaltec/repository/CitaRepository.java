@@ -56,5 +56,16 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=?1 where idcita=?2 ")
     void cambiarEstadoCita( int idEstado , int idCita);
 
+    //para ver cual es la cita en transcurso
+    @Query(nativeQuery = true, value = "select idcita, paciente_dni from telesystem_2.cita where estadoscita_idestados=2")
+    Cita citaEnTranscurso();
+
+
+    //cambair a estado de cita en transcurso
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=2 where idcita=?1 and fecha=current_date() and hora=?2 and pagada=1 and citacancelada=0 ")
+    void cambiarEstadoCitaEnTranscurso(int idCita, LocalTime hora);
+
 
 }

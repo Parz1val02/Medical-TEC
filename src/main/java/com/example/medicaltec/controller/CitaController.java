@@ -35,7 +35,6 @@ public class CitaController {
                 long minutos = diferencia.toMinutes() % 60;
                 long segundos = diferencia.getSeconds() % 60;
 
-
                 if (horas == 0 && minutos == 10 && segundos == 0){
                     // Estado 4: En espera
                     citaRepository.cambiarEstadoCita(4,cita.getId());
@@ -45,25 +44,6 @@ public class CitaController {
                 }
                 // Estado 5: En consulta
                 // Se cambia al dar clic en iniciar video
-
-
-
-
-                int hora1Actual = horaActual.getHour();
-                int minutoActual = horaActual.getMinute();
-
-                int horaCita = citaHoras.getHour();
-                int minutoCita = citaHoras.getMinute();
-
-                int restaHoras = horaCita-hora1Actual;
-                int restaMinutos = minutoCita-minutoActual;
-
-                // Estado 4: En espera
-                // Estado 5: En consulta
-                // Estado 3: Culminada
-
-
-
 
             }
         }

@@ -178,7 +178,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true, value="select dni from usuario ")
     List<String> obtenerdnis();
 
-    @Query(nativeQuery = true, value="select * from usuario where dni = ?")
+    @Query(nativeQuery = true, value="select * from usuario where dni = ?1")
     Usuario usuarioForm(String dni);
+
+
+    //para cambiar el estado de un paciente: en consulta
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update usuario set estados_idestado=5 where dni=?1")
+    void actualizarEstadoPacienteEnConsulta(String dni);
 
 }
