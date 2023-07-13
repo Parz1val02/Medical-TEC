@@ -32,7 +32,13 @@ public class NotFoundController implements com.example.medicaltec.controller.Err
             modelAndView.setViewName("denegado");
         }
 
+        else if (response.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+            modelAndView.setViewName("error500");
+        }
 
+        else {
+            modelAndView.setViewName("error500");
+        }
         return modelAndView;
     }
 
