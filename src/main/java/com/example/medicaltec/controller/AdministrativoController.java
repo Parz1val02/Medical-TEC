@@ -26,10 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @RequestMapping("/administrativo")
 @Controller
@@ -45,11 +42,13 @@ public class AdministrativoController {
     final FormInvitationRepository formInvitationRepository;
     final VerificarRepository verificarRepository;
     final EmailSenderService senderService;
+    final CitaRepository citaRepository;
+    final BoletaRepository boletaRepository;
 
     @Autowired
     private HttpServletRequest request;
 
-    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, VerificarRepository verificarRepository, EmailSenderService senderService) {
+    public AdministrativoController(UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, VerificarRepository verificarRepository, EmailSenderService senderService, CitaRepository citaRepository, BoletaRepository boletaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.apiRepository = apiRepository;
         this.seguroRepository = seguroRepository;
@@ -57,6 +56,8 @@ public class AdministrativoController {
         this.formInvitationRepository = formInvitationRepository;
         this.verificarRepository = verificarRepository;
         this.senderService = senderService;
+        this.citaRepository = citaRepository;
+        this.boletaRepository = boletaRepository;
     }
 
 
@@ -398,4 +399,42 @@ public class AdministrativoController {
     }
 
 
+    @PostMapping("/validarPagos")
+    public String pagosTarjeta(@RequestParam("citaId") String citaId,
+                               @RequestParam("precio") String precio,
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        try{
+            Optional<Cita> cita = citaRepository.findById(Integer.parseInt(citaId));
+            if(cita.isPresent()){
+                Cita citaA = cita.get();
+                if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
+                    try{
+                        String concpeto = null;
+                        if(citaA.getEspecialidadesIdEspecialidad()!=null){
+                            concpeto = "Consulta médica: " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad();
+                        }else if(citaA.getExamenMedico()!=null){
+                            concpeto = "Examen médico: " +  citaA.getExamenMedico().getNombre();
+                        }
+                        boletaRepository.crearBoletaCita(concpeto, Double.parseDouble(precio), citaA.getId(), usuarioSession.getSegurosIdSeguro().getId());
+                        citaRepository.pagarCita(citaA.getId());
+                        citaRepository.estadoPagada(citaA.getId());
+                        attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
+                        //Enviar correo pago con tarjeta correcto
+                    }catch (NumberFormatException e){
+                        attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
+                    }
+                    //Enviar correo cita cancelada
+                }else{
+                    attr.addFlashAttribute("errorPagar", "Error al intentar pagar la cita");
+                }
+            }
+        }catch (NumberFormatException e){
+            System.out.printf(e.getMessage());
+            attr.addFlashAttribute("errorPagar", "Id erróneo de cita");
+        }
+        return "redirect:/administrativo/";
+    }
 }

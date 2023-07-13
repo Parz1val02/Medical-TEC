@@ -39,6 +39,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Query(nativeQuery = true, value = "update cita set pagada=1 where idcita=?1")
     void pagarCita(Integer id);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=2 where idcita=?1")
+    void estadoPagada(Integer id);
 
     //para videollamada
     @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
