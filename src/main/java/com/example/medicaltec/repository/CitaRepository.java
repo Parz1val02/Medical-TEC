@@ -19,7 +19,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.cita where str_to_date(fecha, '%d-%m-%Y') < current_date() and citacancelada=0 and pagada=1 and estadoscita_idestados=3 and paciente_dni=?1")
     List<Cita> historialCitas2(String dniPaciente);
 
-    @Query(value = "SELECT * FROM telesystem_2.cita c JOIN usuario u ON c.paciente_dni = u.dni WHERE c.doctor_dni1=?1 " +
+    @Query(value = "SELECT c.* FROM telesystem_2.cita c INNER JOIN telesystem_2.usuario u ON c.paciente_dni = u.dni WHERE c.doctor_dni1=?1 " +
             "AND c.estadoscita_idestados=3 AND u.enabled = 1 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
     List<Cita> pacientesAtendidos(String dni);
