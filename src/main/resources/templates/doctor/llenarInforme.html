@@ -29,67 +29,70 @@
                                 <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
                                     Rellene los siguientes campos
                                 </h5>
+                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px" th:text="|Nombre del tipo de informe: ${titulo}|">
+                                </h5>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ===============================================-->
-            <!--    static Content-->
-            <!-- ===============================================-->
-            <div class="card mb-3 bg-card-gradient">
-                <div class="card-body" style="background-color: white">
-                    <div class="container">
-                        <form th:action="@{/doctor/rellenarInforme}" method="post">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <label for="bitacora">Bitácora</label>
-                                        <input type="text" class="form-control"  th:classappend="${bitacoramsg!=null?'is-invalid':''}" id="bitacora" name="bitacora" required>
-                                        <div class="invalid-feedback" th:if="${bitacoramsg!=null}" th:text="${bitacoramsg}"></div>
-                                    </div>
-                                    <div class="row">
-                                        <label for="diagnostico">Diagnóstico</label>
-                                        <input type="text" class="form-control"  th:classappend="${diagnosticomsg!=null?'is-invalid':''}" id="diagnostico" name="diagnostico" required>
-                                        <div class="invalid-feedback" th:if="${diagnosticomsg!=null}" th:text="${diagnosticomsg}"></div>
-                                    </div>
-                                    <div class="row">
-                                        <label for="tratamiento">Tratamiento</label>
-                                        <input type="text" class="form-control"  th:classappend="${tratamientomsg!=null?'is-invalid':''}" id="tratamiento" name="tratamiento" required>
-                                        <div class="invalid-feedback" th:if="${tratamientomsg!=null}" th:text="${tratamientomsg}"></div>
-                                    </div>
-                                    <div th:each="pregunta, status : ${informe.listacampos}">
-                                        <div class="row">
-                                            <div class="col mb-3">
-                                                <label class="form-label" for="respuestasInput" th:text="${pregunta}"></label>
-                                                <input type="text" class="form-control" placeholder="Respuesta" th:name="'respuestas'" />
-                                            </div>
+                        <br>
+                        <div>
+                            <form th:action="@{/doctor/rellenarInforme}" method="post">
+                                <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
+                                    <label for="diagnostico">Diagnóstico</label>
+                                    <input type="text" class="form-control"  th:classappend="${diagnosticomsg!=null?'is-invalid':''}"
+                                           style="min-height: 100px;" id="diagnostico" name="diagnostico" required>
+                                    <div class="invalid-feedback" th:if="${diagnosticomsg!=null}" th:text="${diagnosticomsg}"></div>
+                                </div>
+                                <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
+                                    <label>Receta</label>
+                                    <label for="medicamento">Medicamento:</label>
+                                    <input id="medicamento" name="medicamento"/>
+                                    <label for="cantidad">Cantidad:</label>
+                                    <input id="cantidad" name="cantidad"/>
+                                </div>
+                                <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
+                                    <label for="bitacora">Bitácora</label>
+                                    <input type="text" class="form-control"  th:classappend="${bitacoramsg!=null?'is-invalid':''}"
+                                           style="min-height: 50px;" id="bitacora" name="bitacora" required>
+                                    <div class="invalid-feedback" th:if="${bitacoramsg!=null}" th:text="${bitacoramsg}"></div>
+                                </div>
+
+                                <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
+                                    <label for="tratamiento">Tratamiento</label>
+                                    <input type="text" class="form-control" style="min-height: 50px;" th:classappend="${tratamientomsg!=null?'is-invalid':''}" id="tratamiento" name="tratamiento" required>
+                                    <div class="invalid-feedback" th:if="${tratamientomsg!=null}" th:text="${tratamientomsg}"></div>
+                                </div>
+                                <div th:each="pregunta, status : ${informe.listacampos}">
+                                    <div class="row" style="padding: 0 1.75rem;">
+                                        <div class="col mb-3" style="padding: 0;">
+                                            <label class="form-label" for="respuestasInput" th:text="${pregunta}"></label>
+                                            <input type="text" class="form-control" style="min-height: 50px;" th:name="'respuestas'" />
                                         </div>
                                     </div>
-                                    <br>
                                 </div>
-                            </div>
 
-                            <input type="hidden" id="respuestasInput" name="listarespuestas" />
-                            <button class="btn btn-primary" type="submit" onclick="enviarRespuestas()">Enviar respuestas</button>
-                            <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/cuestionarios}">Cancelar</a>
-                        </form>
+                                <input type="hidden" id="respuestasInput" name="listarespuestas" />
+                                <div style="text-align: center;">
+                                    <button class="btn btn-primary" type="submit" onclick="enviarRespuestas()" style="border-radius: 15px;">Enviar respuestas</button>
+                                    <a class="btn btn-secondary" style="text-align: center;background: #748194; border-radius: 15px;" th:href="@{/paciente/cuestionarios}">Cancelar</a>
+                                </div>
+                            </form>
 
-                        <script>
-                            function enviarRespuestas() {
-                                var respuestas = [];
-                                var inputs = document.querySelectorAll('input[name="respuestas"]');
+                            <script>
+                                function enviarRespuestas() {
+                                    var respuestas = [];
+                                    var inputs = document.querySelectorAll('input[name="respuestas"]');
 
-                                inputs.forEach(function(input) {
-                                    respuestas.push(input.value);
-                                });
+                                    inputs.forEach(function(input) {
+                                        respuestas.push(input.value);
+                                    });
 
-                                document.getElementById('respuestasInput').value = respuestas.join(">%%%%%<%%%%>%%%%%<");
-                                document.getElementById('respuestasInput').form.submit();
+                                    document.getElementById('respuestasInput').value = respuestas.join(">%%%%%<%%%%>%%%%%<");
+                                    document.getElementById('respuestasInput').form.submit();
 
-                            }
-                        </script>
+                                }
+                            </script>
 
+                        </div>
                     </div>
                 </div>
             </div>

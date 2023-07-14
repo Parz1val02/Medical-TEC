@@ -202,6 +202,7 @@ public class DoctorController {
                 httpSession.removeAttribute("iddelinforme");
                 httpSession.setAttribute("iddelinforme",iddinforme);
                 InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                model.addAttribute("titulo",informeNuevo.getNombre());
                 String campostexto = informeNuevo.getCampos();
                 List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
                 informeNuevo.setListacampos(listadecampos);

@@ -22,28 +22,24 @@
         <div class="card-body" style="background: #FFFFFF">
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
-              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+              <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">
                 Citas Recientes
               </h1>
             </div>
             <div class="col-md-11">
-              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+              <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold">
                 Visualiza tus citas ya finalizadas con información del paciente
               </h5>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+          <br>
           <table class="table table-striped" id="userList">
-            <thead style="background: #cdeffc">
+            <thead style="background: rgba(43, 45, 80, 0.08);">
             <tr>
               <th class="sort align-middle" style="width: 20%">Servicio</th>
-              <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
-              <th class="sort align-middle" style="width: 20%">Fecha de Atención</th>
-              <th class="sort align-middle" style="width: 20%">Correo</th>
+              <th class="sort align-middle" style="width: 30%">Nombre Completo</th>
+              <th class="sort align-middle" style="width: 15%">Fecha</th>
+              <th class="sort align-middle" style="width: 15%">Hora</th>
               <th class="sort align-middle" style="width: 20%; text-align: center"></th>
             </tr>
             </thead>
@@ -55,22 +51,22 @@
               <td th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|" class="align-middle">
                 Nombre paciente
               </td>
-              <td class="align-middle" th:text="|${cita.fecha} a las ${cita.hora}hrs|">
+              <td class="align-middle" th:text="|${cita.fecha}|">
                 00/00/00 - 00:00hrs
               </td>
-              <td th:text="${cita.paciente.email}">
-                correoelectronico@hotmail.com
+              <td class="align-middle" th:text="|${cita.hora}|">
+                00/00/00 - 00:00hrs
               </td>
               <td class="align-middle" align="center">
                 <!--*<a th:if="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/llenarInforme(idCita=${cita.id})}">Llenar informe</a>-->
 
                 <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
-                <a th:unless="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver informe</a>
+                <a th:unless="${cita.idinforme == null}" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
+                 border-radius: 15px; border-color: #3d8af7;" th:href="@{/doctor/verInforme(idCita=${cita.id})}">Ver informe</a>
 
-                <a th:if="${cita.idinforme == null}" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                 border-radius: 15px; border-color: #b38df7;" th:href="@{/doctor/elegirInforme(idCita=${cita.id})}">
+                <a th:if="${cita.idinforme == null}" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
+                 border-radius: 15px; border-color: #00a9b1;" th:href="@{/doctor/elegirInforme(idCita=${cita.id})}">
                   Llenar informe
                 </a>
 
@@ -79,8 +75,10 @@
 
             </tbody>
           </table>
+
         </div>
       </div>
+
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
 
     </div>
