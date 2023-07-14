@@ -6,7 +6,6 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.http.HttpClient;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +35,9 @@ public class DoctorController {
     final AlergiaRepository alergiaRepository;
     final InformeRepository informeRepository;
     final ReunionVirtualRepository reunionVirtualRepository;
+    final HorasDoctorRepository horasDoctorRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -47,6 +48,7 @@ public class DoctorController {
         this.alergiaRepository = alergiaRepository;
         this.informeRepository = informeRepository;
         this.reunionVirtualRepository = reunionVirtualRepository;
+        this.horasDoctorRepository = horasDoctorRepository;
     }
     @Autowired
     CuestionariosRepository cuestionariosRepository;
@@ -369,8 +371,36 @@ public class DoctorController {
         return "redirect:/doctor/principal";
     }
 
+    @PostMapping("/enviarHorasDoctor")
+    public String horasDoctor(@RequestParam("mes") String mes, @RequestParam("dia") String dia,
+                              @RequestParam("horainicio") String horainicio, @RequestParam("horafin") String horafin,
+                              @RequestParam("horalibre") String horalibre, HttpSession httpSession,RedirectAttributes attr ){
 
+        Horasdoctor horasdoctor = new Horasdoctor();
 
+        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
+        LocalTime horaInicio = LocalTime.parse(horainicio);
+        LocalTime horaFin = LocalTime.parse(horafin);
+        LocalTime horaLibre = LocalTime.parse(horalibre);
+
+        Duration diferencia = Duration.between(horaFin,horaInicio); //citasHora - variableHoras
+
+        long horas = diferencia.toHours();
+        long minutos = diferencia.toMinutes() % 60;
+
+        if (horas > 0){
+            if (horaLibre.isBefore(horaInicio) || horaLibre.equals(horaInicio) || horaLibre.isAfter(horaFin) || horaLibre.equals(horaFin)){
+                attr.addFlashAttribute("msgError","La hora libre debe encontrarse entre la hora de Inicio y la hora de Fin, y ser diferente de ellas.");
+            }else{
+                horasDoctorRepository.guardarHorasDoc(horaInicio,horaFin,horaLibre,doctor.getId(),dia,mes);
+                attr.addFlashAttribute("msg","Horas de doctor guardadas exitosamente.");
+            }
+        }else {
+            attr.addFlashAttribute("msgError","Las fechas deben llevarse como mínimo 1 hora.");
+        }
+
+        return "redirect:/doctor/config";
+    }
     //Adaptarlo para sesiones
     /*@GetMapping("/llenarInforme")
     public String llenarInforme(@RequestParam("idCita") String idcuestionario,Model model,

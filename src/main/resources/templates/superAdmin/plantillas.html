@@ -41,85 +41,75 @@
           </div>
         </div>
       </div>
-      <br>
-      <div class="card mb-3">
-        <div class="card-header position-relative min-vh-25 mb-7">
-          <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/4.jpg);">
-          </div>
-          <!--/.bg-holder-->
-        </div>
-        <div class="card-body" style="margin-top: -70px">
-          <br>
-          <div class="row">
-            <div class="col-lg-12">
-              <form th:action="@{/superAdmin/guardarPlantilla}" method="post">
-                <div class="row">
-                  <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
-                  <label for="nombre" class="form-label">Nombre del cuestionario</label>
-                  <input type="text" id="nombre" name="nombre" class="form-control">
-                </div>
-                <div class="row">
-                  <div id="preguntas-adicionales"></div>
-                  <input type="hidden" id="preguntas-adicionales-input" name="listaPreguntas">
-
-                  <br>
-                </div>
-                <div class="row">
-                  <div class="container-fluid mt-3 mb-3">
-                    <button type="button" class="btn btn-secondary" style="background-color: #06ff97" onclick="agregarPregunta()">Agregar pregunta</button>
-                  </div>
-                </div>
-                <a th:href="@{/superAdmin/cuestionarios}" class="btn btn-danger" style="text-align: center;background: #748194;
-          border-radius: 15px; border-color: #FFFFFF">Cancelar</a>
-                <button type="submit" class="btn btn-primary">Registrar cuestionario</button>
-              </form>
+      <div class="card">
+        <div class="card-body">
+          <form th:action="@{/superAdmin/guardarPlantilla}" method="post">
+            <div class="row" style="padding: 0 2rem;">
+              <div th:if="${nombremsg != null}" th:text="${nombremsg}" class="alert alert-danger" role="alert"></div>
+              <label for="nombre" class="form-label">Nombre del cuestionario</label>
+              <input type="text" id="nombre" name="nombre" class="form-control" style="width: 96%;">
             </div>
+            <br>
+            <div class="row" style="width: 100%;padding: 0 2rem;">
+              <div id="preguntas-adicionales" style="width: 100%;"></div>
+              <input type="hidden" id="preguntas-adicionales-input" name="listaPreguntas">
+              <br>
+            </div>
+            <div class="row" style="padding: 0 2rem;">
+              <div class="mt-3 mb-3">
+                <button type="button" class="btn btn-secondary" style="background-color: #3d8af7; border: 1px solid #3d8af7;border-radius: 15px;" onclick="agregarPregunta()">Agregar pregunta</button>
+              </div>
+            </div>
+            <div style="padding: 0 1rem;">
+              <button type="submit" class="btn btn-primary" style="margin-right: 10px;border-radius: 15px; background: #0032aa; border: 1px solid #0032aa;">Registrar cuestionario</button>
+              <a th:href="@{/superAdmin/cuestionarios}" style="text-align: center;">Volver a listar cuestionarios</a>
+            </div>
+          </form>
+          <script>
+            var contadorPreguntas = 0;
+            var preguntasAdicionales = [];
 
-            <script>
-              var contadorPreguntas = 0;
-              var preguntasAdicionales = [];
+            function agregarPregunta() {
+              contadorPreguntas++;
 
-              function agregarPregunta() {
-                contadorPreguntas++;
+              var divPregunta = document.createElement('div');
+              divPregunta.classList.add('mb-3');
+              divPregunta.style.width = '100%';
 
-                var divPregunta = document.createElement('div');
-                divPregunta.classList.add('col', 'mb-3');
+              var label = document.createElement('label');
+              label.setAttribute('for', 'pregunta-' + contadorPreguntas);
+              label.classList.add('form-label');
+              label.innerText = 'Pregunta ' + contadorPreguntas;
 
-                var label = document.createElement('label');
-                label.setAttribute('for', 'pregunta-' + contadorPreguntas);
-                label.classList.add('form-label');
-                label.innerText = 'Redacte su pregunta ' + contadorPreguntas;
+              var input = document.createElement('input');
+              input.setAttribute('type', 'text');
+              input.setAttribute('id', 'pregunta-' + contadorPreguntas);
+              input.classList.add('form-control');
+              input.addEventListener('input', function () {
+                preguntasAdicionales[contadorPreguntas - 1] = input.value;
+                document.getElementById('preguntas-adicionales-input').value = preguntasAdicionales.join('>%%%%%<%%%%>%%%%%<');
+              });
 
-                var input = document.createElement('input');
-                input.setAttribute('type', 'text');
-                input.setAttribute('id', 'pregunta-' + contadorPreguntas);
-                input.classList.add('form-control');
-                input.addEventListener('input', function () {
-                  preguntasAdicionales[contadorPreguntas - 1] = input.value;
-                  document.getElementById('preguntas-adicionales-input').value = preguntasAdicionales.join('>%%%%%<%%%%>%%%%%<');
-                });
+              var btnBorrar = document.createElement('button');
+              btnBorrar.setAttribute('type', 'button');
+              btnBorrar.classList.add('btn', 'btn-danger', 'btn-sm','mt-3');
+              btnBorrar.style.borderRadius = '15px';
+              btnBorrar.innerText = 'Borrar pregunta';
+              btnBorrar.addEventListener('click', function () {
+                divPregunta.remove();
+                preguntasAdicionales.splice(contadorPreguntas - 1, 1);
+                document.getElementById('preguntas-adicionales-input').value = preguntasAdicionales.join('>%%%%%<%%%%>%%%%%<');
+                contadorPreguntas--;
+              });
 
-                var btnBorrar = document.createElement('button');
-                btnBorrar.setAttribute('type', 'button');
-                btnBorrar.classList.add('btn', 'btn-danger', 'btn-sm','mt-3');
-                btnBorrar.innerText = 'Borrar pregunta';
-                btnBorrar.addEventListener('click', function () {
-                  divPregunta.remove();
-                  preguntasAdicionales.splice(contadorPreguntas - 1, 1);
-                  document.getElementById('preguntas-adicionales-input').value = preguntasAdicionales.join('>%%%%%<%%%%>%%%%%<');
-                  contadorPreguntas--;
-                });
+              divPregunta.appendChild(label);
+              divPregunta.appendChild(input);
+              divPregunta.appendChild(btnBorrar);
 
-                divPregunta.appendChild(label);
-                divPregunta.appendChild(input);
-                divPregunta.appendChild(btnBorrar);
-
-                var divPreguntasAdicionales = document.getElementById('preguntas-adicionales');
-                divPreguntasAdicionales.appendChild(divPregunta);
-              }
-            </script>
-
-          </div>
+              var divPreguntasAdicionales = document.getElementById('preguntas-adicionales');
+              divPreguntasAdicionales.appendChild(divPregunta);
+            }
+          </script>
         </div>
       </div>
 

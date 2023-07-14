@@ -23,8 +23,4 @@ public class Receta implements Serializable {
     private String comentario;
 
 
-    @ManyToOne
-    @JoinColumn(name = "deliverymedicamentos_iddeliverymedicamentos")
-    private Deliverymedicamento deliverymedicamento;
-
 }

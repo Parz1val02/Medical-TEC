@@ -2,13 +2,14 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import org.springframework.stereotype.Controller;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-
+@Controller
 public class CitaController {
 
     final CitaRepository citaRepository;
@@ -16,7 +17,7 @@ public class CitaController {
     public CitaController(CitaRepository citaRepository) {
         this.citaRepository = citaRepository;
     }
-
+    //5:00pm
     public void cambiarEstadosCitas(){
         //Actualizar estados de las citas
         LocalDate fechaActual = LocalDate.now();

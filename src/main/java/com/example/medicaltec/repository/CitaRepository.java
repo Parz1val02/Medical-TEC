@@ -34,7 +34,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     List<String> pacientesdeldoctor(String dni);
 
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=?1 " +
-            "AND estadoscita_idestados=1 OR estadoscita_idestados=4 OR estadoscita_idestados=5 ORDER BY fecha DESC, hora DESC;",
+            "AND estadoscita_idestados=1 OR estadoscita_idestados=2 OR estadoscita_idestados=4 OR estadoscita_idestados=5 ORDER BY fecha DESC, hora DESC;",
             nativeQuery = true)
     List<Cita> citasParaVer(String dni);
 

@@ -16,7 +16,7 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebarSuper.html::sideBar}"></nav>
         <div class="content">
             <nav th:replace="~{fragmentos/topbarSuper.html::topBar}"></nav>
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                            style="background: #b38df7; border: 5px solid #b38df7; margin-right: 5px; margin-left: 5px; padding: 2px !important;">
+                                            style="background: #00a9b1; border: 5px solid #00a9b1; margin-right: 5px; margin-left: 5px; padding: 2px !important;">
                                         Cambiar UX/UI
                                     </button>
                                 </div>
@@ -325,11 +325,11 @@
                             <thead class="bg-200">
                             <tr>
                                 <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 11%; text-align: center">Estado</th>
                                 <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                                <th class="sort align-middle" style="width: 25%; text-align: center">Logueo</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white" style="text-align: center;">
@@ -342,7 +342,7 @@
                                     <!-- A esto me referia con opciones-->
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #00a9b1;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarAdmS' + '?id=' + ${admS.id}}" >Editar</a>                  </div>
                                     </div>
                                 </td>
@@ -369,12 +369,12 @@
                         <table class="table table-striped" id="administrativosList">
                             <thead class="bg-200">
                             <tr>
-                                <th class="sort align-middle" style="width: 25%">Nombres</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 11%; text-align: center">Estado</th>
                                 <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                                <th class="sort align-middle" style="width: 25%; text-align: center">Logueo</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white" style="text-align: center;">
@@ -387,7 +387,7 @@
                                     <!-- A esto me referia con opciones-->
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #00a9b1;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarAdmT' + '?id=' + ${ad.id}}" >Editar</a>
                                         </div>
                                     </div>
@@ -413,12 +413,12 @@
                         <table class="table table-striped" id="doctorList">
                             <thead class="bg-200">
                             <tr>
-                                <th class="sort align-middle" style="width: 25%">Nombres</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 11%; text-align: center">Estado</th>
                                 <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                                <th class="sort align-middle" style="width: 25%; text-align: center">Logueo</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white" style="text-align: center;">
@@ -431,7 +431,7 @@
                                     <!-- A esto me referia con opciones-->
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #00a9b1;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarDoctor' + '?id=' + ${doctor.id}}" >Editar</a>
                                         </div>
                                     </div>
@@ -528,12 +528,12 @@
                         <table class="table table-striped" id="pacienteList">
                             <thead class="bg-200">
                             <tr>
-                                <th class="sort align-middle" style="width: 25%">Nombres</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">DNI</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Sede</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Estado</th>
+                                <th class="sort align-middle" style="width: 25%">Nombre Completo</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">DNI</th>
+                                <th class="sort align-middle" style="width: 12%; text-align: center">Sede</th>
+                                <th class="sort align-middle" style="width: 11%; text-align: center">Estado</th>
                                 <th class="sort align-middle" style="width: 15%; text-align: center">Editar</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center">Logueo</th>
+                                <th class="sort align-middle" style="width: 25%; text-align: center">Logueo</th>
                             </tr>
                             </thead>
                             <tbody class="bg-white" style="text-align: center;">
@@ -546,7 +546,7 @@
                                     <!-- A esto me referia con opciones-->
                                     <div class="dropdown font-sans-serif">
                                         <div class="form-group" align="center">
-                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                                            <a type="button" class="btn btn-secondary" style="text-align: center;background: #00a9b1;
                                 border-radius: 15px; border-color: #FFFFFF; width: 100px" th:href="@{'/superAdmin/editarPaciente' + '?id=' + ${paciente.id}}" >Editar</a>
                                         </div>
                                     </div>
