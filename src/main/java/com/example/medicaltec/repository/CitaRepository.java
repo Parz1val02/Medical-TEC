@@ -26,10 +26,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
     @Query(value = "SELECT c.paciente_dni\n" +
             "    FROM telesystem_2.cita c\n" +
-            "    JOIN usuario u ON c.paciente_dni = u.dni\n" +
+            "    JOIN telesystem_2.usuario u ON c.paciente_dni = u.dni\n" +
             "    WHERE c.doctor_dni1 = ?1\n" +
             "    AND c.estadoscita_idestados = 3\n" +
-            "    AND u.enable = 1\n" +
+            "    AND u.enabled = 1\n" +
             "    GROUP BY c.paciente_dni",nativeQuery = true)
     List<String> pacientesdeldoctor(String dni);
 

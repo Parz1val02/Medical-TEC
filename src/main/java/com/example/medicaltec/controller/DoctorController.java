@@ -128,7 +128,12 @@ public class DoctorController {
 
 
     @GetMapping("/notificaciones")
-    public String verNotificaciones(){return "doctor/notificaciones";}
+    public String verNotificaciones(HttpSession  httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        System.out.println(
+                usuario_doctor.getNombre()
+        );
+        return "doctor/notificaciones";}
 
     @GetMapping("/calendario")
     public String verCalendario(HttpSession httpSession){
