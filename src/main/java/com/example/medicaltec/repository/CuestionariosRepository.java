@@ -1,5 +1,6 @@
 package com.example.medicaltec.repository;
 
+import com.example.medicaltec.Entity.Cita;
 import com.example.medicaltec.Entity.Cuestionario;
 import com.example.medicaltec.Entity.Cuestionarios;
 import com.example.medicaltec.Entity.CuestionariosUsuarios;
@@ -29,6 +30,9 @@ public interface CuestionariosRepository extends JpaRepository<Cuestionarios,Int
     @Query(value = "update `telesystem_2`.`cuestionarios` set activo = ?1 where idcuestionario = ?2", nativeQuery = true)
     int updateActivoByActivo(Boolean activoNuevo, int id);
 
+    @Query(value = "SELECT * FROM telesystem_2.cuestionarios WHERE activo = 1",
+            nativeQuery = true)
+    List<Cuestionarios> listaDeCuestionarios();
 
 
 }

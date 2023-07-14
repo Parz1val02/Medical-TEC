@@ -242,7 +242,7 @@ public class DoctorController {
 
     @GetMapping("/cuestionarios")
     public String verCuestionarios(Model model){
-        List<Cuestionarios> cuestionariosList = cuestionariosRepository.findAll();
+        List<Cuestionarios> cuestionariosList = cuestionariosRepository.listaDeCuestionarios();
         for (Cuestionarios cue : cuestionariosList){
             String entrada = cue.getPreguntas();
             List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));

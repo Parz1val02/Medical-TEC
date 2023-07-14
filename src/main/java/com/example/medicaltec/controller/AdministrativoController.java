@@ -66,7 +66,7 @@ public class AdministrativoController {
     @RequestMapping(value = {"/dashboard", ""},method = RequestMethod.GET)
     public String dashboard(Model model,HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        List<Usuario> listaUsuarios1 = usuarioRepository.findAll();
+        List<Usuario> listaUsuarios1 = usuarioRepository.listarTodosUsuarios();
 
         List<Usuario> listaUsuarios = new ArrayList<>();
 

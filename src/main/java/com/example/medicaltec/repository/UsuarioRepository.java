@@ -71,16 +71,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2  and u.enabled = 1")
     List<Usuario> obtenerListaPacientes();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 1")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 1  and u.enabled = 1")
     List<Usuario> obtenerListaDoctores();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 3")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 3  and u.enabled = 1")
     List<Usuario> obtenerListaAdministrativos();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 4")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 4  and u.enabled = 1")
     List<Usuario> obtenerListaAdministradores();
 
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5  and u.enabled = 1")
     Usuario obtenerSuperAdmin();
 
 
@@ -104,16 +104,18 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     void cambiarSeguro(String idSeguro, String dni);
 
 
-    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 1", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 1  and u.enabled = 1", nativeQuery = true)
     List<Usuario> listarDoctores();
 
-    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 2", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 2  and u.enabled = 1", nativeQuery = true)
     List<Usuario> listarPacientes();
     @Modifying
     @Transactional
     @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
     void actualizarSede(int id_nuevo);
 
+    @Query(value = "select * from telesystem_2.usuario u where u.enabled = 1", nativeQuery = true)
+    List<Usuario> listarTodosUsuarios();
 
     @Modifying
     @Transactional
