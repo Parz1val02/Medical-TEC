@@ -145,7 +145,7 @@
             // Crea una polilínea con las coordenadas decodificadas y agrega al mapa
             var polyline = L.polyline(coordenadas, {color: 'red'}).addTo(map);
 
-            var tiempoTotal = tiempo * 60; // Convierte el tiempo a milisegundos
+            var tiempoTotal = tiempo * 60; // Convierte el tiempo a segundos
 
             console.log("time: " + tiempoTotal)
 
@@ -190,6 +190,31 @@
                     distanciaRecorrida += velocidad;
                     tiempoTranscurrido += 1000; // Intervalo de actualización en milisegundos
                     console.log(tiempoTranscurrido)
+
+                    // Obtén la latitud y longitud actuales
+                    var latitud = punto.latLng.lat;
+                    var longitud = punto.latLng.lng;
+
+                    // Crea un objeto de datos para enviar al servidor
+                    var data = {
+                        latitud: latitud,
+                        longitud: longitud
+                    };
+                    console.log('Latitud actual: ' + latitud);
+                    console.log('Longitud actual: ' + latitud);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8080/paciente/guardarUbicacion', // Reemplaza con la URL de tu endpoint en el servidor Java
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function(response) {
+                            console.log(response); // Deberías recibir la respuesta del servidor en la consola
+                        },
+                        error: function(error) {
+                            console.error('Error:', error);
+                        }
+                    });
                 }
             }, 1000); // Intervalo de actualización en milisegundos
         }

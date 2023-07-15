@@ -14,10 +14,10 @@ public class Deliverymedicamento {
     @Column(name = "iddeliverymedicamentos", nullable = false)
     private Integer id;
 
-    @Column(name = "latitudinicial", nullable = false)
+    @Column(name = "latitudactual", nullable = false)
     private Float latitudinicial;
 
-    @Column(name = "longitudinicial", nullable = false)
+    @Column(name = "longitudactual", nullable = false)
     private Float longitudinicial;
 
     @Column(name = "latitudfinal", nullable = false)
@@ -29,4 +29,7 @@ public class Deliverymedicamento {
     @Column(name = "estado", nullable = false, length = 45)
     private String estado;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idreceta", referencedColumnName = "idreceta")
+    private Receta recetaidreceta;
 }
