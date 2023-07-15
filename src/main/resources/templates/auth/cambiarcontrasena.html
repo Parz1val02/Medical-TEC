@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Funciones')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cambiara Contraseña')}">
 
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
-  <div style="background: white;">
-    <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/flatpickr.min.css">
+<div style="background: white;">
+  <nav th:replace="~{fragmentos/navbarprincipal.html::navbarprincipal}"></nav>
+</div>
 
-  <div style="position: relative; display: inline-block; width: 100%; height: 977px; ">
-    <img class="card-img-top img-fluid" th:src="@{../img/principalpage/clinica_difuminada.png}" style="height: 100%; width: 100%; object-fit: cover;">
-    <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
-      <div style="display: flex; justify-content: center; width: 100%;">
-        <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
-          <div class="card-body" style="padding: 25px;">
-            <label style="margin: 0;"> Requisitos para la contraseña,<br>
-              Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
-              • Que la contraseña contenga al menos ocho caracteres.<br>
-              • Que la contraseña contenga al menos un número.<br>
-              • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
-              • Que la contraseña contenga al menos una mayúscula.
-            </label>
+<div style="position: relative; display: inline-block; width: 100%; height: 977px; ">
+  <img class="card-img-top img-fluid" th:src="@{../img/principalpage/clinica_difuminada.png}" style="height: 100%; width: 100%; object-fit: cover;">
+  <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
+    <div style="display: flex; justify-content: center; width: 100%;">
+      <!-- Cambiar el ancho del card al 70% -->
+      <div class="card" style="width: 70%; border: 1px solid #d8e2ef;">
+        <div class="card-body" style="padding: 25px;">
+          <div class="alert alert-success" role="alert" th:if="${errorPass != null}" th:text="${errorPass}"></div>
+          <label style="margin: 0;">Requisitos para la contraseña,<br>
+            Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+            • Que la contraseña contenga al menos ocho caracteres.<br>
+            • Que la contraseña contenga al menos un número.<br>
+            • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+            • Que la contraseña contenga al menos una mayúscula.
+          </label>
 
+          <form method="POST" th:action="@{'/validacionCambiar'}">
+            <input th:value="${dni}" name="dni" type="hidden">
+            <label for="passActual" class="form-label">Contraseña actual</label>
+            <input type="password" class="form-control" id="passActual" placeholder="Contraseña actual" name="pass1" required>
 
-            <form method="POST" th:action="@{'/validacionCambiar'}">
-              <label >Contraseña nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" th:value="${contrasenia}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
-              <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
-              <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
+            <label for="passNueva" class="form-label">Contraseña nueva</label>
+            <input type="password" class="form-control" id="passNueva" placeholder="Contraseña nueva" name="pass2" required>
 
+            <label for="passConfirmar" class="form-label">Confirmar contraseña nueva</label>
+            <input type="password" class="form-control" id="passConfirmar" placeholder="Confirmar contraseña nueva" name="pass3" required>
 
-              <label >Confirmar Contraseña Nueva:</label>
-              <input type="password" class="form-control" name="contrasenia" th:value="${contraseniaConfirma}" th:classappend="${passwordError!=null || passwordValid!=null?'is-invalid':''}">
-              <div class ="invalid-feedback" th:if="${passwordError!=null}" th:text="${passwordError}"></div>
-              <div class ="invalid-feedback" th:if="${passwordValid!=null && passwordError==null}" th:text="${passwordValid}"></div>
-            </form>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a class="btn btn-light" th:href="@{/loginA}">Cancelar</a>
+          </form>
 
-          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </body>
 </html>

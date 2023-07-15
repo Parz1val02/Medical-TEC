@@ -14,7 +14,7 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -37,35 +37,43 @@
                     <table class="table table-striped" id="userList">
                         <thead style="background: #cdeffc">
                         <tr>
-                            <th class="sort align-middle" style="width: 15%">Servicio</th>
-                            <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
-                            <th class="sort align-middle" style="width: 20%">Fecha de Atención</th>
-                            <th class="sort align-middle" style="width: 15%">Tipo de Cita</th>
-                            <th class="sort align-middle" style="width: 15%">Tipo de Seguro</th>
-                            <th class="sort align-middle" style="width: 15%">¿Cuánto recibo?</th>
+                            <th class="sort align-middle" style="width: 13%">Servicio</th>
+                            <th class="sort align-middle" style="width: 16%">Nombres</th>
+                            <th class="sort align-middle" style="width: 16%">Apellidos</th>
+                            <th class="sort align-middle" style="width: 10%">Fecha</th>
+                            <th class="sort align-middle" style="width: 10%">Hora</th>
+                            <th class="sort align-middle" style="width: 10%">Tipo de Cita</th>
+                            <th class="sort align-middle" style="width: 10%">Tipo de Seguro</th>
+                            <th class="sort align-middle" style="width: 15%; align-content: center">¿Cuánto recibo?</th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
                         <tr th:each="cita, i : ${listaCitas}">
-                            <td class="align-middle" th:text="|${cita.tipocitaIdtipocita.getTipoCita()}|">
+                            <td th:text="|${cita.tipocitaIdtipocita.getTipoCita()}|" style="vertical-align: middle !important;">
                                 Consulta o exámen médico
                             </td>
-                            <td class="align-middle" th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|">
+                            <td th:text="|${cita.paciente.nombre}|" style="vertical-align: middle !important;">
                                 Nombre Personas
                             </td>
-                            <td class="align-middle" th:text="|${cita.fecha} a las ${cita.hora}hrs|">
-                                00/00/00 - 00:00hrs
+                            <td th:text="|${cita.paciente.apellido}|" style="vertical-align: middle !important;">
+                                Nombre Personas
                             </td>
-                            <td class="align-middle"  th:text="|${#strings.capitalize(cita.modalidad)}|">
+                            <td th:text="|${cita.fecha}|" style="vertical-align: middle !important;">
+                                00/00/00
+                            </td>
+                            <td th:text="|${cita.hora} hrs|" style="vertical-align: middle !important;">
+                                00:00hrs
+                            </td>
+                            <td style="vertical-align: middle !important;" th:text="|${#strings.capitalize(cita.modalidad)}|">
                                 Presencial
                             </td>
-                            <td class="align-middle"  th:text="|${cita.paciente.segurosIdSeguro.nombreSeguro}|">
+                            <td style="vertical-align: middle !important;" th:text="|${cita.paciente.segurosIdSeguro.nombreSeguro}|">
                                 Nombre Seguro
                             </td>
-                            <td class="align-middle" align="center">
+                            <td style="vertical-align: middle !important; align-content: center">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                background: #3d8af7; border-radius: 5px;" data-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
+                                border-radius: 15px; border-color: white" data-toggle="modal"
                                         data-target="#exampleModal" th:data-target="'#Boletas' + ${i.index+1}">
                                     Ver boleta
                                 </button>

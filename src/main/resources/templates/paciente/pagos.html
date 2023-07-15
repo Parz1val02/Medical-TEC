@@ -126,10 +126,10 @@
                                                 <tr>
                                                     <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
                                                     </td>
-                                                    <!--td th:text="${boletas[info.index].conceptopago}" class="align-middle">
+                                                    <td th:text="${boletas[info.index].conceptopago}" class="align-middle">
                                                     </td>
-                                                    <td th:text="${boletas[info.index].monto}" class="align-middle" >
-                                                    </td-->
+                                                    <td th:text="${boletas[info.index].montoCita}" class="align-middle" >
+                                                    </td>
                                                 </tr>
 
                                             </table>
@@ -154,7 +154,8 @@
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
-
+                    </div>
+                </div>
             </div>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>

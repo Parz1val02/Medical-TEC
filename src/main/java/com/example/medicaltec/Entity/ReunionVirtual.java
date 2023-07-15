@@ -18,30 +18,11 @@ public class ReunionVirtual {
     private Integer id;
 
 
-    @Column(name = "fecha", length = 45)
-    private String fecha;
 
-
-    @Column(name = "horainicio")
-    private Date horaInicio;
-
-    @Column(name = "horafin")
-    private Date horaFin;
-
-
-    @Column(name = "token",  length = 500)
-    private String token;
+    @Column(name = "enlace",  length = 500)
+    private String enlace;
 
 
     @Column(name = "room",  length = 200)
-    private String appID;
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_dni", nullable = false)
-    private Usuario doctorDNI;
-
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_dni1", nullable = false)
-    private Usuario pacienteDNI;
+    private String room;
 }

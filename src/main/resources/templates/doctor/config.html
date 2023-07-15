@@ -2,15 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Configuración')}"></head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
 
 <body class="">
 
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
-<main class="container" id="top">
+<main style="padding: 0 50px 50px 50px;" id="top">
 
-    <div data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -141,10 +145,154 @@
                         </a>
                     </div>
                     <!-- HORARIOS DE DISPONIBILIDAD -->
-                    <div id="div1" style="display:none;">
-                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 15px;">
+                    <div id="div1" style="display:none; padding-left: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
                             Horarios de disponibilidad
                         </h4>
+                        <form th:action="@{/enviarHorasDoctor}" method="post" >
+                            <label for="mes" class="form-label">Seleccione el mes para agregar disponibilidad:</label>
+                            <select class="form-control" aria-label="Default select example" name="mes" id="mes" style="font-family: 'Open Sans',serif">
+                                <option selected>Select--</option>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                            <div style="height: 10px;">
+                            </div>
+                            <label for="dia" class="form-label">Seleccione los dias con disponibilidad:</label>
+                            <div style="display: flex;">
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Lunes">Lunes</button>
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Martes">Martes</button>
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Miercoles">Miércoles</button>
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Jueves">Jueves</button>
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Viernes">Viernes</button>
+                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Sabado">Sábado</button>
+                            </div>
+
+                            <div style="width: 100%; display: flex;align-items: center;justify-content: center;padding: 10px 0;">
+                                <input id="dia" name="dia" style="width: 50%; border-radius: 4px;height: 35px;border: 1px solid #d8e2ef;" disabled/>
+                            </div>
+                            <label class="form-label">Seleccione el horario para agregar disponibilidad:</label>
+                            <div style="display: flex;">
+                                <div style="flex: 1; margin-right: 10px;">
+                                    <label class="form-label">Horario Inicio:</label>
+                                    <select class="form-control" aria-label="Default select example" name="horainicial" id="horainicial" style="font-family: 'Open Sans',serif">
+                                        <option selected>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                        <option value="22:00">22:00</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1; margin-left: 10px;">
+                                    <label class="form-label">Horario Final:</label>
+                                    <select class="form-control" aria-label="Default select example" name="horafinal" id="horafinal" style="font-family: 'Open Sans',serif">
+                                        <option selected>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                        <option value="22:00">22:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="height: 10px;"></div>
+                            <label class="form-label">Seleccione el horario para su hora libre del día: (Duración: 1 hora)</label>
+                            <div style="display: flex; width: 50%;">
+                                <select class="form-control" aria-label="Default select example" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
+                                    <option selected>Select--</option>
+                                    <option value="0">Sin hora libre</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="08:30">08:30</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="09:30">09:30</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="13:30">13:30</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="14:30">14:30</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="15:30">15:30</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="16:30">16:30</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="17:30">17:30</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="18:30">18:30</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="19:30">19:30</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="20:30">20:30</option>
+                                    <option value="21:00">21:00</option>
+                                    <option value="21:30">21:30</option>
+                                </select>
+                            </div>
+                            <div style="height: 10px;"></div>
+                            <button type="submit" class="btn btn-primary btn-sm">Finalizar</button>
+                        </form>
                     </div>
                     <!-- AGREGAR FIRMA DIGITAL -->
                     <div id="div2" style="display:none; padding-left: 15px;">
@@ -236,7 +384,7 @@
                             Cambio de sede
                         </h4>
                         <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
-                              style="padding: 0 15px 15px 15px;; display: block;">
+                              style="padding: 0 15px 15px 15px; display: block;">
                             <div class="form-group" style="display: block;">
                                 <label for="id" class="form-label">Seleccione su nueva sede:</label>
                                 <select class="form-control" aria-label="Default select example" name="id" id="id" style="font-family: 'Open Sans',serif">
@@ -381,6 +529,58 @@
                 <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
             </div>
         </div>
+        <script>
+            var input = document.getElementById('dia');
+            var valor;
+            var nuevoValor;
+            var botonLunes = document.getElementById('Lunes');
+            console.log(botonLunes);
+            console.log(input)
+            var botonMartes = document.getElementById('Martes');
+            var botonMiercoles = document.getElementById('Miercoles');
+            var botonJueves = document.getElementById('Jueves');
+            var botonViernes = document.getElementById('Viernes');
+            var botonSabado = document.getElementById('Sabado');
+
+            // Agrega un evento click al botón
+            botonLunes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Lunes";
+                input.value = nuevoValor;
+            });
+
+            botonMartes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Martes";
+                input.value = nuevoValor;
+            });
+
+            botonMiercoles.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Miercoles";
+                input.value = nuevoValor;
+            });
+
+            botonJueves.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Jueves";
+                input.value = nuevoValor;
+            });
+
+            botonViernes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Viernes";
+                input.value = nuevoValor;
+            });
+
+            botonSabado.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Sabado";
+                input.value = nuevoValor;
+            });
+
+
+        </script>
         <script>
             function toggleInput() {
                 var inputContainer = document.getElementById("formscontainersede");

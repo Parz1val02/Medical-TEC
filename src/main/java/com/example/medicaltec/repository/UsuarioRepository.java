@@ -14,6 +14,24 @@ import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     Usuario findByEmail(String email);
+    /*
+    @Query(nativeQuery = true, value = "select contrasena from usuario where email = ?1")
+    String buscarPasswordPorCorreo(String correo);
+    /*Change password hacing email
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value="UPDATE usuario SET contrasena = ?1 WHERE (correo = ?2)")
+    void changePasswordUsuario(String pass,String correo);
+    /*Password from correo*/
+
+    //Dni from correo
+    @Query(nativeQuery = true, value = "select dni from usuario where email = ?1")
+    String dniFromCorreo(String correo);
+    //Correo from dni
+    @Query(nativeQuery = true, value = "select email from usuario where dni = ?1")
+    String correoFromDni(String id);
+
+
 
 
     /*QUERYS USADOOS POR ADMINISTRADOR*/
@@ -53,16 +71,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2  and u.enabled = 1")
     List<Usuario> obtenerListaPacientes();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 1")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 1  and u.enabled = 1")
     List<Usuario> obtenerListaDoctores();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 3")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 3  and u.enabled = 1")
     List<Usuario> obtenerListaAdministrativos();
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 4")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 4  and u.enabled = 1")
     List<Usuario> obtenerListaAdministradores();
 
-    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5")
+    @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5  and u.enabled = 1")
     Usuario obtenerSuperAdmin();
 
 
@@ -86,15 +104,23 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     void cambiarSeguro(String idSeguro, String dni);
 
 
-    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 1", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 1  and u.enabled = 1", nativeQuery = true)
     List<Usuario> listarDoctores();
 
-    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 2", nativeQuery = true)
+    @Query(value = "select * from telesystem_2.usuario u where u.roles_idroles = 2  and u.enabled = 1", nativeQuery = true)
     List<Usuario> listarPacientes();
     @Modifying
     @Transactional
     @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=\"12345678\"", nativeQuery = true)
     void actualizarSede(int id_nuevo);
+
+    @Query(value = "select * from telesystem_2.usuario u where u.enabled = 1", nativeQuery = true)
+    List<Usuario> listarTodosUsuarios();
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE telesystem_2.usuario u SET u.sedes_idsedes = ?1 WHERE dni=?2", nativeQuery = true)
+    void actualizarSede2(int id_nuevo, String dni);
     @Modifying
     @Transactional
     @Query(nativeQuery = true,value = "update usuario u set u.email= ?1, u.nombre= ?2, u.apellido= ?3, u.sedes_idsedes = ?4, u.telefono= ?5, u.estados_idestado = ?6, u.especialidades_id_especialidad = ?7 where  u.dni = ?8")
@@ -154,7 +180,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true, value="select dni from usuario ")
     List<String> obtenerdnis();
 
-    @Query(nativeQuery = true, value="select * from usuario where dni = ?")
+    @Query(nativeQuery = true, value="select * from usuario where dni = ?1")
     Usuario usuarioForm(String dni);
+
+
+    //para cambiar el estado de un paciente: en consulta
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update usuario set estados_idestado=5 where dni=?1")
+    void actualizarEstadoPacienteEnConsulta(String dni);
 
 }

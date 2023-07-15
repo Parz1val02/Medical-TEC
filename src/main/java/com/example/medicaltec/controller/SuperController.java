@@ -1120,6 +1120,7 @@ public class SuperController {
 
             HttpSession httpSession = request.getSession();
             //httpSession.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+            httpSession.removeAttribute("usuario");
             httpSession.setAttribute("usuario", usuarioRepository.findByEmail(user.getEmail()));
             System.out.println("se establecio la sesión");
             Usuario aaaaa = (Usuario) request.getSession().getAttribute("usuario");

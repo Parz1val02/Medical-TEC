@@ -3,7 +3,9 @@ package com.example.medicaltec.repository;
 import com.example.medicaltec.Entity.Receta;
 import com.example.medicaltec.dto.RecetaMedicamentoDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,4 +17,13 @@ public interface RecetaRepository extends JpaRepository<Receta, Integer> {
             "inner join medicamentos m on m.idmedicamentos=rhm.medicamentos_idmedicamentos\n" +
             "where idreceta=?1")
     List<RecetaMedicamentoDto> RecetasxMedicam(int idReceta);
+
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "insert into receta (comentario, informe_idinforme) values (?1,?2)")
+    void crearReceta( String comentario, Integer idinforme);
+
+    @Query(value = "select idreceta from telesystem_2.receta where informe_idinforme =?1",nativeQuery = true)
+    Integer idrecetacreada (Integer idinforme);
 }

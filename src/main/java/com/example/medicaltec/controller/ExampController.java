@@ -3,17 +3,23 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CorreoConEstilos;
+import com.example.medicaltec.more.RandomLineGenerator;
 import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -81,6 +87,12 @@ public class ExampController {
     public String forbidden403(Model model) {
         // Add model attributes
         return "/denegado";
+    }
+
+    @RequestMapping("/error404")
+    public String pagenotfound404(Model model) {
+        // Add model attributes
+        return "/error404";
     }
 
     /*@GetMapping("/QR")
@@ -258,7 +270,7 @@ public class ExampController {
             DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
             String fechaHoraFormateada = fechaHoraActual.format(formateador);
             cambioContrasenia.setFecha(fechaHoraFormateada);
-
+            cambioContrasenia.setCodigo(codigo);
             cambioContraseniaRepository.save(cambioContrasenia);
 
             try {
@@ -401,9 +413,11 @@ public class ExampController {
             e.printStackTrace();
             return "redirect:/cambiarcontrasena";
         }
+            String dni = usuarioRepository.dniFromCorreo(correo);
+            String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(dni));
 
 
-         return "auth/codigoFromCorreo";
+            return "redirect:/codeCorreo/"+randomNumberStr;
         }else{
             model.addAttribute("correoError",correoError);
             model.addAttribute("correoExisteMsg",correoExisteMsg);
@@ -414,41 +428,131 @@ public class ExampController {
     }
 
 
-    //para la validacion de los campos de la contraseña y la nueva
-    @PostMapping("/validacionCambiar")
-    public String autoRegistro(@RequestParam("contrasenia") String contrasenia, @RequestParam("contraseniaConfirma") String contraseniaConfirma ,Model model, RedirectAttributes attr){
+    @GetMapping("/codeCorreo/{random}")
+    public String codigoEnviadoFromCorreo (@PathVariable("random") String random,Model model){
 
-        Regex regex = new Regex();
+        long idLong = RandomLineGenerator.convertToNumber(random);
+        String idLongStr = String.valueOf(idLong);
 
-        boolean contraValida = regex.contrasenaisValid(contrasenia);
-        boolean contraConfValida = regex.contrasenaisValid(contraseniaConfirma);
+        model.addAttribute("dni",idLongStr);
 
-        String passwordError;
-        String passwordValid;
+        return "auth/codigoFromCorreo";
+    }
 
-        if(contrasenia.equalsIgnoreCase("")){
-            passwordError="El campo contraseña no puede estar vacio";
-            //numErrors++;
-            model.addAttribute("msgError", passwordError);
+    @PostMapping("/codigoCorreo")
+    public String codigoFromCorreoValidation (@RequestParam("dni") String dni,
+                                              @RequestParam("codigo") String codigo,
+                                              RedirectAttributes attr,
+                                              Model model){
+
+        String codigoValidoMsg ;
+
+        String correo = usuarioRepository.correoFromDni(dni);
+
+
+        List<CambioContrasenia> cambioContraseniaList = cambioContraseniaRepository.findAll();
+
+        ArrayList<String> fechasCorreo = new ArrayList<>();
+        for(CambioContrasenia cambioContrasenia : cambioContraseniaList){
+            if(cambioContrasenia.getCorreo().equals(correo)){
+                fechasCorreo.add(cambioContrasenia.getFecha());
+            }
         }
+        LocalDateTime fechaMasReciente = null;
 
-        if (!contraValida || !contraConfValida){
-            passwordValid="La contraseña no cumple con los parametros establecidos";
-            model.addAttribute("msgError", passwordValid);
-            //numErrors++;
-
-        } else {
-            String passwordDif = "Las contraseñas no son iguales";
-            if ( contrasenia != contraseniaConfirma){
-                model.addAttribute("passwordDif", passwordDif );
-
-            }else {
-                attr.addFlashAttribute("success","Contraseña cambiada. A continuacion deberá acceder a su cuenta con la nueva contraseña");
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
+        for (String fechaString : fechasCorreo) {
+            LocalDateTime fecha = LocalDateTime.parse(fechaString, formateador);
+            if (fechaMasReciente == null || fecha.isAfter(fechaMasReciente)) {
+                fechaMasReciente = fecha;
             }
         }
 
-        //le faltan los return y redirect en los casos
-        return "redirect:/cambiarcontrasena";
+        String fechaMasRecienteFormateada = fechaMasReciente.format(formateador);
+        LocalDateTime fechaHora = parseFechaHora(fechaMasRecienteFormateada);
+
+
+
+        if(!(hanPasadoMasDe30Minutos(fechaHora))){
+            if(codigo.equals(cambioContraseniaRepository.codigoByFecha(fechaMasRecienteFormateada))){
+
+
+                String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(dni));
+
+
+                return "redirect:/cambiarPassword/"+randomNumberStr;
+
+            }else{
+                codigoValidoMsg = "El codigo no es válido, recuerde que la validez del codigo es de 30 minutos, de lo contrario vuelva a solicitar el cambio de contraseña";
+                model.addAttribute("codigoValidoMsg",codigoValidoMsg);
+                model.addAttribute("dni",dni);
+
+                return "auth/codigoFromCorreo";
+            }
+        }else {
+            attr.addFlashAttribute("minutos","Han pasado mas de 30 minutos desde el envio del codigo a su correo, por favor solicite uno nuevo");
+            return "redirect:/cambiarcontrasena";
+
+        }
+
+
+
+
+
+
+    }
+
+
+    @GetMapping("/cambiarPassword/{random}")
+    public String goChangePassword (@PathVariable("random") String random, Model model){
+
+        long idLong = RandomLineGenerator.convertToNumber(random);
+        String idLongStr = String.valueOf(idLong);
+
+        model.addAttribute("dni",idLongStr);
+
+
+        return "auth/cambiarcontrasena";
+
+    }
+
+
+
+    @PostMapping("/validacionCambiar")
+    public String cambiandoContrasenia (Model model,
+                               @RequestParam("pass1") String pass1,
+                               @RequestParam("pass2") String pass2,
+                               @RequestParam("pass3") String pass3,
+                               @RequestParam("dni") String dni,
+                               RedirectAttributes attr){
+
+        String randomNumberStr = RandomLineGenerator.generateRandomLine(Long.parseLong(dni));
+
+        String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(dni);
+        boolean passwordActualCoincide = BCrypt.checkpw(pass1, passwordAntiguabCrypt);
+
+        if(pass1.equals("") || pass2.equals("") || pass3.equals("")){
+            attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacios");
+
+
+
+            return "auth/cambiarcontrasena";
+        }else if (!passwordActualCoincide ) {
+            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+
+            return "auth/cambiarcontrasena";
+        } else if (!pass3.equals(pass2) ) {
+            attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
+            return "auth/cambiarcontrasena";
+        }else {
+            usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), dni);
+            attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
+            return "redirect:/loginA";
+
+
+
+    }
+
     }
 
     //************************************************************
@@ -509,7 +613,15 @@ public class ExampController {
             return randomCode.toString();
         }
 
+    public static LocalDateTime parseFechaHora(String fechaHoraString) {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH:mm");
+        return LocalDateTime.parse(fechaHoraString, formateador);
+    }
 
-
+    public static boolean hanPasadoMasDe30Minutos(LocalDateTime fechaHora) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fechaHoraMas30Minutos = fechaHora.plusMinutes(30);
+        return ahora.isAfter(fechaHoraMas30Minutos);
+    }
 
 }

@@ -41,7 +41,8 @@
                                                 Filtrar por especialidad
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" th:each="especialidad : ${especialidades}"
+                                                <li><a class="dropdown-item" href="/paciente/listaDoctores">Sin filtro</a>
+                                                    <a class="dropdown-item" th:each="especialidad : ${especialidades}"
                                                        th:href="@{'/paciente/listaDoctores?idEspecialidad=' + ${especialidad.id}}"
                                                        th:text="${especialidad.nombreEspecialidad}"></a></li>
                                             </ul>

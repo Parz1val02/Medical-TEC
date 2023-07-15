@@ -6,7 +6,6 @@ import com.example.medicaltec.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,9 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
 @Controller
@@ -32,8 +34,18 @@ public class DoctorController {
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final AlergiaRepository alergiaRepository;
     final InformeRepository informeRepository;
+    final ReunionVirtualRepository reunionVirtualRepository;
+    final HorasDoctorRepository horasDoctorRepository;
+    @Autowired
+    RecetaRepository recetaRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository) {
+    @Autowired
+    RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
+
+    @Autowired
+    MedicamentoRepository medicamentoRepository;
+
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -43,9 +55,12 @@ public class DoctorController {
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.alergiaRepository = alergiaRepository;
         this.informeRepository = informeRepository;
+        this.reunionVirtualRepository = reunionVirtualRepository;
+        this.horasDoctorRepository = horasDoctorRepository;
     }
     @Autowired
     CuestionariosRepository cuestionariosRepository;
+
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model, HttpSession httpSession){
         Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
@@ -53,14 +68,73 @@ public class DoctorController {
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));
         model.addAttribute("listaNotificaciones",notificacioneRepository.listarNotisActualesSegunUsuario(usuario_doctor.getId()));
-        model.addAttribute("listaProximasCitas",citaRepository.proximasCitasAgendadas());
+        model.addAttribute("listaProximasCitas",citaRepository.citasParaVer(usuario_doctor.getId()));
         model.addAttribute("usuario",usuario_doctor);
         model.addAttribute("listaCuestionarios",cuestionariosRepository.findAll());
-
-
         return "doctor/principal";
     }
 
+
+    @GetMapping("/iniciarCita")
+    public String iniciarCita(Model model, @RequestParam("idUsuario") String idUsuario, @RequestParam("idInforme") String idInforme,
+                              RedirectAttributes attr, HttpSession httpSession){
+
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
+        System.out.println("usuario entero");
+        if (optionalUsuario.isPresent()){
+            System.out.println("usuario encontrado");
+            if(esNumeroEntero(idInforme)){
+                System.out.println("informe entero");
+                Integer iddinforme = Integer.parseInt(idInforme);
+                Optional<InformeNuevo> optionalInformeNuevo = informeNuevoRepository.findById(iddinforme);
+                if(optionalInformeNuevo.isPresent()){
+                    System.out.println("informe nuevo existente");
+                    // Llenar informe
+                    httpSession.removeAttribute("iddelinforme");
+                    httpSession.setAttribute("iddelinforme",iddinforme);
+                    InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                    model.addAttribute("titulo",informeNuevo.getNombre());
+                    String campostexto = informeNuevo.getCampos();
+                    List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
+                    informeNuevo.setListacampos(listadecampos);
+                    model.addAttribute("informe",informeNuevo);
+                    List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
+                    model.addAttribute("listmedic", listademedicamentos);
+
+                    // Historial clínico
+                    Usuario paciente = optionalUsuario.get();
+                    model.addAttribute("paciente",paciente);
+                    // Nombre completo del sexo de la persona
+                    if(paciente.getSexo().equals("M")){
+                        paciente.setSexo("Masculino");
+                    }else if (paciente.getSexo().equals("F")){
+                        paciente.setSexo("Femenino");
+                    }
+                    // Obtener alergias
+                    int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
+                    List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
+                    ArrayList<Alergia> listaAlergias = new ArrayList<>();
+                    for (Integer idAlergia : idAlergias) {
+                        listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+                    }
+
+                    model.addAttribute("listaAlergias",listaAlergias);
+                    // Obtener informes y citas por usuario
+                    model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
+                    return "doctor/iniciarcita";
+
+                }else {
+                    return "redirect:/doctor/principal";
+                }
+            }else {
+                return "redirect:/doctor/principal";
+            }
+        }else {
+            return "redirect:/doctor/principal";
+        }
+
+
+    }
 
     @GetMapping("/historial")
     public String verHistorial(Model model, @RequestParam("id") String id, RedirectAttributes attr){
@@ -93,8 +167,38 @@ public class DoctorController {
 
     }
 
+    //videollamada
+    @GetMapping("/videollamada")
+    public String videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
+        // Cambiamos el estado de cita a 'En consulta'
+
+
+        // Obtener paciente
+        ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
+        /*for (Cita c:citaRepository.proximasCitasAgendadas()) {
+            c.getId();
+            citaRepository.cambiarEstadoCita(2 , Integer.parseInt(id) );
+
+        }*/
+        model.addAttribute("reu",reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) ) );
+        //RedirectView redirectView = new RedirectView();
+        //redirectView.setUrl(reu.getEnlace());
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject("enlace",reu.getEnlace() );
+        //modelAndView.setViewName("redirect:" +  );
+        return "";
+
+
+    }
+
     @GetMapping("/notificaciones")
-    public String verNotificaciones(){return "doctor/notificaciones";}
+    public String verNotificaciones(HttpSession  httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        System.out.println("EL USUARIO ESSSSS:");
+        System.out.println(
+                usuario_doctor.getNombre()
+        );
+        return "doctor/notificaciones";}
 
     @GetMapping("/calendario")
     public String verCalendario(HttpSession httpSession){
@@ -107,16 +211,15 @@ public class DoctorController {
 
 
     @GetMapping("/pacientes")
-    public String verPacientes(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
-        List<String> listadepacientesstring = citaRepository.pacientesdeldoctor();
+    public String verPacientes(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
+        List<String> listadepacientesstring = citaRepository.pacientesdeldoctor(usuario_doctor.getId());
         List<Usuario> listapaciente = new ArrayList<>();
         for (String dnipaciente : listadepacientesstring){
             Usuario pacientedentro = usuarioRepository.findByid(dnipaciente);
             listapaciente.add(pacientedentro);
         }
-        //System.out.println(listadepacientesstring);
-        //System.out.println(listapaciente);
         model.addAttribute("listapaciente",listapaciente);
         return "doctor/pacientes";
     }
@@ -125,15 +228,146 @@ public class DoctorController {
     InformeNuevoRepository informeNuevoRepository;
 
     @GetMapping("/citas")
-    public String verCitas(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+    public String verCitas(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
         model.addAttribute("tiposdeinformes", informeNuevoRepository.findAll());
         return "doctor/citas";
     }
 
+    @GetMapping("/elegirInforme")
+    public String elegirInforme (@RequestParam("idCita") String idCita,Model model,RedirectAttributes attr,HttpSession httpSession){
+        if (esNumeroEntero(idCita)){
+            Integer iddecita = Integer.parseInt(idCita);
+            Optional<Cita> optionalCita = citaRepository.findById(iddecita);
+            if (optionalCita.isPresent()){
+                Cita citas = optionalCita.get();
+                httpSession.removeAttribute("idcitaparainforme");
+                httpSession.setAttribute("idcitaparainforme",citas.getId());
+                List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
+                for (InformeNuevo informes : listainformes){
+                    String entrada1 = informes.getCampos();
+                    List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
+                    informes.setListacampos((listacampos));
+                }
+                model.addAttribute("informeList", listainformes);
+                return "doctor/eleccionInforme";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @GetMapping("/elegirPlantilla")
+    public String elegirPlantilla (@RequestParam("idCita") String idCita,@RequestParam("idUsuario") String idUsuario,
+                                   Model model,RedirectAttributes attr,HttpSession httpSession){
+        citaRepository.cambiarEstadoCita(5, Integer.parseInt(idCita));
+        if (esNumeroEntero(idCita)){
+            Integer iddecita = Integer.parseInt(idCita);
+            Optional<Cita> optionalCita = citaRepository.findById(iddecita);
+            if (optionalCita.isPresent()){
+                Cita citas = optionalCita.get();
+                httpSession.removeAttribute("idcitaparainforme");
+                httpSession.setAttribute("idcitaparainforme",citas.getId());
+                List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
+                for (InformeNuevo informes : listainformes){
+                    String entrada1 = informes.getCampos();
+                    List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
+                    informes.setListacampos((listacampos));
+                }
+                model.addAttribute("informeList", listainformes);
+                model.addAttribute("idUsuario",idUsuario);
+                return "doctor/elegirPlantilla";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @GetMapping("/llenarInforme")
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
+                                HttpSession httpSession,Model model){
+        if(esNumeroEntero(idinforme)){
+            Integer iddinforme = Integer.parseInt(idinforme);
+            Optional<InformeNuevo> optionalInformeNuevo = informeNuevoRepository.findById(iddinforme);
+            if(optionalInformeNuevo.isPresent()){
+                httpSession.removeAttribute("iddelinforme");
+                httpSession.setAttribute("iddelinforme",iddinforme);
+                InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                model.addAttribute("titulo",informeNuevo.getNombre());
+                String campostexto = informeNuevo.getCampos();
+                List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
+                informeNuevo.setListacampos(listadecampos);
+                model.addAttribute("informe",informeNuevo);
+                List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
+                model.addAttribute("listmedic", listademedicamentos);
+                return "doctor/llenarInforme";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @PostMapping("/rellenarInforme")
+    public String rellenarInforme(@RequestParam("bitacora") String bit,
+                                  @RequestParam("diagnostico") String diag,
+                                  @RequestParam("tratamiento") String trat,
+                                  @RequestParam("listamedicamentos") String med,
+                                  @RequestParam("listacantidades") String cant,
+                                  @RequestParam("listaobservaciones") String obser,
+                                  @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
+                                RedirectAttributes attr, Model model, HttpSession httpSession){
+        int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
+        int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
+        String dniusuario;
+        Optional<Cita> optionalCita = citaRepository.findById(iddelacita);
+        if(optionalCita.isPresent()){
+            Cita cita = optionalCita.get();
+            dniusuario = cita.getPaciente().getId();
+            String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
+            String salida ="";
+            String separador ="#!%&%!#";
+            int i = 0;
+            for (String respuesta : respuestasSeparadas){
+                System.out.println(respuesta);
+                System.out.println(i);
+                if (i==0){
+                    salida = salida+respuesta;
+                }else {
+                    salida = salida + separador + respuesta;
+                }
+                i++;
+            }
+            System.out.println(salida);
+            String camposllenados = salida;
+            String diagnostico  = diag;
+            String tratamiento = trat;
+            String bitacora = bit;
+            String medicamente  = med;
+            String cantidad = cant;
+            attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+            String comentario  ="";
+            informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,bitacora,tratamiento,camposllenados,iddelinformenuevo);
+            Integer informe1 = informeRepository.idinformecreado(iddelacita);
+            recetaRepository.crearReceta(comentario,informe1);
+            Integer idrecetacreada = recetaRepository.idrecetacreada(informe1);
+            return "redirect:/doctor/citas";
+        }else {
+            attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
+            return "redirect:/doctor/citas";
+        }
+    }
+
     @GetMapping("/cuestionarios")
     public String verCuestionarios(Model model){
-        List<Cuestionarios> cuestionariosList = cuestionariosRepository.findAll();
+        List<Cuestionarios> cuestionariosList = cuestionariosRepository.listaDeCuestionarios();
         for (Cuestionarios cue : cuestionariosList){
             String entrada = cue.getPreguntas();
             List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
@@ -145,8 +379,9 @@ public class DoctorController {
     }
 
     @GetMapping("/boletas")
-    public String verBoletas(Model model){
-        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
+    public String verBoletas(Model model, HttpSession httpSession){
+        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("listaCitas",citaRepository.pacientesAtendidos(usuario_doctor.getId()));
         return "doctor/boletas";
     }
 
@@ -169,8 +404,9 @@ public class DoctorController {
 
     @PostMapping("/cambiarSede")
     public String cambiarSede(RedirectAttributes attr,
-                              @RequestParam("id") int id){
-        usuarioRepository.actualizarSede(id);
+                              @RequestParam("id") int id, HttpSession httpSession){
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
+        usuarioRepository.actualizarSede2(id, usuario.getId() );
         attr.addFlashAttribute("msg", "Se actualizó la sede del usuario");
         return "redirect:/doctor/config";
     }
@@ -258,8 +494,42 @@ public class DoctorController {
         return "redirect:/doctor/principal";
     }
 
+    @PostMapping("/enviarHorasDoctor")
+    public String horasDoctor(@RequestParam("mes") String mes, @RequestParam("dia") String dia,
+                              @RequestParam("horainicio") String horainicio, @RequestParam("horafin") String horafin,
+                              @RequestParam("horalibre") String horalibre, HttpSession httpSession,RedirectAttributes attr ){
 
+        Horasdoctor horasdoctor = new Horasdoctor();
 
+        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
+        LocalTime horaInicio = LocalTime.parse(horainicio);
+        LocalTime horaFin = LocalTime.parse(horafin);
+        LocalTime horaLibre = LocalTime.parse(horalibre);
+
+        Duration diferencia = Duration.between(horaFin,horaInicio); //citasHora - variableHoras
+
+        long horas = diferencia.toHours();
+        long minutos = diferencia.toMinutes() % 60;
+
+        if (horas > 0){
+            if (horaLibre.isBefore(horaInicio) || horaLibre.equals(horaInicio) || horaLibre.isAfter(horaFin) || horaLibre.equals(horaFin)){
+                attr.addFlashAttribute("msgError","La hora libre debe encontrarse entre la hora de Inicio y la hora de Fin, y ser diferente de ellas.");
+            }else{
+                horasDoctorRepository.guardarHorasDoc(horaInicio,horaFin,horaLibre,doctor.getId(),dia,mes);
+                attr.addFlashAttribute("msg","Horas de doctor guardadas exitosamente.");
+            }
+        }else {
+            attr.addFlashAttribute("msgError","Las fechas deben llevarse como mínimo 1 hora.");
+        }
+
+        return "redirect:/doctor/config";
+    }
+
+    @PostMapping("/enviarBitacoras")
+    public String enviarBitacoras(HttpSession httpSession,RedirectAttributes attr){
+
+        return "";
+    }
     //Adaptarlo para sesiones
     /*@GetMapping("/llenarInforme")
     public String llenarInforme(@RequestParam("idCita") String idcuestionario,Model model,

@@ -39,6 +39,10 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md">
                             <h5 class="mb-2 mb-md-0 text-white">Próximas Citas</h5>
+                            <div th:if="${exitoPagar != null}" th:text="${exitoPagar}" class="alert alert-success" role="alert"></div>
+                            <div th:if="${errorPagar != null}" th:text="${errorPagar}" class="alert alert-danger" role="alert"></div>
+                            <div th:if="${exitoCancelar != null}" th:text="${exitoCancelar}" class="alert alert-success" role="alert"></div>
+                            <div th:if="${errorCancelar != null}" th:text="${errorCancelar}" class="alert alert-danger" role="alert"></div>
                         </div>
                     </div>
                 </div>
@@ -243,6 +247,237 @@
 
 
 </main>
+<div class="modal fade" id="modalVirtual" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita Virtual Agendada</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="especialidadVirtual">Especialidad:</label>
+                                <input type="text" name="especialidadId" id="especialidadVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaVirtual">Fecha:</label>
+                                <input type="text" name="fecha" id="fechaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipocitaVirtual">Tipo de cita: </label>
+                                <input type="text" name="tipocitaId" id="tipocitaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="doctorDniVirtual">Doctor:</label>
+                                <input type="text" name="doctorDni" id="doctorDniVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="horaVirtual">Hora:</label>
+                                <input type="text" name="hora" id="horaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sedeVirtual">Sede:</label>
+                                <input type="text" name="sedeId" id="sedeVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="estadoVirtual">Estado de la cita:</label>
+                                <input type="text" name="estado" id="estadoVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height: 1px; background-color: #333; border: none">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <a id="enlace" href="" type="button" class="btn btn-success" target="_blank">Ingresar Cita</a>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <button type="button" class="btn btn-primary" id="pagarVirtual">Pagar Cita</button>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <button id="cancelarVirtual" type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelarCita">Cancelar Cita</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPresencial" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModal1Label">Información Cita Presencial Agendada</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="especialidadPresencial">Especialidad:</label>
+                                <input type="text" name="especialidadId" id="especialidadPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaPresencial">Fecha:</label>
+                                <input type="text" name="fecha" id="fechaPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipocitaPresencial">Tipo de cita: </label>
+                                <input type="text" name="tipocitaId" id="tipocitaPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="doctorDniPresencial">Doctor:</label>
+                                <input type="text" name="doctorDni" id="doctorDniPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="horaPresencial">Hora:</label>
+                                <input type="text" name="hora" id="horaPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sedePresencial">Sede:</label>
+                                <input type="text" name="sedeId" id="sedePresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="estadoPresencial">Estado de la cita:</label>
+                                <input type="text" name="estado" id="estadoPresencial" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height: 1px; background-color: #333; border: none">
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="direccion">Dirección:</label>
+                            <input type="text" name="direccion" id="direccion" class="form-control" readonly="" placeholder="">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="consultorio">Consultorio:</label>
+                            <input type="text" name="consultorio" id="consultorio" class="form-control" readonly="" placeholder="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <button id="cancelarPresencial" type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelarCita">Cancelar Cita</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cancelarCita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-5" id="exampleModalLabelga">Cancelar cita</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea cancelar su cita agendada?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <a id="cancelar" type="button" class="btn btn-primary" href="">Confirmar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pagarCita" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                    <h5 class="mb-0">Pago con tarjeta</h5>
+                </div>
+                <form class="card-body" method="post" th:action="@{/paciente/pagosTarjeta}">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input radio-collapse" type="radio" name="payment-method" id="credit-card" checked="checked">
+                                <label class="custom-control-label" for="credit-card"><span class="d-flex align-items-center mb-2 fs-1">Tarjeta de crédito/débito</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12 pl-4">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-row align-items-center">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input class="form-control" type="hidden" name="citaId" id="citaId">
+                                                <input class="form-control" type="hidden" name="precio" id="precio">
+                                                <label class="ls text-uppercase text-600 font-weight-semi-bold mb-0">Card Number</label>
+                                                <input class="form-control" type="text" name="cardNumber" placeholder="####-####-####-####">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row align-items-center">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="ls text-uppercase text-600 font-weight-semi-bold mb-0">Exp Date</label>
+                                                <input class="form-control" type="text" name="expDate" placeholder="MM/YY">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="ls text-uppercase text-600 font-weight-semi-bold mb-0">CVV<a class="d-inline-block" href="#"><svg class="svg-inline--fa fa-question-circle fa-w-16 ml-2" data-toggle="tooltip" data-placement="top" title="" aria-labelledby="svg-inline--fa-title-lSKpl7Uy3fZd" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="Card verification value"><title id="svg-inline--fa-title-lSKpl7Uy3fZd">Card verification value</title><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg><!-- <span class="fa fa-question-circle ml-2" data-toggle="tooltip" data-placement="top" title="Card verification value"></span> --></a></label>
+                                                <input class="form-control" type="text" name="cvv" placeholder="123 o 1234" maxlength="4" pattern="[0-9]{3,4}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center pt-2 d-none d-sm-block">
+                                    <div class="rounded p-2 mt-3 bg-100">
+                                        <div class="text-uppercase fs--2 font-weight-bold">Aceptamos</div><img src="/img/icons/icon-payment-methods-grid.png" alt="" width="120">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="border-dashed">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="media"><img class="mr-3" src="/img/icons/shield.png" alt="" width="60">
+                                <div class="media-body">
+                                    <div class="fs-2 font-weight-semi-bold">Total: <span class="text-primary" id="totalPago"></span></div>
+                                    <button class="btn btn-success mt-3 px-5" type="submit">Confirmar pago</button>
+                                </div>
+                            </div>
+                            <div class="vertical-line d-none d-md-block d-xl-none d-xxl-block"></div>
+                        </div>
+                        <div class="col-sm-5">
+                            <hr class="border-dashed d-block d-md-none d-xl-block d-xxl-none my-4">
+                            <br>
+                            <br>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar pago</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->
@@ -331,7 +566,7 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
-            eventDidMount: function(info) {
+            /*eventDidMount: function(info) {
                 tippy(info.el, {
                     trigger: 'mouseenter',
                     content: generateTooltipContent(info.event), // call a function to generate the html content
@@ -339,6 +574,107 @@
                     animation: 'fade',
                     allowHTML: 'true'
                 })
+            },*/
+            eventClick: function(info) {
+                if(info.event.extendedProps.modalidad==="Virtual"){
+                    let modalA = $('#modalVirtual');
+                    modalA.modal('show');
+                    modalA.on('shown.bs.modal', function() {
+                        let especialidad = $("#especialidadVirtual");
+                        especialidad.attr('placeholder', info.event.title);
+                        let doctorcito = $("#doctorDniVirtual");
+                        doctorcito.attr('placeholder', info.event.extendedProps.doctor);
+                        let fecha = $("#fechaVirtual");
+                        let hora = $("#horaVirtual");
+                        let tipocita = $("#tipocitaVirtual");
+                        let sede = $("#sedeVirtual");
+                        let estado = $("#estadoVirtual");
+                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                        let formattedTime = time.format('h:mm A');
+                        let date = moment(info.event.start, 'YYYY-MM-DD');
+                        let formattedDate = date.format('DD-MM-YYYY');
+                        estado.attr('placeholder', info.event.extendedProps.estado);
+                        hora.attr('placeholder', formattedTime);
+                        fecha.attr('placeholder', formattedDate);
+                        tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
+                        sede.attr('placeholder', info.event.extendedProps.sede);
+                        let enlace = $("#enlace");
+                        enlace.attr('href', info.event.extendedProps.extra);
+                        console.log(info.event.extendedProps.pagada);
+                        if(info.event.extendedProps.pagada==='true'){
+                            $("#pagarVirtual").hide();
+                            $("#cancelarVirtual").hide();
+                        }else if(info.event.extendedProps.pagada==='false'){
+                            $("#pagarVirtual").show();
+                            $("#cancelarVirtual").show();
+                        }
+
+                        $('#cancelarVirtual').on('click', function (){
+                            modalA.modal('hide');
+                            let modalb = $('#cancelarCita');
+                            modalb.modal('show');
+                            modalb.on('shown.bs.modal', function() {
+                                let ga = $("#cancelar");
+                                let link = '/paciente/cancelarCita?citaId='
+                                link += info.event.extendedProps.citaid;
+                                ga.attr('href', link);
+                            });
+                        });
+                        $("#pagarVirtual").on('click', function (){
+                            modalA.modal('hide');
+                            let modalc = $('#pagarCita');
+                            modalc.modal('show');
+                            modalc.on('shown.bs.modal', function() {
+                                $("#totalPago").text("S/" + info.event.extendedProps.precio);
+                                $("#citaId").val(info.event.extendedProps.citaid);
+                                $("#precio").val(info.event.extendedProps.precio);
+                            });
+                        })
+                    })
+                }else if(info.event.extendedProps.modalidad==="Presencial"){
+                    let modalA = $('#modalPresencial');
+                    modalA.modal('show');
+                    modalA.on('shown.bs.modal', function() {
+                        let especialidad = $("#especialidadPresencial");
+                        especialidad.attr('placeholder', info.event.title);
+                        let doctorcito = $("#doctorDniPresencial");
+                        doctorcito.attr('placeholder', info.event.extendedProps.doctor);
+                        let fecha = $("#fechaPresencial");
+                        let hora = $("#horaPresencial");
+                        let tipocita = $("#tipocitaPresencial");
+                        let sede = $("#sedePresencial");
+                        let estado = $("#estadoPresencial");
+                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                        let formattedTime = time.format('h:mm A');
+                        let date = moment(info.event.start, 'YYYY-MM-DD');
+                        let formattedDate = date.format('DD-MM-YYYY');
+                        estado.attr('placeholder', info.event.extendedProps.estado);
+                        hora.attr('placeholder', formattedTime);
+                        fecha.attr('placeholder', formattedDate);
+                        tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
+                        sede.attr('placeholder', info.event.extendedProps.sede);
+                        let direccion = $("#direccion");
+                        let consultorio = $("#consultorio");
+                        direccion.attr('placeholder', info.event.extendedProps.direccion);
+                        consultorio.attr('placeholder', info.event.extendedProps.extra);
+                        if(info.event.extendedProps.pagada==='true'){
+                            $("#cancelarPresencial").hide();
+                        }else if(info.event.extendedProps.pagada==='false'){
+                            $("#cancelarPresencial").show();
+                        }
+                        $('#cancelarPresencial').on('click', function (){
+                            modalA.modal('hide');
+                            let modalb = $('#cancelarCita');
+                            modalb.modal('show');
+                            modalb.on('shown.bs.modal', function() {
+                                let ga = $("#cancelar");
+                                let link = '/paciente/cancelarCita?citaId='
+                                link += info.event.extendedProps.citaid;
+                                ga.attr('href', link);
+                            });
+                        })
+                    })
+                }
             }
         });
         // AJAX request to fetch events
@@ -363,7 +699,13 @@
                         hora: eventData.hora,
                         sede: eventData.sede,
                         tipoCita: eventData.tipoCita,
-                        formaPago: eventData.formaPago
+                        formaPago: eventData.formaPago,
+                        pagada: eventData.pagada,
+                        extra: eventData.extra,
+                        precio: eventData.precio,
+                        direccion: eventData.direccion,
+                        citaid: eventData.citaid,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -378,7 +720,7 @@
         });
         calendar.render();
     });
-    function generateTooltipContent(event) {
+    /*function generateTooltipContent(event) {
         // Generate the HTML content for the tooltip
         // Assuming you have a time string like '14:30'
         var timeString = event.extendedProps.hora;
@@ -401,7 +743,7 @@
         content += '<br>Sede: ' + event.extendedProps.sede;
 
         return content;
-    }
+    }*/
 </script>
 <script>
 
