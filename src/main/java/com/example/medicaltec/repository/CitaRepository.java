@@ -73,4 +73,9 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     void cambiarEstadoCitaEnTranscurso(int idCita, LocalTime hora);
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "update cita set receta_idreceta = ?1, informe_idinforme=?2 where idcita = ?3",nativeQuery = true)
+    void informeRecetaCita (Integer idreceta, Integer idinforme, Integer idcita);
+
 }

@@ -22,5 +22,9 @@ public class Receta implements Serializable {
     @Column(name = "comentario", length = 500)
     private String comentario;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "informe_idinforme")
+    private Informe informe;
+
 
 }

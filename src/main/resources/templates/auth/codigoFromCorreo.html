@@ -16,19 +16,19 @@
     <img class="card-img-top img-fluid" th:src="@{../img/principalpage/clinica_difuminada.png}" style="height: 100%; width: 100%; object-fit: cover;">
     <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
         <div style="display: flex; justify-content: center; width: 100%;">
-            <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
-                <div class="card-body" style="padding: 25px;">
-                    <label style="margin: 0;"> A continuacion debe ingresar el codigo enviado a su correo <br>
-                        De esa manera se podra confirmar su identidad <br>
-                        Posteriormente podra cambiar su contraseña
+            <!-- Cambiar el ancho del card al 70% -->
+            <div class="card" style="width: 70%; border: 1px solid #d8e2ef;">
+                <div class="card-body" style="padding: 25px; text-align: center;">
+                    <label style="margin: 0;">A continuación, debe ingresar el código enviado a su correo<br>
+                        De esa manera se podrá confirmar su identidad<br>
+                        Posteriormente podrá cambiar su contraseña
                     </label>
 
-
-                    <form method="POST" th:action="@{'/codigoCorreo'}" >
+                    <form method="POST" th:action="@{'/codigoCorreo'}">
                         <input th:value="${dni}" name="dni" type="hidden">
-                        <label >Codigo recibido : </label>
-                        <input type="text" name = "codigo" class="form-control" th:classappend="${codigoValidoMsg!=null?'is-invalid':''}">
-                        <div class ="invalid-feedback" th:if="${codigoValidoMsg!=null}" th:text="${codigoValidoMsg}"></div>
+                        <label>Codigo recibido :</label>
+                        <input type="text" name="codigo" class="form-control" th:classappend="${codigoValidoMsg!=null?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${codigoValidoMsg!=null}" th:text="${codigoValidoMsg}"></div>
 
                         <button type="submit" class="btn btn-primary">Confirmar</button>
                         <a th:href="@{'/loginA'}" class="btn btn-danger">Cancelar</a>

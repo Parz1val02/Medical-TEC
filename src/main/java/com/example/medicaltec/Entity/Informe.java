@@ -29,15 +29,16 @@ public class Informe {
 
     @Column(name = "tratamiento", length = 100)
     private String tratamiento;
-    @ManyToOne
-    @JoinColumn(name = "receta_idreceta", nullable = false)
-    private Receta receta;
 
     @Column(name = "activo")
     private Boolean activo;
 
     @Column(name = "camposllenados")
     private String campos;
+
+    @ManyToOne
+    @JoinColumn(name = "informe_nuevo_idinforme")
+    private InformeNuevo informeNuevo;
 
 
 
