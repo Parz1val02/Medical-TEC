@@ -35,10 +35,11 @@
                         </div>
                         <br>
                         <div>
+                            <div th:if="${error != null}" th:text="${error}" class="alert alert-danger" role="alert"></div>
                             <form th:action="@{/doctor/rellenarInforme}" method="post">
                                 <h6>Receta</h6>
                                 <div class="row mb-3" id="containermedicamentos" style="padding: 0 1.75rem;margin-bottom: 1rem;">
-                                    <div class="container-fluid mb-3" id="superminicontainer">
+                                    <div class="container-fluid" id="superminicontainer">
                                         <div class="container-fluid mb-3" id = "minicontainer">
                                             <div class="row mb-3">
                                                 <div class="col">
@@ -67,12 +68,12 @@
                                     </div>
                                     <div class="container-fluid mb-3" id="superminicontainer2">
                                     </div>
-                                    <div id="divpacomentario">
-                                        <label for="comentario">Comentario</label>
-                                        <input type="text" class="form-control"  th:classappend="${comentariomsg!=null?'is-invalid':''}"
-                                               style="min-height: 100px;" id="comentario" name="comentario" required>
-                                        <div class="invalid-feedback" th:if="${comentariomsg!=null}" th:text="${comentariomsg}"></div>
-                                    </div>
+                                </div>
+                                <div id="divpacomentario">
+                                    <label for="comentario">Comentario</label>
+                                    <input type="text" class="form-control"  th:classappend="${comentariomsg!=null?'is-invalid':''}"
+                                           style="min-height: 100px;" id="comentario" name="comentario" required>
+                                    <div class="invalid-feedback" th:if="${comentariomsg!=null}" th:text="${comentariomsg}"></div>
                                 </div>
                                 <div class="container-fluid mt-3 mb-3">
                                     <button type="button" class="btn btn-secondary" style="background-color: #0eb4fd " onclick="agregarMedicamento()">Agregar medicamento</button>
@@ -84,13 +85,6 @@
                                            style="min-height: 100px;" id="diagnostico" name="diagnostico" required>
                                     <div class="invalid-feedback" th:if="${diagnosticomsg!=null}" th:text="${diagnosticomsg}"></div>
                                 </div>
-                                <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
-                                    <label for="bitacora">Bitácora</label>
-                                    <input type="text" class="form-control"  th:classappend="${bitacoramsg!=null?'is-invalid':''}"
-                                           style="min-height: 50px;" id="bitacora" name="bitacora" required>
-                                    <div class="invalid-feedback" th:if="${bitacoramsg!=null}" th:text="${bitacoramsg}"></div>
-                                </div>
-
                                 <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
                                     <label for="tratamiento">Tratamiento</label>
                                     <input type="text" class="form-control" style="min-height: 50px;" th:classappend="${tratamientomsg!=null?'is-invalid':''}" id="tratamiento" name="tratamiento" required>
@@ -158,10 +152,15 @@
 
                                 function agregarMedicamento() {
                                     var containerpalmedic = document.querySelector('#superminicontainer2');
-                                    var selectmed = document.querySelector('#superminicontainer');
-                                    var col1 = selectmed.innerHTML;
+                                    var selectmed = document.querySelector('#minicontainer');
+                                    var col1 = selectmed.cloneNode(true);
 
-                                    containerpalmedic.innerHTML += col1;
+                                    var inputs = col1.querySelectorAll('input');
+                                    inputs.forEach(function(input) {
+                                        input.value = '';
+                                    });
+
+                                    containerpalmedic.appendChild(col1);
                                 }
 
                             </script>
