@@ -241,7 +241,8 @@ public class DoctorController {
                                   @RequestParam("tratamiento") String trat,
                                   @RequestParam("listamedicamentos") String med,
                                   @RequestParam("listacantidades") String cant,
-                                  @RequestParam("listaobservaciones") String obser,@RequestParam("listarespuestas") String respuestas,
+                                  @RequestParam("listaobservaciones") String obser,
+                                  @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
                                 RedirectAttributes attr, Model model, HttpSession httpSession){
         int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
         int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");

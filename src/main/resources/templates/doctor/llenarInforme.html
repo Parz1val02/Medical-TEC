@@ -65,6 +65,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="container-fluid mb-3" id="superminicontainer2">
+                                    </div>
+                                    <div id="divpacomentario">
+                                        <label for="comentario">Comentario</label>
+                                        <input type="text" class="form-control"  th:classappend="${comentariomsg!=null?'is-invalid':''}"
+                                               style="min-height: 100px;" id="comentario" name="comentario" required>
+                                        <div class="invalid-feedback" th:if="${comentariomsg!=null}" th:text="${comentariomsg}"></div>
+                                    </div>
                                 </div>
                                 <div class="container-fluid mt-3 mb-3">
                                     <button type="button" class="btn btn-secondary" style="background-color: #0eb4fd " onclick="agregarMedicamento()">Agregar medicamento</button>
@@ -149,7 +157,7 @@
                                 }
 
                                 function agregarMedicamento() {
-                                    var containerpalmedic = document.querySelector('#superminicontainer');
+                                    var containerpalmedic = document.querySelector('#superminicontainer2');
                                     var selectmed = document.querySelector('#superminicontainer');
                                     var col1 = selectmed.innerHTML;
 
