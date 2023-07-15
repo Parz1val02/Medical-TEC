@@ -33,8 +33,12 @@ public interface InformeRepository extends JpaRepository<Informe,Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO `telesystem_2`.`informe` (`idcuestionario`, `dnipaciente`, `respuestas`,`respondido`,`dnidoctor`) " +
-            "VALUES (?1, ?2, ?3,?4,?5);",nativeQuery = true)
-    void rellenarInforme(int cuestionario, String paciente,String respuestas,int respondido,String doctor);
+    @Query(value = "INSERT INTO `telesystem_2`.`informe` (`usuario_dni`, `cita_idcita`,`diagnostico`,`bitacora`,`activo`,`tratamiento`,`camposllenados`," +
+            "`informe_nuevo_idinforme`) " +
+            "VALUES (?1,?2,?3,?4,1,?5,?6,?7);",nativeQuery = true)
+    void rellenarInforme(String dni, int cita,String diagnostico,String bitacora, String tratamiento, String camposllenados, int informenuevo);
+
+    @Query(value = "select idinforme from telesystem_2.informe where cita_idcita =?1",nativeQuery = true)
+    Integer idinformecreado (Integer cita);
 
 }
