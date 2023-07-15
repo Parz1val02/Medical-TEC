@@ -205,7 +205,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8080/paciente/guardarUbicacion', // Reemplaza con la URL de tu endpoint en el servidor Java
+                        url: 'http://localhost:8080/guardarUbicacion', // Reemplaza con la URL de tu endpoint en el servidor Java
                         data: JSON.stringify(data),
                         contentType: 'application/json',
                         success: function(response) {
@@ -216,7 +216,7 @@
                         }
                     });
                 }
-            }, 1000); // Intervalo de actualización en milisegundos
+            }, 3000); // Intervalo de actualización en milisegundos
         }
         set_map()
 

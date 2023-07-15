@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -71,11 +72,11 @@ public class PacienteController {
     final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
     final ExamenMedicoRepository examenMedicoRepository;
     final HorasDoctorRepository horasDoctorRepository;
-
+    final DeliverymedicamentoRepository deliverymedicamentoRepository;
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository){
+                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository, DeliverymedicamentoRepository deliverymedicamentoRepository){
         this.historialMedicoRepository = historialMedicoRepository;
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
@@ -96,6 +97,7 @@ public class PacienteController {
         this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
         this.examenMedicoRepository = examenMedicoRepository;
         this.horasDoctorRepository = horasDoctorRepository;
+        this.deliverymedicamentoRepository = deliverymedicamentoRepository;
     }
 
     @RequestMapping(value = "/principal")
@@ -146,8 +148,6 @@ public class PacienteController {
 
         return "redirect:/paciente/principal";
     }
-
-
 
     @RequestMapping(value = "/tracking")
     public String tracking(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
@@ -212,7 +212,6 @@ public class PacienteController {
         }catch (IOException e) {
             e.printStackTrace();
         }
-
 
         assert sede != null;
         double origen_latitud = sede.getLatitud();

@@ -1,15 +1,14 @@
 package com.example.medicaltec.controller;
 
+import com.example.medicaltec.Entity.Deliverymedicamento;
 import com.example.medicaltec.Entity.Usuario;
 import com.example.medicaltec.Entity.UxUi;
+import com.example.medicaltec.repository.DeliverymedicamentoRepository;
 import com.example.medicaltec.repository.UsuarioRepository;
 import com.example.medicaltec.repository.UxUiRepository;
-import com.google.cloud.storage.*;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,19 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -39,10 +28,12 @@ public class CambiosGeneralesController {
     @Autowired
     final UsuarioRepository usuarioRepository;
     final UxUiRepository uxUiRepository;
+    final DeliverymedicamentoRepository deliverymedicamentoRepository;
 
-    public CambiosGeneralesController(UsuarioRepository usuarioRepository, UxUiRepository uxUiRepository) {
+    public CambiosGeneralesController(UsuarioRepository usuarioRepository, UxUiRepository uxUiRepository, DeliverymedicamentoRepository deliverymedicamentoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.uxUiRepository = uxUiRepository;
+        this.deliverymedicamentoRepository = deliverymedicamentoRepository;
     }
 
     @GetMapping("/logo")
@@ -101,5 +92,26 @@ public class CambiosGeneralesController {
         colorMap.put("color2", uxUi.getColorBack());
 
         return ResponseEntity.ok(colorMap);
+    }
+
+    @PostMapping(value = "/guardarUbicacion")
+    public ResponseEntity<String> guardarUbicacion(@RequestParam Float latitud, @RequestParam Float longitud) {
+
+        //Busca el objeto Deliverymedicamento por su ID
+        Optional<Deliverymedicamento> optionalDelivery = deliverymedicamentoRepository.findById(1);
+
+        if (optionalDelivery.isPresent()) {
+            // Actualiza los campos latitudActual y longitudActual
+            Deliverymedicamento delivery = optionalDelivery.get();
+            delivery.setLatitudActual(latitud);
+            delivery.setLongitudActual(longitud);
+
+            // Guarda los cambios en la base de datos
+            deliverymedicamentoRepository.save(delivery);
+
+            return ResponseEntity.ok("Ubicación actualizada correctamente");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
