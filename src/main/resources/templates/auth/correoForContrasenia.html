@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cambiar Contraseña')}">
+</head>
 
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
@@ -16,22 +18,21 @@
     <img class="card-img-top img-fluid" th:src="@{../img/principalpage/clinica_difuminada.png}" style="height: 100%; width: 100%; object-fit: cover;">
     <div style="transform: translate(-50%, -50%);color: #4d5969;top: 50%;left: 50%;position: absolute;">
         <div style="display: flex; justify-content: center; width: 100%;">
-            <div class="card" style="width: 50%; border: 1px solid #d8e2ef;">
-                <div class="card-body" style="padding: 25px;">
-                    <div class="alert alert-success" role="alert" th:if="${minutos != null}" th:text="${minutos}">
-
-                    </div>
-                    <label style="margin: 0;"> Para poder continuar con el cambio de su contraseña <br>
-                        Debe cambiar ingresar su correo <br>
+            <!-- Cambiar el ancho del card al 70% -->
+            <div class="card" style="width: 70%; border: 1px solid #d8e2ef;">
+                <div class="card-body" style="padding: 25px; text-align: center;">
+                    <div class="alert alert-success" role="alert" th:if="${minutos != null}" th:text="${minutos}"></div>
+                    <label style="margin: 0;">Para poder continuar con el cambio de su contraseña<br>
+                        Debe cambiar ingresar su correo<br>
                         A este correo le llegará un código para validar su identificación
                     </label>
 
-
-                    <form method="POST" th:action="@{'/correoValido'}" >
-                        <label >Contraseña nueva:</label>
-                        <input type="text" name = "correo" class="form-control" th:classappend="${correoError!=null || correoExisteMsg!=null?'is-invalid':''}">
-                        <div class ="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
-                        <div class ="invalid-feedback" th:if="${correoExisteMsg!=null && correoError==null}" th:text="${correoExisteMsg}"></div>
+                    <form method="POST" th:action="@{'/correoValido'}">
+                        <label>Contraseña nueva:</label>
+                        <input type="text" name="correo" class="form-control" th:classappend="${correoError!=null || correoExisteMsg!=null?'is-invalid':''}">
+                        <div class="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
+                        <div class="invalid-feedback" th:if="${correoExisteMsg!=null && correoError==null}" th:text="${correoExisteMsg}"></div>
+                        <br>
                         <button type="submit" class="btn btn-primary">Confirmar</button>
                         <a th:href="@{'/loginA'}" class="btn btn-danger">Cancelar</a>
                     </form>
@@ -42,4 +43,5 @@
     </div>
 </div>
 </body>
+
 </html>
