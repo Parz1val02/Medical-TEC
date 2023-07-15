@@ -480,7 +480,7 @@
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://34.28.24.16:8081/api/citasDoctor', // Replace with your API endpoint URL
+            url: 'http://localhost:8081/api/citasDoctor', // Replace with your API endpoint URL
             type: 'GET',
             data: {
                 dni: [[${session.usuario.id}]] // Specify the GET parameter
@@ -503,7 +503,9 @@
                         hora: eventData.hora,
                         sede: eventData.sede,
                         especialidad: eventData.especialidad,
-                        formaPago: eventData.formaPago
+                        formaPago: eventData.formaPago,
+                        pago: eventData.pago,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -534,13 +536,10 @@
         var fechaFormateada = date.format('DD/MM/YYYY');
 
         var content = '<strong>' + event.title + '</strong>';
-        content += '<br>' + event.extendedProps.especialidad;
         content += '<br>Paciente: ' + event.extendedProps.paciente;
         content += '<br>Modalidad: ' + event.extendedProps.modalidad;
         content += '<br>Fecha: ' + fechaFormateada;
         content += '<br>Hora: ' + formattedTime;
-        content += '<br>Sede: ' + event.extendedProps.sede;
-
         return content;
     }
 </script>

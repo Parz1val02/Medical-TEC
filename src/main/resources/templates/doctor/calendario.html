@@ -48,6 +48,73 @@
 <!--    End of Main Content-->
 <!-- ===============================================-->
 
+<div class="modal fade" id="modalCitasCalendario" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="especialidadVirtual">Especialidad:</label>
+                                <input type="text" name="especialidadId" id="especialidadVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaVirtual">Fecha:</label>
+                                <input type="text" name="fecha" id="fechaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipocitaVirtual">Tipo de cita: </label>
+                                <input type="text" name="tipocitaId" id="tipocitaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="doctorDniVirtual">Doctor:</label>
+                                <input type="text" name="doctorDni" id="doctorDniVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="horaVirtual">Hora:</label>
+                                <input type="text" name="hora" id="horaVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sedeVirtual">Sede:</label>
+                                <input type="text" name="sedeId" id="sedeVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="estadoVirtual">Estado de la cita:</label>
+                                <input type="text" name="estado" id="estadoVirtual" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="height: 1px; background-color: #333; border: none">
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <a id="enlace" href="" type="button" class="btn btn-success" target="_blank">Ingresar Cita</a>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <button type="button" class="btn btn-primary" id="pagarVirtual">Pagar Cita</button>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <button id="cancelarVirtual" type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelarCita">Cancelar Cita</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -95,19 +162,10 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
-            eventDidMount: function(info) {
-                tippy(info.el, {
-                    trigger: 'mouseenter',
-                    content: generateTooltipContent(info.event), // call a function to generate the html content
-                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
-                    animation: 'fade',
-                    allowHTML: 'true'
-                })
-            }
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://34.28.24.16:8081/api/citasDoctor', // Replace with your API endpoint URL
+            url: 'http://localhost:8081/api/citasDoctor', // Replace with your API endpoint URL
             type: 'GET',
             data: {
                 dni: [[${session.usuario.id}]] // Specify the GET parameter
@@ -130,7 +188,9 @@
                         hora: eventData.hora,
                         sede: eventData.sede,
                         especialidad: eventData.especialidad,
-                        formaPago: eventData.formaPago
+                        formaPago: eventData.formaPago,
+                        pago: eventData.pago,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -145,31 +205,6 @@
         });
         calendar.render();
     });
-    function generateTooltipContent(event) {
-        // Generate the HTML content for the tooltip
-        // Assuming you have a time string like '14:30'
-        var timeString = event.extendedProps.hora;
-
-        // Parse the time string using Moment.js
-        var time = moment(timeString, 'HH:mm');
-
-        // Format the time as 'h:mm A' (e.g., '2:30 PM')
-        var formattedTime = time.format('h:mm A');
-
-        var dateString = event.start;
-        var date = moment(dateString, 'YYYY-MM-DD');
-        var fechaFormateada = date.format('DD/MM/YYYY');
-
-        var content = '<strong>' + event.title + '</strong>';
-        content += '<br>' + event.extendedProps.especialidad;
-        content += '<br>Paciente: ' + event.extendedProps.paciente;
-        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
-        content += '<br>Fecha: ' + fechaFormateada;
-        content += '<br>Hora: ' + formattedTime;
-        content += '<br>Sede: ' + event.extendedProps.sede;
-
-        return content;
-    }
 </script>
 </body>
 </html>
