@@ -4,7 +4,13 @@
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
 </head>
 
-
+<style>
+    .disabledButton{
+        background: grey;
+        border-color: grey;
+        pointer-events: none;
+    }
+</style>
 <body class="">
 
 <!-- ===============================================-->
@@ -580,26 +586,26 @@
                     let modalA = $('#modalVirtual');
                     modalA.modal('show');
                     modalA.on('shown.bs.modal', function() {
+                        let enlace = $("#enlace");
+                        enlace.addClass("disabledButton");
+                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                        let formattedTime = time.format('h:mm A');
+                        let date = moment(info.event.start, 'YYYY-MM-DD');
+                        let formattedDate = date.format('DD-MM-YYYY');
                         let especialidad = $("#especialidadVirtual");
                         especialidad.attr('placeholder', info.event.title);
                         let doctorcito = $("#doctorDniVirtual");
                         doctorcito.attr('placeholder', info.event.extendedProps.doctor);
                         let fecha = $("#fechaVirtual");
-                        let hora = $("#horaVirtual");
+                        let horaGa = $("#horaVirtual");
                         let tipocita = $("#tipocitaVirtual");
                         let sede = $("#sedeVirtual");
                         let estado = $("#estadoVirtual");
-                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
-                        let formattedTime = time.format('h:mm A');
-                        let date = moment(info.event.start, 'YYYY-MM-DD');
-                        let formattedDate = date.format('DD-MM-YYYY');
                         estado.attr('placeholder', info.event.extendedProps.estado);
-                        hora.attr('placeholder', formattedTime);
+                        horaGa.attr('placeholder', formattedTime);
                         fecha.attr('placeholder', formattedDate);
                         tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
                         sede.attr('placeholder', info.event.extendedProps.sede);
-                        let enlace = $("#enlace");
-                        enlace.attr('href', info.event.extendedProps.extra);
                         console.log(info.event.extendedProps.pagada);
                         if(info.event.extendedProps.pagada==='true'){
                             $("#pagarVirtual").hide();
@@ -608,7 +614,32 @@
                             $("#pagarVirtual").show();
                             $("#cancelarVirtual").show();
                         }
+                        // Obtener la fecha y hora actual
+                        var fechaActual = new Date();
+                        // Obtenemos las partes de la fecha
+                        var fechaPartes = date.format('DD-MM-YYYY').split('-');
+                        var dia = fechaPartes[0];
+                        var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                        var anio = fechaPartes[2];
 
+                        // Obtenemos las partes de la hora
+                        var horaPartes = time.format('HH:mm').split(':');
+                        var hora = horaPartes[0];
+                        var minutos = horaPartes[1];
+
+                        // Creamos el objeto de fecha combinando las partes correspondientes
+                        var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+                        var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                        var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+                        console.log(fechaObjetivo);
+                        console.log(fechaInicio);
+                        console.log(fechaFin);
+                        console.log(fechaActual);
+                        //var tiempo=fechaInicio-fechaActual;
+                        if (fechaActual >= fechaInicio && fechaActual <= fechaFin) {
+                            enlace.removeClass("disabledButton");
+                            enlace.attr('href', info.event.extendedProps.extra);
+                        }
                         $('#cancelarVirtual').on('click', function (){
                             modalA.modal('hide');
                             let modalb = $('#cancelarCita');
@@ -679,7 +710,7 @@
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://34.28.24.16:8081/api/citas', // Replace with your API endpoint URL
+            url: 'http://localhost:8081/api/citas', // Replace with your API endpoint URL
             type: 'GET',
             data: {
                 dni: [[${session.usuario.id}]] // Specify the GET parameter
@@ -744,11 +775,6 @@
 
         return content;
     }*/
-</script>
-<script>
-
-
-
 </script>
 </body>
 </html>
