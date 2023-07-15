@@ -170,6 +170,7 @@ public class PacienteController {
         try {
             // Codificar la dirección para incluirla en la URL de la solicitud
             String direccionCodificada = URLEncoder.encode(direccion, "UTF-8");
+            System.out.println(direccionCodificada);
 
             // Construir la URL de la solicitud a la API Geocoding de Google Maps
             String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + direccionCodificada + "&key="+apiKey;
@@ -217,6 +218,7 @@ public class PacienteController {
         double origen_latitud = sede.getLatitud();
 
         double origen_longitud = sede.getLongitud();
+        System.out.println("Latitud es:"+origen_latitud+" y longitud es"+origen_longitud);
 
         String origen = origen_latitud+","+origen_longitud;
         String destino = latitud+","+longitud;
