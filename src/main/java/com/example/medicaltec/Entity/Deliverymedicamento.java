@@ -15,10 +15,10 @@ public class Deliverymedicamento {
     private Integer id;
 
     @Column(name = "latitudactual", nullable = false)
-    private Float latitudinicial;
+    private Float latitudActual;
 
     @Column(name = "longitudactual", nullable = false)
-    private Float longitudinicial;
+    private Float longitudActual;
 
     @Column(name = "latitudfinal", nullable = false)
     private Float latitudfinal;
