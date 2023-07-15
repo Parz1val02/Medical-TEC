@@ -1,10 +1,8 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dto.*;
-import com.example.medicaltec.funciones.Fechas;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.more.RutaTiempo;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
@@ -14,9 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,26 +19,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.springframework.http.HttpHeaders;
 
-import javax.print.Doc;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Scanner;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @Controller
 @RequestMapping("/paciente")
@@ -78,6 +71,7 @@ public class PacienteController {
     final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
     final ExamenMedicoRepository examenMedicoRepository;
     final HorasDoctorRepository horasDoctorRepository;
+
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
@@ -168,9 +162,107 @@ public class PacienteController {
         Sede sede = sedeRepository.findById(SPA.getSedesIdsedes().getId()).orElse(null);
         model.addAttribute("sede",sede);
 
-        RutaTiempo rutaTiempo = ruta();
-        String rutaOptima = rutaTiempo.getRutaOptima();
-        String tiempoDemora = rutaTiempo.getTiempoDemora();
+        String apiKey = "AIzaSyC2fZLkVLhfgmyjt4sC_c4E61ibz_fa7yQ";
+        String direccion = SPA.getDireccion();
+        double latitud= 0;
+        double longitud= 0;
+
+        try {
+            // Codificar la dirección para incluirla en la URL de la solicitud
+            String direccionCodificada = URLEncoder.encode(direccion, "UTF-8");
+
+            // Construir la URL de la solicitud a la API Geocoding de Google Maps
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + direccionCodificada + "&key="+apiKey;
+
+            // Realizar la solicitud GET a la API
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+
+            // Leer la respuesta de la API
+            Scanner scanner = new Scanner(connection.getInputStream());
+            StringBuilder response = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                response.append(scanner.nextLine());
+            }
+            scanner.close();
+
+            // Procesar los datos de respuesta en formato JSON
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            // Obtener el arreglo de resultados
+            JSONArray resultsArray = jsonResponse.getJSONArray("results");
+
+            // Verificar si se encontraron resultados
+            if (resultsArray.length() > 0) {
+                // Obtener el primer resultado
+                JSONObject firstResult = resultsArray.getJSONObject(0);
+
+                // Obtener la ubicación del primer resultado
+                JSONObject location = firstResult.getJSONObject("geometry").getJSONObject("location");
+
+                // Obtener la latitud y la longitud
+                latitud = location.getDouble("lat");
+                longitud = location.getDouble("lng");
+
+                // Mostrar los resultados
+                System.out.println("Dirección: " + direccion);
+                System.out.println("Latitud: " + latitud);
+                System.out.println("Longitud: " + longitud);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        assert sede != null;
+        double origen_latitud = sede.getLatitud();
+
+        double origen_longitud = sede.getLongitud();
+
+        String origen = origen_latitud+","+origen_longitud;
+        String destino = latitud+","+longitud;
+        String rutaOptima = "";
+        String tiempoDemora = "";
+
+        try {
+            // Construye la URL de la solicitud
+            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origen +
+                    "&destination=" + destino + "&key=" + apiKey;
+
+            // Envía la solicitud y obtén la respuesta
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Analiza la respuesta
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode data = objectMapper.readTree(response.toString());
+
+            if (data.get("status").asText().equals("OK")) {
+                JsonNode routes = data.get("routes");
+                JsonNode route = routes.get(0);
+                rutaOptima = route.get("overview_polyline").get("points").asText();
+                tiempoDemora = route.get("legs").get(0).get("duration").get("text").asText();
+
+                System.out.println("Ruta óptima: " + rutaOptima);
+                System.out.println("Tiempo de demora: " + tiempoDemora);
+            } else {
+                System.out.println("No se pudo encontrar una ruta óptima.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("longitud_actual");
         model.addAttribute("ruta",rutaOptima);
         model.addAttribute("tiempo",tiempoDemora);
 
@@ -662,52 +754,5 @@ public class PacienteController {
             return null;
         }
     }*/
-    public RutaTiempo ruta() {
-        String origen = "-12.05314868427954,-77.03782872298778";
-        String destino = "-12.143227773094788,-76.99973085549144";
-        String apiKey = "AIzaSyC2fZLkVLhfgmyjt4sC_c4E61ibz_fa7yQ";
-        String rutaOptima = "";
-        String tiempoDemora = "";
-
-        try {
-            // Construye la URL de la solicitud
-            String url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origen +
-                    "&destination=" + destino + "&key=" + apiKey;
-
-            // Envía la solicitud y obtén la respuesta
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            // Analiza la respuesta
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode data = objectMapper.readTree(response.toString());
-
-            if (data.get("status").asText().equals("OK")) {
-                JsonNode routes = data.get("routes");
-                JsonNode route = routes.get(0);
-                rutaOptima = route.get("overview_polyline").get("points").asText();
-                tiempoDemora = route.get("legs").get(0).get("duration").get("text").asText();
-
-                System.out.println("Ruta óptima: " + rutaOptima);
-                System.out.println("Tiempo de demora: " + tiempoDemora);
-            } else {
-                System.out.println("No se pudo encontrar una ruta óptima.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return new RutaTiempo(rutaOptima, tiempoDemora);
-    }
 
 }
