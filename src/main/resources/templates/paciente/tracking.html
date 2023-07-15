@@ -88,11 +88,11 @@
             map.setView([latitud, longitud], 30);
             if (marker) {
                 marker.setLatLng([latitud, longitud])
-                    .bindPopup(nombre)
+                    .bindPopup("Delivery")
                     .openPopup();
             } else {
                 marker = L.marker([latitud, longitud]).addTo(map)
-                    .bindPopup(nombre)
+                    .bindPopup("Delivery")
                     .openPopup();
             }
 
@@ -145,7 +145,7 @@
             // Crea una polilínea con las coordenadas decodificadas y agrega al mapa
             var polyline = L.polyline(coordenadas, {color: 'red'}).addTo(map);
 
-            var tiempoTotal = tiempo * 60; // Convierte el tiempo a milisegundos
+            var tiempoTotal = tiempo * 60; // Convierte el tiempo a segundos
 
             console.log("time: " + tiempoTotal)
 
@@ -190,8 +190,33 @@
                     distanciaRecorrida += velocidad;
                     tiempoTranscurrido += 1000; // Intervalo de actualización en milisegundos
                     console.log(tiempoTranscurrido)
+
+                    // Obtén la latitud y longitud actuales
+                    var latitud = punto.latLng.lat;
+                    var longitud = punto.latLng.lng;
+
+                    // Crea un objeto de datos para enviar al servidor
+                    var data = {
+                        latitud: latitud,
+                        longitud: longitud
+                    };
+                    console.log('Latitud actual: ' + latitud);
+                    console.log('Longitud actual: ' + latitud);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8080/guardarUbicacion', // Reemplaza con la URL de tu endpoint en el servidor Java
+                        data: JSON.stringify(data),
+                        contentType: 'application/json',
+                        success: function(response) {
+                            console.log(response); // Deberías recibir la respuesta del servidor en la consola
+                        },
+                        error: function(error) {
+                            console.error('Error:', error);
+                        }
+                    });
                 }
-            }, 1000); // Intervalo de actualización en milisegundos
+            }, 3000); // Intervalo de actualización en milisegundos
         }
         set_map()
 
@@ -199,266 +224,5 @@
     });
 </script>
 <!--para descarga de consentimientos en pdf-->
-<script>
-
-  var enlaceDescarga = document.getElementById("downloadPDF");
-  var consentimiento =`\t\t\tConsentimiento Informado\t\t\t\n
-
-Yo,  declaro que he sido informado(a) y comprendo los siguientes puntos:
-
-1. He sido informado(a) sobre los objetivos, procedimientos y posibles riesgos.
-
-2. He tenido la oportunidad de hacer preguntas y se me han proporcionado respuestas satisfactorias.
-
-3. Entiendo que se mantendrá la confidencialidad de mi información personal y que solo se utilizará con fines de investigación y atención médica.
-
-4. He recibido una copia de este consentimiento informado y se me ha explicado su contenido de manera clara y comprensible.`;
-
-
-  var consentimiento_teleconsulta = "CONSENTIMIENTO INFORMADO TELECONSULTA MEDICAL TEC\n" +
-          "\n" +
-          "\n" +
-          "\n" +
-          "Yo, entiendo y acepto que estoy participando en una teleconsulta \n" +
-          "a través de un medio de comunicación electrónico, como videoconferencia \n" +
-          "o llamada telefónica, en lugar de una consulta médica tradicional en persona. " +
-          "A continuación, se detallan los aspectos importantes de esta teleconsulta:\n" +
-          "\n" +
-          "Objetivo de la Teleconsulta:\n" +
-          "La teleconsulta tiene como objetivo brindar servicios médicos a distancia, permitiéndome \n" +
-          "recibir evaluación, diagnóstico, tratamiento, recomendaciones y/o asesoramiento médico \n" +
-          "sin la necesidad de estar físicamente presente en la consulta médica.\n" +
-          "\n" +
-          "Limitaciones de la Teleconsulta:\n" +
-          "Reconozco que existen limitaciones en la teleconsulta en comparación con una consulta en persona. \n" +
-          "Estas limitaciones pueden incluir, pero no se limitan a, la falta de examen físico completo, \n" +
-          "restricciones en la evaluación visual, limitaciones técnicas o de calidad en la comunicación, \n" +
-          "así como la posibilidad de interrupciones o fallas técnicas.\n" +
-          "\n" +
-          "Confidencialidad:\n" +
-          "Comprendo que se tomarán medidas para garantizar la confidencialidad de mi información médica \n" +
-          "durante la teleconsulta. Se utilizarán tecnologías y prácticas de seguridad adecuadas para proteger \n" +
-          "la privacidad y confidencialidad de mi información personal y médica.\n" +
-          "\n" +
-          "Responsabilidades y Riesgos:\n" +
-          "Entiendo que es mi responsabilidad proporcionar información precisa y completa durante la teleconsulta. \n" +
-          "Además, reconozco que existen riesgos inherentes a la comunicación electrónica, como la pérdida de datos, \n" +
-          "el acceso no autorizado o la intercepción de la información durante la transmisión. \n" +
-          "Aunque se tomarán precauciones razonables para proteger mi información, no se puede garantizar una seguridad \n" +
-          "completa.\n" +
-          "\n" +
-          "Alternativas y Derivaciones:\n" +
-          "Me han informado sobre las alternativas disponibles, incluyendo la opción de una consulta médica en persona. \n" +
-          "Además, comprendo que durante la teleconsulta, el médico puede recomendar una consulta en persona si lo \n" +
-          "considera necesario para un diagnóstico más preciso o un tratamiento adecuado.\n" +
-          "\n" +
-          "Consentimiento Voluntario:\n" +
-          "Certifico que he leído y comprendido la información proporcionada anteriormente y que he tenido la oportunidad \n" +
-          "de hacer preguntas y aclarar cualquier duda antes de la teleconsulta. Acepto participar en esta teleconsulta \n" +
-          "de manera voluntaria y doy mi consentimiento para recibir servicios médicos a través de medios electrónicos.\n" +
-          "\n" ;
-
-
-  enlaceDescarga.addEventListener('click', function () {
-
-    generaPDF(consentimiento,'consentimiento_informado.pdf' );
-    //descargarPDF(pdfData, 'consentimiento_informado.pdf');
-
-    generaPDF(consentimiento_teleconsulta, 'consentimiento_teleconsulta.pdf');
-    //descargarPDF(pdfData, 'consentimiento_teleconsulta.pdf');
-  });
-
-
-  // Crea un nuevo documento PDF
-
-
-  // Genera los datos del PDF en formato Data URL
-  //var dataURL = doc.output("dataurlstring");
-
-  // Establece el contenido del atributo href con los datos del PDF
-  //enlaceDescarga.href = dataURL;
-
-  // Establece el nombre del archivo descargado
-  //enlaceDescarga.download = "consentimiento.pdf";
-  //} );
-
-
-  function generaPDF(contenido, nombreArchivo) {
-    return new Promise(function(resolve, reject) {
-      //aqui va el contenido de la generacion del pdf
-
-      var doc = new jspdf.jsPDF();
-
-      // Configuración del tamaño de página
-      var textWidth = 170; // Ancho del área de texto en unidades de puntos
-      var textHeight = 250; // Altura del área de texto en unidades de puntos
-
-      // Establecer el tamaño de página personalizado
-
-      // Margen superior e inferior
-      var marginVertical = 20;
-      var marginHorizontal = 20;
-
-      //var fontSize = 11;
-      var tipoLetra = "Helvetica";
-
-      // Tamaño del texto
-      var fontSize = 10;
-      var lineHeight = fontSize * 1.2;
-
-      // Cargar la imagen desde una URL
-      var imageUrl = "static/img/logo.png";
-      var imageWidth = 100; // Ancho de la imagen en unidades de puntos
-      var imageHeight = 60; // Altura de la imagen en unidades de puntos
-
-      // Agregar la imagen en la página actual
-      //doc.addImage(imageUrl, "PNG", 10, 10, imageWidth, imageHeight);
-
-      doc.setFont(tipoLetra);
-      doc.setFontSize(fontSize);
-
-      //doc.setFontStyle(tipoLetra);
-
-      // Dividir el texto en líneas
-      var lines = doc.splitTextToSize(contenido, textWidth );
-
-      // Calcular el número de páginas necesarias
-      var totalPages = Math.ceil(lines.length / (textHeight / lineHeight));
-      console.log(totalPages);
-
-      // Iterar sobre cada página
-      for (var i = 0; i < totalPages; i++) {
-        // Agregar una nueva página
-        if (i > 0) {
-          doc.addPage();
-        }
-
-        // Imprimir las líneas correspondientes a la página actual
-        var startIndex = i * (textHeight / lineHeight);
-        var endIndex = (i + 1) * (textHeight / lineHeight);
-        var pageLines = lines.slice(startIndex, endIndex);
-
-        // Calcular la posición de inicio del área de texto en la página actual
-        var startX = marginHorizontal;
-        var startY = marginVertical;
-
-        // Imprimir cada línea
-        pageLines.forEach(function (line) {
-          doc.text(line, startX, startY);
-          startY += lineHeight;
-        });
-
-        startY = marginVertical;
-      }
-
-      doc.save(nombreArchivo);
-
-      // Obtener los datos del PDF en formato blob
-      /*var pdfData = doc.output('blob');
-      console.log(pdfData);
-
-      // Crear un enlace de descarga temporal
-      var link = enlaceDescarga;
-      link.href = URL.createObjectURL(pdfData);
-      link.download = nombreArchivo;
-
-      // Disparar el evento de clic en el enlace
-      link.click();
-
-      // Liberar la URL del objeto PDF
-      URL.revokeObjectURL(link.href);*/
-
-    });
-
-  }
-
-
-</script>
-
-<script>
-  //para el enlace de la reunion que se le enviara por correo al cliente
-
-  //import jwt from 'jsonwebtoken';
-  //const jwt = require('jsonwebtoken');
-  /*function createScheduledMeeting(date, duration) {
-    const domain = '8x8.vc';
-    const options = {
-      roomName: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly',
-      width: 800,
-      height: 600,
-      parentNode: document.querySelector('#jitsi-container'),
-      configOverwrite: {
-        enableFeaturesBasedOnToken: true,
-      },
-      onload: function () {
-        // Set the scheduled start time and duration
-        const scheduledStart = new Date(date);
-        const scheduledEnd = new Date(date);
-        scheduledEnd.setMinutes(scheduledEnd.getMinutes() + duration);
-
-        // Generate the JWT token with scheduled meeting parameters
-        const token = generateScheduledMeetingToken(scheduledStart, scheduledEnd);
-        console.log(token);
-
-        // Set the JWT token as the JWT parameter for authentication
-        api.executeCommand('authenticate', { jwt: token });
-      },
-    };
-
-    const api = new JitsiMeetExternalAPI(domain, options);
-  }
-
-  function generateScheduledMeetingToken(start, end) {
-    // Implement your logic here to generate a JWT token with scheduled meeting parameters
-    // You'll need to use a JWT library or Jitsi Meet token generator to create the token
-    // Ensure the token includes the scheduled start time and duration
-    // Example: return jwtGenerator.generateToken({ start: start.getTime(), end: end.getTime() });
-
-    const secret = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/aae24d'; // Replace with your secret key used for signing the token
-    let duration = end - start;
-    const scheduledStart = Math.floor(start.getTime() / 1000); // Convert to Unix timestamp
-    const scheduledEnd = Math.floor((start.getTime() + duration * 60 * 1000) / 1000); // Convert to Unix timestamp
-
-    const payload = {
-      context: {
-        user: {
-          //avatar: 'your-avatar-url', // Replace with the URL of the user's avatar
-          email: 'luis.ramost@pucp.edu.pe', // Replace with the user's email address
-          name: 'luis.ramost', // Replace with the user's name
-        },
-      },
-      aud: 'jitsi', // Replace with your API domain
-      iss: 'MedicalTec', // Replace with the issuer of the token
-      room: 'scheduled-room-name', // Replace with the scheduled room name
-      sub: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524', // Replace with the subject of the token
-      exp: scheduledEnd, // Set the token expiration time
-      nbf: scheduledStart, // Set the token not-before time
-    };
-
-    const token = jwt.sign(payload, secret);
-    console.log(token);
-    return token;
-
-
-  }*/
-  //console.log(token)
-  //para obtener el enlace de una reunion
-  function generateScheduledMeetingLink(apiDomain, roomName) {
-    const link = `https://${apiDomain}/${roomName}`;
-
-    return link;
-  }
-
-  /*document.addEventListener('DOMContentLoaded', () => {
-    // Trigger scheduled meeting creation on page load
-    createScheduledMeeting('2023-06-30T10:00:00', 60); /// fecha, tiempo en minutos
-  });*/
-
-
-  const apiDomain = '8x8.vc';
-  const roomName = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal';
-  let link = generateScheduledMeetingLink(apiDomain, roomName);
-  console.log(link);
-</script>
 </body>
 </html>

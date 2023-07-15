@@ -13,7 +13,7 @@
 <main class="main" id="top">
 
 
-  <div class="container" data-layout="container">
+  <div style="padding: 0 50px 50px 50px;" data-layout="container">
     <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
     <div class="content" >
       <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -33,6 +33,8 @@
             </div>
           </div>
           <br>
+          <div th:if="${respondido != null}" th:text="${respondido}" class="alert alert-success" role="alert"></div>
+          <div th:if="${error != null}" th:text="${error}" class="alert alert-danger" role="alert"></div>
           <table class="table table-striped" id="userList">
             <thead style="background: rgba(43, 45, 80, 0.08);">
             <tr>

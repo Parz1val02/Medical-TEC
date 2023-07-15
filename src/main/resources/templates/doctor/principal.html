@@ -222,9 +222,9 @@
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
                             <td class="align-middle" style="text-align: center; vertical-align: middle !important;">
-                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">
+                                <a th:href="@{'/doctor/elegirPlantilla?idCita='+${cita.id}+'&idUsuario='+${cita.paciente.id}}">
                                     <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
-                                border-radius: 15px; border-color: white">Historial Clínico</button>
+                                border-radius: 15px; border-color: white">Iniciar cita</button>
                                 </a>
                             </td>
                         </tr>
@@ -316,8 +316,8 @@
 
                     // Creamos el objeto de fecha combinando las partes correspondientes
                     var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
-                    var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
-                    var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+                    var fechaInicio = new Date(fechaObjetivo.getTime() - 45 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin = new Date(fechaObjetivo.getTime() + 45 * 60000); // Sumar 30 minutos en milisegundos
 
                     //var tiempo=fechaInicio-fechaActual;
 
