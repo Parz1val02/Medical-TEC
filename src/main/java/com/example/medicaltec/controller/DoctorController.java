@@ -316,8 +316,7 @@ public class DoctorController {
     }
 
     @PostMapping("/rellenarInforme")
-    public String rellenarInforme(@RequestParam("bitacora") String bit,
-                                  @RequestParam("diagnostico") String diag,
+    public String rellenarInforme(@RequestParam("diagnostico") String diag,
                                   @RequestParam("tratamiento") String trat,
                                   @RequestParam("listamedicamentos") String med,
                                   @RequestParam("listacantidades") String cant,
@@ -328,10 +327,20 @@ public class DoctorController {
         int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
         String dniusuario;
         Optional<Cita> optionalCita = citaRepository.findById(iddelacita);
+        int a = 0;
         if(optionalCita.isPresent()){
             Cita cita = optionalCita.get();
             dniusuario = cita.getPaciente().getId();
+            String diagnostico  = diag;
+            String tratamiento = trat;
+            String medicamente  = med;
+            String cantidad = cant;
+            String observaciones = obser;
+            String comentario  =comen;
             String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
+            String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
+            String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
+            String [] listacantidades = cantidad.split(">%%%%%<%%%%>%%%%%<");
             String salida ="";
             String separador ="#!%&%!#";
             int i = 0;
@@ -345,19 +354,50 @@ public class DoctorController {
                 }
                 i++;
             }
-            System.out.println(salida);
-            String camposllenados = salida;
-            String diagnostico  = diag;
-            String tratamiento = trat;
-            String bitacora = bit;
-            String medicamente  = med;
-            String cantidad = cant;
-            attr.addFlashAttribute("respondido","Informe rellenado con éxito");
-            String comentario  ="";
-            informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,bitacora,tratamiento,camposllenados,iddelinformenuevo);
-            Integer informe1 = informeRepository.idinformecreado(iddelacita);
-            recetaRepository.crearReceta(comentario,informe1);
-            Integer idrecetacreada = recetaRepository.idrecetacreada(informe1);
+            for (int k =0; k<listamedicamentos.length;k++){
+                String indicemedi = listamedicamentos[k];
+                String indiceobser = listaobservaciones[k];
+                String indicecant = listacantidades[k];
+                if(esNumeroEntero(indicemedi)){
+                    if(!esNumeroEntero(indicecant)){
+                        attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
+                        a++;
+                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                    }else {
+                        a = 0;
+                    }
+                }else {
+                    if(!esNumeroEntero(indicecant)){
+                        attr.addFlashAttribute("error","El medicamento seleccionado no es válido. La cantidad ingresada debe ser un número entero");
+                        a++;
+                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                    }
+                    attr.addFlashAttribute("error","El medicamento seleccionado no es válido.");
+                    a++;
+                    return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                }
+            }
+            if(a==0){
+                System.out.println(salida);
+                String camposllenados = salida;
+                attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+                System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);
+                informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,tratamiento,camposllenados,iddelinformenuevo);
+                Integer informe1 = informeRepository.idinformecreado(iddelacita);
+                recetaRepository.crearReceta(comentario,informe1);
+                Integer idrecetacreada = recetaRepository.idrecetacreada(informe1);
+                for (int k =0; k<listamedicamentos.length;k++){
+                    String indicemedi = listamedicamentos[k];
+                    String indiceobser = listaobservaciones[k];
+                    String indicecant = listacantidades[k];
+                    Integer intindicemedi = Integer.parseInt(indicemedi);
+                    Integer intindicecant = Integer.parseInt(indicecant);
+                    recetaHasMedicamentoRepository.llenarRecMed(idrecetacreada,intindicemedi,intindicecant,indiceobser);
+                    citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
+                    httpSession.removeAttribute("iddelinforme");
+                    httpSession.removeAttribute("idcitaparainforme");
+                }
+            }
             return "redirect:/doctor/citas";
         }else {
             attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
