@@ -13,7 +13,7 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -55,7 +55,7 @@
                                 </td>
                                 <td class="align-middle" align="center">
                                     <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial' + '?id=' + ${paciente.id}}">Ver historial clínico</a>
+                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial?id=' + ${paciente.id}}">Ver historial clínico</a>
                                 </td>
                             </tr>
 

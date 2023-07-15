@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold;">
-                Previsualiza y elija el informe que considere más conveniente
+                Para poder llevar a cabo tu cita por favor elige la plantilla de informe a utilizar
               </h5>
             </div>
           </div>
@@ -58,7 +58,7 @@
               </td>
               <td class="align-middle" align="center">
                 <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
-                 border-radius: 15px; border-color: #00a9b1;" th:href="@{/doctor/llenarInforme(idInforme=${informe.id})}">
+                 border-radius: 15px; border-color: #00a9b1;" th:href="@{'/doctor/iniciarCita?idUsuario='+${idUsuario}+'&idInforme='+${informe.id}}">
                   Elegir Informe
                 </a>
               </td>
