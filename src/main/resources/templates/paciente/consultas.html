@@ -45,6 +45,8 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md">
                             <h5 class="mb-2 mb-md-0 text-white">Próximas Citas</h5>
+                            <div th:if="${exitoReceta != null}" th:text="${exitoReceta}" class="alert alert-success" role="alert"></div>
+                            <div th:if="${errorReceta != null}" th:text="${errorReceta}" class="alert alert-danger" role="alert"></div>
                             <div th:if="${exitoPagar != null}" th:text="${exitoPagar}" class="alert alert-success" role="alert"></div>
                             <div th:if="${errorPagar != null}" th:text="${errorPagar}" class="alert alert-danger" role="alert"></div>
                             <div th:if="${exitoCancelar != null}" th:text="${exitoCancelar}" class="alert alert-success" role="alert"></div>
@@ -168,7 +170,7 @@
             </div>
 
             <div th:each="cita, info : ${citas}">
-                <div class="modal fade" th:id="'Receta' + ${info.index + 1}">
+                <div class="modal fade" th:if="${cita.recetaIdreceta!=null}" th:id="'Receta' + ${info.index + 1}">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <!-- Aquí puedes agregar el contenido del modal -->
@@ -218,7 +220,11 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary pagarBoletaReceta" th:data-target="'#Pago' + ${info.index+1}">Pagar Receta</button>
+                                <div th:each="receta : ${listaRecetas}">
+                                    <div th:if="${cita.getRecetaIdreceta().id}==${receta.receta.id}">
+                                        <button type="button" class="btn btn-primary pagarBoletaReceta" th:data-target="'#Pago' + ${info.index+1}" data-toggle="modal" data-dismiss="modal" th:if="${receta.recetaPagada}==false">Pagar Receta</button>
+                                    </div>
+                                </div>
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
@@ -227,7 +233,7 @@
 
             </div>
             <div th:each="cita, info : ${citas}">
-                <div class="modal fade" th:id="'Pago' + ${info.index + 1}" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+                <div class="modal fade" th:if="${cita.recetaIdreceta!=null}" th:id="'Pago' + ${info.index + 1}" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="card">
@@ -289,7 +295,11 @@
                                         <div class="col-sm-7">
                                             <div class="media"><img class="mr-3" src="/img/icons/shield.png" alt="" width="60">
                                                 <div class="media-body">
-                                                    <div class="fs-2 font-weight-semi-bold">Total: <span class="text-primary" id="totalPagoReceta"></span></div>
+                                                    <div th:each="receta : ${listaRecetas}">
+                                                        <div th:if="${cita.getRecetaIdreceta().id}==${receta.receta.id}">
+                                                            <div class="fs-2 font-weight-semi-bold">Total: <span class="text-primary" id="totalPagoReceta" th:text="|S/${receta.precioTotal}|"></span></div>
+                                                        </div>
+                                                    </div>
                                                     <button class="btn btn-success mt-3 px-5" type="submit">Confirmar pago</button>
                                                 </div>
                                             </div>

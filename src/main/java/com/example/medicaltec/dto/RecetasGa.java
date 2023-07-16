@@ -7,6 +7,7 @@ import com.example.medicaltec.Entity.RecetaHasMedicamento;
 import java.util.List;
 
 public class RecetasGa {
+    private Boolean recetaPagada;
     private Receta receta;
     private Double precioTotal;
     private List<RecetaHasMedicamento> medicamentos;
@@ -33,5 +34,13 @@ public class RecetasGa {
 
     public void setPrecioTotal(Double precioTotal) {
         this.precioTotal = precioTotal;
+    }
+
+    public Boolean getRecetaPagada() {
+        return recetaPagada;
+    }
+
+    public void setRecetaPagada(Boolean recetaPagada) {
+        this.recetaPagada = recetaPagada;
     }
 }
