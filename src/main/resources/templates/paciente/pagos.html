@@ -23,11 +23,11 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
                             <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                                Sección de pagos
+                                Sección de boletas
                             </h1>
                         </div>
                         <div class="col-md-11">
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">Visualice sus boletas emitidas y pagos de citas</h5>
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">Visualice sus boletas emitidas por citas y recetas</h5>
                         </div>
                     </div>
                 </div>
@@ -46,31 +46,26 @@
                     <table class="table table-striped" id="listaPagos">
                         <thead style="background: #cdeffc">
                         <tr>
-                            <th class="sort align-middle" style="width: 22%">Tipo</th>
-                            <th class="sort align-middle" style="width: 22%">Especialidad</th>
-                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Tipo de cita</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Modalidad</th>
                             <th class="no-sort" style="width: 15%;" ></th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-
-                        <tr th:each="cita, info : ${citas}">
-                            <td th:text="${cita.tipocitaIdtipocita.tipoCita}" class="align-middle" style="text-align: center">
+                        <tr th:each="boleta, info : ${boletas}">
+                            <td th:text="${boleta.citaIdcita.tipocitaIdtipocita.tipoCita}" class="align-middle" style="text-align: center">
                             </td>
-                            <td th:text="${cita.especialidadesIdEspecialidad.nombreEspecialidad}" class="align-middle">
+                            <td th:text="${boleta.citaIdcita.fecha}" class="align-middle" style="text-align: center">
                             </td>
-                            <td th:text="${cita.fecha}" class="align-middle">
+                            <td th:text="|${boleta.citaIdcita.doctor.nombre} ${boleta.citaIdcita.doctor.apellido}|" class="align-middle" style="text-align: center">
                             </td>
-                            <td class="align-middle" align="center">
+                            <td th:text="${boleta.citaIdcita.modalidad}" class="align-middle" style="text-align: center">
+                            </td>
+                            <td class="align-middle" style="text-align: center">
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
-                                    border-radius: 15px" th:data-target="'#Boleta' + ${info.index+1}">Ver más</button>
-                                <!-- Modal -->
-                            </td>
-
-
-                            <td class="align-middle" align="center" th:if="${cita.getCitacancelada()==false && cita.getEstadoscitaIdestados().getId()==1}">
-                                <button type="submit" class="btn btn-primary btn-sm" style="text-align: center;
-                                    border-radius: 15px" >Pagar</button>
+                                    border-radius: 15px" th:data-target="'#Boleta' + ${info.index+1}">Boleta</button>
                             </td>
                         </tr>
                         </tbody>
@@ -79,76 +74,100 @@
             </div>
 
 
-            <div th:each="cita, info : ${citas}">
+            <div th:each="boleta, info : ${boletas}">
                 <div class="modal fade" th:id="'Boleta' + ${info.index + 1}">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <!-- Aquí puedes agregar el contenido del modal -->
                             <div class="modal-header">
-                                <h5 class="modal-title">Boleta de cita</h5>
+                                <img class="mr-2" th:src="@{/logo}" alt="" width="50">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="container">
+                                    <h3 class="modal-title">Boleta de cita</h3>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <!-- aquí iría el logo de la empresa -->
-                                            <img class="mr-2" th:src="@{/logo}" alt="" width="50">
+                                            <label for="paciente">Paciente:</label>
+                                            <input type="text" id="paciente" name="paciente"  th:value="|${boleta.citaIdcita.paciente.nombre} ${boleta.citaIdcita.paciente.apellido}|" class="form-control" disabled>
                                         </div>
-
+                                        <div class="col-md-6">
+                                            <label for="dni">DNI del paciente:</label>
+                                            <input type="text" id="dni" name="dni"  th:value="|${boleta.citaIdcita.paciente.id}|" class="form-control" disabled>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <!-- aquí irían los detalles del empleador -->
-                                            <p th:text="|Doctor: ${cita.doctor.nombre} ${cita.doctor.apellido}|"></p>
-                                            <p th:text="|Cédula: ${cita.doctor.ceduladoctor}|"></p>
-                                            <p th:text="|Especialidad: ${cita.especialidadesIdEspecialidad.nombreEspecialidad}|"></p>
+                                            <label for="doctor">Doctor:</label>
+                                            <input type="text" id="doctor" name="doctor"  th:value="|${boleta.citaIdcita.doctor.nombre} ${boleta.citaIdcita.doctor.apellido}|" class="form-control" disabled>
                                         </div>
                                         <div class="col-md-6">
-                                            <!-- aquí irían los detalles del empleado -->
-                                            <p th:text="|Paciente: ${cita.paciente.nombre} ${cita.paciente.apellido}|"></p>
-                                            <p th:text="|DNI: ${cita.paciente.id}|"></p>
+                                            <label for="colegiatura">Nro. de colegiatura:</label>
+                                            <input type="text" id="colegiatura" name="colegiatura"  th:value="|${boleta.citaIdcita.doctor.ceduladoctor}|" class="form-control" disabled>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <!-- aquí iría la tabla con los detalles del pago -->
-
                                             <table>
                                                 <thead style="background: #cdeffc">
                                                 <tr>
-                                                    <th class="sort align-middle" style="width: 22%">Tipo de servicio</th>
-                                                    <th class="sort align-middle" style="width: 22%">Descripcion</th>
-                                                    <th class="sort align-middle" style="width: 15%; text-align: center">Valor total</th>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Descripción</th>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Seguro</th>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Valor total</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody class="bg-white">
                                                 <tr>
-                                                    <td th:text="${cita.getTipocitaIdtipocita().tipoCita}" class="align-middle">
+                                                    <td th:text="${boleta.conceptopago}" class="align-middle" style="text-align: center">
                                                     </td>
-                                                    <td th:text="${boletas[info.index].conceptopago}" class="align-middle">
+                                                    <td th:text="${boleta.seguro.nombreSeguro}" class="align-middle" style="text-align: center">
                                                     </td>
-                                                    <td th:text="${boletas[info.index].montoCita}" class="align-middle" >
+                                                    <td th:text="|S/${boleta.montoCita}|" class="align-middle" style="text-align: center">
                                                     </td>
                                                 </tr>
-
                                             </table>
                                         </div>
                                     </div>
+                                </div>
+                                <hr style="height: 1px; background-color: #333; border: none">
+                                <div class="container" th:if="${boleta.recetaIdreceta!=null}">
+                                    <h3 class="modal-title">Boleta de receta</h3>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="seguro">Seguro:</label>
+                                            <input type="text" id="seguro" name="seguro"  th:value="|${boleta.seguro.nombreSeguro}|" class="form-control" disabled>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="precio">Precio total:</label>
+                                            <input type="text" id="precio" name="precio"  th:value="|S/${boleta.montoReceta}|" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <!-- aquí iría cualquier otro detalle o nota -->
-                                            <hr>
-                                            <div style="display: flex; flex-direction: column;">
-                                                <label for="firma" class="form-label">Firma del doctor:</label>
-                                                <img th:src="@{'/fotoFirmaDoctor?dni='+${cita.doctor.id}}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
-                                height: 100px;width: 300px;border: 1px solid #d8e2ef;"/>
-                                            </div>
+                                            <table>
+                                                <thead style="background: #cdeffc">
+                                                <tr>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Medicamento</th>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Candidad</th>
+                                                    <th class="sort align-middle" style="width: 15%;text-align: center">Precio</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                <tr th:each="entrada: ${medicamentosReceta}" th:if="${entrada.recetaIdreceta.id == boleta.recetaIdreceta.id}">
+                                                    <td th:text="${entrada.medicamentosIdmedicamentos.nombre}" class="align-middle" style="text-align: center">
+                                                    </td>
+                                                    <td th:text="${entrada.cantidad}" class="align-middle" style="text-align: center">
+                                                    </td>
+                                                    <div th:each="entry : ${lista}" th:if="${boleta.seguro.id==entry.id}">
+                                                        <td th:text="|S/${(entrada.medicamentosIdmedicamentos.precio*entry.porcentaje)/100}|" class="align-middle" style="text-align: center">
+                                                        </td>
+                                                    </div>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
@@ -198,12 +217,12 @@
                 "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
             language: {
                 processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                lengthMenu: "Mostrar  _MENU_  boletas",
+                zeroRecords: "No se encontraron boletas",
+                emptyTable: "No hay boletas",
+                info: "Mostrando boletas del _START_ al _END_ <br>Total _TOTAL_ boletas",
+                infoEmpty: "Mostrando boletas del 0 al 0 <br>Total 0 boletas",
+                infoFiltered: "(filtrado de un total de _MAX_ boletas)",
                 loadingRecords: "Cargando...",
                 search: "Buscar:",
                 paginate: {

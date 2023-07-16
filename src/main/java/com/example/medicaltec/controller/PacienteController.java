@@ -355,16 +355,11 @@ public class PacienteController {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Seguro1Dto> lista = seguroRepository.lista();
         model.addAttribute("usuario", usuario);
-
-        List<Cita> citaspas =  citaRepository.historialCitas2(usuario.getId());
-        ArrayList<Boleta> boletas = new ArrayList<>();
-        for (int i = 0; i < citaspas.size(); i++) {
-            boletas.add(boletaRepository.obtenerCitaxBoleta(citaspas.get(i).getId()));
-        }
-        model.addAttribute("boletas", boletas);
-        model.addAttribute("citas", citaspas);
-        model.addAttribute("medicamentos", medicamentoRepository.findAll());
+        model.addAttribute("boletas", boletaRepository.findAll());
+        model.addAttribute("medicamentosReceta", recetaHasMedicamentoRepository.findAll());
+        model.addAttribute("lista", lista);
        return "paciente/pagos";
     }
 
