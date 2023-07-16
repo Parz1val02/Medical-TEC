@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
 @Controller
 @RequestMapping("/doctor")
@@ -36,6 +35,14 @@ public class DoctorController {
     final InformeRepository informeRepository;
     final ReunionVirtualRepository reunionVirtualRepository;
     final HorasDoctorRepository horasDoctorRepository;
+    @Autowired
+    RecetaRepository recetaRepository;
+
+    @Autowired
+    RecetaHasMedicamentoRepository recetaHasMedicamentoRepository;
+
+    @Autowired
+    MedicamentoRepository medicamentoRepository;
 
     public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository) {
         this.sedeRepository = sedeRepository;
@@ -66,6 +73,67 @@ public class DoctorController {
         return "doctor/principal";
     }
 
+
+    @GetMapping("/iniciarCita")
+    public String iniciarCita(Model model, @RequestParam("idUsuario") String idUsuario, @RequestParam("idInforme") String idInforme,
+                              RedirectAttributes attr, HttpSession httpSession){
+
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
+        System.out.println("usuario entero");
+        if (optionalUsuario.isPresent()){
+            System.out.println("usuario encontrado");
+            if(esNumeroEntero(idInforme)){
+                System.out.println("informe entero");
+                Integer iddinforme = Integer.parseInt(idInforme);
+                Optional<InformeNuevo> optionalInformeNuevo = informeNuevoRepository.findById(iddinforme);
+                if(optionalInformeNuevo.isPresent()){
+                    System.out.println("informe nuevo existente");
+                    // Llenar informe
+                    httpSession.removeAttribute("iddelinforme");
+                    httpSession.setAttribute("iddelinforme",iddinforme);
+                    InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                    model.addAttribute("titulo",informeNuevo.getNombre());
+                    String campostexto = informeNuevo.getCampos();
+                    List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
+                    informeNuevo.setListacampos(listadecampos);
+                    model.addAttribute("informe",informeNuevo);
+                    List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
+                    model.addAttribute("listmedic", listademedicamentos);
+
+                    // Historial clínico
+                    Usuario paciente = optionalUsuario.get();
+                    model.addAttribute("paciente",paciente);
+                    // Nombre completo del sexo de la persona
+                    if(paciente.getSexo().equals("M")){
+                        paciente.setSexo("Masculino");
+                    }else if (paciente.getSexo().equals("F")){
+                        paciente.setSexo("Femenino");
+                    }
+                    // Obtener alergias
+                    int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
+                    List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
+                    ArrayList<Alergia> listaAlergias = new ArrayList<>();
+                    for (Integer idAlergia : idAlergias) {
+                        listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+                    }
+
+                    model.addAttribute("listaAlergias",listaAlergias);
+                    // Obtener informes y citas por usuario
+                    model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
+                    return "doctor/iniciarcita";
+
+                }else {
+                    return "redirect:/doctor/principal";
+                }
+            }else {
+                return "redirect:/doctor/principal";
+            }
+        }else {
+            return "redirect:/doctor/principal";
+        }
+
+
+    }
 
     @GetMapping("/historial")
     public String verHistorial(Model model, @RequestParam("id") String id, RedirectAttributes attr){
@@ -98,12 +166,11 @@ public class DoctorController {
 
     }
 
-
     //videollamada
     @GetMapping("/videollamada")
     public String videollamada(Model model, @RequestParam("idCita") String id, RedirectAttributes attr){
         // Cambiamos el estado de cita a 'En consulta'
-        citaRepository.cambiarEstadoCita(5, Integer.parseInt(id));
+
 
         // Obtener paciente
         ReunionVirtual reu  =reunionVirtualRepository.ReuPorCita(Integer.parseInt(id) );
@@ -123,13 +190,10 @@ public class DoctorController {
 
     }
 
-
-
-
-
     @GetMapping("/notificaciones")
     public String verNotificaciones(HttpSession  httpSession){
         Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+        System.out.println("EL USUARIO ESSSSS:");
         System.out.println(
                 usuario_doctor.getNombre()
         );
@@ -155,8 +219,6 @@ public class DoctorController {
             Usuario pacientedentro = usuarioRepository.findByid(dnipaciente);
             listapaciente.add(pacientedentro);
         }
-        //System.out.println(listadepacientesstring);
-        //System.out.println(listapaciente);
         model.addAttribute("listapaciente",listapaciente);
         return "doctor/pacientes";
     }
@@ -197,6 +259,34 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/elegirPlantilla")
+    public String elegirPlantilla (@RequestParam("idCita") String idCita,@RequestParam("idUsuario") String idUsuario,
+                                   Model model,RedirectAttributes attr,HttpSession httpSession){
+        citaRepository.cambiarEstadoCita(5, Integer.parseInt(idCita));
+        if (esNumeroEntero(idCita)){
+            Integer iddecita = Integer.parseInt(idCita);
+            Optional<Cita> optionalCita = citaRepository.findById(iddecita);
+            if (optionalCita.isPresent()){
+                Cita citas = optionalCita.get();
+                httpSession.removeAttribute("idcitaparainforme");
+                httpSession.setAttribute("idcitaparainforme",citas.getId());
+                List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
+                for (InformeNuevo informes : listainformes){
+                    String entrada1 = informes.getCampos();
+                    List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
+                    informes.setListacampos((listacampos));
+                }
+                model.addAttribute("informeList", listainformes);
+                model.addAttribute("idUsuario",idUsuario);
+                return "doctor/elegirPlantilla";
+            }else {
+                return "redirect:/doctor/citas";
+            }
+        }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
     @GetMapping("/llenarInforme")
     public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
                                 HttpSession httpSession,Model model){
@@ -212,6 +302,8 @@ public class DoctorController {
                 List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
                 informeNuevo.setListacampos(listadecampos);
                 model.addAttribute("informe",informeNuevo);
+                List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
+                model.addAttribute("listmedic", listademedicamentos);
                 return "doctor/llenarInforme";
             }else {
                 return "redirect:/doctor/citas";
@@ -222,30 +314,110 @@ public class DoctorController {
         }
     }
 
-    @PostMapping("/rellenarInforme")
-    public String rellenarInforme(@RequestParam("bitacora") String bitacora,
-                                  @RequestParam("diagnostico") String diagnostico,
-                                  @RequestParam("tratamiento") String tratamiento,@RequestParam("listarespuestas") String respuestas,
-                                RedirectAttributes attr, Model model, HttpSession httpSession){
-        int iddelinforme = (int) httpSession.getAttribute("iddelinforme");
-        int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
-        String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
-        String salida ="";
-        String separador ="#!%&%!#";
-        int i = 0;
-        for (String respuesta : respuestasSeparadas){
-            System.out.println(respuesta);
-            System.out.println(i);
-            if (i==0){
-                salida = salida+respuesta;
-            }else {
-                salida = salida + separador + respuesta;
-            }
-            i++;
+    @PostMapping("/enviarBitacoras")
+    public String enviarBitacoras(@RequestParam("listaidInformes") String listaidInformes, @RequestParam("listaBitacoras") String listaBitacoras,
+                                  Model model){
+
+        String[] informesid = listaidInformes.split(">%%%%%<%%%%>%%%%%<");
+        String[] bitacoraContent = listaBitacoras.split(">%%%%%<%%%%>%%%%%<");
+
+        for (int i=0;i<informesid.length;i++){
+            String idInforme = informesid[i];
+            String bitacora = bitacoraContent[i];
+            informeRepository.ingresarBitacora(bitacora, Integer.parseInt(idInforme));
         }
-        System.out.println(salida);
-        attr.addFlashAttribute("respondido","Informe rellenado con éxito");
-        return "redirect:/doctor/citas";
+
+        model.addAttribute("bitacoracambios","Se guardaron los comentarios correctamento");
+        return "redirect:/doctor/pacientes";
+    }
+    @PostMapping("/rellenarInforme")
+    public String rellenarInforme(@RequestParam("diagnostico") String diag,
+                                  @RequestParam("tratamiento") String trat,
+                                  @RequestParam("listamedicamentos") String med,
+                                  @RequestParam("listacantidades") String cant,
+                                  @RequestParam("listaobservaciones") String obser,
+                                  @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
+                                RedirectAttributes attr, Model model, HttpSession httpSession){
+        int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
+        int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
+        String dniusuario;
+        Optional<Cita> optionalCita = citaRepository.findById(iddelacita);
+        int a = 0;
+        if(optionalCita.isPresent()){
+            Cita cita = optionalCita.get();
+            dniusuario = cita.getPaciente().getId();
+            String diagnostico  = diag;
+            String tratamiento = trat;
+            String medicamente  = med;
+            String cantidad = cant;
+            String observaciones = obser;
+            String comentario  =comen;
+            String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
+            String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
+            String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
+            String [] listacantidades = cantidad.split(">%%%%%<%%%%>%%%%%<");
+            String salida ="";
+            String separador ="#!%&%!#";
+            int i = 0;
+            for (String respuesta : respuestasSeparadas){
+                System.out.println(respuesta);
+                System.out.println(i);
+                if (i==0){
+                    salida = salida+respuesta;
+                }else {
+                    salida = salida + separador + respuesta;
+                }
+                i++;
+            }
+            for (int k =0; k<listamedicamentos.length;k++){
+                String indicemedi = listamedicamentos[k];
+                String indiceobser = listaobservaciones[k];
+                String indicecant = listacantidades[k];
+                if(esNumeroEntero(indicemedi)){
+                    if(!esNumeroEntero(indicecant)){
+                        attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
+                        a++;
+                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                    }else {
+                        a = 0;
+                    }
+                }else {
+                    if(!esNumeroEntero(indicecant)){
+                        attr.addFlashAttribute("error","El medicamento seleccionado no es válido. La cantidad ingresada debe ser un número entero");
+                        a++;
+                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                    }
+                    attr.addFlashAttribute("error","El medicamento seleccionado no es válido.");
+                    a++;
+                    return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                }
+            }
+            if(a==0){
+                System.out.println(salida);
+                String camposllenados = salida;
+                attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+                System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);
+                informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,tratamiento,camposllenados,iddelinformenuevo);
+                Integer informe1 = informeRepository.idinformecreado(iddelacita);
+                recetaRepository.crearReceta(comentario,informe1);
+                Integer idrecetacreada = recetaRepository.idrecetacreada(informe1);
+                for (int k =0; k<listamedicamentos.length;k++){
+                    String indicemedi = listamedicamentos[k];
+                    String indiceobser = listaobservaciones[k];
+                    String indicecant = listacantidades[k];
+                    Integer intindicemedi = Integer.parseInt(indicemedi);
+                    Integer intindicecant = Integer.parseInt(indicecant);
+                    recetaHasMedicamentoRepository.llenarRecMed(idrecetacreada,intindicemedi,intindicecant,indiceobser);
+                    citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
+                    httpSession.removeAttribute("iddelinforme");
+                    httpSession.removeAttribute("idcitaparainforme");
+                }
+            }
+            return "redirect:/doctor/citas";
+        }else {
+            attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
+            return "redirect:/doctor/citas";
+        }
     }
 
     @GetMapping("/cuestionarios")
@@ -302,6 +474,7 @@ public class DoctorController {
             return false;
         }
     }
+
     @PostMapping("/enviarCuest")
     public String enviarCuest(Model model,@RequestParam("usuario") String paciente,
             @RequestParam("mensaje") String mensaje,@RequestParam("cuest") String cuestionarioid,RedirectAttributes attr,
@@ -369,14 +542,6 @@ public class DoctorController {
 
     }
 
-    @PostMapping("/enviarBitacora")
-    public String enviarBitacora(@RequestParam("bitacora") String bitacora,
-                                 @RequestParam("usuarioid") String usuarioid){
-
-
-        return "redirect:/doctor/principal";
-    }
-
     @PostMapping("/enviarHorasDoctor")
     public String horasDoctor(@RequestParam("mes") String mes, @RequestParam("dia") String dia,
                               @RequestParam("horainicio") String horainicio, @RequestParam("horafin") String horafin,
@@ -407,6 +572,8 @@ public class DoctorController {
 
         return "redirect:/doctor/config";
     }
+
+
     //Adaptarlo para sesiones
     /*@GetMapping("/llenarInforme")
     public String llenarInforme(@RequestParam("idCita") String idcuestionario,Model model,

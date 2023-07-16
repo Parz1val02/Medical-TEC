@@ -10,7 +10,12 @@ public interface DeliverymedicamentoRepository extends JpaRepository<Deliverymed
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "insert into deliverymedicamentos (latitudinicial , longitudinicial, latitudfinal, longitudfinal , estado) values (?1, ?2, ?3, ?4, '?5')")
-    void crearDelivery(Double latInicial, Double longitudInicial, Double longitudFinal, Double latFinal, String estado);
+    @Query(nativeQuery = true, value = "insert into deliverymedicamentos (latitudactual , longitudactual, latitudfinal, longitudfinal , estado) values (?1, ?2, ?3, ?4, '?5')")
+    void crearDelivery(Double latActual, Double longitudActual, Double longitudFinal, Double latFinal, String estado);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "Update deliverymedicamentos a set a.latitudactual= ?1, a.longitudactual= ?2 where iddeliverymedicamentos=?3")
+    void guardarUbicacion(Float latitudActual, Float longitudActual, Integer id);
 
 }

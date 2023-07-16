@@ -53,10 +53,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=2 where idcita=?1")
     void estadoPagada(Integer id);
 
-    //para videollamada
-    @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
-    List<CitaxReunionDto> citasxEnlace();
-
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=?1 where idcita=?2 ")
@@ -186,5 +182,10 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
 
 
+
+    @Modifying
+    @Transactional
+    @Query(value = "update cita set receta_idreceta = ?1, informe_idinforme=?2 where idcita = ?3",nativeQuery = true)
+    void informeRecetaCita (Integer idreceta, Integer idinforme, Integer idcita);
 
 }

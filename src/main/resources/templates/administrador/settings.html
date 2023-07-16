@@ -59,31 +59,31 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput1" class="form-label">Nombres</label>
-                      <input type="text" id="disabledTextInput1" class="form-control" th:value="${#strings.capitalize(admin.nombre)}">
+                      <div  style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput1" class="form-control" th:text="${#strings.capitalize(admin.nombre)}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                      <input type="text" id="disabledTextInput2" class="form-control" th:value="${#strings.capitalize(admin.apellido)}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput2" class="form-control" th:text="${#strings.capitalize(admin.apellido)}"> </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput3" class="form-label">Correo</label>
-                      <input type="text" id="disabledTextInput3" class="form-control" th:value="${admin.email}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput3" class="form-control" th:text="${admin.email}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput4" class="form-label">Celular</label>
-                      <input type="text" id="disabledTextInput4" class="form-control" th:value="${admin.telefono}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput4" class="form-control" th:text="${admin.telefono}"> </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput5" class="form-label">DNI</label>
-                      <input type="text" id="disabledTextInput5" class="form-control" th:value="${admin.id}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput5" class="form-control" th:text="${admin.id}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput6" class="form-label">Sede actual</label>
-                      <input type="text" id="disabledTextInput6" class="form-control" th:value="${admin.sedesIdsedes.nombre}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput6" class="form-control" th:text="${admin.sedesIdsedes.nombre}"> </div>
                     </div>
                   </div>
                 </fieldset>
@@ -96,7 +96,7 @@
                     Cambio de contraseña
                   </h5>
                   <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su contraseña?</h6>
-                  <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" th:href="@{/paciente/password}">Cambiar Contraseña</button>
+                  <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" >Cambiar Contraseña</button>
                 </div>
               </div>
             </div>

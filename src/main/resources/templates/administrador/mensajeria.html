@@ -4,32 +4,6 @@
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Mensajeria')}">
 </head>
 
-<style>
-  @media only screen and (max-width: 480px) {
-    #cometchat__widget {
-      width: 200px;
-      height: 300px;
-      /* Estilos adicionales para pantallas pequeñas */
-    }
-  }
-
-  @media only screen and (min-width: 481px) and (max-width: 768px) {
-    #cometchat__widget {
-      width: 600px;
-      height: 400px;
-      /* Estilos adicionales para pantallas medianas */
-    }
-  }
-
-  @media only screen and (min-width: 769px) {
-    #cometchat__widget {
-      width: 800px;
-      height: 600px;
-      /* Estilos adicionales para pantallas grandes */
-    }
-  }
-
-</style>
 <body class="">
 
 <!-- ===============================================-->
@@ -156,7 +130,7 @@
                     target: "#cometchat",
                     roundedCorners: "true",
                     height: "600px",
-                    width: "700px",
+                    width: "800px",
                     defaultID: "superhero1", //default UID (user) or GUID (group) to show,
                     defaultType: "user", //user or group
                   });

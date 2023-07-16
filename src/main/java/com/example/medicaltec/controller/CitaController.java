@@ -36,7 +36,7 @@ public class CitaController {
                 long minutos = diferencia.toMinutes() % 60;
                 long segundos = diferencia.getSeconds() % 60;
 
-                if (horas == 0 && minutos == 10 && segundos == 0){
+                if (horas == 0 && minutos == 15 && segundos == 0){
                     // Estado 4: En espera
                     citaRepository.cambiarEstadoCita(4,cita.getId());
                 }else if (horas == 0 && minutos == -30 && segundos == 0){
