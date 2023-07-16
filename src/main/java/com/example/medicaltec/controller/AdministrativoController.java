@@ -48,8 +48,10 @@ public class AdministrativoController {
 
     @Autowired
     private HttpServletRequest request;
+    private final FormAutoregistroRepository formAutoregistroRepository;
 
-    public AdministrativoController(CorreoConEstilos correoConEstilos, UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, VerificarRepository verificarRepository, EmailSenderService senderService, CitaRepository citaRepository, BoletaRepository boletaRepository) {
+    public AdministrativoController(CorreoConEstilos correoConEstilos, UsuarioRepository usuarioRepository, ApiRepository apiRepository, SeguroRepository seguroRepository, SedeRepository sedeRepository, FormInvitationRepository formInvitationRepository, VerificarRepository verificarRepository, EmailSenderService senderService, CitaRepository citaRepository, BoletaRepository boletaRepository,
+                                    FormAutoregistroRepository formAutoregistroRepository) {
         this.correoConEstilos = correoConEstilos;
         this.usuarioRepository = usuarioRepository;
         this.apiRepository = apiRepository;
@@ -60,6 +62,7 @@ public class AdministrativoController {
         this.senderService = senderService;
         this.citaRepository = citaRepository;
         this.boletaRepository = boletaRepository;
+        this.formAutoregistroRepository = formAutoregistroRepository;
     }
 
 
@@ -314,8 +317,10 @@ public class AdministrativoController {
 
                 List<String> dnispacientes = usuarioRepository.obtenerdnis();
                 List<String> dnisInvitados = formInvitationRepository.dnisFormInvitacion();
+                List<String> dnisAutoregistro = formAutoregistroRepository.ListaDnis();
                 boolean existe1 = false;
                 boolean existe2 = false;
+                boolean existe3 = false;
                 for (String dni1 : dnispacientes) {
                     if (dni.equals(dni1)) {
                         existe1 = true;
@@ -329,9 +334,15 @@ public class AdministrativoController {
                         break;
                     }
                 }
+                for(String dni1 : dnisAutoregistro){
+                    if(dni.equals(dni1)){
+                        existe3 = true;
+                        break;
+                    }
+                }
 
 
-                if (!existe1 && !existe2) {
+                if (!existe1 && !existe2 && !existe3) {
 
 
                     Persona3 persona3 = personaDao.obtenerPersona(dni);
@@ -348,9 +359,9 @@ public class AdministrativoController {
                         return "administrativo/formEnvio";
                     }
 
-                } else if (existe2) {
+                } else if (existe2 || existe3) {
 
-                    attr.addFlashAttribute("errorenvio", "El usuario ya ha sido invitado a la plataforma");
+                    attr.addFlashAttribute("errorenvio", "El usuario ya ha sido invitado y/o autoregistrado a la plataforma");
                     return "redirect:/administrativo/dashboard";
 
                 } else {
