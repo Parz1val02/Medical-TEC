@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.FinanzasDto;
+import com.example.medicaltec.dto.InsertSelectLastIdDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CometChatApi;
@@ -8,12 +9,10 @@ import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.*;
-import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,6 +46,14 @@ public class AdministradorController {
     final BoletaRepository boletaRepository;
 
     final InformeRepository informeRepository;
+
+    final HistorialMedicoRepository historialMedicoRepository;
+
+    final SeguroRepository seguroRepository;
+
+    final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
+
+    final EspecialidadRepository especialidadRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -56,7 +63,11 @@ public class AdministradorController {
             FormInvitationRepository formInvitationRepository,
             CorreoConEstilos correoConEstilos,
             BoletaRepository boletaRepository,
-            InformeRepository informeRepository
+            InformeRepository informeRepository,
+            HistorialMedicoRepository historialMedicoRepository,
+            SeguroRepository seguroRepository,
+            SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository,
+            EspecialidadRepository especialidadRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -67,6 +78,10 @@ public class AdministradorController {
         this.correoConEstilos = correoConEstilos;
         this.boletaRepository = boletaRepository;
         this.informeRepository = informeRepository;
+        this.historialMedicoRepository = historialMedicoRepository;
+        this.seguroRepository = seguroRepository;
+        this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
+        this.especialidadRepository = especialidadRepository;
     }
 
 
@@ -91,18 +106,41 @@ public class AdministradorController {
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
+
+
+        /*ENVIAR CORREO CON CONTRASEÑA A MI MISMO PRUEBA
+        String destinatario = usuarioSession.getEmail() ;
+        String asunto = "Invitación a la plataforma de Medical-Tec";
+        try {
+            correoConEstilos.sendEmailUserCreation(destinatario, asunto, "PRUEBA DE CONTRASENA");
+        } catch (MessagingException e) {
+            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+            e.printStackTrace();
+            return "redirect:/administrador/usuarios";
+        }*/
+
+
         return "administrador/usuarios";
     }
 
 
     @GetMapping("/editarDoctorPagina")
     public String editarDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optDoctor = usuarioRepository.findById(dni);
         if (optDoctor.isPresent()){
             doctor = optDoctor.get();
-            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+            ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+            for(int i=0;i<especialidadesxSedeId.size();i++){
+                listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+            }
             model.addAttribute("listaEspecialidades",listaEspecialidades);
             model.addAttribute("doctor",doctor);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected",doctor.getEspecialidadesIdEspecialidad().getId());
+            httpServletRequest.getSession().setAttribute("idDelDoctorAEditar", dni);
+
             return "administrador/editarDoctor";
         } else {
             attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
@@ -120,8 +158,14 @@ public class AdministradorController {
             HttpServletRequest httpServletRequest
 
     ){
-        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
         Regex regex = new Regex();
 
         int a = 0;
@@ -139,10 +183,10 @@ public class AdministradorController {
                     model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
                     a = a + 1;
                 } else {
-                    List<Usuario> listaPacientes = usuarioRepository.findAll();
+                    List<Usuario> listaDoctores = usuarioRepository.findAll();
 
-                    for (Usuario pacienteLista : listaPacientes) {
-                        if (doctor.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
+                    for (Usuario doctorLista : listaDoctores) {
+                        if (doctor.getId().equalsIgnoreCase(doctorLista.getId()) ) {
                             existeDoctor = true;
                             break;
                         }
@@ -170,10 +214,10 @@ public class AdministradorController {
                 a = a + 1;
             } else {
                 if ( !dniNulo  && existeDoctor) {
-                    List<Usuario> listaPacientes = usuarioRepository.findAll();
-                    for (Usuario pacienteLista : listaPacientes) {
-                        if (doctor.getEmail().equals(pacienteLista.getEmail()) ) {
-                            if ( !doctor.getId().equals(pacienteLista.getId())) {
+                    List<Usuario> listaDoctores = usuarioRepository.findAll();
+                    for (Usuario doctorLista : listaDoctores) {
+                        if (doctor.getEmail().equals(doctorLista.getEmail()) ) {
+                            if ( !doctor.getId().equals(doctorLista.getId())) {
                                 contadorDuplicadosCorreo = contadorDuplicadosCorreo + 1;
                             }
 
@@ -195,7 +239,7 @@ public class AdministradorController {
         if(doctor.getNombre() == null || doctor.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (doctor.getNombre().length() > 45 || !regex.inputisValid(doctor.getNombre())){
+        } else if (doctor.getNombre().length() > 45 ){  // || !regex.inputisValid(doctor.getNombre())
             model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -205,7 +249,7 @@ public class AdministradorController {
         if(doctor.getApellido() == null || doctor.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (doctor.getApellido().length() > 45 || !regex.inputisValid(doctor.getApellido())){
+        } else if (doctor.getApellido().length() > 45 ){ //  || !regex.inputisValid(doctor.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -243,8 +287,8 @@ public class AdministradorController {
         if ( especialidad != null  && (!especialidad.isBlank()) ) {
             try {
                 int especialidadEntero = Integer.parseInt(especialidad);
-                if (especialidadEntero < 1 || especialidadEntero > listaEspecialidades.size() ) {
-                    model.addAttribute("especialidadmsg","Especialidad no existente");
+                if (especialidadEntero < 1 || (!especialidadesxSedeId.contains(especialidadEntero)) ) {
+                    model.addAttribute("especialidadmsg","Especialidad no existente en la sede");
                     a = a + 1;
                 }
             } catch (NumberFormatException e) {
@@ -257,24 +301,34 @@ public class AdministradorController {
         }
         //VALIDACION ESPECIALIDAD
 
-        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelUsuarioAEditar");
+        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelDoctorAEditar");
         System.out.println(idNecesario);
+        int idEspecialidadParaFuncionarElSelected = 0;
+        Optional<Usuario> optDoctorParaSelectedDeEspecialidad = usuarioRepository.findById(idNecesario);
+        if (optDoctorParaSelectedDeEspecialidad.isPresent()) {
+            Usuario doctorParaSelectedDeEspecialidad  = optDoctorParaSelectedDeEspecialidad.get();
+            idEspecialidadParaFuncionarElSelected = doctorParaSelectedDeEspecialidad.getEspecialidadesIdEspecialidad().getId();
+        }
+        System.out.println("especialidad entero:" +  idEspecialidadParaFuncionarElSelected);
+
         /*
         Usuario usuarioParaEnviarEstado = usuarioRepository.findByid(idNecesario);
         paciente.getEstadosIdestado().setNombre("");*/
         if ( !existeDoctor || dniNulo) {
             attr.addFlashAttribute("msgDanger","El DNI del doctor ingresado no existe o no puede ser nulo");
-            String retorno = "redirect:/administrador/editarDoctor?id="+ idNecesario;
+            String retorno = "redirect:/administrador/editarDoctorPagina?id="+ idNecesario;
             System.out.println("DNI NULO ");
             return retorno;
         } else if (correoDuplicado) {
             model.addAttribute("msgDanger","El correo del doctor ingresado ya existe");
             model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected", idEspecialidadParaFuncionarElSelected);
             System.out.println("EXISTECORREO");
             return "administrador/editarDoctor";
         } else if (a > 0) {
             System.out.println("ALGUN ERROR ESTA SALTANDO");
             model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected", idEspecialidadParaFuncionarElSelected);
             return "administrador/editarDoctor";
         } else {
             attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
@@ -284,8 +338,15 @@ public class AdministradorController {
     }
 
     @GetMapping("/crearDoctorPagina")
-    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @ModelAttribute("especialidad") String especialidad){
-        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @ModelAttribute("especialidad") String especialidad, HttpServletRequest httpServletRequest){
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         return "administrador/crearDoctor";
     }
@@ -298,9 +359,17 @@ public class AdministradorController {
             Model model,
             HttpServletRequest httpServletRequest
     ){
-        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
-        Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
+        Regex regex = new Regex();
+
         int a = 0;
         //VALIDACION EXISTE PACIENTE
         boolean existeDoctor = false;
@@ -365,8 +434,8 @@ public class AdministradorController {
         if(doctor.getNombre() == null || doctor.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (doctor.getNombre().length() > 45 || !regex.inputisValid(doctor.getNombre())){
-            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras y sin espacios");
+        } else if (doctor.getNombre().length() > 45 ){  // || !regex.inputisValid(doctor.getNombre())
+            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
         //VALIDACION NOMBRE
@@ -376,7 +445,7 @@ public class AdministradorController {
         if(doctor.getApellido() == null || doctor.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (doctor.getApellido().length() > 45 || !regex.inputisValid(doctor.getApellido())){
+        } else if (doctor.getApellido().length() > 45 ){   // || !regex.inputisValid(doctor.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -457,8 +526,8 @@ public class AdministradorController {
         if ( especialidad != null  && (!especialidad.isBlank()) ) {
             try {
                 int especialidadEntero = Integer.parseInt(especialidad);
-                if (especialidadEntero < 1 || especialidadEntero > listaEspecialidades.size() ) {
-                    model.addAttribute("especialidadmsg","Especialidad no existente");
+                if (especialidadEntero < 1 || (!especialidadesxSedeId.contains(especialidadEntero)) ) {
+                    model.addAttribute("especialidadmsg","Especialidad no existente en la sede");
                     a = a + 1;
                 }
             } catch (NumberFormatException e) {
@@ -496,6 +565,8 @@ public class AdministradorController {
             System.out.println("contrasena creada para doctor de id " + doctor.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
             usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  Integer.parseInt(especialidad),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
+
+            /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = doctor.getId();
             String nameAPI = doctor.getNombre() + " " + doctor.getApellido();
@@ -504,6 +575,18 @@ public class AdministradorController {
             } catch (IOException | InterruptedException e) {
                 System.out.println("ERROR EN LA CREACION DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
                 throw new RuntimeException(e);
+            }*/
+
+
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = doctor.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                return "redirect:/administrador/usuarios";
             }
 
 
@@ -519,7 +602,7 @@ public class AdministradorController {
         if (optPaciente.isPresent()){
             paciente = optPaciente.get();
             model.addAttribute("paciente",paciente);
-            httpServletRequest.getSession().setAttribute("idDelUsuarioAEditar", dni);
+            httpServletRequest.getSession().setAttribute("idDelPacienteAEditar", dni);
             return "administrador/editarPacientePRUEBA";
         } else {
             attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
@@ -608,7 +691,7 @@ public class AdministradorController {
         if(paciente.getNombre() == null || paciente.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (paciente.getNombre().length() > 45 || !regex.inputisValid(paciente.getNombre())){
+        } else if (paciente.getNombre().length() > 45 ){ // || !regex.inputisValid(paciente.getNombre())
             model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -618,7 +701,7 @@ public class AdministradorController {
         if(paciente.getApellido() == null || paciente.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (paciente.getApellido().length() > 45 || !regex.inputisValid(paciente.getApellido())){
+        } else if (paciente.getApellido().length() > 45 ){ //  || !regex.inputisValid(paciente.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -653,7 +736,7 @@ public class AdministradorController {
         }
         //VALIDACION TELEFONO
 
-        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelUsuarioAEditar");
+        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelPacienteAEditar");
         System.out.println(idNecesario);
         /*
         Usuario usuarioParaEnviarEstado = usuarioRepository.findByid(idNecesario);
@@ -758,8 +841,8 @@ public class AdministradorController {
         if(paciente.getNombre() == null || paciente.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (paciente.getNombre().length() > 45 || !regex.inputisValid(paciente.getNombre())){
-            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras y sin espacios");
+        } else if (paciente.getNombre().length() > 45 ){  //   || !regex.inputisValid(paciente.getNombre())
+            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras.");
             a = a+1;
         }
         //VALIDACION NOMBRE
@@ -769,7 +852,7 @@ public class AdministradorController {
         if(paciente.getApellido() == null || paciente.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (paciente.getApellido().length() > 45 || !regex.inputisValid(paciente.getApellido())){
+        } else if (paciente.getApellido().length() > 45 ){  //   || !regex.inputisValid(paciente.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
@@ -858,16 +941,40 @@ public class AdministradorController {
             String contrasena = generadorDeContrasenha.crearPassword();
             System.out.println("contrasena creada para paciente de id " + paciente.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
+
+            //CREACION HISTORIAL MEDICO POR DEFECTO ASIGNADO A PACIENTE;
+            Historialmedico historialmedicoDefecto = new Historialmedico();
+            Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(7);
+            Seguro seguroDefecto = seguroDefectoOpt.get();
+            historialmedicoDefecto.setValidahistorial(true);
+            historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+            Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+            int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+
+            //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
+
+            /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = paciente.getId();
             String nameAPI = paciente.getNombre() + " " + paciente.getApellido();
-
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
                 System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR PACIENTE");
                 throw new RuntimeException(e);
+            }*/
+
+
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = paciente.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                return "redirect:/administrador/usuarios";
             }
 
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
@@ -1096,8 +1203,8 @@ public class AdministradorController {
     }
 
     @PostMapping("/guardarFormulariosRegistro")
-    public String guardarFormulariosRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr){
-        //Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+    public String guardarFormulariosRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
 
         if (idsSeleccionados == null)  {
             attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
@@ -1112,153 +1219,33 @@ public class AdministradorController {
                 // Realizas las operaciones necesarias para guardar el registro en la base de datos
                 // ...
                 GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-                String contrasena = generadorDeContrasenha.crearPassword();
+                String contrasena = generadorDeContrasenha.crearPassword(); //contrasena del usuario sin hash
                 String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
 
                 //Linea comentada por el cambio de edad a fechanacimiento en forminvitacion
                 //usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
-                                                                                                                                                                                                                                                                                                                                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+                //CREACION HISTORIAL MEDICO POR DEFECTO
+                Historialmedico historialmedicoDefecto = new Historialmedico();
+                Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(Integer.parseInt(formInvitacionOptional.get().getIdSeguro()));
+                Seguro seguroDefecto = seguroDefectoOpt.get();
+                historialmedicoDefecto.setValidahistorial(true);
+                historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(),  formInvitacionOptional.get().getNombres(),   formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formInvitacionOptional.get().getFechanacimiento(), formInvitacionOptional.get().getDomicilio(), formInvitacionOptional.get().getSexo(), contrasenaBCrypt,idReciengenerado,seguroDefecto.getId(),"invitado"); //
+                //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
 
 
                 // Actualizar el estado de pendiente a 0. ya no es pendiente.
                 formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
+
                 //ENVIAR CORREO CON CONTRASEÑA
                 String destinatario = formInvitacionOptional.get().getCorreo() ;
                 String asunto = "Invitación a la plataforma de Medical-Tec";
-                String contenido = "<!DOCTYPE html>\n" +
-                        "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
-                        "<head>\n" +
-                        "  <meta charset=\"utf-8\">\n" +
-                        "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n" +
-                        "  <meta name=\"x-apple-disable-message-reformatting\">\n" +
-                        "  <title></title>\n" +
-                        "  <!--[if mso]>\n" +
-                        "  <style>\n" +
-                        "    table {border-collapse:collapse;border-spacing:0;border:none;margin:0;}\n" +
-                        "    div, td {padding:0;}\n" +
-                        "    div {margin:0 !important;}\n" +
-                        "  </style>\n" +
-                        "  <noscript>\n" +
-                        "    <xml>\n" +
-                        "      <o:OfficeDocumentSettings>\n" +
-                        "        <o:PixelsPerInch>96</o:PixelsPerInch>\n" +
-                        "      </o:OfficeDocumentSettings>\n" +
-                        "    </xml>\n" +
-                        "  </noscript>\n" +
-                        "  <![endif]-->\n" +
-                        "  <style>\n" +
-                        "    table, td, div, h1, p {\n" +
-                        "      font-family: Arial, sans-serif;\n" +
-                        "    }\n" +
-                        "    @media screen and (max-width: 530px) {\n" +
-                        "      .unsub {\n" +
-                        "        display: block;\n" +
-                        "        padding: 8px;\n" +
-                        "        margin-top: 14px;\n" +
-                        "        border-radius: 6px;\n" +
-                        "        background-color: #555555;\n" +
-                        "        text-decoration: none !important;\n" +
-                        "        font-weight: bold;\n" +
-                        "      }\n" +
-                        "      .col-lge {\n" +
-                        "        max-width: 100% !important;\n" +
-                        "      }\n" +
-                        "    }\n" +
-                        "    @media screen and (min-width: 531px) {\n" +
-                        "      .col-sml {\n" +
-                        "        max-width: 27% !important;\n" +
-                        "      }\n" +
-                        "      .col-lge {\n" +
-                        "        max-width: 73% !important;\n" +
-                        "      }\n" +
-                        "    }\n" +
-                        "  </style>\n" +
-                        "</head>\n" +
-                        "<body style=\"margin:0;padding:0;word-spacing:normal;background-color:#939297;\">\n" +
-                        "  <div role=\"article\" aria-roledescription=\"email\" lang=\"en\" style=\"text-size-adjust:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#939297;\">\n" +
-                        "    <table role=\"presentation\" style=\"width:100%;border:none;border-spacing:0;\">\n" +
-                        "      <tr>\n" +
-                        "        <td align=\"center\" style=\"padding:0;\">\n" +
-                        "          <!--[if mso]>\n" +
-                        "          <table role=\"presentation\" align=\"center\" style=\"width:600px;\">\n" +
-                        "          <tr>\n" +
-                        "          <td>\n" +
-                        "          <![endif]-->\n" +
-                        "          <table role=\"presentation\" style=\"width:94%;max-width:600px;border:none;border-spacing:0;text-align:left;font-family:Arial,sans-serif;font-size:16px;line-height:22px;color:#363636;\">\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:40px 30px 30px 30px;text-align:center;font-size:24px;font-weight:bold;\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/logo.png\" width=\"165\" alt=\"Logo\" style=\"width:165px;max-width:80%;height:auto;border:none;text-decoration:none;color:#ffffff;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;background-color:#ffffff;\">\n" +
-                        "                <h1 style=\"margin-top:0;margin-bottom:16px;font-size:26px;line-height:32px;font-weight:bold;letter-spacing:-0.02em;\">Bienvenido a la plataforma de Medical-TEC!</h1>\n" +
-                        "                <p style=\"margin:0;\"> TEXTO DE BIENVENIDA <a href=\"http://www.example.com/\" style=\"color:#e50d70;text-decoration:underline;\"></a></p>\n" +
-                        " <p style=\"margin:0;\"> Su contraseña predeterminada es " + contrasena + " </p> " +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:0;font-size:24px;line-height:28px;font-weight:bold;\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/1200x800-2.png\" width=\"600\" alt=\"\" style=\"width:100%;height:auto;display:block;border:none;text-decoration:none;color:#363636;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:35px 30px 11px 30px;font-size:0;background-color:#ffffff;border-bottom:1px solid #f0f0f5;border-color:rgba(201,201,207,.35);\">\n" +
-                        "                <!--[if mso]>\n" +
-                        "                <table role=\"presentation\" width=\"100%\">\n" +
-                        "                <tr>\n" +
-                        "                <td style=\"width:145px;\" align=\"left\" valign=\"top\">\n" +
-                        "                <![endif]-->\n" +
-                        "                <div class=\"col-sml\" style=\"display:inline-block;width:100%;max-width:145px;vertical-align:top;text-align:left;font-family:Arial,sans-serif;font-size:14px;color:#363636;\">\n" +
-                        "                  <img src=\"https://assets.codepen.io/210284/icon.png\" width=\"115\" alt=\"\" style=\"width:115px;max-width:80%;margin-bottom:20px;\">\n" +
-                        "                </div>\n" +
-                        "                <!--[if mso]>\n" +
-                        "                </td>\n" +
-                        "                <td style=\"width:395px;padding-bottom:20px;\" valign=\"top\">\n" +
-                        "                <![endif]-->\n" +
-                        "                <div class=\"col-lge\" style=\"display:inline-block;width:100%;max-width:395px;vertical-align:top;padding-bottom:20px;font-family:Arial,sans-serif;font-size:16px;line-height:22px;color:#363636;\">\n" +
-                        "                  <p style=\"margin-top:0;margin-bottom:12px;\">Nullam mollis sapien vel cursus fermentum. Integer porttitor augue id ligula facilisis pharetra. In eu ex et elit ultricies ornare nec ac ex. Mauris sapien massa, placerat non venenatis et, tincidunt eget leo.</p>\n" +
-                        "                  <p style=\"margin-top:0;margin-bottom:18px;\">Nam non ante risus. Vestibulum vitae eleifend nisl, quis vehicula justo. Integer viverra efficitur pharetra. Nullam eget erat nibh.</p>\n" +
-                        "                  <p style=\"margin:0;\"><a href=\"https://example.com/\" style=\"background: #ff3884; text-decoration: none; padding: 10px 25px; color: #ffffff; border-radius: 4px; display:inline-block; mso-padding-alt:0;text-underline-color:#ff3884\"><!--[if mso]><i style=\"letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt\">&nbsp;</i><![endif]--><span style=\"mso-text-raise:10pt;font-weight:bold;\">Claim yours now</span><!--[if mso]><i style=\"letter-spacing: 25px;mso-font-width:-100%\">&nbsp;</i><![endif]--></a></p>\n" +
-                        "                </div>\n" +
-                        "                <!--[if mso]>\n" +
-                        "                </td>\n" +
-                        "                </tr>\n" +
-                        "                </table>\n" +
-                        "                <![endif]-->\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;font-size:24px;line-height:28px;font-weight:bold;background-color:#ffffff;border-bottom:1px solid #f0f0f5;border-color:rgba(201,201,207,.35);\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/1200x800-1.png\" width=\"540\" alt=\"\" style=\"width:100%;height:auto;border:none;text-decoration:none;color:#363636;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;background-color:#ffffff;\">\n" +
-                        "                <p style=\"margin:0;\">Duis sit amet accumsan nibh, varius tincidunt lectus. Quisque commodo, nulla ac feugiat cursus, arcu orci condimentum tellus, vel placerat libero sapien et libero. Suspendisse auctor vel orci nec finibus.</p>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;text-align:center;font-size:12px;background-color:#404040;color:#cccccc;\">\n" +
-                        "                <p style=\"margin:0 0 8px 0;\"><a href=\"http://www.facebook.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/facebook_1.png\" width=\"40\" height=\"40\" alt=\"f\" style=\"display:inline-block;color:#cccccc;\"></a> <a href=\"http://www.twitter.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/twitter_1.png\" width=\"40\" height=\"40\" alt=\"t\" style=\"display:inline-block;color:#cccccc;\"></a></p>\n" +
-                        "                <p style=\"margin:0;font-size:14px;line-height:20px;\">&reg; Someone, Somewhere 2021<br><a class=\"unsub\" href=\"http://www.example.com/\" style=\"color:#cccccc;text-decoration:underline;\">Unsubscribe instantly</a></p>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "          </table>\n" +
-                        "          <!--[if mso]>\n" +
-                        "          </td>\n" +
-                        "          </tr>\n" +
-                        "          </table>\n" +
-                        "          <![endif]-->\n" +
-                        "        </td>\n" +
-                        "      </tr>\n" +
-                        "    </table>\n" +
-                        "  </div>\n" +
-                        "</body>\n" +
-                        "</html>";
-
                 try {
-                    correoConEstilos.sendEmailEstilos(destinatario, asunto, contenido);
+                    correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
                 } catch (MessagingException e) {
                     // Manejar la excepción en caso de que ocurra un error al enviar el correo
                     e.printStackTrace();
