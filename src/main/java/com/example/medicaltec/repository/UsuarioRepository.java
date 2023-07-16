@@ -34,7 +34,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
 
 
-    /*QUERYS USADOOS POR ADMINISTRADOR*/
+    /*QUERYS USADOS POR ADMINISTRADOR*/
     @Query(nativeQuery = true, value = "select contrasena from usuario u where u.dni = ?1")
     String buscarPasswordPropioUsuario(String id);
     @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 2 and u.sedes_idsedes = ?1 and u.enabled = 1")
@@ -45,8 +45,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, fechanacimiento, direccion, sexo, contrasena, roles_idroles, estados_idestado, modoregistro, enabled) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1,'invitado',1)")
-    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, Integer sede, String fechanacimiento, String direccion, String sexo, String contrasena  );
+    @Query(nativeQuery = true,value = "INSERT INTO usuario (email, nombre, apellido, telefono, dni, sedes_idsedes, fechanacimiento, direccion, sexo, contrasena, roles_idroles, estados_idestado, enabled, historialmedico_idhistorialmedico, seguros_id_seguro,modoregistro) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,2,1,1,?11,?12,?13)")
+    void crearPaciente(String email, String nombre, String apellido, String telefono, String dni, Integer sede, String fechanacimiento, String direccion, String sexo, String contrasena, int idHistorialMedicoDefecto, int idseguro, String modoregistro);
 
     @Transactional
     @Modifying
@@ -64,7 +64,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String direccion, String dni, Integer sede );
 
 
-    /*FIN QUERYS USADOOS POR ADMINISTRADOR*/
+    /*FIN QUERYS USADOS POR ADMINISTRADOR*/
     /* ************************************ */
     /* ************************************ */
 

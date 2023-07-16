@@ -1,7 +1,7 @@
     <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Paciente')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Pacientes Atendidos')}">
 </head>
 
 
@@ -22,49 +22,51 @@
                 <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
-                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-bottom: 5px">
                                 Pacientes Atendidos
                             </h1>
                         </div>
                         <div class="col-md-11">
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                                Visualiza a los pacientes que has atendido
+                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold;">
+                                Visualiza la información de tus pacientes atendidos
                             </h5>
                         </div>
                     </div>
+                    <div th:if="${bitacoracambios != null}" th:text="${bitacoracambios}" class="alert alert-success" role="alert" style="margin: 10px 0;"></div>
+                    <table class="table table-striped" id="userList">
+                        <thead style="background: rgba(43, 45, 80, 0.08);">
+                        <tr>
+                            <th class="sort align-middle" style="width: 20%">Nombre</th>
+                            <th class="sort align-middle" style="width: 20%">Apellido</th>
+                            <th class="sort align-middle" style="width: 20%">DNI</th>
+                            <th class="sort align-middle" style="width: 20%">Correo electrónico</th>
+                            <th class="sort align-middle" style="width: 20%; text-align: center">Más información</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        <tr th:each="paciente : ${listapaciente}">
+                            <td th:text="|${paciente.nombre}|" class="align-middle">
+                                Nombre paciente
+                            </td>
+                            <td th:text="|${paciente.apellido}|" class="align-middle">
+                                Nombre paciente
+                            </td>
+                            <td th:text="|${paciente.id}|" class="align-middle">
+                                Nombre paciente
+                            </td>
+                            <td th:text="${paciente.email}">
+                                correoelectronico@hotmail.com
+                            </td>
+                            <td class="align-middle" align="center">
+                                <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
+                                    border-radius: 15px; border: 1px solid #00a9b1" th:href="@{'historial?id=' + ${paciente.id}}">Ver historial clínico</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card mb-3">
-                    <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                        <table class="table table-striped" id="userList">
-                            <thead style="background: #cdeffc">
-                            <tr>
-                                <th class="sort align-middle" style="width: 20%">Nombre Completo</th>
-                                <th class="sort align-middle" style="width: 20%">Correo</th>
-                                <th class="sort align-middle" style="width: 20%; text-align: center"></th>
-                            </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                            <tr th:each="paciente : ${listapaciente}">
-                                <td th:text="|${paciente.nombre} ${paciente.apellido}|" class="align-middle">
-                                    Nombre paciente
-                                </td>
-                                <td th:text="${paciente.email}">
-                                    correoelectronico@hotmail.com
-                                </td>
-                                <td class="align-middle" align="center">
-                                    <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border: 1px solid #b38df7" th:href="@{'historial?id=' + ${paciente.id}}">Ver historial clínico</a>
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>

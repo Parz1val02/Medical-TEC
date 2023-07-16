@@ -1,6 +1,7 @@
 package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dao.PersonaDao;
+import com.example.medicaltec.dto.ValidarCitaDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.more.EmailSenderService;
@@ -32,6 +33,7 @@ public class AdministrativoController {
 
     @Autowired
     PersonaDao personaDao;
+
 
     final CorreoConEstilos correoConEstilos;
     final UsuarioRepository usuarioRepository;
@@ -236,10 +238,27 @@ public class AdministrativoController {
         return "chatroom/index";
     }
 
-    @RequestMapping(value = {"/notificaciones"},method = RequestMethod.GET)
-    public String notificaciones(){
+    @RequestMapping(value = {"/validarLaCita"},method = RequestMethod.GET)
+    public String notificaciones(Model model, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<ValidarCitaDto> listaValidarCita = citaRepository.validarCitasList();
+        ArrayList<ValidarCitaDto> listaValidarCitaFilter = new ArrayList<>();
 
-        return "administrativo/notificaciones";
+
+        for(ValidarCitaDto c : listaValidarCita){
+
+            if(Objects.equals(usuarioSession.getSedesIdsedes().getId(), c.getSedes_idsedes()) && !c.getPagada() && !c.getCitacancelada()){
+                listaValidarCitaFilter.add(c);
+            }
+        }
+
+        model.addAttribute("listaValidarCitaFilter",listaValidarCitaFilter);
+
+
+
+
+
+        return "administrativo/validarCita";
     }
 
     //Cambio de contraseña
@@ -547,8 +566,59 @@ public class AdministrativoController {
     @PostMapping("/validarPagos")
     public String pagosTarjeta(@RequestParam("citaId") String citaId,
                                @RequestParam("precio") String precio,
+                               @RequestParam("concepto") String concepto,
+                               @RequestParam("seguro") String seguro,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
-        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        /*Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<ValidarCitaDto> listaValidarCita = citaRepository.validarCitasList();
+        ArrayList<ValidarCitaDto> listaValidarCitaFilter = new ArrayList<>();
+
+
+        for(ValidarCitaDto c : listaValidarCita){
+
+            if(Objects.equals(usuarioSession.getSedesIdsedes().getId(), c.getSedes_idsedes()) && !c.getPagada() && !c.getCitacancelada()){
+                listaValidarCitaFilter.add(c);
+            }
+        }*/
+        try{
+            Optional<Cita> citaOptional = citaRepository.findById(Integer.valueOf(citaId));
+            if(citaOptional.isPresent()){
+                Cita citaA = citaOptional.get();
+                if(!citaA.getPagada() && !citaA.getCitacancelada()){
+                    Double precioParsed = Double.valueOf(precio);
+                    Seguro seguro1 = seguroRepository.obtenerSegurobyName(seguro);
+
+                    Boleta boleta = new Boleta();
+                    boleta.setConceptopago(concepto);
+                    boleta.setMontoCita(precioParsed);
+                    boleta.setCitaIdcita(citaA);
+                    boleta.setSeguro(seguro1);
+                    citaRepository.pagarCita(citaA.getId());
+
+                    boletaRepository.save(boleta);
+
+                    attr.addFlashAttribute("msg1","Cita validada correctamente");
+                    return "redirect:/administrativo/validarLaCita";
+                }else{
+                    attr.addFlashAttribute("msg","La cita no es correcta");
+                    return "redirect:/administrativo/validarLaCita";
+                }
+            }
+        }catch (Exception e){
+            attr.addFlashAttribute("msg","Hubo errores en el envio de datos");
+            return "redirect:/administrativo/validarLaCita";
+        }
+            return "redirect:/administrativo/validarLaCita";
+        }
+
+
+
+
+
+
+
+
+        /*Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         try{
@@ -576,10 +646,19 @@ public class AdministrativoController {
                     attr.addFlashAttribute("errorPagar", "Error al intentar pagar la cita");
                 }
             }
+
+
+
+
         }catch (NumberFormatException e){
             System.out.printf(e.getMessage());
             attr.addFlashAttribute("errorPagar", "Id erróneo de cita");
         }
         return "redirect:/administrativo/";
-    }
+    }*/
+
+
+
+
+
 }

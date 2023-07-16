@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
 @Controller
 @RequestMapping("/doctor")
@@ -315,6 +314,22 @@ public class DoctorController {
         }
     }
 
+    @PostMapping("/enviarBitacoras")
+    public String enviarBitacoras(@RequestParam("listaidInformes") String listaidInformes, @RequestParam("listaBitacoras") String listaBitacoras,
+                                  Model model){
+
+        String[] informesid = listaidInformes.split(">%%%%%<%%%%>%%%%%<");
+        String[] bitacoraContent = listaBitacoras.split(">%%%%%<%%%%>%%%%%<");
+
+        for (int i=0;i<informesid.length;i++){
+            String idInforme = informesid[i];
+            String bitacora = bitacoraContent[i];
+            informeRepository.ingresarBitacora(bitacora, Integer.parseInt(idInforme));
+        }
+
+        model.addAttribute("bitacoracambios","Se guardaron los comentarios correctamento");
+        return "redirect:/doctor/pacientes";
+    }
     @PostMapping("/rellenarInforme")
     public String rellenarInforme(@RequestParam("diagnostico") String diag,
                                   @RequestParam("tratamiento") String trat,
@@ -459,6 +474,7 @@ public class DoctorController {
             return false;
         }
     }
+
     @PostMapping("/enviarCuest")
     public String enviarCuest(Model model,@RequestParam("usuario") String paciente,
             @RequestParam("mensaje") String mensaje,@RequestParam("cuest") String cuestionarioid,RedirectAttributes attr,
@@ -526,14 +542,6 @@ public class DoctorController {
 
     }
 
-    @PostMapping("/enviarBitacora")
-    public String enviarBitacora(@RequestParam("bitacora") String bitacora,
-                                 @RequestParam("usuarioid") String usuarioid){
-
-
-        return "redirect:/doctor/principal";
-    }
-
     @PostMapping("/enviarHorasDoctor")
     public String horasDoctor(@RequestParam("mes") String mes, @RequestParam("dia") String dia,
                               @RequestParam("horainicio") String horainicio, @RequestParam("horafin") String horafin,
@@ -565,11 +573,7 @@ public class DoctorController {
         return "redirect:/doctor/config";
     }
 
-    @PostMapping("/enviarBitacoras")
-    public String enviarBitacoras(HttpSession httpSession,RedirectAttributes attr){
 
-        return "";
-    }
     //Adaptarlo para sesiones
     /*@GetMapping("/llenarInforme")
     public String llenarInforme(@RequestParam("idCita") String idcuestionario,Model model,
