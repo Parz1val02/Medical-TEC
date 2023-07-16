@@ -224,7 +224,71 @@
                     </table>
                 </div>
             </div>
+            <script>
+                // Obtener datos y botones
+                var botones = document.getElementsByClassName('botones');
+                var fecha = document.getElementsByClassName('fecha');
+                var horas = document.getElementsByClassName('hora');
 
+                // Obtener la fecha y hora actual
+                var fechaActual = new Date();
+
+                for (var i=0;i<botones.length;i++) {
+
+                    var fechaString = fecha[i].value;
+                    var horaString = horas[i].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes = fechaString.split('-');
+                    var dia = fechaPartes[0];
+                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio = fechaPartes[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes = horaString.split(':');
+                    var hora = horaPartes[0];
+                    var minutos = horaPartes[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+                    var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                    //var tiempo=fechaInicio-fechaActual;
+
+                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
+                        mostrarBoton(i);
+                    }
+                }
+
+                function accionesBoton(parametro) {
+                    // Código de la función
+                    botones[parametro].disabled = false;
+                    botones[parametro].style.background = '#3d8af7';
+                    botones[parametro].style.borderColor = '#3d8af7';
+                    console.log(botones[parametro]);
+
+                }
+
+                function mostrarBoton(valor) {
+                    setTimeout(function() {
+                        accionesBoton(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+                function myStopFunction() {
+                    clearTimeout(myTimeout);
+                }
+
+                function mostrarDiv(numeroDiv) {
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
+                    // Mostrar el div seleccionado
+                    document.getElementById("div" + numeroDiv).style.display = "block";
+                }
+            </script>
             <script type="text/javascript">
 
                 //var elemento = document.getElementById('jitsi-button');
@@ -278,97 +342,6 @@
                         // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
                     });
                 });*/
-            </script>
-
-            <script>
-                // Obtener datos y botones
-                var botones = document.getElementsByClassName('botones');
-                var fecha = document.getElementsByClassName('fecha');
-                var horas = document.getElementsByClassName('hora');
-
-                // Obtener la fecha y hora actual
-                var fechaActual = new Date();
-
-                for (var i=0;i<botones.length;i++) {
-
-                    var fechaString = fecha[i].value;
-                    var horaString = horas[i].value;
-
-                    // Obtenemos las partes de la fecha
-                    var fechaPartes = fechaString.split('-');
-                    var dia = fechaPartes[0];
-                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
-                    var anio = fechaPartes[2];
-
-                    // Obtenemos las partes de la hora
-                    var horaPartes = horaString.split(':');
-                    var hora = horaPartes[0];
-                    var minutos = horaPartes[1];
-
-                    // Creamos el objeto de fecha combinando las partes correspondientes
-                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
-                    var fechaInicio = new Date(fechaObjetivo.getTime() - 45 * 60000); // Restar 30 minutos en milisegundos
-                    var fechaFin = new Date(fechaObjetivo.getTime() + 45 * 60000); // Sumar 30 minutos en milisegundos
-
-                    //var tiempo=fechaInicio-fechaActual;
-
-                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
-                        mostrarBoton(i);
-                    }
-                    /*
-                    if(fechaInicio>fechaActual && fechaFin<fechaActual){
-                        mostrarBoton(i);
-                    } else if (fechaActual<fechaInicio){
-                        mostrarBoton(i);
-                    } else {
-                        console.log("No es tiempo aún"+"corresponde a"+i);
-                    }
-
-
-                    mostrarBoton(i);
-                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
-                        botones[i].disabled = false;
-                        botones[i].style.background = 'grey';
-                        botones[i].style.borderColor = 'grey';
-                    }
-
-                    var tiempo = fechaObjetivo - fechaActual;
-                    const fecha = setTimeout(
-                        function cambios(i){
-                        botones[i].disabled = false;
-                        botones[i].style.background = 'grey';
-                        botones[i].style.borderColor = 'grey';
-                        }, 5000);
-                    */
-                }
-
-                function accionesBoton(parametro) {
-                    // Código de la función
-                    botones[parametro].disabled = false;
-                    botones[parametro].style.background = '#3d8af7';
-                    botones[parametro].style.borderColor = '#3d8af7';
-                    console.log(botones[parametro]);
-
-                }
-
-                function mostrarBoton(valor) {
-                    setTimeout(function() {
-                        accionesBoton(valor);
-                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
-                }
-
-                function myStopFunction() {
-                    clearTimeout(myTimeout);
-                }
-
-                function mostrarDiv(numeroDiv) {
-                    // Ocultar todos los divs
-                    document.getElementById("div1").style.display = "none";
-                    document.getElementById("div2").style.display = "none";
-
-                    // Mostrar el div seleccionado
-                    document.getElementById("div" + numeroDiv).style.display = "block";
-                }
             </script>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
