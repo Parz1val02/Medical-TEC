@@ -3,10 +3,8 @@ import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.dto.DoctorDto;
 import com.example.medicaltec.dto.DoctorDto2;
 import com.example.medicaltec.dto.FinanzasDto;
-//import com.example.medicaltec.dto.InsertSelectLastIdDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
-import com.example.medicaltec.more.CometChatApi;
 import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
 import jakarta.mail.MessagingException;
@@ -18,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
