@@ -222,7 +222,7 @@
                             <div class="modal-footer">
                                 <div th:each="receta : ${listaRecetas}">
                                     <div th:if="${cita.getRecetaIdreceta().id}==${receta.receta.id}">
-                                        <button type="button" class="btn btn-primary pagarBoletaReceta" th:data-target="'#Pago' + ${info.index+1}" data-toggle="modal" data-dismiss="modal" th:if="${receta.recetaPagada}==false">Pagar Receta</button>
+                                        <button type="button" class="btn btn-primary pagarBoletaReceta" th:data-target="'#Pago' + ${info.index+1}" data-toggle="modal" data-dismiss="modal" th:if="${receta.recetaPagada}==false && ${cita.modalidad}=='Virtual'">Pagar Receta</button>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>

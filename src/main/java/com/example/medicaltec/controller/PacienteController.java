@@ -75,10 +75,11 @@ public class PacienteController {
     final ExamenMedicoRepository examenMedicoRepository;
     final HorasDoctorRepository horasDoctorRepository;
     final DeliverymedicamentoRepository deliverymedicamentoRepository;
+    final CorreoConEstilos correoConEstilos;
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository, DeliverymedicamentoRepository deliverymedicamentoRepository){
+                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository, DeliverymedicamentoRepository deliverymedicamentoRepository, CorreoConEstilos correoConEstilos){
         this.historialMedicoRepository = historialMedicoRepository;
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
@@ -100,6 +101,7 @@ public class PacienteController {
         this.examenMedicoRepository = examenMedicoRepository;
         this.horasDoctorRepository = horasDoctorRepository;
         this.deliverymedicamentoRepository = deliverymedicamentoRepository;
+        this.correoConEstilos = correoConEstilos;
     }
 
     @RequestMapping(value = "/principal")
@@ -668,7 +670,6 @@ public class PacienteController {
     public String cancelarCita(@RequestParam("citaId") String citaId,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         try{
@@ -705,7 +706,6 @@ public class PacienteController {
                                @RequestParam("cvv") String cvv,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Regex regex = new Regex();
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
@@ -749,7 +749,6 @@ public class PacienteController {
                                @RequestParam("cvv") String cvv,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Regex regex = new Regex();
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
