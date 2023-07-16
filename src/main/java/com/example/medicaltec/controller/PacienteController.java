@@ -300,16 +300,27 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
-        List<List<RecetaHasMedicamento>> medicamentos = new ArrayList<>(); // 1 -> 1 Lista medicamentos
+        List<RecetasGa> listaMedicamentosxReceta = new ArrayList<>(); // 1 -> 1 Lista medicamentos
         for (Cita c: citas) {
-            List<RecetaHasMedicamento> recetaHasMedicamentos = recetaHasMedicamentoRepository.listarMedxId(c.getRecetaIdreceta().getId());
-            if(recetaHasMedicamentos.size()>0){
-                medicamentos.add(recetaHasMedicamentos);
-            }else{
-                medicamentos.add(new ArrayList<RecetaHasMedicamento>());
+            Optional<Receta> recetaOptional = recetaRepository.findById(c.getRecetaIdreceta().getId());
+            if(recetaOptional.isPresent()){
+                Receta receta = recetaOptional.get();
+                List<RecetaHasMedicamento> recetaHasMedicamentos = recetaHasMedicamentoRepository.listarMedxId(receta.getId());
+                Double precio = 0.0;
+                for(RecetaHasMedicamento r: recetaHasMedicamentos){
+                    precio += r.getMedicamentosIdmedicamentos().getPrecio();
+                }
+                Boleta boleta = boletaRepository.obtenerCitaxBoleta(c.getId());
+                RecetasGa recetasGa = new RecetasGa();
+                Double porcentaje = Double.parseDouble(boleta.getSeguro().getPorcSeguro());
+                precio = (precio*porcentaje)/100;
+                recetasGa.setPrecioTotal(precio);
+                recetasGa.setReceta(receta);
+                recetasGa.setMedicamentos(recetaHasMedicamentos);
+                listaMedicamentosxReceta.add(recetasGa);
             }
         }
-        model.addAttribute("medicamentos", medicamentos);
+        model.addAttribute("listaRecetas", listaMedicamentosxReceta);
         model.addAttribute("citas", citas);
         return "paciente/consultas";
     }
