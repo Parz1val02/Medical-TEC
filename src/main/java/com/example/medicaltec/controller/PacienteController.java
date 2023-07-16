@@ -311,7 +311,7 @@ public class PacienteController {
                 Double precio = 0.0;
                 Boolean recetaPagada = false;
                 for(RecetaHasMedicamento r: recetaHasMedicamentos){
-                    precio += r.getMedicamentosIdmedicamentos().getPrecio();
+                    precio += r.getMedicamentosIdmedicamentos().getPrecio()*r.getCantidad();
                 }
                 Boleta boleta = boletaRepository.obtenerCitaxBoleta(c.getId());
                 if(boleta.getRecetaIdreceta()!=null){
