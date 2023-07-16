@@ -302,16 +302,32 @@ public class PacienteController {
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List<Cita> citas = citaRepository.historialCitas2(usuario.getId());
-        List<List<RecetaHasMedicamento>> medicamentos = new ArrayList<>(); // 1 -> 1 Lista medicamentos
+        List<RecetasGa> listaMedicamentosxReceta = new ArrayList<>(); // 1 -> 1 Lista medicamentos
         for (Cita c: citas) {
-            List<RecetaHasMedicamento> recetaHasMedicamentos = recetaHasMedicamentoRepository.listarMedxId(c.getRecetaIdreceta().getId());
-            if(recetaHasMedicamentos.size()>0){
-                medicamentos.add(recetaHasMedicamentos);
-            }else{
-                medicamentos.add(new ArrayList<RecetaHasMedicamento>());
+            Optional<Receta> recetaOptional = recetaRepository.findById(c.getRecetaIdreceta().getId());
+            if(recetaOptional.isPresent()){
+                Receta receta = recetaOptional.get();
+                List<RecetaHasMedicamento> recetaHasMedicamentos = recetaHasMedicamentoRepository.listarMedxId(receta.getId());
+                Double precio = 0.0;
+                Boolean recetaPagada = false;
+                for(RecetaHasMedicamento r: recetaHasMedicamentos){
+                    precio += r.getMedicamentosIdmedicamentos().getPrecio();
+                }
+                Boleta boleta = boletaRepository.obtenerCitaxBoleta(c.getId());
+                if(boleta.getRecetaIdreceta()!=null){
+                    recetaPagada=true;
+                }
+                RecetasGa recetasGa = new RecetasGa();
+                Double porcentaje = Double.parseDouble(boleta.getSeguro().getPorcSeguro());
+                precio = (precio*porcentaje)/100;
+                recetasGa.setPrecioTotal(precio);
+                recetasGa.setReceta(receta);
+                recetasGa.setRecetaPagada(recetaPagada);
+                recetasGa.setMedicamentos(recetaHasMedicamentos);
+                listaMedicamentosxReceta.add(recetasGa);
             }
         }
-        model.addAttribute("medicamentos", medicamentos);
+        model.addAttribute("listaRecetas", listaMedicamentosxReceta);
         model.addAttribute("citas", citas);
         return "paciente/consultas";
     }
@@ -663,9 +679,11 @@ public class PacienteController {
                     citaRepository.cancelarCita(citaA.getId());
                     attr.addFlashAttribute("exitoCancelar", "Su cita se canceló de manera exitosa");
                     //Enviar correo cita cancelada
-
-                    correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cambio de estado de cita" , "El estado de su ultima cita pasó a " + citaA.getEstadoscitaIdestados().getTipo());
-
+                    if(citaA.getEspecialidadesIdEspecialidad()!=null){
+                        correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
+                    }else if(citaA.getExamenMedico()!=null){
+                        correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
+                    }
                 }else{
                     attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
                 }
@@ -704,8 +722,7 @@ public class PacienteController {
                             citaRepository.estadoPagada(citaA.getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
                             //Enviar correo pago con tarjeta correcto
-
-                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cambio de estado de cita" , "El estado de su ultima cita pasó a " + citaA.getEstadoscitaIdestados().getTipo());
+                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Pago de cita exitoso" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
                         } catch (MessagingException e) {
@@ -721,6 +738,48 @@ public class PacienteController {
         }catch (NumberFormatException e){
             System.out.printf(e.getMessage());
             attr.addFlashAttribute("errorPagar", "Id erróneo de cita");
+        }
+        return "redirect:/paciente/consultas";
+    }
+    @PostMapping("/pagosTarjeta2")
+    public String pagosTarjeta2(@RequestParam("cita") String citaId,
+                               @RequestParam("precioReceta") String precio,
+                               @RequestParam("cardNumber") String cardNumber,
+                               @RequestParam("expDate")String expDate,
+                               @RequestParam("cvv") String cvv,
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Regex regex = new Regex();
+        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",SPA);
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        try{
+            Optional<Cita> cita = citaRepository.findById(Integer.parseInt(citaId));
+            if(cita.isPresent()){
+                Cita citaA = cita.get();
+                if(regex.cardNumberValid(cardNumber) && regex.expDateValid(expDate) && regex.cvvValid(cvv)){
+                    if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
+                        try{
+                            Boleta boleta = boletaRepository.obtenerCitaxBoleta(citaA.getId());
+                            boletaRepository.boletaReceta(citaA.getRecetaIdreceta().getId(), Double.parseDouble(precio), boleta.getId());
+                            attr.addFlashAttribute("exitoReceta", "Su receta se pagó de manera exitosa");
+                            //Enviar correo pago con tarjeta correcto
+                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Pago de receta exitoso" , "La receta de consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
+                        }catch (NumberFormatException e){
+                            attr.addFlashAttribute("errorReceta", "Monto a pagar erróneo");
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }else{
+                        attr.addFlashAttribute("errorReceta", "Error al intentar pagar la receta");
+                    }
+                }else{
+                    attr.addFlashAttribute("errorReceta", "Error en el ingreso de datos de la tarjeta");
+                }
+            }
+        }catch (NumberFormatException e){
+            System.out.printf(e.getMessage());
+            attr.addFlashAttribute("errorReceta", "Id erróneo de cita");
         }
         return "redirect:/paciente/consultas";
     }

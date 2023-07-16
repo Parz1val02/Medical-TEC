@@ -22,6 +22,12 @@ public interface BoletaRepository extends JpaRepository<Boleta,Integer> {
     @Query(value = "insert into boletas (conceptopago, monto_cita, cita_idcita, seguros_id_seguro, receta_idreceta, monto_Receta) values (?1,?2,?3,?4,null,null)", nativeQuery = true)
     void crearBoletaCita(String concepto, Double monto, Integer idcita, Integer idseguro);
 
+
+    @Transactional
+    @Modifying
+    @Query(value = "update boletas set receta_idreceta=?1, monto_receta=?2 where idboletas=?3", nativeQuery = true)
+    void boletaReceta(Integer idreceta, Double monto, Integer idboleta);
+
     //querys administrador  finanzas
 
     @Query(nativeQuery = true, value = "SELECT b.idboletas, b.conceptopago, b.monto_cita as 'monto', c.formapago, s.nombre_seguro, e.nombre_especialidad,  c.fecha,\n" +
