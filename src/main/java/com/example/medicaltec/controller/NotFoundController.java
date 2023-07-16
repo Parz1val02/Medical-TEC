@@ -10,13 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class NotFoundController implements com.example.medicaltec.controller.ErrorController {
 
-    /*@RequestMapping("/error")
-    public ModelAndView handleError()
-    {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("error404");
-        return modelAndView;
-    }*/
+
 
 
 
@@ -47,8 +41,5 @@ public class NotFoundController implements com.example.medicaltec.controller.Err
     public String getErrorPath() {
         return "/error";
     }
-    /*@Override
-    public String getErrorPath() {
-        return "/error";
-    }*/
+
 }

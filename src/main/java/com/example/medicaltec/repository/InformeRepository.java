@@ -41,7 +41,9 @@ public interface InformeRepository extends JpaRepository<Informe,Integer> {
     @Query(value = "select idinforme from telesystem_2.informe where cita_idcita =?1",nativeQuery = true)
     Integer idinformecreado (Integer cita);
 
-    @Query(value = "UPDATE `telesystem_2`.`informe` SET `bitacora` = ?1 WHERE (`idinforme` = ?2);",nativeQuery = true)
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE informe i SET i.bitacora=?1 WHERE i.idinforme=?2",nativeQuery = true)
     void ingresarBitacora (String bitacora, int idInforme);
 
 }

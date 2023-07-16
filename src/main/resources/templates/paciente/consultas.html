@@ -4,7 +4,13 @@
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Citas')}">
 </head>
 
-
+<style>
+    .disabledButton{
+        background: grey;
+        border-color: grey;
+        pointer-events: none;
+    }
+</style>
 <body class="">
 
 <!-- ===============================================-->
@@ -49,48 +55,6 @@
             </div>
             <div class="card mb-3">
                 <div id="calendar"></div>
-                <!-- Start popup dialog box -->
-                <!--div class="modal fade" id="event_entry_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-md" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel">Add New Event</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="img-container">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <label for="event_name">Event name</label>
-                                                <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter your event name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="event_start_date">Event start</label>
-                                                <input type="date" name="event_start_date" id="event_start_date" class="form-control onlydatepicker" placeholder="Event start date">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="event_end_date">Event end</label>
-                                                <input type="date" name="event_end_date" id="event_end_date" class="form-control" placeholder="Event end date">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" onclick="save_event()">Save Event</button>
-                            </div>
-                        </div>
-                    </div-->
-                <!-- End popup dialog box -->
             </div>
             <div class="card mb-3 bg-card-gradient">
                 <div class="card-body ">
@@ -490,8 +454,6 @@
 <!--script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
@@ -566,40 +528,31 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
-            /*eventDidMount: function(info) {
-                tippy(info.el, {
-                    trigger: 'mouseenter',
-                    content: generateTooltipContent(info.event), // call a function to generate the html content
-                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
-                    animation: 'fade',
-                    allowHTML: 'true'
-                })
-            },*/
             eventClick: function(info) {
                 if(info.event.extendedProps.modalidad==="Virtual"){
                     let modalA = $('#modalVirtual');
                     modalA.modal('show');
                     modalA.on('shown.bs.modal', function() {
+                        let enlace = $("#enlace");
+                        enlace.addClass("disabledButton");
+                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                        let formattedTime = time.format('h:mm A');
+                        let date = moment(info.event.start, 'YYYY-MM-DD');
+                        let formattedDate = date.format('DD-MM-YYYY');
                         let especialidad = $("#especialidadVirtual");
                         especialidad.attr('placeholder', info.event.title);
                         let doctorcito = $("#doctorDniVirtual");
                         doctorcito.attr('placeholder', info.event.extendedProps.doctor);
                         let fecha = $("#fechaVirtual");
-                        let hora = $("#horaVirtual");
+                        let horaGa = $("#horaVirtual");
                         let tipocita = $("#tipocitaVirtual");
                         let sede = $("#sedeVirtual");
                         let estado = $("#estadoVirtual");
-                        let time = moment(info.event.extendedProps.hora, 'HH:mm');
-                        let formattedTime = time.format('h:mm A');
-                        let date = moment(info.event.start, 'YYYY-MM-DD');
-                        let formattedDate = date.format('DD-MM-YYYY');
                         estado.attr('placeholder', info.event.extendedProps.estado);
-                        hora.attr('placeholder', formattedTime);
+                        horaGa.attr('placeholder', formattedTime);
                         fecha.attr('placeholder', formattedDate);
                         tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
                         sede.attr('placeholder', info.event.extendedProps.sede);
-                        let enlace = $("#enlace");
-                        enlace.attr('href', info.event.extendedProps.extra);
                         console.log(info.event.extendedProps.pagada);
                         if(info.event.extendedProps.pagada==='true'){
                             $("#pagarVirtual").hide();
@@ -608,7 +561,32 @@
                             $("#pagarVirtual").show();
                             $("#cancelarVirtual").show();
                         }
+                        // Obtener la fecha y hora actual
+                        var fechaActual = new Date();
+                        // Obtenemos las partes de la fecha
+                        var fechaPartes = date.format('DD-MM-YYYY').split('-');
+                        var dia = fechaPartes[0];
+                        var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                        var anio = fechaPartes[2];
 
+                        // Obtenemos las partes de la hora
+                        var horaPartes = time.format('HH:mm').split(':');
+                        var hora = horaPartes[0];
+                        var minutos = horaPartes[1];
+
+                        // Creamos el objeto de fecha combinando las partes correspondientes
+                        var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+                        var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                        var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+                        console.log(fechaObjetivo);
+                        console.log(fechaInicio);
+                        console.log(fechaFin);
+                        console.log(fechaActual);
+                        //var tiempo=fechaInicio-fechaActual;
+                        if (fechaActual >= fechaInicio && fechaActual <= fechaFin) {
+                            enlace.removeClass("disabledButton");
+                            enlace.attr('href', info.event.extendedProps.extra);
+                        }
                         $('#cancelarVirtual').on('click', function (){
                             modalA.modal('hide');
                             let modalb = $('#cancelarCita');
@@ -720,35 +698,6 @@
         });
         calendar.render();
     });
-    /*function generateTooltipContent(event) {
-        // Generate the HTML content for the tooltip
-        // Assuming you have a time string like '14:30'
-        var timeString = event.extendedProps.hora;
-
-        // Parse the time string using Moment.js
-        var time = moment(timeString, 'HH:mm');
-
-        // Format the time as 'h:mm A' (e.g., '2:30 PM')
-        var formattedTime = time.format('h:mm A');
-
-        var dateString = event.start;
-        var date = moment(dateString, 'YYYY-MM-DD');
-        var fechaFormateada = date.format('DD/MM/YYYY');
-
-        var content = '<strong>' + event.title + '</strong>';
-        content += '<br>Doctor: ' + event.extendedProps.doctor;
-        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
-        content += '<br>Fecha: ' + fechaFormateada;
-        content += '<br>Hora: ' + formattedTime;
-        content += '<br>Sede: ' + event.extendedProps.sede;
-
-        return content;
-    }*/
-</script>
-<script>
-
-
-
 </script>
 </body>
 </html>

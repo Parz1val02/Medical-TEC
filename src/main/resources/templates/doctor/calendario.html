@@ -48,6 +48,71 @@
 <!--    End of Main Content-->
 <!-- ===============================================-->
 
+<div class="modal fade" id="modalCitasCalendario" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="tipocita">Tipo de cita: </label>
+                                <input type="text" name="tipocita" id="tipocita" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="especialidad">Especialidad:</label>
+                                <input type="text" name="especialidad" id="especialidad" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha:</label>
+                                <input type="text" name="fecha" id="fecha" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado de cita:</label>
+                                <input type="text" name="estado" id="estado" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="forma">Forma de pago:</label>
+                                <input type="text" name="forma" id="forma" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="modalidad">Modalidad:</label>
+                                <input type="text" name="modalidad" id="modalidad" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="paciente">Paciente:</label>
+                                <input type="text" name="paciente" id="paciente" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="hora">Hora:</label>
+                                <input type="text" name="hora" id="hora" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sede">Sede:</label>
+                                <input type="text" name="sede" id="sede" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="pago">Monto a cobrar:</label>
+                                <input type="text" name="pago" id="pago" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -95,13 +160,34 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
-            eventDidMount: function(info) {
-                tippy(info.el, {
-                    trigger: 'mouseenter',
-                    content: generateTooltipContent(info.event), // call a function to generate the html content
-                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
-                    animation: 'fade',
-                    allowHTML: 'true'
+            eventClick: function (info){
+                let modalA = $('#modalCitasCalendario');
+                modalA.modal('show');
+                modalA.on('shown.bs.modal', function() {
+                    let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                    let formattedTime = time.format('h:mm A');
+                    let date = moment(info.event.start, 'YYYY-MM-DD');
+                    let formattedDate = date.format('DD-MM-YYYY');
+                    let tipoCita = $("#tipocita");
+                    let modalidad = $("#modalidad");
+                    let especialidad = $("#especialidad");
+                    let paciente = $("#paciente");
+                    let fecha = $("#fecha");
+                    let horaGa = $("#hora");
+                    let estadoCita = $("#estado");
+                    let sede = $("#sede");
+                    let formaPago = $("#forma");
+                    let montoCobrar = $("#pago");
+                    tipoCita.attr('placeholder', info.event.title);
+                    modalidad.attr('placeholder', info.event.extendedProps.modalidad);
+                    especialidad.attr('placeholder', info.event.extendedProps.especialidad);
+                    paciente.attr('placeholder', info.event.extendedProps.paciente);
+                    horaGa.attr('placeholder', formattedTime);
+                    fecha.attr('placeholder', formattedDate);
+                    estadoCita.attr('placeholder', info.event.extendedProps.estado);
+                    sede.attr('placeholder', info.event.extendedProps.sede);
+                    formaPago.attr('placeholder', info.event.extendedProps.formaPago);
+                    montoCobrar.attr('placeholder', info.event.extendedProps.pago);
                 })
             }
         });
@@ -130,7 +216,9 @@
                         hora: eventData.hora,
                         sede: eventData.sede,
                         especialidad: eventData.especialidad,
-                        formaPago: eventData.formaPago
+                        formaPago: eventData.formaPago,
+                        pago: eventData.pago,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -145,31 +233,6 @@
         });
         calendar.render();
     });
-    function generateTooltipContent(event) {
-        // Generate the HTML content for the tooltip
-        // Assuming you have a time string like '14:30'
-        var timeString = event.extendedProps.hora;
-
-        // Parse the time string using Moment.js
-        var time = moment(timeString, 'HH:mm');
-
-        // Format the time as 'h:mm A' (e.g., '2:30 PM')
-        var formattedTime = time.format('h:mm A');
-
-        var dateString = event.start;
-        var date = moment(dateString, 'YYYY-MM-DD');
-        var fechaFormateada = date.format('DD/MM/YYYY');
-
-        var content = '<strong>' + event.title + '</strong>';
-        content += '<br>' + event.extendedProps.especialidad;
-        content += '<br>Paciente: ' + event.extendedProps.paciente;
-        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
-        content += '<br>Fecha: ' + fechaFormateada;
-        content += '<br>Hora: ' + formattedTime;
-        content += '<br>Sede: ' + event.extendedProps.sede;
-
-        return content;
-    }
 </script>
 </body>
 </html>
