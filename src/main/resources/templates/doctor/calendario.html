@@ -61,50 +61,48 @@
                         <!-- columna 1 -->
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="especialidadVirtual">Especialidad:</label>
-                                <input type="text" name="especialidadId" id="especialidadVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="tipocita">Tipo de cita: </label>
+                                <input type="text" name="tipocita" id="tipocita" class="form-control" readonly="" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="fechaVirtual">Fecha:</label>
-                                <input type="text" name="fecha" id="fechaVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="especialidad">Especialidad:</label>
+                                <input type="text" name="especialidad" id="especialidad" class="form-control" readonly="" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="tipocitaVirtual">Tipo de cita: </label>
-                                <input type="text" name="tipocitaId" id="tipocitaVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="fecha">Fecha:</label>
+                                <input type="text" name="fecha" id="fecha" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado de cita:</label>
+                                <input type="text" name="estado" id="estado" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="forma">Forma de pago:</label>
+                                <input type="text" name="forma" id="forma" class="form-control" readonly="" placeholder="">
                             </div>
                         </div>
                         <!-- columna 2 -->
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="doctorDniVirtual">Doctor:</label>
-                                <input type="text" name="doctorDni" id="doctorDniVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="modalidad">Modalidad:</label>
+                                <input type="text" name="modalidad" id="modalidad" class="form-control" readonly="" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="horaVirtual">Hora:</label>
-                                <input type="text" name="hora" id="horaVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="paciente">Paciente:</label>
+                                <input type="text" name="paciente" id="paciente" class="form-control" readonly="" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="sedeVirtual">Sede:</label>
-                                <input type="text" name="sedeId" id="sedeVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="hora">Hora:</label>
+                                <input type="text" name="hora" id="hora" class="form-control" readonly="" placeholder="">
                             </div>
-                        </div>
-                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="estadoVirtual">Estado de la cita:</label>
-                                <input type="text" name="estado" id="estadoVirtual" class="form-control" readonly="" placeholder="">
+                                <label for="sede">Sede:</label>
+                                <input type="text" name="sede" id="sede" class="form-control" readonly="" placeholder="">
                             </div>
-                        </div>
-                    </div>
-                    <hr style="height: 1px; background-color: #333; border: none">
-                    <div class="row">
-                        <div class="form-group col-sm-4">
-                            <a id="enlace" href="" type="button" class="btn btn-success" target="_blank">Ingresar Cita</a>
-                        </div>
-                        <div class="form-group col-sm-4">
-                            <button type="button" class="btn btn-primary" id="pagarVirtual">Pagar Cita</button>
-                        </div>
-                        <div class="form-group col-sm-4">
-                            <button id="cancelarVirtual" type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelarCita">Cancelar Cita</button>
+                            <div class="form-group">
+                                <label for="pago">Monto a cobrar:</label>
+                                <input type="text" name="pago" id="pago" class="form-control" readonly="" placeholder="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,10 +160,40 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
+            eventClick: function (info){
+                let modalA = $('#modalCitasCalendario');
+                modalA.modal('show');
+                modalA.on('shown.bs.modal', function() {
+                    let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                    let formattedTime = time.format('h:mm A');
+                    let date = moment(info.event.start, 'YYYY-MM-DD');
+                    let formattedDate = date.format('DD-MM-YYYY');
+                    let tipoCita = $("#tipocita");
+                    let modalidad = $("#modalidad");
+                    let especialidad = $("#especialidad");
+                    let paciente = $("#paciente");
+                    let fecha = $("#fecha");
+                    let horaGa = $("#hora");
+                    let estadoCita = $("#estado");
+                    let sede = $("#sede");
+                    let formaPago = $("#forma");
+                    let montoCobrar = $("#pago");
+                    tipoCita.attr('placeholder', info.event.title);
+                    modalidad.attr('placeholder', info.event.extendedProps.modalidad);
+                    especialidad.attr('placeholder', info.event.extendedProps.especialidad);
+                    paciente.attr('placeholder', info.event.extendedProps.paciente);
+                    horaGa.attr('placeholder', formattedTime);
+                    fecha.attr('placeholder', formattedDate);
+                    estadoCita.attr('placeholder', info.event.extendedProps.estado);
+                    sede.attr('placeholder', info.event.extendedProps.sede);
+                    formaPago.attr('placeholder', info.event.extendedProps.formaPago);
+                    montoCobrar.attr('placeholder', info.event.extendedProps.pago);
+                })
+            }
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://localhost:8081/api/citasDoctor', // Replace with your API endpoint URL
+            url: 'http://34.28.24.16:8081/api/citasDoctor', // Replace with your API endpoint URL
             type: 'GET',
             data: {
                 dni: [[${session.usuario.id}]] // Specify the GET parameter

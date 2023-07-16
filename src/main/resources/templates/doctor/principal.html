@@ -126,36 +126,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-12">
-                            <div class="card mb-3">
-                                <div class="card-body" style="max-height: 650px">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Calendario
-                                    </h4>
-                                    <div id="calendar"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--<div class="col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body" >
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Cuestionarios
-                                    </h4>
-                                    <div>
-                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
-                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
-                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="|${cuestionario.nombre}|"></b>
-                                                <div> Descripción cuestionario respectiva</div>
-                                            </div>
+                    <div class="row no-gutters">
+                        <div class="col-lg-12 pl-lg-2" style="padding-top: 25px">
+                            <div class="card h-100 mb-3">
+                                <div class="card-header h-100  bg-light py-2">
+                                    <div class="row flex-between-center">
+                                        <div class="col-md-6 col-lg-6">
+                                            <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                                Calendario
+                                            </h4>
+                                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
+                                        </div>
+                                    </div>
+                                    <div class="row flex-between-center">
+                                        <div class="col-md-12 col-lg-12">
+                                            <div id="calendar"></div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                        </div>-->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -480,7 +471,7 @@
         });
         // AJAX request to fetch events
         $.ajax({
-            url: 'http://localhost:8081/api/citasDoctor', // Replace with your API endpoint URL
+            url: 'http://34.28.24.16:8081/api/citasDoctor', // Replace with your API endpoint URL
             type: 'GET',
             data: {
                 dni: [[${session.usuario.id}]] // Specify the GET parameter
@@ -518,6 +509,7 @@
                 console.log('Error:', error);
             }
         });
+        calendar.updateSize();
         calendar.render();
     });
     function generateTooltipContent(event) {
@@ -543,6 +535,5 @@
         return content;
     }
 </script>
-
 </body>
 </html>

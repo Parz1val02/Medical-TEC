@@ -556,6 +556,7 @@
                         doctor: eventData.doctor,
                         formaPago: eventData.formaPago,
                         especialidad: eventData.especialidad,
+                        estado: eventData.estado
                         // Add more properties as needed
                     };
                     events.push(event);
@@ -589,15 +590,10 @@
         var content = '<strong>' + event.title + '</strong>';
         content += '<br>Paciente: ' + event.extendedProps.paciente;
         content += '<br>Doctor: ' + event.extendedProps.doctor;
-        content += '<br>Especialidad: ' + event.extendedProps.especialidad;
-        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
         content += '<br>Fecha: ' + fechaFormateada;
         content += '<br>Hora: ' + formattedTime;
-
         return content;
     }
 </script>
-
-
 </body>
 </html>
