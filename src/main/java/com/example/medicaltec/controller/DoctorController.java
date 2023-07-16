@@ -293,8 +293,7 @@ public class DoctorController {
     }
 
     @GetMapping("/llenarInforme")
-    public String llenarInforme(@RequestParam("idInforme") String idinforme,
-                                @RequestParam("checkboxName") Boolean valorCheckbox,RedirectAttributes attr,
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
                                 HttpSession httpSession,Model model){
         if(esNumeroEntero(idinforme)){
             Integer iddinforme = Integer.parseInt(idinforme);
@@ -310,12 +309,8 @@ public class DoctorController {
                 model.addAttribute("informe",informeNuevo);
                 List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
                 model.addAttribute("listmedic", listademedicamentos);
-
-                if (valorCheckbox){ //si se marca el checkbox
-                    model.addAttribute("examenes", examenMedicoRepository.findAll());
-                }else {
-                    model.addAttribute("");
-                }
+                List<ExamenMedico> listaexamenes = examenMedicoRepository.findAll();
+                model.addAttribute("examen",listaexamenes);
                 return "doctor/llenarInforme";
             }else {
                 return "redirect:/doctor/citas";
@@ -352,6 +347,13 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/examenes")
+    @ResponseBody
+    public List<ExamenMedico> enviarExamenes(Model model){
+        List<ExamenMedico> listaexamenes = examenMedicoRepository.findAll();
+        return listaexamenes;
+    }
+
     @PostMapping("/enviarBitacoras")
     public String enviarBitacoras(@RequestParam("listaidInformes") String listaidInformes, @RequestParam("listaBitacoras") String listaBitacoras,
                                   Model model){
@@ -374,7 +376,7 @@ public class DoctorController {
                                   @RequestParam("listamedicamentos") String med,
                                   @RequestParam("listacantidades") String cant,
                                   @RequestParam("listaobservaciones") String obser,
-                                  @RequestParam("listaexamenes")String examenes,
+                                  @RequestParam("examen")String exa,
                                   @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
                                   @RequestParam("checkboxName") Boolean valorCheckbox,
                                 RedirectAttributes attr, Model model, HttpSession httpSession) throws MessagingException {
@@ -392,12 +394,11 @@ public class DoctorController {
             String cantidad = cant;
             String observaciones = obser;
             String comentario  =comen;
-            String examen  =examenes;//verfiicar o corregir para examenes
+            String examen  =exa;//verfiicar o corregir para examenes
             String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
             String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
             String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
             String [] listacantidades = cantidad.split(">%%%%%<%%%%>%%%%%<");
-            String [] listaexamenes = examenes.split(">%%%%%<%%%%>%%%%%<");
             String salida ="";
             String separador ="#!%&%!#";
             int i = 0;
@@ -449,9 +450,25 @@ public class DoctorController {
                     return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
                 }
             }
-
+            int b =0;
+            if (valorCheckbox){ //validando si se marcó el checkbox
+                usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
+                CorreoConEstilos correoConEstilos = new CorreoConEstilos();
+                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
+                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+                if(esNumeroEntero(examen)){
+                    b = 1;
+                }else {
+                    attr.addFlashAttribute("examenmsg","El examen seleccionado no es válido.");
+                    a++;
+                    b=3;
+                    return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
+                }
+            }else{
+                b= 0;
+            }
             //falatria algo similar para los examenes
-            if(a==55555){
+            if(a==0){
                 System.out.println(salida);
                 String camposllenados = salida;
                 System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);
@@ -466,20 +483,17 @@ public class DoctorController {
                     Integer intindicemedi = Integer.parseInt(indicemedi);
                     Integer intindicecant = Integer.parseInt(indicecant);
                     recetaHasMedicamentoRepository.llenarRecMed(idrecetacreada,intindicemedi,intindicecant,indiceobser);
-                    citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
-                    httpSession.removeAttribute("iddelinforme");
-                    httpSession.removeAttribute("idcitaparainforme");
-                    if (valorCheckbox){ //validando si se marcó el checkbox
-                        usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
-                        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
-                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
-                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
-
-
-                    }
 
                 }
+                citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
+                if(b==1){
+                    Integer idexamen = Integer.parseInt(examen);
+                    citaRepository.updateExamenCita(idexamen,iddelacita);
+                }
+                httpSession.removeAttribute("iddelinforme");
+                httpSession.removeAttribute("idcitaparainforme");
                 attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+                citaRepository.cambiarEstadoCita(3,iddelacita);
                 return "redirect:/doctor/citas";
             }else {
                 attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
