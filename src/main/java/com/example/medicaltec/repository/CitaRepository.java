@@ -81,6 +81,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "    CONCAT(d.nombre, \" \", d.apellido) AS `fullnameDoc`,\n" +
             "    c.citacancelada,\n" +
             "    s.nombre_seguro,\n" +
+            "    p.dni,\n" +
             "    em.nombre AS `ExamenMedico`,\n" +
             "    CASE\n" +
             "        WHEN t.tipo_cita = 'Consulta médica' THEN\n" +

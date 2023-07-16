@@ -3,11 +3,13 @@ package com.example.medicaltec.controller;
 import com.example.medicaltec.dto.*;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.HistorialMedicoRepository;
 import com.example.medicaltec.repository.TipoCitaRepository;
 import com.example.medicaltec.repository.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -578,7 +580,7 @@ public class PacienteController {
         }
     }
 
-
+        //BCryptPasswordEncoder().encode(plainTextPassword);
 
     @PostMapping("/guardarRespuestas")
     public String guardarRptas( @RequestParam("listarespuestas") String respuestas,
@@ -661,6 +663,7 @@ public class PacienteController {
     public String cancelarCita(@RequestParam("citaId") String citaId,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         try{
@@ -671,6 +674,9 @@ public class PacienteController {
                     citaRepository.cancelarCita(citaA.getId());
                     attr.addFlashAttribute("exitoCancelar", "Su cita se canceló de manera exitosa");
                     //Enviar correo cita cancelada
+
+                    correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cambio de estado de cita" , "El estado de su ultima cita pasó a " + citaA.getEstadoscitaIdestados().getTipo());
+
                 }else{
                     attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
                 }
@@ -678,6 +684,8 @@ public class PacienteController {
         }catch (NumberFormatException e){
             System.out.printf(e.getMessage());
             attr.addFlashAttribute("errorCancelar", "Id erróneo de cita");
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/paciente/consultas";
     }
@@ -690,6 +698,7 @@ public class PacienteController {
                                @RequestParam("cvv") String cvv,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Regex regex = new Regex();
+        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
@@ -706,8 +715,12 @@ public class PacienteController {
                             citaRepository.estadoPagada(citaA.getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
                             //Enviar correo pago con tarjeta correcto
+
+                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cambio de estado de cita" , "El estado de su ultima cita pasó a " + citaA.getEstadoscitaIdestados().getTipo());
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
                         }
                     }else{
                         attr.addFlashAttribute("errorPagar", "Error al intentar pagar la cita");

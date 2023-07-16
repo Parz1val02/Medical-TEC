@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -35,6 +37,9 @@ public class Informe {
 
     @Column(name = "camposllenados")
     private String campos;
+
+    @Transient
+    private List<String> listacamposllenados;
 
     @ManyToOne
     @JoinColumn(name = "informe_nuevo_idinforme")

@@ -2,7 +2,9 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class DoctorController {
 
     @Autowired
     MedicamentoRepository medicamentoRepository;
+
+    @Autowired
+    ExamenMedicoRepository examenMedicoRepository;
 
     public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository) {
         this.sedeRepository = sedeRepository;
@@ -288,7 +293,8 @@ public class DoctorController {
     }
 
     @GetMapping("/llenarInforme")
-    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,
+                                @RequestParam("checkboxName") Boolean valorCheckbox,RedirectAttributes attr,
                                 HttpSession httpSession,Model model){
         if(esNumeroEntero(idinforme)){
             Integer iddinforme = Integer.parseInt(idinforme);
@@ -304,12 +310,44 @@ public class DoctorController {
                 model.addAttribute("informe",informeNuevo);
                 List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
                 model.addAttribute("listmedic", listademedicamentos);
+
+                if (valorCheckbox){ //si se marca el checkbox
+                    model.addAttribute("examenes", examenMedicoRepository.findAll());
+                }else {
+                    model.addAttribute("");
+                }
                 return "doctor/llenarInforme";
             }else {
                 return "redirect:/doctor/citas";
             }
 
         }else {
+            return "redirect:/doctor/citas";
+        }
+    }
+
+    @GetMapping("/verInforme")
+    public String verInforme(@RequestParam("idCita") String idCita,Model model, RedirectAttributes attr){
+        if(esNumeroEntero(idCita)){
+            Integer iddelacita = Integer.parseInt(idCita);
+            Optional<Cita> optionalCita = citaRepository.findById(iddelacita);
+            if(optionalCita.isPresent()){
+                Cita cita = optionalCita.get();
+                Informe informe = cita.getIdinforme();
+                String camposfilled = informe.getCampos();
+                List<String> listacamposfilled = List.of(camposfilled.split("#!%&%!#"));
+                cita.getIdinforme().setListacamposllenados(listacamposfilled);
+                String campospallenar = informe.getInformeNuevo().getCampos();
+                List<String> listacampospallenar = List.of(campospallenar.split("#!%&%!#"));
+                cita.getIdinforme().getInformeNuevo().setListacampos(listacampospallenar);
+                model.addAttribute("citaOWO",cita);
+                return "doctor/verInforme";
+            }else {
+                attr.addFlashAttribute("idcitainvalido","El identificador de la cita es inválido");
+                return "redirect:/doctor/citas";
+            }
+        }else {
+            attr.addFlashAttribute("idcitainvalido","El identificador de la cita no es un entero");
             return "redirect:/doctor/citas";
         }
     }
@@ -336,8 +374,10 @@ public class DoctorController {
                                   @RequestParam("listamedicamentos") String med,
                                   @RequestParam("listacantidades") String cant,
                                   @RequestParam("listaobservaciones") String obser,
+                                  @RequestParam("listaexamenes")String examenes,
                                   @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
-                                RedirectAttributes attr, Model model, HttpSession httpSession){
+                                  @RequestParam("checkboxName") Boolean valorCheckbox,
+                                RedirectAttributes attr, Model model, HttpSession httpSession) throws MessagingException {
         int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
         int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
         String dniusuario;
@@ -352,10 +392,12 @@ public class DoctorController {
             String cantidad = cant;
             String observaciones = obser;
             String comentario  =comen;
+            String examen  =examenes;//verfiicar o corregir para examenes
             String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
             String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
             String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
             String [] listacantidades = cantidad.split(">%%%%%<%%%%>%%%%%<");
+            String [] listaexamenes = examenes.split(">%%%%%<%%%%>%%%%%<");
             String salida ="";
             String separador ="#!%&%!#";
             int i = 0;
@@ -369,33 +411,49 @@ public class DoctorController {
                 }
                 i++;
             }
+            System.out.println("LA LONGITUD DEL ARRAY DE MEDICAMENTOS: " + listamedicamentos.length);
+            System.out.println("LA LONGITUD DEL ARRAY DE CANTIDADES: " + listacantidades.length);
+            if(listamedicamentos.length>listacantidades.length){
+                System.out.println("La cantidad de medicamentos ingresado debe ser un número entero");
+                attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
+                a++;
+                return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
+            }
             for (int k =0; k<listamedicamentos.length;k++){
                 String indicemedi = listamedicamentos[k];
+                System.out.println("MEDICAMENTOOO: "+indicemedi);
                 String indiceobser = listaobservaciones[k];
+                System.out.println("OBSERVACIONES: "+indiceobser);
                 String indicecant = listacantidades[k];
+                System.out.println("CANTIDAD: "+indicecant);
                 if(esNumeroEntero(indicemedi)){
                     if(!esNumeroEntero(indicecant)){
+                        System.out.println("ERROR DE CANTIDAD NO ES UN NÚMERO");
+                        //spring.jpa.show-sql=true
                         attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
                         a++;
-                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                        return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
                     }else {
+                        System.out.println("BIEENNN");
                         a = 0;
                     }
                 }else {
                     if(!esNumeroEntero(indicecant)){
+                        System.out.println("ERROR MEDICAMENTO MAL CANTIDAD MAL");
                         attr.addFlashAttribute("error","El medicamento seleccionado no es válido. La cantidad ingresada debe ser un número entero");
                         a++;
-                        return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                        return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
                     }
                     attr.addFlashAttribute("error","El medicamento seleccionado no es válido.");
                     a++;
-                    return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
+                    return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
                 }
             }
-            if(a==0){
+
+            //falatria algo similar para los examenes
+            if(a==55555){
                 System.out.println(salida);
                 String camposllenados = salida;
-                attr.addFlashAttribute("respondido","Informe rellenado con éxito");
                 System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);
                 informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,tratamiento,camposllenados,iddelinformenuevo);
                 Integer informe1 = informeRepository.idinformecreado(iddelacita);
@@ -411,9 +469,23 @@ public class DoctorController {
                     citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
                     httpSession.removeAttribute("iddelinforme");
                     httpSession.removeAttribute("idcitaparainforme");
+                    if (valorCheckbox){ //validando si se marcó el checkbox
+                        usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
+                        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
+                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
+                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+
+
+                    }
+
                 }
+                attr.addFlashAttribute("respondido","Informe rellenado con éxito");
+                return "redirect:/doctor/citas";
+            }else {
+                attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
+                return "redirect:/doctor/citas";
             }
-            return "redirect:/doctor/citas";
+
         }else {
             attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
             return "redirect:/doctor/citas";
