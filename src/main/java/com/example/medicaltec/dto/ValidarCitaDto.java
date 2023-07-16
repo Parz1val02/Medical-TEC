@@ -14,6 +14,7 @@ public interface ValidarCitaDto {
     String getNombre_seguro();
     String getExamenMedico();
     Double getPrecio_calculado();
+    String getDni();
 
 
 }

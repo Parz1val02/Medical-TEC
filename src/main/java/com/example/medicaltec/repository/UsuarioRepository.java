@@ -202,4 +202,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     void actualizarEstadoPacientePendienteExa(String dni);
 
 
+    @Query(nativeQuery = true,value = "select email from usuario where dni = ?1")
+    String emailFromdni (String dni);
+
 }

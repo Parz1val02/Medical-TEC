@@ -107,6 +107,9 @@
 
                   <input th:value="${cita.getNombre_seguro()}" name="seguro" type="hidden"/>
                   <input th:value="${cita.getPrecio_calculado()}" name="precio" type="hidden"/>
+
+                  <input th:value="${cita.getDni()}" name="dni" type="hidden"/>
+
                   <div th:if="${cita.getNombre_especialidad()!=null}" >
 
                     <input th:value="|'Consulta médica: '${cita.getNombre_especialidad()}|" name="concepto" type="hidden"/>
