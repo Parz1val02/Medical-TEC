@@ -190,4 +190,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true, value = "update usuario set estados_idestado=5 where dni=?1")
     void actualizarEstadoPacienteEnConsulta(String dni);
 
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update usuario set estados_idestado=8 where dni=?1")
+    void actualizarEstadoPacientePendienteExa(String dni);
+
+
 }

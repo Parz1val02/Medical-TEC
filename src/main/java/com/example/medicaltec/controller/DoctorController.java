@@ -2,7 +2,9 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class DoctorController {
 
     @Autowired
     MedicamentoRepository medicamentoRepository;
+
+    @Autowired
+    ExamenMedicoRepository examenMedicoRepository;
 
     public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository) {
         this.sedeRepository = sedeRepository;
@@ -289,7 +294,8 @@ public class DoctorController {
     }
 
     @GetMapping("/llenarInforme")
-    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,
+                                @RequestParam("checkboxName") Boolean valorCheckbox,RedirectAttributes attr,
                                 HttpSession httpSession,Model model){
         if(esNumeroEntero(idinforme)){
             Integer iddinforme = Integer.parseInt(idinforme);
@@ -305,6 +311,12 @@ public class DoctorController {
                 model.addAttribute("informe",informeNuevo);
                 List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
                 model.addAttribute("listmedic", listademedicamentos);
+
+                if (valorCheckbox){ //si se marca el checkbox
+                    model.addAttribute("examenes", examenMedicoRepository.findAll());
+                }else {
+                    model.addAttribute("");
+                }
                 return "doctor/llenarInforme";
             }else {
                 return "redirect:/doctor/citas";
@@ -321,8 +333,10 @@ public class DoctorController {
                                   @RequestParam("listamedicamentos") String med,
                                   @RequestParam("listacantidades") String cant,
                                   @RequestParam("listaobservaciones") String obser,
+                                  @RequestParam("listaexamenes")String examenes,
                                   @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
-                                RedirectAttributes attr, Model model, HttpSession httpSession){
+                                  @RequestParam("checkboxName") Boolean valorCheckbox,
+                                RedirectAttributes attr, Model model, HttpSession httpSession) throws MessagingException {
         int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
         int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
         String dniusuario;
@@ -337,10 +351,12 @@ public class DoctorController {
             String cantidad = cant;
             String observaciones = obser;
             String comentario  =comen;
+            String examen  =examenes;//verfiicar o corregir para examenes
             String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
             String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
             String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
             String [] listacantidades = cantidad.split(">%%%%%<%%%%>%%%%%<");
+            String [] listaexamenes = examenes.split(">%%%%%<%%%%>%%%%%<");
             String salida ="";
             String separador ="#!%&%!#";
             int i = 0;
@@ -377,6 +393,8 @@ public class DoctorController {
                     return "redirect:/doctor/llenarInforme?idInforme=?"+iddelinformenuevo;
                 }
             }
+
+            //falatria algo similar para los examenes
             if(a==0){
                 System.out.println(salida);
                 String camposllenados = salida;
@@ -396,6 +414,15 @@ public class DoctorController {
                     citaRepository.informeRecetaCita(idrecetacreada,informe1,iddelacita);
                     httpSession.removeAttribute("iddelinforme");
                     httpSession.removeAttribute("idcitaparainforme");
+                    if (valorCheckbox){ //validando si se marcó el checkbox
+                        usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
+                        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
+                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
+                        correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+
+
+                    }
+
                 }
             }
             return "redirect:/doctor/citas";
