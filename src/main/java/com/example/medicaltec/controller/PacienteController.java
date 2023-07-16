@@ -170,6 +170,7 @@ public class PacienteController {
         try {
             // Codificar la dirección para incluirla en la URL de la solicitud
             String direccionCodificada = URLEncoder.encode(direccion, "UTF-8");
+            System.out.println(direccionCodificada);
 
             // Construir la URL de la solicitud a la API Geocoding de Google Maps
             String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + direccionCodificada + "&key="+apiKey;
@@ -217,6 +218,7 @@ public class PacienteController {
         double origen_latitud = sede.getLatitud();
 
         double origen_longitud = sede.getLongitud();
+        System.out.println("Latitud es:"+origen_latitud+" y longitud es"+origen_longitud);
 
         String origen = origen_latitud+","+origen_longitud;
         String destino = latitud+","+longitud;
@@ -709,49 +711,4 @@ public class PacienteController {
         }
         return "redirect:/paciente/consultas";
     }
-
-
-    /*
-    @PostMapping("/guardarFoto")
-    public String guardarFoto(@RequestParam("file")MultipartFile file, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
-        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",SPA);
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        if(file.isEmpty()){
-           attr.addFlashAttribute("foto", "Debe subir un archivo");
-           return "redirect:/paciente/perfil";
-        }
-        String filename = file.getOriginalFilename();
-        if(filename.contains("..")){
-            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
-            return "redirect:/paciente/perfil";
-        }
-        try{
-           usuario.setFoto(file.getBytes());
-           usuario.setFotonombre(filename);
-           usuario.setFotocontenttype(file.getContentType());
-           usuarioRepository.save(usuario);
-           attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
-           return "redirect:/paciente/perfil";
-        } catch (IOException e) {
-            e.printStackTrace();
-            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
-            return "redirect:/paciente/perfil";
-        }
-    }
-
-    @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
-        Optional<Usuario> opt = usuarioRepository.findById(id);
-        if(opt.isPresent()){
-            Usuario u = opt.get();
-            byte[] imagenComoBytes = u.getFoto();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(u.getFotocontenttype()));
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-        }else{
-            return null;
-        }
-    }*/
-
 }

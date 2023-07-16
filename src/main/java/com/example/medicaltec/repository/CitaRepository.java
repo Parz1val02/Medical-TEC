@@ -1,7 +1,6 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Cita;
-import com.example.medicaltec.dto.CitaxReunionDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -51,10 +50,6 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Query(nativeQuery = true, value = "update cita set estadoscita_idestados=2 where idcita=?1")
     void estadoPagada(Integer id);
-
-    //para videollamada
-    @Query(nativeQuery = true, value = "SELECT c.idcita, rv.enlace FROM telesystem_2.cita c inner join reunion_virtual rv on c.idcita = rv.cita_idcita")
-    List<CitaxReunionDto> citasxEnlace();
 
     @Modifying
     @Transactional

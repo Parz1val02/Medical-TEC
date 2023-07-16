@@ -94,24 +94,4 @@ public class CambiosGeneralesController {
         return ResponseEntity.ok(colorMap);
     }
 
-    @PostMapping(value = "/guardarUbicacion")
-    public ResponseEntity<String> guardarUbicacion(@RequestParam Float latitud, @RequestParam Float longitud) {
-
-        //Busca el objeto Deliverymedicamento por su ID
-        Optional<Deliverymedicamento> optionalDelivery = deliverymedicamentoRepository.findById(1);
-
-        if (optionalDelivery.isPresent()) {
-            // Actualiza los campos latitudActual y longitudActual
-            Deliverymedicamento delivery = optionalDelivery.get();
-            delivery.setLatitudActual(latitud);
-            delivery.setLongitudActual(longitud);
-
-            // Guarda los cambios en la base de datos
-            deliverymedicamentoRepository.save(delivery);
-
-            return ResponseEntity.ok("Ubicación actualizada correctamente");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
