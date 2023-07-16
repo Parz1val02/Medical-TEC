@@ -1,7 +1,7 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Historialmedico;
-import com.example.medicaltec.dto.InsertSelectLastIdDto;
+//import com.example.medicaltec.dto.InsertSelectLastIdDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

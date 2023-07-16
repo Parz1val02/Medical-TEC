@@ -120,14 +120,14 @@
 
                             <td th:text="${#strings.capitalize(doctor.nombre)} + ' ' + ${#strings.capitalize(doctor.apellido)} "></td>
                             <td th:text="${doctor.email}"></td>
-                            <td style="text-align: center" th:text="${#strings.capitalize(doctor.especialidadesIdEspecialidad.nombreEspecialidad)}"></td>
+                            <td style="text-align: center" th:text="${#strings.capitalize(doctor.especialidad)}"></td>
 
                             <td class="align-middle" align="center">
                                 <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px" data-toggle="modal" th:data-target="'#modalPerfil-' + ${vEstado.index + 1}">Ver Perfil</button>
+                                    border-radius: 15px" data-toggle="modal" th:data-target="'#PerfilDoctor' + ${doctor.dni}">Ver Perfil</button>
                             </td>
                             <td class="align-middle" align="center">
-                                <a th:href="@{'/administrador/editarDoctorPagina' + '?id=' + ${doctor.id}}" class="btn btn-danger btn-sm" style="text-align: center;
+                                <a th:href="@{'/administrador/editarDoctorPagina' + '?id=' + ${doctor.dni}}" class="btn btn-danger btn-sm" style="text-align: center;
                                     border-radius: 15px" >Editar</a>
                             </td>
                         </tr>
@@ -148,47 +148,46 @@
 
 
 <!-- Modal-->
-<div th:each="doctor, vEstado : ${listaDoctores}">
-    <div class="modal fade" th:id="'modalPerfil-' + ${vEstado.index + 1}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+
+<div th:each="doctor, arch: ${listaDoctores}">
+    <div class="modal fade modalDoctor" th:id="'PerfilDoctor' + ${doctor.dni}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
         <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Perfil de Dr. <span th:text="' ' + ${#strings.capitalize(doctor.nombre)} + ' ' + ${#strings.capitalize(doctor.apellido)}"></span></h5>
+                    <h5 class="modal-title" id="exampleModalLabel1" th:text="|Dr. ${doctor.nombre}|" th:if="${doctor.sexo=='M'}"></h5>
+                    <h5 class="modal-title" id="exampleModalLabel2" th:text="|Dra. ${doctor.nombre}|" th:if="${doctor.sexo=='F'}"></h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-12 col-lg-6">
-                                <form action="#" method="post">
-
+                            <div class="col">
+                                <form>
                                     <div class="row" style="display: flex; align-items: center">
-
                                         <!-- Columna 1 -->
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="nombres">Nombres</label>
-                                                <input type="text" id="nombres"   th:value="${#strings.capitalize(doctor.nombre)}" class="form-control" disabled>
+                                                <input type="text" id="nombres" name="nombres" th:value="${doctor.nombre}" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="text" id="email"  th:value="${doctor.email}" class="form-control" disabled>
+                                                <label for="cedula">Nro. de Colegiatura</label>
+                                                <input type="text" id="cedula" name="cedula" th:value="${doctor.cedula}" class="form-control" disabled>
                                             </div>
                                         </div>
                                         <!-- Columna 2 -->
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="apellidos">Apellidos</label>
-                                                <input type="text" id="apellidos"   th:value="${#strings.capitalize(doctor.apellido)}" class="form-control" disabled>
+                                                <input type="text" id="apellidos" name="apellidos" th:value="${doctor.apellido}" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
                                                 <label for="especialidad">Especialidad</label>
-                                                <input type="text" id="especialidad"  class="form-control" th:value="${#strings.capitalize(doctor.especialidadesIdEspecialidad.nombreEspecialidad)}" disabled>
+                                                <input type="text" id="especialidad" name="especialidad" th:value="${doctor.especialidad}" class="form-control" disabled>
                                             </div>
                                         </div>
 
                                     </div>
-
                                     <div class="row justify-content-center" >
 
                                         <!-- Columna 1 -->
@@ -198,7 +197,7 @@
                                                 <input type="text" id="telefono"  th:value="${doctor.telefono}" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
-                                                <label for="email">Fecha de nacimiento</label>
+                                                <label for="fechanacimiento">Fecha de nacimiento</label>
                                                 <input type="text" id="fechanacimiento" th:value="${doctor.fechaNacimiento}" class="form-control" disabled>
                                             </div>
                                         </div>
@@ -208,88 +207,32 @@
                                                 <label for="estado">Estado</label>
                                                 <input type="text" id="estado" th:value="${doctor.enabled==true?'Activo':'Inactivo'}" class="form-control" disabled>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="direccion">Direccion</label>
+                                                <input type="text" id="direccion" th:value="${doctor.direccion}" class="form-control" disabled>
+                                            </div>
                                         </div>
-
                                     </div>
 
                                     <!-- Botón de envío -->
 
                                 </form>
                             </div>
-                            <div class="col-lg-6 justify-content-center d-flex align-items-center">
+                            <div class="col">
                                 <div class="avatar avatar-2x1" style="display: flex; align-items: center; justify-content: space-around">
-                                    <img class="rounded-circle" src="/img/team/avatar.png" alt="" style="max-height: 200px; max-width: 200px"/>
+                                    <img class="rounded-circle" th:src="@{'/fotoPerfilDoctor?dni='+${doctor.dni}}" alt="" style="max-height: 200px; max-width: 200px"/>
+                                </div>
+                                <hr>
+                                <div style="display: flex; flex-direction: column;">
+                                    <label for="firma" class="form-label">Firma:</label>
+                                    <img th:src="@{'/fotoFirmaDoctor?dni='+${doctor.dni}}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
+                                height: 100px;width: 300px;border: 1px solid #d8e2ef;"/>
                                 </div>
                             </div>
                         </div>
-
                         <div class="row no-gutters">
-                            <div class="col-lg-6 pl-lg-2 mb-3">
-                                <div class="card mb-3 h-100">
-                                    <div class="card-header bg-light" style="text-align: center;">
-                                        <h5 class="mb-0">Horarios de disponibilidad</h5>
-                                        <p class="text-1000 mb-0">Domingo - 2 de abril de 2023</p>
-                                    </div>
-                                    <div class="card-body fs--1">
-                                        <div class="card-body" style="max-height:100%; overflow-y: auto; text-align: center">
-                                            <div class="row" style="display: flex; align-items: center">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">10:00 - 10:30 am</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">10:30 - 11:00 am</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">11:30 - 12:00 pm</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">12:00 - 12:30 pm</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">13:30 - 14:00 pm</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">14:30 - 15:00 pm</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center; margin-bottom: 35px;margin-top: 35px;">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">15:30 - 16:00 pm</p>
-                                                </div>
-
-                                            </div>
-                                            <div class="row" style="display: flex; align-items: center">
-                                                <div class="col" style="text-align: center;">
-                                                    <p class="text-1000 mb-0 h4">16:00 - 16:30 pm</p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 pl-lg-2 mb-3">
-                                <div class="card mb-3 h-100">
-                                    <div th:replace="~{fragmentos/calendar.html::calendar}"></div>
-                                </div>
-                            </div>
-
+                            <h5>Horarios de disponibilidad:</h5>
+                            <div class="col-lg-12 pl-lg-2 mb-3 calendar " th:id="${doctor.dni}"></div>
                         </div>
                     </div>
                 </div>
@@ -303,8 +246,6 @@
 
 
 
-
-
 <!-- ===============================================-->
 <!--   Modals -->
 <!-- ===============================================-->
@@ -314,8 +255,9 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
@@ -399,6 +341,73 @@
     });
 </script>
 
+<script th:inline="javascript">
+    $(document).ready(function() {
+        var doctores = [[${listaDoctores}]];
+        $.each(doctores, function (i){
+            $.ajax({
+                method: 'GET',
+                data: {
+                    dni: doctores[i].dni,
+                },
+                url: 'http://34.28.24.16:8081/api/doctores',
+                success: function(response) {
+                    var horariosMes = response.horariosMes;
+                    $('.calendar').each(function(){
+                        var calendarEl = this;
+                        var elementId = calendarEl.id;
+                        if(elementId===horariosMes.doctorDni){
+                            var calendar = new FullCalendar.Calendar(calendarEl, {
+                                initialView: 'dayGridWeek',
+                                headerToolbar: {
+                                    left: 'prev,next',
+                                    center: 'title',
+                                    right: 'dayGridWeek,dayGridDay' // user can switch between the two
+                                },
+                                defaultView: 'month',
+                                weekday: 'long',
+                                selectable: true,
+                                height: 650,
+                                events: [],
+                                eventTextColor: '#ffffff',
+                                eventBackgroundColor: '#3d8af7',
+                                eventDisplay: 'block',
+                                eventTimeFormat:{
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    meridiem: 'short'
+                                },
+                                firstDay: 1,
+                                locale: 'es',
+                            });
+                            var diasDelMes = horariosMes.diasDelMes;
+                            $.each(diasDelMes,function(i, object) {
+                                var dia = object.dia;
+                                var horas = object.horas;
+                                var events = [];
+                                $.each(horas, function (j, hora){
+                                    var event = {
+                                        title: hora,
+                                        start: dia,
+
+                                    };
+                                    events.push(event);
+                                });
+                                calendar.addEventSource(events);
+                            });
+                            calendar.updateSize()
+                            calendar.render();
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Error handling
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

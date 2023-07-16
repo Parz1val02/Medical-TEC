@@ -3,6 +3,7 @@ package com.example.medicaltec.repository;
 import com.example.medicaltec.Entity.Usuario;
 
 import com.example.medicaltec.dto.DoctorDto;
+import com.example.medicaltec.dto.DoctorDto2;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -93,6 +94,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
             "where u.roles_idroles = 1 and u.sedes_idsedes =?1 and u.enabled=1")
     List<DoctorDto> obtenerlistaDoctores(Integer idSede);
 
+    @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, sexo as `Sexo`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`, telefono as `Telefono`, enabled as `Enabled`, fechanacimiento as `FechaNacimiento`, direccion as `Direccion`\n" +
+            "from usuario u \n" +
+            "inner join especialidades e on (u.especialidades_id_especialidad=e.id_especialidad)\n" +
+            "where u.roles_idroles = 1 and u.sedes_idsedes =?1 and u.enabled=1")
+    List<DoctorDto2> obtenerlistaDoctores2(Integer idSede);
     @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, sexo as `Sexo`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +
             "            from usuario u \n" +
             "            inner join especialidades e on (u.especialidades_id_especialidad=e.id_especialidad)\n" +

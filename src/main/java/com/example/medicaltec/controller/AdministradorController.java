@@ -1,7 +1,9 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dto.DoctorDto;
+import com.example.medicaltec.dto.DoctorDto2;
 import com.example.medicaltec.dto.FinanzasDto;
-import com.example.medicaltec.dto.InsertSelectLastIdDto;
+//import com.example.medicaltec.dto.InsertSelectLastIdDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CometChatApi;
@@ -90,7 +92,7 @@ public class AdministradorController {
     public String pagprincipal(Model model, HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        List listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        List<DoctorDto2> listaDoctores = usuarioRepository.obtenerlistaDoctores2(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
         return "administrador/principal";
@@ -102,7 +104,7 @@ public class AdministradorController {
         //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        List<DoctorDto2> listaDoctores = usuarioRepository.obtenerlistaDoctores2(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
