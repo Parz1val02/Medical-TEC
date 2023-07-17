@@ -252,7 +252,7 @@ public class AdministrativoController {
     @RequestMapping(value = {"/mensajeria"},method = RequestMethod.GET)
     public String mensajeria(){
 
-        return "chatroom/index";
+        return "administrativo/mensajeria";
     }
 
     @RequestMapping(value = {"/validarLaCita"},method = RequestMethod.GET)
@@ -1252,8 +1252,6 @@ public class AdministrativoController {
             }catch (NumberFormatException e){
                 System.out.printf(e.getMessage());
                 attr.addFlashAttribute("errorCancelar", "Id erróneo de cita");
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
             }
         }else{
             attr.addFlashAttribute("errorCancelar", "Id erróneo de usuario");
