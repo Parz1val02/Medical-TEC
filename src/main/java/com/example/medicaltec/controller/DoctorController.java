@@ -436,14 +436,14 @@ public class DoctorController {
         return "redirect:/doctor/pacientes";
     }
     @PostMapping("/rellenarInforme")
-    public String rellenarInforme(@RequestParam("diagnostico") String diag,
-                                  @RequestParam("tratamiento") String trat,
-                                  @RequestParam("listamedicamentos") String med,
-                                  @RequestParam("listacantidades") String cant,
-                                  @RequestParam("listaobservaciones") String obser,
-                                  @RequestParam("examen")String exa,
-                                  @RequestParam("comentario") String comen,@RequestParam("listarespuestas") String respuestas,
-                                  @RequestParam("checkboxName") Boolean valorCheckbox,
+    public String rellenarInforme(@RequestParam("diagnostico") String diagnostico,
+                                  @RequestParam("tratamiento") String tratamiento,
+                                  @RequestParam("listamedicamentos") String medicamente,
+                                  @RequestParam("listacantidades") String cantidad,
+                                  @RequestParam("listaobservaciones") String observaciones,
+                                  @RequestParam("examen")String examen,
+                                  @RequestParam("comentario") String comentario,@RequestParam("listarespuestas") String respuestas,
+                                  @RequestParam(value = "checkboxName",required = false) Boolean valorCheckbox,
                                 RedirectAttributes attr, HttpSession httpSession) throws MessagingException {
         int iddelinformenuevo = (int) httpSession.getAttribute("iddelinforme");
         int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
@@ -453,13 +453,6 @@ public class DoctorController {
         if(optionalCita.isPresent()){
             Cita cita = optionalCita.get();
             dniusuario = cita.getPaciente().getId();
-            String diagnostico  = diag;
-            String tratamiento = trat;
-            String medicamente  = med;
-            String cantidad = cant;
-            String observaciones = obser;
-            String comentario  =comen;
-            String examen  =exa;//verfiicar o corregir para examenes
             String[] respuestasSeparadas = respuestas.split(">%%%%%<%%%%>%%%%%<");
             String [] listamedicamentos = medicamente.split(">%%%%%<%%%%>%%%%%<");
             String [] listaobservaciones = observaciones.split(">%%%%%<%%%%>%%%%%<");
@@ -468,8 +461,8 @@ public class DoctorController {
             String separador ="#!%&%!#";
             int i = 0;
             for (String respuesta : respuestasSeparadas){
-                System.out.println(respuesta);
-                System.out.println(i);
+                /*System.out.println(respuesta);
+                System.out.println(i);*/
                 if (i==0){
                     salida = salida+respuesta;
                 }else {
@@ -477,66 +470,136 @@ public class DoctorController {
                 }
                 i++;
             }
-            System.out.println("LA LONGITUD DEL ARRAY DE MEDICAMENTOS: " + listamedicamentos.length);
-            System.out.println("LA LONGITUD DEL ARRAY DE CANTIDADES: " + listacantidades.length);
-            if(listamedicamentos.length>listacantidades.length){
-                System.out.println("La cantidad de medicamentos ingresado debe ser un número entero");
-                attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
+            if(diagnostico.isEmpty()){
+                attr.addFlashAttribute("diagnosticomsg","El diagnóstico no puede estar vacio");
                 a++;
-                return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
             }
-            for (int k =0; k<listamedicamentos.length;k++){
-                String indicemedi = listamedicamentos[k];
-                System.out.println("MEDICAMENTOOO: "+indicemedi);
-                String indiceobser = listaobservaciones[k];
-                System.out.println("OBSERVACIONES: "+indiceobser);
-                String indicecant = listacantidades[k];
-                System.out.println("CANTIDAD: "+indicecant);
-                if(esNumeroEntero(indicemedi)){
-                    if(!esNumeroEntero(indicecant)){
-                        System.out.println("ERROR DE CANTIDAD NO ES UN NÚMERO");
-                        //spring.jpa.show-sql=true
-                        attr.addFlashAttribute("error","La cantidad de medicamentos ingresada debe ser un número entero");
+            if(tratamiento.isEmpty()){
+                attr.addFlashAttribute("tratamientomsg","El tratamiento no puede estar vacío");
+                a++;
+            }
+           /* System.out.println("LA LONGITUD DEL ARRAY DE MEDICAMENTOS: " + listamedicamentos.length);
+            System.out.println("LA LONGITUD DEL ARRAY DE CANTIDADES: " + listacantidades.length);
+            System.out.println("LA LONGITUD DEL ARRAY DE OBSERVACIONES" + listaobservaciones.length);*/
+            int medilength = medicamentoRepository.findAll().toArray().length;
+            String [] listaerroresmedicamentos = new String[listamedicamentos.length];
+            if(listamedicamentos.length!=0){
+                for(int me = 0;me<listamedicamentos.length;me++){
+                    /*System.out.println("primer INGRESO MEDICAMENTOS");*/
+                    String indicemedi = listamedicamentos[me];
+                    if(!esNumeroEntero(indicemedi)){
+                        if(me==0){
+                            attr.addFlashAttribute("medicamentomsg0","El medicamento seleccionado es inválido");
+                        }
+                        listaerroresmedicamentos[me]="El medicamento seleccionado es inválido";
                         a++;
-                        return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
                     }else {
-                        System.out.println("BIEENNN");
-                        a = 0;
+                        int medi = Integer.parseInt(indicemedi);
+                        if(me==0){
+                            attr.addFlashAttribute("medicamentomsg0","El medicamento seleccionado es inválido");
+                        }
+                        if(0<medi && medi<=medilength){
+                            listaerroresmedicamentos[me]=null;
+                        }else {
+                            listaerroresmedicamentos[me]="El medicamento seleccionado es inválido";
+                            a++;
+                        }
                     }
-                }else {
-                    if(!esNumeroEntero(indicecant)){
-                        System.out.println("ERROR MEDICAMENTO MAL CANTIDAD MAL");
-                        attr.addFlashAttribute("error","El medicamento seleccionado no es válido. La cantidad ingresada debe ser un número entero");
+                }
+            }else {
+                attr.addFlashAttribute("medicamentomsg","Debe seleccionar un medicamento válido");
+                a++;
+            }
+            String [] listaerrorescantidades = new String[listamedicamentos.length];
+           /* System.out.println("cantidades erroneas:");*/
+            if(listacantidades.length!=0){
+                for(int ca = 0;ca<listamedicamentos.length;ca++){
+                    if(ca<listacantidades.length){
+                        /*System.out.println("primer ingreso cantidades");*/
+                        String indicecant = listacantidades[ca];
+                        if(!esNumeroEntero(indicecant)){
+                            String nombremsg = "cantidadmsg"+(ca);
+                            a++;
+                            /*System.out.println(nombremsg);*/
+                            listaerrorescantidades[ca] = "La cantidad ingresada no es un número entero";
+                            if(ca==0){
+                                attr.addFlashAttribute("cantidadmsg0","La cantidad ingresada no es un número entero");
+                            }
+                        }else {
+                            int canti = Integer.parseInt(indicecant);
+                            listaerroresmedicamentos[ca] = null;
+                        }
+                    }else {
+                        String nombremsg = "cantidadmsg"+(ca);
                         a++;
-                        return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
+                        /*System.out.println(nombremsg);*/
+                        listaerrorescantidades[ca] = "La cantidad ingresada no es un número entero";
                     }
-                    attr.addFlashAttribute("error","El medicamento seleccionado no es válido.");
+                }
+            }else {
+                for(int ca = 0;ca<listamedicamentos.length;ca++){
+                    String nombremsg = "cantidadmsg"+(ca);
                     a++;
-                    return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
+                    listaerrorescantidades[ca] = "La cantidad ingresada no es un número entero";
+                    /*System.out.println(nombremsg);*/
+                    attr.addFlashAttribute("cantidadmsg0","La cantidad ingresada no es un número entero");
                 }
             }
-            int b =0;
-            if (valorCheckbox){ //validando si se marcó el checkbox
-                usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
-                CorreoConEstilos correoConEstilos = new CorreoConEstilos();
-                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
-                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
-                if(esNumeroEntero(examen)){
-                    b = 1;
-                }else {
-                    attr.addFlashAttribute("examenmsg","El examen seleccionado no es válido.");
-                    a++;
-                    b=3;
-                    return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
+            String [] listaerroresobservaciones = new String[listamedicamentos.length];
+            if(listaobservaciones.length!=0){
+                for(int obse = 0;obse<listamedicamentos.length;obse++){
+                    if(obse<listaobservaciones.length){
+                        String indiceobser = listaobservaciones[obse];
+                        if(indiceobser.isEmpty()){
+                            String nombremsg = "observacionmsg"+(obse);
+                            a++;
+                            /*System.out.println(nombremsg);*/
+                            listaerroresobservaciones[obse] = "El campo de OBSERVACIONES no puede estar vacío";
+                            attr.addFlashAttribute("observacionmsg0","El campo de OBSERVACIONES no puede estar vacío");
+                        }else {
+                            listaerroresobservaciones[obse] = null;
+                        }
+                    }else {
+                        String nombremsg = "observacionmsg"+(obse);
+                        a++;
+                        /*System.out.println(nombremsg);*/
+                        listaerroresobservaciones[obse] = "El campo de OBSERVACIONES no puede estar vacío";
+                    }
                 }
-            }else{
-                b= 0;
+            }else {
+                for(int obse = 0;obse<listamedicamentos.length;obse++){
+                    String nombremsg = "observacionmsg"+(obse);
+                    a++;
+                    /*System.out.println(nombremsg);*/
+                    listaerroresobservaciones[obse] = "El campo de OBSERVACIONES no puede estar vacío";
+                    attr.addFlashAttribute("observacionmsg0","El campo de OBSERVACIONES no puede estar vacío");
+                }
+            }
+            String checked = null;
+            int b =0;
+            if(valorCheckbox !=null){
+                if (valorCheckbox){ //validando si se marcó el checkbox
+                    if(esNumeroEntero(examen)){
+                        b = 1;
+                    }else {
+                        attr.addFlashAttribute("examenmsg","El examen seleccionado no es válido.");
+                        a++;
+                        b=3;
+                    }
+                    checked = "sdad";
+                }else{
+                    checked = null;
+                    b= 0;
+                }
+            }else {
+                checked = null;
+                b =0;
             }
             //falatria algo similar para los examenes
-            if(a==0){
-                System.out.println(salida);
+            if(a==0){//poner 0 pa mandar
+                /*System.out.println(salida);*/
                 String camposllenados = salida;
-                System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);
+                /*System.out.println(camposllenados +"adad" + diagnostico +"adad"+tratamiento+"adad"+medicamente+"adad"+cantidad);*/
                 informeRepository.rellenarInforme(dniusuario,iddelacita,diagnostico,tratamiento,camposllenados,iddelinformenuevo);
                 Integer informe1 = informeRepository.idinformecreado(iddelacita);
                 recetaRepository.crearReceta(comentario,informe1);
@@ -555,18 +618,116 @@ public class DoctorController {
                     Integer idexamen = Integer.parseInt(examen);
                     citaRepository.updateExamenCita(idexamen,iddelacita);
                 }
+                if(b==1){
+                    usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
+                    CorreoConEstilos correoConEstilos = new CorreoConEstilos();
+                    correoConEstilos.sendEmailEstilos2(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
+                    correoConEstilos.sendEmailEstilos2(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+                }
                 httpSession.removeAttribute("iddelinforme");
                 httpSession.removeAttribute("idcitaparainforme");
                 attr.addFlashAttribute("respondido","Informe rellenado con éxito");
                 citaRepository.cambiarEstadoCita(3,iddelacita);
                 return "redirect:/doctor/citas";
             }else {
-                attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
-                return "redirect:/doctor/citas";
+                String errordinamico = "SI";
+                attr.addFlashAttribute("errordinamico",errordinamico);
+                int medilargo  = listamedicamentos.length;
+                int cantlargo = listacantidades.length;
+                int obserlargo = listaobservaciones.length;
+                String [] nuevalistacantidad = new String[medilargo];
+                for (int p=0;p<medilargo;p++){
+                    if(p<listacantidades.length){
+                        nuevalistacantidad[p] = listacantidades[p];
+                    }else {
+                        nuevalistacantidad[p] = "";
+                    }
+                    /*System.out.println("La cantidad iterada es: "+nuevalistacantidad[p]);*/
+                }
+                attr.addFlashAttribute("cantidad",nuevalistacantidad[0]);
+                if(medilargo>obserlargo){
+                    String [] nuevalistaobservaciones = new String[medilargo];
+                    for (int t=0;t<medilargo;t++){
+                        if(t<listaobservaciones.length){
+                            nuevalistaobservaciones[t] = listaobservaciones[t];
+                        }else {
+                            nuevalistaobservaciones[t] = "";
+                        }
+                    }
+                    attr.addFlashAttribute("observacion",nuevalistaobservaciones[0]);
+                    attr.addFlashAttribute("nuevalistaobservaciones",nuevalistaobservaciones);
+                }else {
+                    attr.addFlashAttribute("observacion",listaobservaciones[0]);
+                    attr.addFlashAttribute("nuevalistaobservaciones",listaobservaciones);
+                }
+                Optional<InformeNuevo> optinformeNuevo = informeNuevoRepository.findById(iddelinformenuevo);
+                InformeNuevo informeNuevo = optinformeNuevo.get();
+                String listadecampitosString = informeNuevo.getCampos();
+                List<String> listcampos = List.of(listadecampitosString.split(">%%%%%<%%%%>%%%%%<"));
+                if(listcampos.size()> respuestasSeparadas.length){
+                    String [] nuevalistarespuestas = new String[listcampos.size()];
+                    for (int h=0;h<listcampos.size();h++){
+                        if(h<respuestasSeparadas.length){
+                            nuevalistarespuestas[h] = respuestasSeparadas[h];
+                        }else {
+                            nuevalistarespuestas[h] = "";
+                        }
+                    }
+                    attr.addFlashAttribute("nuevaListarespuestas",nuevalistarespuestas);
+                }else {
+                    attr.addFlashAttribute("nuevaListarespuestas",respuestasSeparadas);
+                }
+                if(b==1){
+                    int examenseleccionad = Integer.parseInt(examen);
+                    attr.addFlashAttribute("seleccionado",examenseleccionad);
+                    /*System.out.println("asadawdad: "+examenseleccionad);*/
+                }
+                Integer [] listanuevamedicamentos = new Integer[listamedicamentos.length];
+                for (int j = 0; j<listamedicamentos.length;j++){
+                    String uu = listamedicamentos[j];
+                    if(!esNumeroEntero(uu)){
+                       listanuevamedicamentos[j] = 1;
+                    }else {
+                        int medu = Integer.parseInt(uu);
+                        if(0<medu && medu<=medilength){
+                            listanuevamedicamentos[j] = medu;
+                        }else {
+                            listanuevamedicamentos[j] = 1;
+                        }
+                    }
+                    /*System.out.println(listanuevamedicamentos[j]);*/
+                }
+                attr.addFlashAttribute("checkedd",checked);
+                attr.addFlashAttribute("nuevalistamedicamentos",listanuevamedicamentos);
+                attr.addFlashAttribute("comentario",comentario);
+                attr.addFlashAttribute("diagnostico",diagnostico);
+                attr.addFlashAttribute("tratamiento",tratamiento);
+                attr.addFlashAttribute("error","Ha ocurrido un error en el llenado de los campos");
+                attr.addFlashAttribute("listaerroresmedicamentos",listaerroresmedicamentos);
+                attr.addFlashAttribute("listaerrorescantidades",listaerrorescantidades);
+                attr.addFlashAttribute("listaerroresobservaciones",listaerroresobservaciones);
+                /*for (String n : listaerrorescantidades){
+                    System.out.println("ERROR CANTIDAD: ");
+                    System.out.println(n);
+                }
+                for (String m : listaerroresmedicamentos){
+                    System.out.println("ERROR MEDICAMENTO: ");
+                    System.out.println(m);
+                }
+                for (String g : listaerroresobservaciones){
+                    System.out.println("ERROR OBSERVACIONES: ");
+                    System.out.println(g);
+                }*/
+                attr.addFlashAttribute("listanuevacantidades",nuevalistacantidad);
+                /*System.out.println("LISTA NUEVA CANTIDADES: ");
+                for (String u : nuevalistacantidad){
+                    System.out.println(u);
+                }*/
+                return "redirect:/doctor/llenarInforme?idInforme="+iddelinformenuevo;
             }
 
         }else {
-            attr.addFlashAttribute("error","Ha ocurrido un error inesperado");
+            attr.addFlashAttribute("error","La cita es incorrecta");
             return "redirect:/doctor/citas";
         }
     }
