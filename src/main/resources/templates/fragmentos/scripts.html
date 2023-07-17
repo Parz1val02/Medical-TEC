@@ -30,4 +30,32 @@
             }
         })
     </script>
+
+    <script>
+        var logout = function () {
+            // log user out of CometChat
+            CometChatWidget.logout().then((response) => {
+                    // User successfully logged out.
+                    //Logout completed successfully
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA successfully Logout completed ");
+                },(error) => {
+                    //Logout failed with exception
+                    console.log(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx failed Logout with exception:", {error});
+                }
+            );
+
+            /*
+            CometChat.logout().then(
+                () => {
+                    //Logout completed successfully
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA successfully Logout completed");
+                },
+                (error) => {
+                    //Logout failed with exception
+                    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  failed Logout with exception:", { error });
+                }
+            );*/
+        };
+    </script>
+
 </div>

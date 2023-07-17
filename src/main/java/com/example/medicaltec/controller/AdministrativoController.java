@@ -252,7 +252,7 @@ public class AdministrativoController {
     @RequestMapping(value = {"/mensajeria"},method = RequestMethod.GET)
     public String mensajeria(){
 
-        return "chatroom/index";
+        return "administrativo/mensajeria";
     }
 
     @RequestMapping(value = {"/validarLaCita"},method = RequestMethod.GET)
