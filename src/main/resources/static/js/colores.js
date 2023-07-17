@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // Aplicar los valores recibidos según sea necesario
                 $("body").css("background-color", color1);
-                $("#change, #change1, #change2").css("background-color", color2);
+                $("#change, #change2").css("background-color",  color2);
+                $('[name="change1"]').css("background-color",  color2);
 
                 // Guardar los colores en el almacenamiento local como un objeto JSON
                 var colors = {
@@ -36,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("clash2")
         // Aplicar los colores almacenados a los elementos necesarios
         $("body").css("background-color", storedColorsObj.color1);
-        $("#change, #change1, #change2").css("background-color", storedColorsObj.color2);
+        $("#change, #change2").css("background-color", storedColorsObj.color2);
+        $('[name="change1"]').css("background-color", storedColorsObj.color2);
 
         // Actualizar los colores en la caché del navegador si han cambiado en la base de datos
         obtenerColores();
