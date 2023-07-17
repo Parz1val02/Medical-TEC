@@ -42,12 +42,11 @@ public class CorreoConEstilos {
         String prueba = "<table width=\"650\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:1px solid #d8d8d8;border-collapse:collapse\">\n" +
                 "\t\t<tbody><tr>\n" +
                 "          <td valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background:#fff;line-height:0\">\n" +
-                "\t\t\t\t<img alt=\"x\" src=\"https://ci5.googleusercontent.com/proxy/oI279oTiQTODAnBqRikWRyNPGjb0B1iLcs97jNPgd0No737wt_8onUBCC_84k567Qc7teZlAfd9PyktdJI2nadOAd7jkXGtgUMzU8JAKUKdeZq97PIZGJTQ3=s0-d-e1-ft#https://s3.amazonaws.com/files.pucp.edu.pe/dci/brochure/img/default.gif\" width=\"650\" class=\"CToWUd\" data-bit=\"iit\">\n" +
+                "\t\t\t\t<img alt=\"x\" src=\"https://res.cloudinary.com/dtnko1xwm/image/upload/v1689559827/medical-logo-cloud_ketqww.jpg\" width=\"650\" class=\"CToWUd\" data-bit=\"iit\">\n" +
                 "\t\t\t</td>\n" +
                 "\t\t</tr>\n" +
                 "\t\t<tr>\n" +
                 "\t\t\t<td valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background:#fff;line-height:0\">\n" +
-                "\t\t\t\t<img src=\"https://ci3.googleusercontent.com/proxy/LZnN5YsgxaTyjxFVLO4LsQI5WLttqYI5wYnieniyIqU-pJWlZMf82_FGdfqu9untPyo6iudVRDUwU1MiQuk3X8vimmt2E4cHopbtI-DDXqxssXzQU9y0Uan1wS4W=s0-d-e1-ft#https://files.pucp.education/dci/comunicados/2015/09/22195052/sombrita.jpg\" alt=\"\" width=\"650\" height=\"26\" class=\"CToWUd\" data-bit=\"iit\">\n" +
                 "\t\t\t</td>\n" +
                 "\t\t</tr>\n" +
                 "      \t\n" +
