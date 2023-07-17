@@ -154,6 +154,7 @@ public class PacienteController {
         return "redirect:/paciente/principal";
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/tracking")
     public String tracking(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
