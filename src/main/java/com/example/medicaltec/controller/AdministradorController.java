@@ -572,7 +572,7 @@ public class AdministradorController {
             /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = doctor.getId();
-            String nameAPI = doctor.getNombre() + " " + doctor.getApellido();
+            String nameAPI = "Dr. " + doctor.getNombre() + " " + doctor.getApellido();
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
@@ -960,7 +960,7 @@ public class AdministradorController {
             /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = paciente.getId();
-            String nameAPI = paciente.getNombre() + " " + paciente.getApellido();
+            String nameAPI = "Paciente " + paciente.getNombre() + " " + paciente.getApellido();
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
