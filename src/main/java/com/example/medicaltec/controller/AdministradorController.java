@@ -7,15 +7,19 @@ import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CorreoConEstilos;
 import com.example.medicaltec.repository.*;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.*;
+import org.apache.commons.io.FileUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -55,6 +59,8 @@ public class AdministradorController {
     final EspecialidadRepository especialidadRepository;
 
     final FormAutoregistroRepository formAutoregistroRepository;
+
+    final UxUiRepository uxUiRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -69,7 +75,8 @@ public class AdministradorController {
             SeguroRepository seguroRepository,
             SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository,
             EspecialidadRepository especialidadRepository,
-            FormAutoregistroRepository formAutoregistroRepository
+            FormAutoregistroRepository formAutoregistroRepository,
+            UxUiRepository uxUiRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -85,6 +92,7 @@ public class AdministradorController {
         this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
         this.especialidadRepository = especialidadRepository;
         this.formAutoregistroRepository = formAutoregistroRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
 
@@ -182,8 +190,8 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(doctor.getId());
-                if (dniEntero<11111111 || dniEntero>99999999){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                if (dniEntero<10000000 || dniEntero>99999999){ //11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
                     List<Usuario> listaDoctores = usuarioRepository.findAll();
@@ -196,7 +204,7 @@ public class AdministradorController {
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                 a = a + 1;
             }
         } else {
@@ -384,8 +392,8 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(doctor.getId());
-                if ( (dniEntero<11111111) || (dniEntero>99999999)){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                if ( (dniEntero<10000000) || (dniEntero>99999999)){ //  11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
                     List<Usuario> listaPacientes = usuarioRepository.findAll();
@@ -397,7 +405,7 @@ public class AdministradorController {
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                 a = a + 1;
             }
         } else {
@@ -453,6 +461,22 @@ public class AdministradorController {
             a = a+1;
         }
         //VALIDACION APELLIDO
+
+        //VALIDACION NUMERO COLEGIATURA O CEDULA DOCTOR
+        List<String> listaTodasCedulasDoctor = usuarioRepository.obtenerTodasCedulasDoctor();
+        if(doctor.getCeduladoctor() == null || doctor.getCeduladoctor().isBlank()){
+            model.addAttribute("ceduladoctormsg","El número de colegiatura no puede ser nulo");
+            a = a+1;
+        } else if (!regex.cedulaDoctorValid(doctor.getCeduladoctor()) ){   // || !regex.inputisValid(doctor.getApellido())
+            model.addAttribute("ceduladoctormsg","El número de colegiatura ingresado es inválido. Deben ser solo números entre 5 y 45 dígitos");
+            a = a+1;
+        } else if ( listaTodasCedulasDoctor.contains(doctor.getCeduladoctor())) {
+            model.addAttribute("ceduladoctormsg","El número de colegiatura ingresado ya existe");
+            a = a+1;
+        }
+        //VALIDACION NUMERO COLEGIATURA O CEDULA DOCTOR
+
+
 
         //VALIDACION DIRECCION
         if(doctor.getDireccion() == null || doctor.getDireccion().isBlank() ){
@@ -577,7 +601,8 @@ public class AdministradorController {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
                 System.out.println("ERROR EN LA CREACION DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                //throw new RuntimeException(e);
             }*/
 
 
@@ -591,6 +616,37 @@ public class AdministradorController {
                 e.printStackTrace();
                 return "redirect:/administrador/usuarios";
             }
+
+
+
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO DOCTOR (AVATAR.JPE)
+
+            String id = doctor.getId();
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            String firmaImagePath = "src/main/resources/static/img/team/subasufirma.JPG";
+            String nombreArchivoFima = "fotosFirma/firma-" + id;
+
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+
+                File imageFileFirma = new File(firmaImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataFirma = FileUtils.readFileToByteArray(imageFileFirma);
+                Storage storageFirma = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketFirma = storageFirma.get("wenas", Storage.BucketGetOption.fields());
+                bucketFirma.create(nombreArchivoFima + ".jpeg", fileDataFirma);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+
+            }
+
 
 
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
@@ -634,8 +690,8 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(paciente.getId());
-                if (dniEntero<11111111 || dniEntero>99999999){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                if (dniEntero<10000000 || dniEntero>99999999){ // 11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
                     List<Usuario> listaPacientes = usuarioRepository.findAll();
@@ -648,7 +704,7 @@ public class AdministradorController {
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                 a = a + 1;
             }
         } else {
@@ -791,8 +847,8 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(paciente.getId());
-                if ( (dniEntero<11111111) || (dniEntero>99999999)){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos aaaa");
+                if ( (dniEntero<10000000) || (dniEntero>99999999)){ //10000000 11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
                     List<Usuario> listaPacientes = usuarioRepository.findAll();
@@ -804,7 +860,7 @@ public class AdministradorController {
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos xd");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
                 a = a + 1;
             }
         } else {
@@ -979,6 +1035,24 @@ public class AdministradorController {
                 e.printStackTrace();
                 return "redirect:/administrador/usuarios";
             }
+
+
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+            String id = paciente.getId();
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
+
 
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
