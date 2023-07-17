@@ -454,8 +454,10 @@ public class DoctorController {
             if (valorCheckbox){ //validando si se marcó el checkbox
                 usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
                 CorreoConEstilos correoConEstilos = new CorreoConEstilos();
-                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
-                correoConEstilos.sendEmailEstilos(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+
+                correoConEstilos.sendEmailNotificationCambioEstado(usuarioRepository.findByid(dniusuario).getEmail() , "Cambio a nuevo estado", cita);
+                //correoConEstilos.sendEmailEstilos(, , "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
+                correoConEstilos.sendEmailEstilos2(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
                 if(esNumeroEntero(examen)){
                     b = 1;
                 }else {
