@@ -53,9 +53,10 @@
       </div>
       <div class="card mb-3">
         <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-          <table class="table table-striped" id="listaHistorial">
+          <table class="table table-striped" id="userList">
             <thead style="background: #cdeffc">
             <tr>
+              <th class="sort align-middle" style="width: 22%">Id cita</th>
               <th class="sort align-middle" style="width: 22%">Tipo de Cita</th>
               <th class="sort align-middle" style="width: 13%">Fecha</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Paciente</th>
@@ -66,6 +67,8 @@
             </thead>
             <tbody class="bg-white">
             <tr th:each="cita, info : ${listaValidarCitaFilter}">
+              <td th:text="${cita.idcita}" class="align-middle">
+              </td>
               <td th:text="${cita.tipo_cita}" class="align-middle">
               </td>
               <td th:text="${cita.fecha}" class="align-middle">
@@ -91,6 +94,9 @@
           </table>
         </div>
       </div>
+
+
+      <!-- Modal para validar cita -->
       <div th:each="cita, info : ${listaValidarCitaFilter}">
         <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
           <div class="modal-dialog">
@@ -128,10 +134,6 @@
                       <label for="doctor">Doctor:</label>
                       <input type="text" id="doctor" th:placeholder="${cita.getFullnameDoc()}" class="form-control" disabled>
                     </div>
-
-                  </div>
-                  <!-- Columna 2 -->
-                  <div class="col-sm-6">
                     <div class="form-group">
                       <label for="seguro">Seguro:</label>
                       <input type="text" id="seguro"  th:placeholder="${cita.getNombre_seguro()}" class="form-control" disabled>
@@ -140,15 +142,113 @@
                       <label for="precio">Precio (S/):</label>
                       <input type="text" id="precio"  th:placeholder="${cita.getPrecio_calculado()}" class="form-control" disabled>
                     </div>
-
-
-
                   </div>
+                  <!-- Columna 2 -->
 
                   <button type="submit" class="btn btn-primary">Validar</button>
                   <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
 
                 </div>
+
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card mb-3">
+        <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+          <table class="table table-striped" id="userList">
+            <thead style="background: #cdeffc">
+            <tr>
+              <th class="sort align-middle" style="width: 22%">Id Cita</th>
+              <th class="sort align-middle" style="width: 22%">Medicamento</th>
+              <th class="sort align-middle" style="width: 13%">Comentario</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Observaciones</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Cantidad</th>
+              <th class="no-sort" style="width: 15%;" ></th>
+
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+            <tr th:each="receta, info : ${listaValidarRecetaFilter}">
+              <td th:text="${receta.idcita}" class="align-middle">
+              </td>
+              <td th:text="${receta.nombre}" class="align-middle">
+              </td>
+              <td th:text="${receta.comentario}" class="align-middle" style="text-align: center">
+              </td>
+              <td th:text="${receta.observaciones}" class="align-middle" style="text-align: center">
+              </td>
+              <td th:text="${receta.cantidad}" class="align-middle" style="text-align: center">
+              </td>
+              <td class="align-middle" align="center">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Details' + ${info.index+1}">Validar</button>
+                <!-- Modal -->
+              </td>
+              <!-- Cancelar cita
+              <td class="align-middle" align="center">
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="">Cancelar</button>
+                 Modal
+              </td>
+              -->
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal para validar cita -->
+      <div th:each="receta, info : ${listaValidarRecetaFilter}">
+        <div class="modal fade" th:id="'Details' + ${info.index + 1}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Aquí puedes agregar el contenido del modal -->
+              <div class="modal-header">
+                <h5 class="modal-title">Validar Cita</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" th:action="@{'/administrativo/validarReceta'}">
+
+                  <input th:value="${receta.getIdcita()}" name="citaId" type="hidden"/>
+
+                  <input th:value="${receta.getIdreceta()}" name="recetaId" type="hidden"/>
+                  <input th:value="${receta.getPrecio_Calculado()}" name="precio" type="hidden"/>
+                  <input th:value="${receta.getEmail()}" name="correo" type="hidden"/>
+
+
+
+
+
+                  <div class="row">
+                    <div class="col-sm-6">
+
+
+                      <div class="form-group">
+                        <label for="doctor">Paciente:</label>
+                        <input type="text"  th:placeholder="${receta.getFullname()}" class="form-control" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label for="seguro">Seguro:</label>
+                        <input type="text"   th:placeholder="${receta.getNombre_seguro()}" class="form-control" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label for="precio">Precio (S/):</label>
+                        <input type="text"   th:placeholder="${receta.getPrecio_Calculado()}" class="form-control" disabled>
+                      </div>
+                    </div>
+                    <!-- Columna 2 -->
+
+                    <button type="submit" class="btn btn-primary">Validar</button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+
+                  </div>
 
                 </form>
               </div>

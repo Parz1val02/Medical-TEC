@@ -2,6 +2,7 @@ package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Cita;
 import com.example.medicaltec.dto.CitaxReunionDto;
+import com.example.medicaltec.dto.RecetaValidarDto;
 import com.example.medicaltec.dto.ValidarCitaDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -193,5 +194,42 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Transactional
     @Query(value = "update cita set receta_idreceta = ?1, informe_idinforme=?2 where idcita = ?3",nativeQuery = true)
     void informeRecetaCita (Integer idreceta, Integer idinforme, Integer idcita);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value="update boletas set receta_idreceta = ?1, monto_receta = ?2 where cita_idcita=?3")
+    void updateBoletaReceta (Integer idreceta, Double precio, Integer idCita);
+
+
+        //Para validar receta
+        @Query(nativeQuery = true, value="SELECT\n" +
+                "    c.idcita,\n" +
+                "    r.idreceta,\n" +
+                "    r.comentario,\n" +
+                "    rm.observaciones,\n" +
+                "    rm.cantidad,\n" +
+                "    m.precio,\n" +
+                "    m.nombre,\n" +
+                "    p.seguros_id_seguro,\n" +
+                "    s.nombre_seguro,\n" +
+                "    CONCAT(p.nombre, \" \", p.apellido) AS `fullname`,\n" +
+                "    p.email,\n" +
+                "    ROUND(\n" +
+                "    CASE\n" +
+                "        WHEN s.nombre_seguro = 'Rimac-EPS' THEN m.precio * rm.cantidad * 0.85\n" +
+                "        WHEN s.nombre_seguro = 'Rimac seguros' THEN m.precio * rm.cantidad * 0.75\n" +
+                "        WHEN s.nombre_seguro = 'Pacifico EPS' THEN m.precio * rm.cantidad * 0.9\n" +
+                "        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN m.precio * rm.cantidad * 0.8\n" +
+                "        WHEN s.nombre_seguro = 'Mapfre' THEN m.precio * rm.cantidad * 0.6\n" +
+                "        WHEN s.nombre_seguro = 'Plan Salud' THEN m.precio * rm.cantidad * 0.9\n" +
+                "        ELSE m.precio * rm.cantidad -- Si no hay seguro o el seguro no está en la lista, no hay descuento\n" +
+                "    END,2) AS precio_calculado\n" +
+                "FROM cita c \n" +
+                "INNER JOIN receta r ON c.receta_idreceta = r.idreceta\n" +
+                "LEFT JOIN receta_has_medicamentos rm ON rm.receta_idreceta = r.idreceta\n" +
+                "LEFT JOIN medicamentos m ON m.idmedicamentos = rm.medicamentos_idmedicamentos\n" +
+                "INNER JOIN usuario p ON p.dni = c.paciente_dni\n" +
+                "LEFT JOIN seguros s ON p.seguros_id_seguro = s.id_seguro ")
+    List<RecetaValidarDto> listaValidReceta();
 
 }
