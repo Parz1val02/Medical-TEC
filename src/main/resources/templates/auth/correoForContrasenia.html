@@ -28,7 +28,7 @@
                     </label>
 
                     <form method="POST" th:action="@{'/correoValido'}">
-                        <label>Contraseña nueva:</label>
+                        <label>Correo actual:</label>
                         <input type="text" name="correo" class="form-control" th:classappend="${correoError!=null || correoExisteMsg!=null?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${correoError!=null}" th:text="${correoError}"></div>
                         <div class="invalid-feedback" th:if="${correoExisteMsg!=null && correoError==null}" th:text="${correoExisteMsg}"></div>

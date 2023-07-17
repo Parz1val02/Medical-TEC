@@ -57,7 +57,7 @@
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
 <script th:inline="javascript">
     $(document).ready(function () {
-        var porcentajeRecorrido; // Variable para almacenar el valor del porcentajeRecorrido
+        var porcentajeRecorridoActual; // Variable para almacenar el valor del porcentajeRecorrido
 
         $('#zona').on('change', function () {
             set_map($(this).val());
@@ -178,12 +178,15 @@
             var tiempoTranscurrido = 0;
 
             const socket = io('http://localhost:8082');
-            socket.on('porcentajeRecorrido', function (valor) {
+            socket.on('connect', () => {
+                console.log('Conectado al servidor WebSocket');
+            });
+            socket.on('porcentajeRecorrido', function (porcentajeRecorrido) {
                 // Actualiza el valor de la variable porcentajeRecorrido
-                porcentajeRecorrido = valor;
-                console.log(porcentajeRecorrido)
+                porcentajeRecorridoActual = porcentajeRecorrido;
+                console.log('Porcentaje de Recorrido:', porcentajeRecorridoActual);
 
-                var punto = L.GeometryUtil.interpolateOnLine(map, polyline, porcentajeRecorrido); // Obtiene el punto en el porcentaje del recorrido
+                var punto = L.GeometryUtil.interpolateOnLine(map, polyline, porcentajeRecorridoActual); // Obtiene el punto en el porcentaje del recorrido
                 marker.setLatLng(punto.latLng); // Actualiza la posición del marcador en el mapa
                 console.log(punto.latLng)
                 console.log("tiempo: " + tiempoTranscurrido)

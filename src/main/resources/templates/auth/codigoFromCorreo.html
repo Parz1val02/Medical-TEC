@@ -29,7 +29,7 @@
                         <label>Codigo recibido :</label>
                         <input type="text" name="codigo" class="form-control" th:classappend="${codigoValidoMsg!=null?'is-invalid':''}">
                         <div class="invalid-feedback" th:if="${codigoValidoMsg!=null}" th:text="${codigoValidoMsg}"></div>
-
+                        <br>
                         <button type="submit" class="btn btn-primary">Confirmar</button>
                         <a th:href="@{'/loginA'}" class="btn btn-danger">Cancelar</a>
                     </form>
