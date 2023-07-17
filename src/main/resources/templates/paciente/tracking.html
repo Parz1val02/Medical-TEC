@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Tracking')}">
 </head>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -12,12 +12,13 @@
         crossorigin=""></script>
 <script src="../../js/polyline.js"></script>
 <script src="../../js/leaflet.geometryutil.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src='https://8x8.vc/libs/external_api.min.js' async></script>
 <style>
   #map {
     height: 300px;
-    width: 300px;
+    width: 500px;
   }
 </style>
 <body class="">
@@ -33,6 +34,7 @@
       <div class="content">
         <div class="card-deck">
               <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+                  <span hidden id="porcentajeRecorrido"></span>
                 <div id="map" class="col-sm-12"></div>
               </div>
               <div class="card-footer bg-transparent">
@@ -53,9 +55,10 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
 <script th:inline="javascript">
     $(document).ready(function () {
+        var porcentajeRecorrido; // Variable para almacenar el valor del porcentajeRecorrido
+
         $('#zona').on('change', function () {
             set_map($(this).val());
         });
@@ -65,20 +68,14 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
         ;
-        var marker,sede,ruta,tiempo;
-
+        var marker,sede,ruta,tiempo,tiempoStr,latitudActual,longitudActual;
 
         function set_map() {
-
             /*<![CDATA[*/
             sede = [[${sede}]];
             ruta = [[${ruta}]];
             var tiempoStr = [[${tiempo}]]; // Reemplaza esto con el valor de tiempo que tienes
-
             tiempo = parseInt(tiempoStr); // Extrae el valor numérico de la cadena
-
-            console.log(tiempo); // Imprime el tiempo en minutos
-            console.log(ruta);
 
             var latitud, longitud, nombre;
             longitud = sede.longitud;
@@ -98,10 +95,10 @@
 
             var rutaOptimaCodificada = ruta; // Reemplaza con la ruta óptima codificada que tienes
 
-            // Decodifica la representación codificada de la ruta óptima
+// Decodifica la representación codificada de la ruta óptima
             var coordenadas = decodePolyline(rutaOptimaCodificada);
 
-            // Función para decodificar una cadena codificada en formato polyline
+// Función para decodificar una cadena codificada en formato polyline
             function decodePolyline(encoded) {
                 var index = 0;
                 var len = encoded.length;
@@ -142,7 +139,9 @@
                 return coordinates;
             }
 
-            // Crea una polilínea con las coordenadas decodificadas y agrega al mapa
+            console.log("coordinates: " + coordenadas)
+
+// Crea una polilínea con las coordenadas decodificadas y agrega al mapa
             var polyline = L.polyline(coordenadas, {color: 'red'}).addTo(map);
 
             var tiempoTotal = tiempo * 60; // Convierte el tiempo a segundos
@@ -169,60 +168,43 @@
                 return distance;
             }
 
-            var distanciaTotal = calculateDistance(coordenadas); // Obtiene la distancia total de la ruta
-            console.log("distancia: "+distanciaTotal)
+            var distanciaTotalInicial = calculateDistance(coordenadas); // Obtiene la distancia total de la ruta
+            console.log("distancia: " + distanciaTotalInicial)
 
-            var velocidad = distanciaTotal / tiempoTotal; // Calcula la velocidad necesaria para completar la ruta en el tiempo especificado
-            console.log("velocidad: " +velocidad)
+            var velocidad = distanciaTotalInicial / tiempoTotal; // Calcula la velocidad CONSTANTE necesaria para completar la ruta en el tiempo especificado
+            console.log("velocidad: " + velocidad)
 
             var distanciaRecorrida = 0;
             var tiempoTranscurrido = 0;
 
-            var interval = setInterval(function() {
-                if (distanciaRecorrida >= distanciaTotal) {
-                    clearInterval(interval); // Detiene la actualización cuando se ha completado la ruta
-                } else {
-                    var porcentajeRecorrido = distanciaRecorrida / distanciaTotal;
-                    console.log(porcentajeRecorrido)
-                    var punto = L.GeometryUtil.interpolateOnLine(map, polyline, porcentajeRecorrido); // Obtiene el punto en el porcentaje del recorrido
-                    marker.setLatLng(punto.latLng); // Actualiza la posición del marcador en el mapa
-                    console.log(punto.latLng)
-                    distanciaRecorrida += velocidad;
-                    tiempoTranscurrido += 1000; // Intervalo de actualización en milisegundos
-                    console.log(tiempoTranscurrido)
+            const socket = io('http://localhost:8082');
+            socket.on('porcentajeRecorrido', function (valor) {
+                // Actualiza el valor de la variable porcentajeRecorrido
+                porcentajeRecorrido = valor;
+                console.log(porcentajeRecorrido)
 
-                    // Obtén la latitud y longitud actuales
-                    var latitud = punto.latLng.lat;
-                    var longitud = punto.latLng.lng;
+                var punto = L.GeometryUtil.interpolateOnLine(map, polyline, porcentajeRecorrido); // Obtiene el punto en el porcentaje del recorrido
+                marker.setLatLng(punto.latLng); // Actualiza la posición del marcador en el mapa
+                console.log(punto.latLng)
+                console.log("tiempo: " + tiempoTranscurrido)
 
-                    // Crea un objeto de datos para enviar al servidor
-                    var data = {
-                        latitud: latitud,
-                        longitud: longitud
-                    };
-                    console.log('Latitud actual: ' + latitud);
-                    console.log('Longitud actual: ' + latitud);
+                // Obtén la latitud y longitud actuales
+                var latitud = punto.latLng.lat;
+                var longitud = punto.latLng.lng;
 
-                    $.ajax({
-                        type: 'POST',
-                        url: 'http://localhost:8080/guardarUbicacion', // Reemplaza con la URL de tu endpoint en el servidor Java
-                        data: JSON.stringify(data),
-                        contentType: 'application/json',
-                        success: function(response) {
-                            console.log(response); // Deberías recibir la respuesta del servidor en la consola
-                        },
-                        error: function(error) {
-                            console.error('Error:', error);
-                        }
-                    });
-                }
-            }, 3000); // Intervalo de actualización en milisegundos
+                // Crea un objeto de datos para enviar al servidor
+                console.log('Latitud actual: ' + latitud);
+                console.log('Longitud actual: ' + longitud);
+
+            });
         }
         set_map()
 
         /*]]>*/
     });
+
 </script>
+
 <!--para descarga de consentimientos en pdf-->
 </body>
 </html>
