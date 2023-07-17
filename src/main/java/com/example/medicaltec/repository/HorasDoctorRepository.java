@@ -11,12 +11,11 @@ import java.util.List;
 
 public interface HorasDoctorRepository extends JpaRepository<Horasdoctor, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM telesystem_2.horasdoctor where doctor_dni=?1 and lower(mes)=?2")
-    Horasdoctor DniMes(String dni, String mes);
-
+    Horasdoctor obtenerHorasDoctorEnMes(String dni, String mes);
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "insert into horasdoctor (horainicio, horafin, horalibre, doctor_dni, dias, mes) values ('?1', '?2', '?3', '?4', '?5','?6')")
+    @Query(nativeQuery = true, value = "insert into horasdoctor (horainicio, horafin, horalibre, doctor_dni, dias, mes) values (?1, ?2, ?3, ?4, ?5, ?6)")
     void guardarHorasDoc(LocalTime horaIni, LocalTime horaFin, LocalTime horaLibre, String doctorDNI, String dias, String mes );
 
 

@@ -23,12 +23,12 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
               <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Validar Pago de Cita
+                Validar Pago Presenciales
               </h1>
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Valide el pago de las citas en su sede
+                Valide el pago de las citas y recetas en su sede
               </h5>
             </div>
           </div>
@@ -41,12 +41,10 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md">
               <h5 class="mb-2 mb-md-0 text-white" th:text="${session.usuario.sedesIdsedes.nombre}"></h5>
-              <div class="alert alert-danger" role="alert" th:if="${msg != null}" th:text="${msg}">
-
-              </div>
-              <div class="alert alert-success" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
-
-              </div>
+              <div class="alert alert-danger" role="alert" th:if="${errorCancelar != null}" th:text="${errorCancelar}"></div>
+              <div class="alert alert-success" role="alert" th:if="${exitoCancelar != null}" th:text="${exitoCancelar}"></div>
+              <div class="alert alert-danger" role="alert" th:if="${msg != null}" th:text="${msg}"></div>
+              <div class="alert alert-success" role="alert" th:if="${msg1 != null}" th:text="${msg1}"></div>
             </div>
           </div>
         </div>
@@ -56,41 +54,100 @@
           <table class="table table-striped" id="listaHistorial">
             <thead style="background: #cdeffc">
             <tr>
-              <th class="sort align-middle" style="width: 22%">Tipo de Cita</th>
-              <th class="sort align-middle" style="width: 13%">Fecha</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Id cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Tipo de Cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Fecha</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Paciente</th>
-              <th class="sort align-middle" style="width: 15%; text-align: center">Especialidad</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
               <th class="no-sort" style="width: 15%;" ></th>
               <th class="no-sort" style="width: 15%;" ></th>
             </tr>
             </thead>
             <tbody class="bg-white">
             <tr th:each="cita, info : ${listaValidarCitaFilter}">
+              <td th:text="${cita.idcita}" class="align-middle">
+              </td>
               <td th:text="${cita.tipo_cita}" class="align-middle">
               </td>
               <td th:text="${cita.fecha}" class="align-middle">
               </td>
               <td th:text="${cita.getFullname()}" class="align-middle" style="text-align: center">
               </td>
-              <td th:text="${cita.getNombre_especialidad()}" class="align-middle" style="text-align: center">
+              <td th:text="${cita.getFullnameDoc()}" class="align-middle" style="text-align: center">
               </td>
               <td class="align-middle" align="center">
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
                                     border-radius: 15px" th:data-target="'#Detalles' + ${info.index+1}">Validar</button>
-                <!-- Modal -->
               </td>
-              <!-- Cancelar cita
               <td class="align-middle" align="center">
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"  style="text-align: center;
-                                    border-radius: 15px" th:data-target="">Cancelar</button>
-                 Modal
+                <a th:href="@{'/administrativo/cancelarCita?citaId='+${cita.idcita}+'&dni='+${cita.dni}}">
+                  <button  type="button" class="btn btn-danger btn-sm botones" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey" disabled>Cancelar</button>
+                </a>
+                <input type="hidden" th:class="fecha" th:value="${cita.fecha}"/>
               </td>
-              -->
             </tr>
             </tbody>
           </table>
+          <script>
+            // Obtener datos y botones
+            var botones = document.getElementsByClassName('botones');
+            var fecha = document.getElementsByClassName('fecha');
+
+            // Obtener la fecha y hora actual
+            var fechaActual = new Date();
+
+            for (var i=0;i<botones.length;i++) {
+
+              var fechaString = fecha[i].value;
+
+              // Obtenemos las partes de la fecha
+              var fechaPartes = fechaString.split(' ');
+              var fechaGa = fechaPartes[0];
+              var horaGa = fechaPartes[1];
+
+              var fechaGaPartes = fechaGa.split('-');
+              var dia = fechaGaPartes[0] ;
+              var mes = fechaGaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+              var anio = fechaGaPartes[2];
+
+              // Obtenemos las partes de la hora
+              var horaGaPartes = horaGa.split(':');
+              var hora = horaGaPartes[0];
+              var minutos = horaGaPartes[1];
+
+              // Creamos el objeto de fecha combinando las partes correspondientes
+              var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+              console.log(fechaObjetivo);
+              var fechaInicio = new Date(fechaObjetivo.getTime() - 60 * 60000); // Restar 30 minutos en milisegundos
+              console.log(fechaInicio);
+              //var tiempo=fechaInicio-fechaActual;
+
+              if (fechaActual >= fechaInicio){
+                mostrarBoton(i);
+              }
+            }
+
+            function accionesBoton(parametro) {
+              // Código de la función
+              botones[parametro].disabled = false;
+              botones[parametro].style.background = '#3d8af7';
+              botones[parametro].style.borderColor = '#3d8af7';
+              console.log(botones[parametro]);
+
+            }
+
+            function mostrarBoton(valor) {
+              setTimeout(function() {
+                accionesBoton(valor);
+              }, 0); // Retraso de 2 segundos (2000 milisegundos)
+            }
+          </script>
         </div>
       </div>
+
+
+      <!-- Modal para validar cita -->
       <div th:each="cita, info : ${listaValidarCitaFilter}">
         <div class="modal fade" th:id="'Detalles' + ${info.index + 1}">
           <div class="modal-dialog">
@@ -128,10 +185,6 @@
                       <label for="doctor">Doctor:</label>
                       <input type="text" id="doctor" th:placeholder="${cita.getFullnameDoc()}" class="form-control" disabled>
                     </div>
-
-                  </div>
-                  <!-- Columna 2 -->
-                  <div class="col-sm-6">
                     <div class="form-group">
                       <label for="seguro">Seguro:</label>
                       <input type="text" id="seguro"  th:placeholder="${cita.getNombre_seguro()}" class="form-control" disabled>
@@ -140,15 +193,113 @@
                       <label for="precio">Precio (S/):</label>
                       <input type="text" id="precio"  th:placeholder="${cita.getPrecio_calculado()}" class="form-control" disabled>
                     </div>
-
-
-
                   </div>
+                  <!-- Columna 2 -->
 
                   <button type="submit" class="btn btn-primary">Validar</button>
                   <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
 
                 </div>
+
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card mb-3">
+        <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
+          <table class="table table-striped" id="recetalist">
+            <thead style="background: #cdeffc">
+            <tr>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Id Cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Medicamento</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Comentario</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Observaciones</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Cantidad</th>
+              <th class="no-sort" style="width: 15%;" ></th>
+
+            </tr>
+            </thead>
+            <tbody class="bg-white">
+            <tr th:each="receta, info : ${listaValidarRecetaFilter}">
+              <td th:text="${receta.idcita}" class="align-middle">
+              </td>
+              <td th:text="${receta.nombre}" class="align-middle">
+              </td>
+              <td th:text="${receta.comentario}" class="align-middle" style="text-align: center">
+              </td>
+              <td th:text="${receta.observaciones}" class="align-middle" style="text-align: center">
+              </td>
+              <td th:text="${receta.cantidad}" class="align-middle" style="text-align: center">
+              </td>
+              <td class="align-middle" align="center">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="'#Details' + ${info.index+1}">Validar</button>
+                <!-- Modal -->
+              </td>
+              <!-- Cancelar cita
+              <td class="align-middle" align="center">
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"  style="text-align: center;
+                                    border-radius: 15px" th:data-target="">Cancelar</button>
+                 Modal
+              </td>
+              -->
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal para validar cita -->
+      <div th:each="receta, info : ${listaValidarRecetaFilter}">
+        <div class="modal fade" th:id="'Details' + ${info.index + 1}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Aquí puedes agregar el contenido del modal -->
+              <div class="modal-header">
+                <h5 class="modal-title">Validar Cita</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form method="POST" th:action="@{'/administrativo/validarReceta'}">
+
+                  <input th:value="${receta.getIdcita()}" name="citaId" type="hidden"/>
+
+                  <input th:value="${receta.getIdreceta()}" name="recetaId" type="hidden"/>
+                  <input th:value="${receta.getPrecio_Calculado()}" name="precio" type="hidden"/>
+                  <input th:value="${receta.getEmail()}" name="correo" type="hidden"/>
+
+
+
+
+
+                  <div class="row">
+                    <div class="col-sm-6">
+
+
+                      <div class="form-group">
+                        <label for="doctor">Paciente:</label>
+                        <input type="text"  th:placeholder="${receta.getFullname()}" class="form-control" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label for="seguro">Seguro:</label>
+                        <input type="text"   th:placeholder="${receta.getNombre_seguro()}" class="form-control" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label for="precio">Precio (S/):</label>
+                        <input type="text"   th:placeholder="${receta.getPrecio_Calculado()}" class="form-control" disabled>
+                      </div>
+                    </div>
+                    <!-- Columna 2 -->
+
+                    <button type="submit" class="btn btn-primary">Validar</button>
+                    <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+
+                  </div>
 
                 </form>
               </div>
@@ -176,12 +327,7 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <!--    Scripts de Calendar -->
-<!--script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -226,218 +372,37 @@
 
       ]
     });
-  });
-</script>
-
-
-<script th:inline="javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      start: 'title', // will normally be on the left. if RTL, will be on the right
-      center: '',
-      end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
-      defaultView: 'month',
-      weekday: 'long',
-      selectable: true,
-      height: 650,
-      events: [],
-      eventTextColor: '#ffffff',
-      eventBackgroundColor: '#3d8af7',
-      eventDisplay: 'block',
-      eventTimeFormat:{
-        hour: 'numeric',
-        minute: '2-digit',
-        meridiem: 'short'
-      },
-      firstDay: 1,
-      locale: 'es',
-      allDay: false,
-      displayEventTime: true,
-      /*eventDidMount: function(info) {
-          tippy(info.el, {
-              trigger: 'mouseenter',
-              content: generateTooltipContent(info.event), // call a function to generate the html content
-              placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
-              animation: 'fade',
-              allowHTML: 'true'
-          })
-      },*/
-      eventClick: function(info) {
-        if(info.event.extendedProps.modalidad==="Virtual"){
-          let modalA = $('#modalVirtual');
-          modalA.modal('show');
-          modalA.on('shown.bs.modal', function() {
-            let especialidad = $("#especialidadVirtual");
-            especialidad.attr('placeholder', info.event.title);
-            let doctorcito = $("#doctorDniVirtual");
-            doctorcito.attr('placeholder', info.event.extendedProps.doctor);
-            let fecha = $("#fechaVirtual");
-            let hora = $("#horaVirtual");
-            let tipocita = $("#tipocitaVirtual");
-            let sede = $("#sedeVirtual");
-            let estado = $("#estadoVirtual");
-            let time = moment(info.event.extendedProps.hora, 'HH:mm');
-            let formattedTime = time.format('h:mm A');
-            let date = moment(info.event.start, 'YYYY-MM-DD');
-            let formattedDate = date.format('DD-MM-YYYY');
-            estado.attr('placeholder', info.event.extendedProps.estado);
-            hora.attr('placeholder', formattedTime);
-            fecha.attr('placeholder', formattedDate);
-            tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
-            sede.attr('placeholder', info.event.extendedProps.sede);
-            let enlace = $("#enlace");
-            enlace.attr('href', info.event.extendedProps.extra);
-            console.log(info.event.extendedProps.pagada);
-            if(info.event.extendedProps.pagada==='true'){
-              $("#pagarVirtual").hide();
-              $("#cancelarVirtual").hide();
-            }else if(info.event.extendedProps.pagada==='false'){
-              $("#pagarVirtual").show();
-              $("#cancelarVirtual").show();
-            }
-
-            $('#cancelarVirtual').on('click', function (){
-              modalA.modal('hide');
-              let modalb = $('#cancelarCita');
-              modalb.modal('show');
-              modalb.on('shown.bs.modal', function() {
-                let ga = $("#cancelar");
-                let link = '/paciente/cancelarCita?citaId='
-                link += info.event.extendedProps.citaid;
-                ga.attr('href', link);
-              });
-            });
-            $("#pagarVirtual").on('click', function (){
-              modalA.modal('hide');
-              let modalc = $('#pagarCita');
-              modalc.modal('show');
-              modalc.on('shown.bs.modal', function() {
-                $("#totalPago").text("S/" + info.event.extendedProps.precio);
-                $("#citaId").val(info.event.extendedProps.citaid);
-                $("#precio").val(info.event.extendedProps.precio);
-              });
-            })
-          })
-        }else if(info.event.extendedProps.modalidad==="Presencial"){
-          let modalA = $('#modalPresencial');
-          modalA.modal('show');
-          modalA.on('shown.bs.modal', function() {
-            let especialidad = $("#especialidadPresencial");
-            especialidad.attr('placeholder', info.event.title);
-            let doctorcito = $("#doctorDniPresencial");
-            doctorcito.attr('placeholder', info.event.extendedProps.doctor);
-            let fecha = $("#fechaPresencial");
-            let hora = $("#horaPresencial");
-            let tipocita = $("#tipocitaPresencial");
-            let sede = $("#sedePresencial");
-            let estado = $("#estadoPresencial");
-            let time = moment(info.event.extendedProps.hora, 'HH:mm');
-            let formattedTime = time.format('h:mm A');
-            let date = moment(info.event.start, 'YYYY-MM-DD');
-            let formattedDate = date.format('DD-MM-YYYY');
-            estado.attr('placeholder', info.event.extendedProps.estado);
-            hora.attr('placeholder', formattedTime);
-            fecha.attr('placeholder', formattedDate);
-            tipocita.attr('placeholder', info.event.extendedProps.tipoCita);
-            sede.attr('placeholder', info.event.extendedProps.sede);
-            let direccion = $("#direccion");
-            let consultorio = $("#consultorio");
-            direccion.attr('placeholder', info.event.extendedProps.direccion);
-            consultorio.attr('placeholder', info.event.extendedProps.extra);
-            if(info.event.extendedProps.pagada==='true'){
-              $("#cancelarPresencial").hide();
-            }else if(info.event.extendedProps.pagada==='false'){
-              $("#cancelarPresencial").show();
-            }
-            $('#cancelarPresencial').on('click', function (){
-              modalA.modal('hide');
-              let modalb = $('#cancelarCita');
-              modalb.modal('show');
-              modalb.on('shown.bs.modal', function() {
-                let ga = $("#cancelar");
-                let link = '/paciente/cancelarCita?citaId='
-                link += info.event.extendedProps.citaid;
-                ga.attr('href', link);
-              });
-            })
-          })
+    $('#recetalist').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  citas",
+        zeroRecords: "No se encontraron citas pasadas",
+        emptyTable: "No hay citas",
+        info: "Mostrando citas del _START_ al _END_ <br>Total _TOTAL_ citas",
+        infoEmpty: "Mostrando citas del 0 al 0 <br>Total 0 citas pasadas",
+        infoFiltered: "(filtrado de un total de _MAX_ citas)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
         }
-      }
-    });
-    // AJAX request to fetch events
-    $.ajax({
-      url: 'http://34.28.24.16:8081/api/citas', // Replace with your API endpoint URL
-      type: 'GET',
-      data: {
-        dni: [[${session.usuario.id}]] // Specify the GET parameter
       },
-      success: function(response) {
-        // Parse and format the received data
-        var events = [];
-        response.forEach(function(eventData) {
-          var dateString = eventData.start;
-          var date = moment(dateString, 'DD/MM/YYYY');
-          var fechaFormateada = date.format('YYYY-MM-DD');
-          var event = {
-            title: eventData.title,
-            start: fechaFormateada,
-            modalidad: eventData.modalidad,
-            doctor: eventData.doctor,
-            hora: eventData.hora,
-            sede: eventData.sede,
-            tipoCita: eventData.tipoCita,
-            formaPago: eventData.formaPago,
-            pagada: eventData.pagada,
-            extra: eventData.extra,
-            precio: eventData.precio,
-            direccion: eventData.direccion,
-            citaid: eventData.citaid,
-            estado: eventData.estado
-            // Add more properties as needed
-          };
-          events.push(event);
-        });
+      autoWidth: false,
+      lengthMenu: [
+        [5, 10, 15, -1], [5, 10, 15, "Todos"]
+      ],
+      buttons: [
 
-        // Add the events to FullCalendar
-        calendar.addEventSource(events);
-      },
-      error: function(xhr, status, error) {
-        console.log('Error:', error);
-      }
+      ]
     });
-    calendar.render();
   });
-  /*function generateTooltipContent(event) {
-      // Generate the HTML content for the tooltip
-      // Assuming you have a time string like '14:30'
-      var timeString = event.extendedProps.hora;
-
-      // Parse the time string using Moment.js
-      var time = moment(timeString, 'HH:mm');
-
-      // Format the time as 'h:mm A' (e.g., '2:30 PM')
-      var formattedTime = time.format('h:mm A');
-
-      var dateString = event.start;
-      var date = moment(dateString, 'YYYY-MM-DD');
-      var fechaFormateada = date.format('DD/MM/YYYY');
-
-      var content = '<strong>' + event.title + '</strong>';
-      content += '<br>Doctor: ' + event.extendedProps.doctor;
-      content += '<br>Modalidad: ' + event.extendedProps.modalidad;
-      content += '<br>Fecha: ' + fechaFormateada;
-      content += '<br>Hora: ' + formattedTime;
-      content += '<br>Sede: ' + event.extendedProps.sede;
-
-      return content;
-  }*/
 </script>
-<script>
 
 
-
-</script>
 </body>
 </html>

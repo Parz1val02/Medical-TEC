@@ -83,9 +83,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Query(nativeQuery = true, value = "select * from usuario u where u.roles_idroles = 5  and u.enabled = 1")
     Usuario obtenerSuperAdmin();
-
-
-
     Usuario findByid(String id);
 
     @Query(nativeQuery = true,value = "select dni as `Dni`, email as `Email`, nombre as `Nombre`, apellido as `Apellido`, sexo as `Sexo`, e.nombre_especialidad as `Especialidad` , ceduladoctor as `Cedula`\n" +

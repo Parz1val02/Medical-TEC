@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Ver Calendario')}">
 </head>
 
 
@@ -20,24 +20,492 @@
 
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-11">
-                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                                Calendario
-                            </h1>
-                        </div>
-                        <div class="col-md-11">
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                                Revisa la información correspondiente a mensajes, citas y más.
-                            </h5>
-                        </div>
-                    </div>
+                    <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                        Calendario
+                    </h1>
+                    <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                        Revisa la información correspondiente a mensajes, citas y más.
+                    </h5>
                 </div>
             </div>
-
             <div class="card mb-3">
-                <div id="calendar"></div>
+                <div class="card-body">
+                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${msgError != null}" th:text="${msgError}" class="alert alert-danger" role="alert"></div>
+                    <div th:if="${borrado != null}" th:text="${borrado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${horasdoctornoexiste != null}" th:text="${horasdoctornoexiste}" class="alert alert-danger" role="alert"></div>
+                    <div style="display: flex; text-align: center">
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Ver mis horas de disponibilidad del mes
+                            </button>
+                        </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Agregar horas de disponibilidad
+                            </button>
+                        </a>
+                    </div>
+                    <div id="div1" style="display:none; padding: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                            Mis horas de disponibilidad:
+                        </h4>
+                        <div style="display: flex">
+                            <p class="form-label" style="font-weight: 600;">Mes Actual:</p>
+                            <p th:text="${mesActual}" style="margin: 0 10px;"></p>
+                        </div>
+                        <!-- Hay horas doctor -->
+                        <div th:if="${valor}==1">
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;">Días:</p>
+                                <p th:text="${horasDoctor.dias}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;">Hora inicio:</p>
+                                <p th:text="${horasDoctor.horainicio}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;">Hora fin:</p>
+                                <p th:text="${horasDoctor.horafin}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;">Hora libre:</p>
+                                <p th:text="${horasDoctor.horalibre}" style="margin: 0 10px;"></p>
+                            </div>
+
+                            <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                            <a th:href="@{'/doctor/borrarHorario?id='+${horasDoctor.id}}">
+                                <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                            </a>
+
+                        </div>
+                        <!-- no hay horas doctor -->
+                        <div th:if="${valor}==0">
+                            <p> Debe ingresar sus horas disponibles para este mes.</p>
+                        </div>
+                    </div>
+                    <div id="div2" style="display:none; padding: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                            Horas de disponibilidad
+                        </h4>
+                        <form th:action="@{/doctor/enviarHorasDoctor}" method="post">
+
+                            <div class="form-group">
+                                <label for="mes" class="form-label">Seleccione el mes para agregar disponibilidad:</label>
+                                <select class="form-control" aria-label="Default select example" th:if="${mes != null}" th:value="${mes}" th:classappend="${mesmsg != null ? 'is-invalid' : ''}"
+                                        name="mes" id="mes" style="font-family: 'Open Sans',serif" required>
+                                    <option disabled selected>Select--</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <select class="form-control" aria-label="Default select example" th:if="${mes == null}"  th:classappend="${mesmsg != null ? 'is-invalid' : ''}"
+                                        name="mes" id="mes" style="font-family: 'Open Sans',serif" required>
+                                    <option disabled selected>Select--</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${mesmsg != null}" th:text="${mesmsg}">
+                                    Debe escoger el mes para las horas de disponibilidad.
+                                </div>
+                            </div>
+
+                            <div style="height: 10px;"></div>
+
+                            <div class="form-group">
+                                <label for="dia" class="form-label">Seleccione los dias con disponibilidad:</label>
+                                <div style="display: flex;">
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin-right: 10px;" id="Lunes">Lunes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Martes">Martes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Miercoles">Miércoles</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Jueves">Jueves</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Viernes">Viernes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin-left: 10px;" id="Sabado">Sábado</button>
+                                </div>
+                                <input id="dia" type="hidden" name="dia" style="width: 50%; border-radius: 4px;height: 35px;border: 1px solid #d8e2ef;">
+                                <div class="invalid-feedback" th:if="${diamsg != null}" th:text="${diamsg}"></div>
+                            </div>
+
+                            <div style="height: 5px;"></div>
+
+                            <div class="form-group">
+                                <label class="form-label">Seleccione el horario para agregar disponibilidad:</label>
+                                <div style="display: flex;">
+                                    <div style="flex: 1; margin-right: 10px;">
+                                        <label class="form-label">Horario Inicio:</label>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horainicio != null}" th:value="${horainicio}" th:classappend="${iniciomsg != null ? 'is-invalid' : ''}"
+                                                name="horainicio" id="horainicio" style="font-family: 'Open Sans',serif" required>
+                                            <option selected disabled>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horainicio == null}"  th:classappend="${iniciomsg != null ? 'is-invalid' : ''}" name="horainicio" id="horainicio" style="font-family: 'Open Sans',serif" required>
+                                            <option selected disabled>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${iniciomsg != null}" th:text="${iniciomsg}"></div>
+                                    </div>
+                                    <div style="flex: 1; margin-left: 10px;">
+                                        <label class="form-label">Horario Final:</label>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horafin != null}" th:value="${horafin}" th:classappend="${finmsg != null ? 'is-invalid' : ''}" name="horafin" id="horafin" style="font-family: 'Open Sans',serif" required>
+                                            <option disabled selected>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horafin == null}"  th:classappend="${finmsg != null ? 'is-invalid' : ''}" name="horafin" id="horafin" style="font-family: 'Open Sans',serif" required>
+                                            <option disabled selected>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${finmsg != null}" th:text="${finmsg}"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 10px;"></div>
+
+                            <div class="form-group">
+                                <label class="form-label">Seleccione el horario para su hora libre del día:</label>
+                                <label  class="form-label" style="font-weight: 500 !important; font-size: 12px">Se le recomienda elegir acorde a su horario de comida y/o otras actividades</label>
+                                <div style="display: flex; width: 50%;">
+                                    <select class="form-control" aria-label="Default select example" th:if="${horalibre != null}" th:value="${horalibre}" th:classappend="${libremsg != null ? 'is-invalid' : ''}" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
+                                        <option selected>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                    </select>
+                                    <select class="form-control" aria-label="Default select example" th:if="${horalibre == null}" th:classappend="${libremsg != null ? 'is-invalid' : ''}" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
+                                        <option selected disabled>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback" th:if="${libremsg != null}" th:text="${libremsg}"></div>
+
+                            </div>
+
+                            <div style="height: 10px;"></div>
+                            <div class="form-group">
+                                <label  class="form-label" style="font-weight: 500 !important; font-size: 12px">Debe elegir todas las opciones vistas</label>
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="stringDias()">Finalizar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <div id="calendar"></div>
+                </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <!--
+            <script>
+                $(document).ready(function() {
+                    $('form').submit(function(event) {
+                        var checkboxValue = $('#miCheckbox').is(':checked') ? $('#miCheckbox').val() : '';
+                        $('input[name="miCheckbox"]').val(checkboxValue);
+                    });
+                });
+            </script>
+            -->
+            <script>
+                function mostrarDiv(numeroDiv) {
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
+                    // Mostrar el div seleccionado
+                    document.getElementById("div" + numeroDiv).style.display = "block";
+                }
+            </script>
+            <script>
+                var condicionalLunes = 0;
+                var condicionalMartes = 0;
+                var condicionalMiercoles = 0;
+                var condicionalJueves = 0;
+                var condicionalViernes = 0;
+                var condicionalSabado = 0;
+
+                document.getElementById('Lunes').addEventListener("click", function() {
+                    if (condicionalLunes === 0){
+                        condicionalLunes = 1;
+                        document.getElementById('Lunes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalLunes = 0;
+                        document.getElementById('Lunes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Martes').addEventListener("click", function() {
+                    if (condicionalMartes === 0){
+                        condicionalMartes = 1;
+                        document.getElementById('Martes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalMartes = 0;
+                        document.getElementById('Martes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Miercoles').addEventListener("click", function() {
+                    if (condicionalMiercoles === 0){
+                        condicionalMiercoles = 1;
+                        document.getElementById('Miercoles').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalMiercoles = 0;
+                        document.getElementById('Miercoles').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Jueves').addEventListener("click", function() {
+                    if (condicionalJueves === 0){
+                        condicionalJueves = 1;
+                        document.getElementById('Jueves').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalJueves = 0;
+                        document.getElementById('Jueves').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Viernes').addEventListener("click", function() {
+                    if (condicionalViernes === 0){
+                        condicionalViernes = 1;
+                        document.getElementById('Viernes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalViernes = 0;
+                        document.getElementById('Viernes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Sabado').addEventListener("click", function() {
+                    if (condicionalSabado === 0){
+                        condicionalSabado = 1;
+                        document.getElementById('Sabado').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalSabado = 0;
+                        document.getElementById('Sabado').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                function stringDias(){
+                    var dias = [];
+                    console.log(condicionalLunes)
+                    console.log(condicionalMartes)
+                    console.log(condicionalMiercoles)
+                    console.log(condicionalJueves)
+                    console.log(condicionalViernes)
+                    console.log(condicionalSabado)
+
+                    if (condicionalLunes===1){
+                        dias.push("Lunes");
+                    }
+                    if (condicionalMartes===1){
+                        dias.push("Martes");
+                    }
+                    if (condicionalMiercoles===1){
+                        dias.push("Miercoles");
+                    }
+                    if (condicionalJueves===1){
+                        dias.push("Jueves");
+                    }
+                    if (condicionalViernes===1){
+                        dias.push("Viernes");
+                    }
+                    if (condicionalSabado===1){
+                        dias.push("Sabado");
+                    }
+
+                    document.getElementById('dia').value = dias.join(",");
+                    document.getElementById('dia').form.submit();
+                    console.log(typeof document.getElementById('dia').value)
+                }
+
+                // Agrega un evento click al botón
+                /*botonMartes.addEventListener("click", function() {
+                    valor = input.value;
+                    nuevoValor = valor+"Martes";
+                    input.value = nuevoValor;
+                });*/
+
+            </script>
 
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>

@@ -71,14 +71,16 @@
                                         </div>
                                         <div class="row">
                                             <div class="col mb-3">
-                                                <label for="disabledTextInput5" class="form-label">Sede</label>
+                                                <label for="disabledTextInput7" class="form-label">Sede</label>
                                                 <input type="text" id="disabledTextInput7" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${paciente.sedesIdsedes.nombre}">
                                             </div>
                                             <div class="col mb-3">
-                                                <label for="disabledTextInput6" class="form-label">Seguro</label>
+                                                <label for="disabledTextInput8" class="form-label">Seguro</label>
                                                 <input type="text" id="disabledTextInput8" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${paciente.segurosIdSeguro.nombreSeguro}">
                                             </div>
                                         </div>
+                                        <label for="disabledTextInput9" class="form-label">Alergias</label>
+                                        <input type="text" id="disabledTextInput9" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${resultado}">
                                     </fieldset>
                                 </form>
                             </div>
@@ -95,7 +97,7 @@
                                 <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
                             </div>
                         </div>
-                        <!--  -->
+                        <!-- -->
                         <form method="POST" th:action="@{/doctor/enviarBitacoras}">
                             <div class="row no-gutters" th:each="informe, i : ${informesPorUsuario}">
                                 <div class="col-md-12">
@@ -114,10 +116,12 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <label  class="form-label" style="font-weight: 700 !important;">Mi bitácora (notas personales):</label>
-                                        <label  class="form-label" style="font-weight: 500 !important; font-size: 20px">Agregar comentarios acerca del historial clínico:</label>
-                                        <input type="hidden" class="informeid" th:value="${informe.id}">
-                                        <input class="form-control bitacora" style="border: 1px solid #b6c1d2;width: 100%;" th:value="${informe.bitacora}">
+                                        <label  class="form-label" style="font-weight: 700 !important;margin: 0;">Mi bitácora (notas personales):</label>
+                                        <label  class="form-label" style="font-weight: 500 !important; font-size: 12px">Agregar comentarios acerca del historial clínico:</label>
+                                        <input type="hidden" th:value="${informe.id}" class="informeid form-control">
+                                        <textarea class="form-control bitacora" style="border: 1px solid #b6c1d2;width: 100%;" th:text="${informe.bitacora}">
+                                        </textarea>
+
                                     </div>
                                 </div>
                             </div>
@@ -133,6 +137,9 @@
 
 
                     <script>
+                        function borrarRespuesta(){
+
+                        }
 
                         function juntarRespuestas(){
                             var informeid = document.getElementsByClassName('informeid');
@@ -147,14 +154,25 @@
                             iterableInformeid.forEach(function (x){
                                 idInforme.push(x.value);
                             })
+
+                            console.log(idInforme)
+
                             iterableBitacora.forEach(function (x){
-                                bitacoraContent.push(x.value);
+                                if (x.value === ''){
+                                    bitacoraContent.push("nulo");
+                                }else {
+                                    console.log("hola")
+                                    bitacoraContent.push(x.value);
+                                }
                             })
 
+                            console.log(bitacoraContent)
                             document.getElementById('informesId').value = idInforme.join(">%%%%%<%%%%>%%%%%<");
                             document.getElementById('bitacoraContent').value = bitacoraContent.join(">%%%%%<%%%%>%%%%%<");
-                            document.getElementById('informesId').form.submit();
-                            document.getElementById('bitacoraContent').form.submit();
+                            //document.getElementById('informesId').form.submit();
+                            //document.getElementById('bitacoraContent').form.submit();
+                            console.log(document.getElementById('informesId').value)
+                            console.log(document.getElementById('bitacoraContent').value)
                         }
 
                         function toggleInput() {

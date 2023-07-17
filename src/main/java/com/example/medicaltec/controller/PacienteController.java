@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
@@ -75,10 +76,11 @@ public class PacienteController {
     final ExamenMedicoRepository examenMedicoRepository;
     final HorasDoctorRepository horasDoctorRepository;
     final DeliverymedicamentoRepository deliverymedicamentoRepository;
+    final CorreoConEstilos correoConEstilos;
 
     public PacienteController(HistorialMedicoRepository historialMedicoRepository, SedeRepository sedeRepository, SeguroRepository seguroRepository, EspecialidadRepository especialidadRepository, AlergiaRepository alergiaRepository, BoletaRepository boletaRepository, UsuarioRepository usuarioRepository, RolesRepository rolesRepository,
                               TipoCitaRepository tipoCitaRepository, CitaRepository citaRepository, MedicamentoRepository medicamentoRepository, PreguntaRepository preguntaRepository, RptaRepository rptaRepository, HistorialMedicoHasAlergiaRepository historialMedicoHasAlergiaRepository, RecetaHasMedicamentoRepository recetaHasMedicamentoRepository,
-                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository, DeliverymedicamentoRepository deliverymedicamentoRepository){
+                              CuestionarioRepository cuestionarioRepository, RecetaRepository recetaRepository, SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository, ExamenMedicoRepository examenMedicoRepository, HorasDoctorRepository horasDoctorRepository, DeliverymedicamentoRepository deliverymedicamentoRepository, CorreoConEstilos correoConEstilos){
         this.historialMedicoRepository = historialMedicoRepository;
         this.sedeRepository = sedeRepository;
         this.seguroRepository = seguroRepository;
@@ -100,6 +102,7 @@ public class PacienteController {
         this.examenMedicoRepository = examenMedicoRepository;
         this.horasDoctorRepository = horasDoctorRepository;
         this.deliverymedicamentoRepository = deliverymedicamentoRepository;
+        this.correoConEstilos = correoConEstilos;
     }
 
     @RequestMapping(value = "/principal")
@@ -269,7 +272,29 @@ public class PacienteController {
         model.addAttribute("ruta",rutaOptima);
         model.addAttribute("tiempo",tiempoDemora);
 
-        return "paciente/tracking";
+        String latitud1 = String.valueOf(origen_latitud);
+        String longitud1 = String.valueOf(origen_longitud);
+        // Construir la URL con los parámetros
+        String url = "http://localhost:8082/paciente/tracking?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
+                "&rutaOptima=" + rutaOptima + "&tiempoDemora=" + tiempoDemora;
+
+        // Enviar la solicitud GET al servidor Node.js
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        // Comprobar el código de estado de la respuesta
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // La solicitud se realizó correctamente
+
+            // Devolver la vista paciente/tracking
+            return "paciente/tracking";
+        } else {
+            // La solicitud no se realizó correctamente
+            // Manejar el error de acuerdo a tus necesidades
+
+            // Devolver una vista de error o manejar el error de otra manera
+            return "error";
+        }
     }
 
     @RequestMapping("/perfil")
@@ -353,16 +378,11 @@ public class PacienteController {
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Seguro1Dto> lista = seguroRepository.lista();
         model.addAttribute("usuario", usuario);
-
-        List<Cita> citaspas =  citaRepository.historialCitas2(usuario.getId());
-        ArrayList<Boleta> boletas = new ArrayList<>();
-        for (int i = 0; i < citaspas.size(); i++) {
-            boletas.add(boletaRepository.obtenerCitaxBoleta(citaspas.get(i).getId()));
-        }
-        model.addAttribute("boletas", boletas);
-        model.addAttribute("citas", citaspas);
-        model.addAttribute("medicamentos", medicamentoRepository.findAll());
+        model.addAttribute("boletas", boletaRepository.findAll());
+        model.addAttribute("medicamentosReceta", recetaHasMedicamentoRepository.findAll());
+        model.addAttribute("lista", lista);
        return "paciente/pagos";
     }
 
@@ -668,7 +688,6 @@ public class PacienteController {
     public String cancelarCita(@RequestParam("citaId") String citaId,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         try{
@@ -705,7 +724,6 @@ public class PacienteController {
                                @RequestParam("cvv") String cvv,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Regex regex = new Regex();
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
@@ -749,7 +767,6 @@ public class PacienteController {
                                @RequestParam("cvv") String cvv,
                                RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
         Regex regex = new Regex();
-        CorreoConEstilos correoConEstilos = new CorreoConEstilos();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");

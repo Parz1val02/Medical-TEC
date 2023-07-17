@@ -66,8 +66,8 @@
                         Visualiza tus notificaciones, mensajería y calendario de citas.
                     </h6>
                     <br>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-4" style="padding: 0">
+                    <div class="row no-gutters justify-content-between align-items-center">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -76,7 +76,7 @@
                                     <div style="height: 250px;">
                                         <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
                                              th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
-                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
                                             <div class="card-body" style="overflow: hidden; padding: 10px !important;">
                                                 <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
                                                 <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4" style="padding: 0">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -106,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4" style="padding: 0">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card">
                                 <div class="card-body" >
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
@@ -114,20 +114,21 @@
                                     </h4>
                                     <div>
                                         <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
-                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
+                                             th:if="${iterStatus2.index &lt; 3}" style="padding-bottom: 10px;
                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
                                             <div class="card-body" style="overflow: hidden; padding: 10px !important;">
                                                 <b th:text="|${cuestionario.nombre}|"></b>
-                                                <div> Descripción cuestionario respectiva</div>
+                                                <div>
+                                                    <button type="button" class="btn btn-light btn-sm" style="background: #00a9b1; border-color: #00a9b1; color: #FFFFFF;
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${iterStatus2.index+1}">Previsualizar</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-lg-12 pl-lg-2" style="padding-top: 25px">
+                        <div class="col-sm-6" style="padding-top: 25px">
                             <div class="card h-100 mb-3">
                                 <div class="card-header h-100  bg-light py-2">
                                     <div class="row flex-between-center">
@@ -150,6 +151,41 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal previsualizar cuestionario -->
+            <div th:each="cuestionario, i : ${listaCuestionarios}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Cuestionario' + ${i.index+1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Información del Cuestionario </h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <br>
+                                    <b>Nombre:  </b>
+                                    <p th:text="|${cuestionario.nombre}|">Título del Cuestionario</p>
+                                    <div th:each="pregunta, iterStatus2  : ${cuestionario.listapreguntas}">
+                                        <b th:text="|Pregunta ${iterStatus2.index+1}|"></b>
+                                        <p style="margin: 0" th:text="${pregunta}"> Información de Pregunta</p>
+                                        <input disabled>
+                                        <div style="width: 10px;height: 20px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a  th:href="@{/doctor/cuestionarios}">
+                                    <button type="button" class="btn btn-primary">Ir a cuestionarios</button>
+                                </a>
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Próximas Citas -->
             <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
                 <div class="card-body">
@@ -224,7 +260,71 @@
                     </table>
                 </div>
             </div>
+            <script>
+                // Obtener datos y botones
+                var botones = document.getElementsByClassName('botones');
+                var fecha = document.getElementsByClassName('fecha');
+                var horas = document.getElementsByClassName('hora');
 
+                // Obtener la fecha y hora actual
+                var fechaActual = new Date();
+
+                for (var i=0;i<botones.length;i++) {
+
+                    var fechaString = fecha[i].value;
+                    var horaString = horas[i].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes = fechaString.split('-');
+                    var dia = fechaPartes[0];
+                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio = fechaPartes[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes = horaString.split(':');
+                    var hora = horaPartes[0];
+                    var minutos = horaPartes[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+                    var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                    //var tiempo=fechaInicio-fechaActual;
+
+                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
+                        mostrarBoton(i);
+                    }
+                }
+
+                function accionesBoton(parametro) {
+                    // Código de la función
+                    botones[parametro].disabled = false;
+                    botones[parametro].style.background = '#3d8af7';
+                    botones[parametro].style.borderColor = '#3d8af7';
+                    console.log(botones[parametro]);
+
+                }
+
+                function mostrarBoton(valor) {
+                    setTimeout(function() {
+                        accionesBoton(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+                function myStopFunction() {
+                    clearTimeout(myTimeout);
+                }
+
+                function mostrarDiv(numeroDiv) {
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
+                    // Mostrar el div seleccionado
+                    document.getElementById("div" + numeroDiv).style.display = "block";
+                }
+            </script>
             <script type="text/javascript">
 
                 //var elemento = document.getElementById('jitsi-button');
@@ -278,97 +378,6 @@
                         // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
                     });
                 });*/
-            </script>
-
-            <script>
-                // Obtener datos y botones
-                var botones = document.getElementsByClassName('botones');
-                var fecha = document.getElementsByClassName('fecha');
-                var horas = document.getElementsByClassName('hora');
-
-                // Obtener la fecha y hora actual
-                var fechaActual = new Date();
-
-                for (var i=0;i<botones.length;i++) {
-
-                    var fechaString = fecha[i].value;
-                    var horaString = horas[i].value;
-
-                    // Obtenemos las partes de la fecha
-                    var fechaPartes = fechaString.split('-');
-                    var dia = fechaPartes[0];
-                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
-                    var anio = fechaPartes[2];
-
-                    // Obtenemos las partes de la hora
-                    var horaPartes = horaString.split(':');
-                    var hora = horaPartes[0];
-                    var minutos = horaPartes[1];
-
-                    // Creamos el objeto de fecha combinando las partes correspondientes
-                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
-                    var fechaInicio = new Date(fechaObjetivo.getTime() - 45 * 60000); // Restar 30 minutos en milisegundos
-                    var fechaFin = new Date(fechaObjetivo.getTime() + 45 * 60000); // Sumar 30 minutos en milisegundos
-
-                    //var tiempo=fechaInicio-fechaActual;
-
-                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
-                        mostrarBoton(i);
-                    }
-                    /*
-                    if(fechaInicio>fechaActual && fechaFin<fechaActual){
-                        mostrarBoton(i);
-                    } else if (fechaActual<fechaInicio){
-                        mostrarBoton(i);
-                    } else {
-                        console.log("No es tiempo aún"+"corresponde a"+i);
-                    }
-
-
-                    mostrarBoton(i);
-                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
-                        botones[i].disabled = false;
-                        botones[i].style.background = 'grey';
-                        botones[i].style.borderColor = 'grey';
-                    }
-
-                    var tiempo = fechaObjetivo - fechaActual;
-                    const fecha = setTimeout(
-                        function cambios(i){
-                        botones[i].disabled = false;
-                        botones[i].style.background = 'grey';
-                        botones[i].style.borderColor = 'grey';
-                        }, 5000);
-                    */
-                }
-
-                function accionesBoton(parametro) {
-                    // Código de la función
-                    botones[parametro].disabled = false;
-                    botones[parametro].style.background = '#3d8af7';
-                    botones[parametro].style.borderColor = '#3d8af7';
-                    console.log(botones[parametro]);
-
-                }
-
-                function mostrarBoton(valor) {
-                    setTimeout(function() {
-                        accionesBoton(valor);
-                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
-                }
-
-                function myStopFunction() {
-                    clearTimeout(myTimeout);
-                }
-
-                function mostrarDiv(numeroDiv) {
-                    // Ocultar todos los divs
-                    document.getElementById("div1").style.display = "none";
-                    document.getElementById("div2").style.display = "none";
-
-                    // Mostrar el div seleccionado
-                    document.getElementById("div" + numeroDiv).style.display = "block";
-                }
             </script>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
