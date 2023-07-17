@@ -66,8 +66,8 @@
                         Visualiza tus notificaciones, mensajería y calendario de citas.
                     </h6>
                     <br>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-4" style="padding: 0">
+                    <div class="row no-gutters justify-content-between align-items-center">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -76,7 +76,7 @@
                                     <div style="height: 250px;">
                                         <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
                                              th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
-                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
                                             <div class="card-body" style="overflow: hidden; padding: 10px !important;">
                                                 <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
                                                 <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4" style="padding: 0">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card" style="margin: 15px">
                                 <div class="card-body" style="padding: 25px !important;">
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
@@ -106,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4" style="padding: 0">
+                        <div class="col-sm-6" style="padding: 0">
                             <div class="card">
                                 <div class="card-body" >
                                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
@@ -114,20 +114,21 @@
                                     </h4>
                                     <div>
                                         <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
-                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
+                                             th:if="${iterStatus2.index &lt; 3}" style="padding-bottom: 10px;
                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
                                             <div class="card-body" style="overflow: hidden; padding: 10px !important;">
                                                 <b th:text="|${cuestionario.nombre}|"></b>
-                                                <div> Descripción cuestionario respectiva</div>
+                                                <div>
+                                                    <button type="button" class="btn btn-light btn-sm" style="background: #00a9b1; border-color: #00a9b1; color: #FFFFFF;
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${iterStatus2.index+1}">Previsualizar</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-lg-12 pl-lg-2" style="padding-top: 25px">
+                        <div class="col-sm-6" style="padding-top: 25px">
                             <div class="card h-100 mb-3">
                                 <div class="card-header h-100  bg-light py-2">
                                     <div class="row flex-between-center">
@@ -150,6 +151,41 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal previsualizar cuestionario -->
+            <div th:each="cuestionario, i : ${listaCuestionarios}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Cuestionario' + ${i.index+1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Información del Cuestionario </h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <br>
+                                    <b>Nombre:  </b>
+                                    <p th:text="|${cuestionario.nombre}|">Título del Cuestionario</p>
+                                    <div th:each="pregunta, iterStatus2  : ${cuestionario.listapreguntas}">
+                                        <b th:text="|Pregunta ${iterStatus2.index+1}|"></b>
+                                        <p style="margin: 0" th:text="${pregunta}"> Información de Pregunta</p>
+                                        <input disabled>
+                                        <div style="width: 10px;height: 20px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a  th:href="@{/doctor/cuestionarios}">
+                                    <button type="button" class="btn btn-primary">Ir a cuestionarios</button>
+                                </a>
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Próximas Citas -->
             <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
                 <div class="card-body">
