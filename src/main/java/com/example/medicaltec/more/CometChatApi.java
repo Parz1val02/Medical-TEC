@@ -9,8 +9,8 @@ import java.net.http.HttpResponse;
 public class CometChatApi {
 
     public void crearUsuarioCometChat(String dni, String nombreUsuario) throws IOException, InterruptedException {
-        String appID = "242035960420f9a5";
-        String apiKey = "a7f103659e71e0d56e60b22815d712153f45e049";
+        String appID = "24272539e9e89a98";
+        String apiKey = "9ab4636d565de4ad3ba6e57e3d361608b9d33986";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://" + appID + ".api-us.cometchat.io/v3/users"))
                 .header("accept", "application/json")

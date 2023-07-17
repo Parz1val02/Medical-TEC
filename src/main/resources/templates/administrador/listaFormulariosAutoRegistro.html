@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Formularios Registro')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Formularios AutoRegistro')}">
 </head>
 
 
@@ -22,12 +22,12 @@
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-11">
                             <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                                Formularios de Registro por Invitación
+                                Formularios de auto registro
                             </h1>
                         </div>
                         <div class="col-md-11">
                             <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                                Invita a los pacientes que llenaron su formulario de registro por invitación
+                                Invita a los pacientes que llenaron su formulario de auto registro
                             </h5>
                         </div>
                     </div>
@@ -40,12 +40,12 @@
 
             <!-- SEGUNDA TABLA -->
             <div class="card mb-3" style="margin-top: 25px">
-                <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Lista de formularios por invitación pendientes </div>
+                <div class="card-body border-top bg-gradient" style="padding-left: 35px; padding-right: 35px; color: white; font-weight: bold"> Lista de formularios de auto registro pendientes </div>
                 <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-                    <a th:href="@{/administrador/listaFormulariosAutoRegistro}" class="btn btn-light">
-                        Ir a Formularios por auto registro
+                    <a th:href="@{/administrador/listaFormulariosRegistro}" class="btn btn-light">
+                        Ir a Formularios por Invitación
                     </a>
-                    <form th:action="@{/administrador/guardarFormulariosRegistro}" method="POST">
+                    <form th:action="@{/administrador/guardarFormulariosAutoRegistro}" method="POST">
                         <table class="table table-striped" id="formList">
                             <thead style="background: #cdeffc">
                             <tr>
@@ -56,11 +56,10 @@
                                 <th class="no-sort align-middle" style="width: 15%; text-align: center"> </th>
 
 
-
                             </tr>
                             </thead>
                             <tbody class="bg-white">
-                            <tr th:each="form, vEstado : ${listaFormulariosRegistro}">
+                            <tr th:each="form, vEstado : ${listaFormulariosAutoRegistroPorInvitar}">
                                 <td class="align-middle" align="center" ><input type="checkbox" th:name="'seleccionados'" th:value="${form.id}" /></td>
                                 <td class="align-middle" align="center" th:text="${form.dni}"></td>
                                 <td class="align-middle" align="center" th:text="${#strings.capitalize(form.nombres)} + ' ' + ${#strings.capitalize(form.apellidos)} "></td>
@@ -68,7 +67,7 @@
                                 <td class="align-middle" align="center" >
                                     <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
                                             background: #3780ef; border-radius: 15px; font-family: 'Open Sans',serif; border: 1px solid white; padding: 5px 15px;" data-toggle="modal"
-                                            data-target="#exampleModal" th:data-target="'#formInvitacionRegistro' + ${vEstado.index+1}">
+                                            data-target="#exampleModal" th:data-target="'#formAutoRegistro' + ${vEstado.index+1}">
                                         Ver formulario
                                     </button>
                                 </td>
@@ -93,13 +92,13 @@
 <!-- ===============================================-->
 <!--   Modals -->
 <!-- ===============================================-->
-<div th:each="form, vEstado : ${listaFormulariosRegistro}">
-    <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'formInvitacionRegistro' + ${vEstado.index+1}">
+<div th:each="form, vEstado : ${listaFormulariosAutoRegistroPorInvitar}">
+    <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'formAutoRegistro' + ${vEstado.index+1}">
         <div class="modal-dialog" style="max-width: 900px !important;">
             <div class="modal-content">
                 <!-- Aquí puedes agregar el contenido del modal -->
                 <div class="modal-header">
-                    <h5 class="modal-title" th:text="|Formulario de invitación de paciente|" >Formulario de invitación de paciente  </h5>
+                    <h5 class="modal-title" th:text="|Formulario de auto registro de paciente|" >Formulario de auto registro de paciente  </h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body" style="padding: 30px;">
@@ -107,31 +106,31 @@
                         <h4 class="modal-title">Campos de información</h4>
                         <h5 class="modal-title mt-3" th:text="${#strings.capitalize(form.nombres)} + ' ' + ${#strings.capitalize(form.apellidos)}" ></h5>
                         <div class="row mt-3">
-                            <div class="col-md-12 col-lg-6 mb-3">
+                            <div class="col-md-6 col-lg-6 mb-3">
                                 <label for="dni" class="form-label" style="font-weight: 700 !important;">DNI</label>
                                 <div style="background-color: #edf2f9;opacity: 1;" class="form-control" id="dni" th:text="${form.dni}"></div>
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3" >
+                            <div class="col-md-6 col-lg-6 mb-3" >
                                 <label for="nombrecompleto" class="form-label" style="font-weight: 700 !important;">Nombre de paciente</label>
                                 <input readonly class="form-control" id="nombrecompleto" th:value="${#strings.capitalize(form.nombres)} + ' ' + ${#strings.capitalize(form.apellidos)}">
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3">
+                            <div class="col-md-6 col-lg-6 mb-3">
                                 <label for="correo" class="form-label" style="font-weight: 700 !important;">Email</label>
                                 <div style="background-color: #edf2f9;opacity: 1;"  class="form-control" id="correo" th:text="${form.correo}"></div>
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3" >
+                            <div class="col-md-6 col-lg-6 mb-3" >
                                 <label for="fechanacimiento" class="form-label" style="font-weight: 700 !important;">Fecha de nacimiento</label>
                                 <div style="background-color: #edf2f9;opacity: 1;" class="form-control" id="fechanacimiento" th:text="${form.fechanacimiento}"></div>
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3" >
+                            <div class="col-md-6 col-lg-6 mb-3" >
                                 <label for="domicilio" class="form-label" style="font-weight: 700 !important;">Domicilio</label>
                                 <input style="background-color: #edf2f9;opacity: 1;" class="form-control" id="domicilio" th:value="${form.domicilio}">
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3" >
+                            <div class="col-md-6 col-lg-6 mb-3" >
                                 <label for="sexo" class="form-label" style="font-weight: 700 !important;">Sexo</label>
                                 <div style="background-color: #edf2f9;opacity: 1;" class="form-control" id="sexo" th:text="${form.sexo}"></div>
                             </div>
-                            <div class="col-md-6 col-lg-6  mb-3" >
+                            <div class="col-md-6 col-lg-6 mb-3" >
                                 <label for="celular" class="form-label" style="font-weight: 700 !important;">Celular</label>
                                 <div style="background-color: #edf2f9;opacity: 1;" class="form-control" id="celular" th:text="${form.celular}"></div>
                             </div>
@@ -146,7 +145,6 @@
         </div>
     </div>
 </div>
-
 
 
 
