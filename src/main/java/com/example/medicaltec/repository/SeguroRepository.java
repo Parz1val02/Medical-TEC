@@ -21,4 +21,7 @@ public interface SeguroRepository extends JpaRepository<Seguro,Integer> {
 
     @Query(nativeQuery = true, value="SELECT id_seguro as `Id`, porc_seguro as `Porcentaje` FROM telesystem_2.seguros")
     List<Seguro1Dto> lista();
+
+    @Query(nativeQuery = true, value = "select * from seguros where id_seguro = ?1")
+    Seguro seguroByID (Integer Id);
 }

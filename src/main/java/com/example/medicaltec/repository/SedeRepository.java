@@ -1,6 +1,7 @@
 package com.example.medicaltec.repository;
 
 import com.example.medicaltec.Entity.Sede;
+import com.example.medicaltec.Entity.Seguro;
 import com.example.medicaltec.dto.Sede1Dto;
 import com.example.medicaltec.dto.SedeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,7 @@ public interface SedeRepository extends JpaRepository<Sede,Integer> {
     List<Sede1Dto> sedeMapa();
     @Query(nativeQuery = true, value = "SELECT idsedes as `Idsedes`,nombre as `Nombre`,latitud as `Latitud`,longitud as `Longitud` FROM telesystem_2.sedes where idsedes=?1")
     Sede1Dto sedeA(Integer idsede);
+
+    @Query(nativeQuery = true, value = "select * from sedes where idsedes = ?1")
+    Sede sedeByID (Integer Id);
 }

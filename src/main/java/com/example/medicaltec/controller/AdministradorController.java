@@ -53,6 +53,8 @@ public class AdministradorController {
     final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
 
     final EspecialidadRepository especialidadRepository;
+
+    final FormAutoregistroRepository formAutoregistroRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -66,7 +68,8 @@ public class AdministradorController {
             HistorialMedicoRepository historialMedicoRepository,
             SeguroRepository seguroRepository,
             SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository,
-            EspecialidadRepository especialidadRepository
+            EspecialidadRepository especialidadRepository,
+            FormAutoregistroRepository formAutoregistroRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -81,6 +84,7 @@ public class AdministradorController {
         this.seguroRepository = seguroRepository;
         this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
         this.especialidadRepository = especialidadRepository;
+        this.formAutoregistroRepository = formAutoregistroRepository;
     }
 
 
@@ -568,7 +572,7 @@ public class AdministradorController {
             /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = doctor.getId();
-            String nameAPI = doctor.getNombre() + " " + doctor.getApellido();
+            String nameAPI = "Dr. " + doctor.getNombre() + " " + doctor.getApellido();
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
@@ -956,7 +960,7 @@ public class AdministradorController {
             /*
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = paciente.getId();
-            String nameAPI = paciente.getNombre() + " " + paciente.getApellido();
+            String nameAPI = "Paciente " + paciente.getNombre() + " " + paciente.getApellido();
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
@@ -1192,6 +1196,70 @@ public class AdministradorController {
         }
 
     }
+
+    @GetMapping("/listaFormulariosAutoRegistro")
+    public String listaFormulariosAutoRegistro(Model model, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<FormAutoregistro> listaFormulariosAutoRegistroPorInvitar = formAutoregistroRepository.findFormAutoRegistroBySede(usuarioSession.getSedesIdsedes().getId());
+        model.addAttribute("listaFormulariosAutoRegistroPorInvitar",listaFormulariosAutoRegistroPorInvitar);
+        return "administrador/listaFormulariosAutoRegistro";
+    }
+
+    @PostMapping("/guardarFormulariosAutoRegistro")
+    public String guardarFormulariosAutoRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+
+        if (idsSeleccionados == null)  {
+            attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
+            return "redirect:/administrador/listaFormulariosAutoRegistro";
+        } else {
+            for (String idStr : idsSeleccionados) {
+                // Obtienes el registro por ID desde tu servicio o repositorio
+                Integer idInt = Integer.parseInt(idStr);
+                Optional<FormAutoregistro> formAutoregistroOptional = formAutoregistroRepository.findById(idInt);
+
+
+                //CREACION HISTORIAL MEDICO POR DEFECTO
+                Historialmedico historialmedicoDefecto = new Historialmedico();
+                Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(formAutoregistroOptional.get().getSeguroid());
+                Seguro seguroDefecto = seguroDefectoOpt.get();
+                historialmedicoDefecto.setValidahistorial(true);
+                historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                usuarioRepository.crearPaciente( formAutoregistroOptional.get().getCorreo(),  formAutoregistroOptional.get().getNombres(),   formAutoregistroOptional.get().getApellidos(),  formAutoregistroOptional.get().getCelular(), formAutoregistroOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formAutoregistroOptional.get().getFechanacimiento(), formAutoregistroOptional.get().getDomicilio(), formAutoregistroOptional.get().getSexo(), formAutoregistroOptional.get().getContrasenia(),idReciengenerado,seguroDefecto.getId(),"autoregistro"); //
+                //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
+                // Actualizar el estado de pendiente a 0. ya no es pendiente.
+                formAutoregistroRepository.actualizarEstadoFormAutoRegistroRevisado(idInt);
+
+                //ENVIAR CORREO CON CONTRASEÑA
+                String destinatario = formAutoregistroOptional.get().getCorreo() ;
+                String asunto = "Invitación a la plataforma de Medical-Tec";
+                String contrasena = "No tiene contraseña por defecto. Usted creó su contraseña en su formulario de auto registro. Para acceder a la plataforma, utilice dicha contraseña";
+                try {
+                    correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+                } catch (MessagingException e) {
+                    // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                    e.printStackTrace();
+                    return "redirect:/administrador/listaFormulariosAutoRegistro";
+                }
+
+
+            }
+            attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
+            return "redirect:/administrador/listaFormulariosAutoRegistro";
+        }
+
+
+
+    }
+
+
+
+
 
     @GetMapping("/listaFormulariosRegistro")
     public String listaFormulariosRegistro(Model model, HttpServletRequest httpServletRequest){
