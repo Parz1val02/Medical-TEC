@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
@@ -271,7 +272,29 @@ public class PacienteController {
         model.addAttribute("ruta",rutaOptima);
         model.addAttribute("tiempo",tiempoDemora);
 
-        return "paciente/tracking";
+        String latitud1 = String.valueOf(origen_latitud);
+        String longitud1 = String.valueOf(origen_longitud);
+        // Construir la URL con los parámetros
+        String url = "http://localhost:8082/paciente/tracking?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
+                "&rutaOptima=" + rutaOptima + "&tiempoDemora=" + tiempoDemora;
+
+        // Enviar la solicitud GET al servidor Node.js
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        // Comprobar el código de estado de la respuesta
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // La solicitud se realizó correctamente
+
+            // Devolver la vista paciente/tracking
+            return "paciente/tracking";
+        } else {
+            // La solicitud no se realizó correctamente
+            // Manejar el error de acuerdo a tus necesidades
+
+            // Devolver una vista de error o manejar el error de otra manera
+            return "error";
+        }
     }
 
     @RequestMapping("/perfil")
