@@ -29,4 +29,6 @@ public interface SedeRepository extends JpaRepository<Sede,Integer> {
     List<Sede> sedesMenosActual(int sede_actual);
     @Query(nativeQuery = true, value = "SELECT idsedes,nombre,latitud,longitud FROM telesystem_2.sedes")
     List<Sede1Dto> sedeMapa();
+    @Query(nativeQuery = true, value = "SELECT idsedes as `Idsedes`,nombre as `Nombre`,latitud as `Latitud`,longitud as `Longitud` FROM telesystem_2.sedes where idsedes=?1")
+    Sede1Dto sedeA(Integer idsede);
 }
