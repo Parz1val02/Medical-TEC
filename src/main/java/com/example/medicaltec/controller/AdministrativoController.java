@@ -969,7 +969,7 @@ public class AdministrativoController {
                         attr.addFlashAttribute("exitoCancelar", "Se canceló de manera exitosa la cita");
                         //Enviar correo cita cancelada
                         if(citaA.getEspecialidadesIdEspecialidad()!=null){
-                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
+                            //correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
                             try {
                                 correoConEstilos.sendEmailEstilos(usuarioSession.getEmail(),"Cita cancelada",
                                         "<!DOCTYPE html>\n" +
@@ -1107,7 +1107,7 @@ public class AdministrativoController {
                                 throw new RuntimeException(e);
                             }
                         }else if(citaA.getExamenMedico()!=null){
-                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
+                            //correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
                             try {
                                 correoConEstilos.sendEmailEstilos(usuarioSession.getEmail(),"Cita cancelada",
                                         "<!DOCTYPE html>\n" +
