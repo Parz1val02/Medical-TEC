@@ -64,7 +64,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
     @Query(nativeQuery = true,value = "update usuario u set u.email=?1, u.nombre=?2, u.apellido=?3, u.telefono=?4, u.especialidades_id_especialidad=?5, u.direccion=?6 where  u.dni = ?7 and u.sedes_idsedes = ?8")
     void editarDoctor(String email, String nombre, String apellido, String telefono, int especialidad, String direccion, String dni, Integer sede );
 
-
+    @Query(nativeQuery = true,value = "select u.ceduladoctor from usuario u where u.roles_idroles = 1")
+    List<String> obtenerTodasCedulasDoctor();
     /*FIN QUERYS USADOS POR ADMINISTRADOR*/
     /* ************************************ */
     /* ************************************ */
