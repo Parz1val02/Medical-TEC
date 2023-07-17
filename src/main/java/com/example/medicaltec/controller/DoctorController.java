@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
+// BCryptPasswordEncoder().encode(plainTextPassword);
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
 @Controller
 @RequestMapping("/doctor")
@@ -161,6 +165,25 @@ public class DoctorController {
                 listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
             }
             model.addAttribute("listaAlergias",listaAlergias);
+            System.out.println(listaAlergias);
+
+            List<Integer> lista = new ArrayList<>();
+            lista.add(1);
+            lista.add(2);
+            lista.add(3);
+            lista.add(4);
+
+            StringJoiner stringJoiner = new StringJoiner(", ");
+            for (Alergia alergia : listaAlergias) {
+                String nombreAlergia = alergia.getNombre();
+                stringJoiner.add(nombreAlergia);
+            }
+
+            String resultado = stringJoiner.toString();
+            System.out.println(resultado);  // "1,2,3,4"
+            model.addAttribute("resultado",resultado);
+
+
             // Obtener informes y citas por usuario
             model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(paciente.getId()));
             return "doctor/historial";
@@ -205,8 +228,27 @@ public class DoctorController {
         return "doctor/notificaciones";}
 
     @GetMapping("/calendario")
-    public String verCalendario(HttpSession httpSession){
-        Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+    public String verCalendario(HttpSession httpSession, Model model){
+        // Vemos en que mes estamos
+        LocalDate fechaActual = LocalDate.now();
+        int mesActual = fechaActual.getMonthValue();
+        String mes = obtenerMesPorNumero(mesActual);
+        model.addAttribute("mesActual",mes);
+
+        // Obtenemos si ya tiene horasDoctor en el mes
+        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
+        Optional<Horasdoctor> horasdoctorOptional = Optional.ofNullable(horasDoctorRepository.obtenerHorasDoctorEnMes(doctor.getId(), mes));
+
+        if (horasdoctorOptional.isPresent()){
+            // Actualizar
+            Horasdoctor horasdoctor = horasdoctorOptional.get();
+            model.addAttribute("valor",1);
+            model.addAttribute("horasDoctor",horasdoctor);
+        }else {
+            // Crear
+            model.addAttribute("valor",0);
+        }
+
         return "doctor/calendario";
     }
 
@@ -364,6 +406,9 @@ public class DoctorController {
         for (int i=0;i<informesid.length;i++){
             String idInforme = informesid[i];
             String bitacora = bitacoraContent[i];
+            if (bitacora.equals("nulo")){
+                bitacora = "";
+            }
             informeRepository.ingresarBitacora(bitacora, Integer.parseInt(idInforme));
         }
 
@@ -561,6 +606,50 @@ public class DoctorController {
         }
     }
 
+    public String obtenerMesPorNumero(int numero){
+        String mes = "";
+        switch (numero) {
+            case 1:
+                mes = "Enero";
+                break;
+            case 2:
+                mes = "Febrero";
+                break;
+            case 3:
+                mes = "Marzo";
+                break;
+            case 4:
+                mes = "Abril";
+                break;
+            case 5:
+                mes = "Mayo";
+                break;
+            case 6:
+                mes = "Junio";
+                break;
+            case 7:
+                mes = "Julio";
+                break;
+            case 8:
+                mes = "Agosto";
+                break;
+            case 9:
+                mes = "Setiembre";
+                break;
+            case 10:
+                mes = "Octubre";
+                break;
+            case 11:
+                mes = "Noviembre";
+                break;
+            case 12:
+                mes = "Diciembre";
+                break;
+
+        }
+        return mes;
+    }
+
     @PostMapping("/enviarCuest")
     public String enviarCuest(Model model,@RequestParam("usuario") String paciente,
             @RequestParam("mensaje") String mensaje,@RequestParam("cuest") String cuestionarioid,RedirectAttributes attr,
@@ -631,34 +720,53 @@ public class DoctorController {
     @PostMapping("/enviarHorasDoctor")
     public String horasDoctor(@RequestParam("mes") String mes, @RequestParam("dia") String dia,
                               @RequestParam("horainicio") String horainicio, @RequestParam("horafin") String horafin,
-                              @RequestParam("horalibre") String horalibre, HttpSession httpSession,RedirectAttributes attr ){
+                              @RequestParam("horalibre") String horalibre, HttpSession httpSession,RedirectAttributes attr ) {
 
         Horasdoctor horasdoctor = new Horasdoctor();
-
         Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
         LocalTime horaInicio = LocalTime.parse(horainicio);
         LocalTime horaFin = LocalTime.parse(horafin);
         LocalTime horaLibre = LocalTime.parse(horalibre);
 
-        Duration diferencia = Duration.between(horaFin,horaInicio); //citasHora - variableHoras
 
+        Duration diferencia = Duration.between(horaInicio, horaFin); //horaFin-horaInicio
         long horas = diferencia.toHours();
-        long minutos = diferencia.toMinutes() % 60;
 
-        if (horas > 0){
-            if (horaLibre.isBefore(horaInicio) || horaLibre.equals(horaInicio) || horaLibre.isAfter(horaFin) || horaLibre.equals(horaFin)){
-                attr.addFlashAttribute("msgError","La hora libre debe encontrarse entre la hora de Inicio y la hora de Fin, y ser diferente de ellas.");
-            }else{
-                horasDoctorRepository.guardarHorasDoc(horaInicio,horaFin,horaLibre,doctor.getId(),dia,mes);
-                attr.addFlashAttribute("msg","Horas de doctor guardadas exitosamente.");
+        // Validar que mes es un número
+        if (esNumeroEntero(mes)) {
+            // cambiamos el valor de mes al nombre del mes correspondiente
+            mes = obtenerMesPorNumero(Integer.parseInt(mes));
+
+            // validar que horainicio < horafinal
+            if (horas >= 3) {
+                // validar que horaInicio < horalibre < horafin, además horalibre != horainicio != horafin
+                if (horaLibre.isBefore(horaInicio) || horaLibre.equals(horaInicio) || horaLibre.isAfter(horaFin) || horaLibre.equals(horaFin)) {
+                    attr.addFlashAttribute("msgError", "La hora libre debe encontrarse entre la hora de Inicio y la hora de Fin, y debe ser diferente de ellas.");
+                    return "redirect:/doctor/calendario";
+                } else {
+                    // validar que horalibre + 1 = horafin
+                    Duration diferencia2 = Duration.between(horaLibre, horaFin); //horaFin-horaInicio
+                    long horas2 = diferencia2.toHours();
+                    if (horas2 > 1){
+                        horasDoctorRepository.guardarHorasDoc(horaInicio, horaFin, horaLibre, doctor.getId(), dia, mes);
+                        attr.addFlashAttribute("msg", "Horas de doctor guardadas exitosamente.");
+                        return "redirect:/doctor/calendario";
+                    }else {
+                        attr.addFlashAttribute("msgError", "La hora libre debe tener 1 hora de diferencia como mínimo de la hora final");
+                        return "redirect:/doctor/calendario";
+                    }
+                }
+            } else {
+                attr.addFlashAttribute("msgError", "Las fechas deben llevarse como mínimo 3 horas.");
+                return "redirect:/doctor/calendario";
             }
-        }else {
-            attr.addFlashAttribute("msgError","Las fechas deben llevarse como mínimo 1 hora.");
+
+        } else {
+            attr.addFlashAttribute("msgError", "Hubo un problema, por favor volver a intentarlo.");
+            return "redirect:/doctor/calendario";
         }
 
-        return "redirect:/doctor/config";
     }
-
 
     //Adaptarlo para sesiones
     /*@GetMapping("/llenarInforme")
