@@ -23,12 +23,12 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md-11">
               <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                Validar Pago de Cita
+                Validar Pago Presenciales
               </h1>
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Valide el pago de las citas en su sede
+                Valide el pago de las citas y recetas en su sede
               </h5>
             </div>
           </div>
@@ -41,26 +41,24 @@
           <div class="row justify-content-between align-items-center">
             <div class="col-md">
               <h5 class="mb-2 mb-md-0 text-white" th:text="${session.usuario.sedesIdsedes.nombre}"></h5>
-              <div class="alert alert-danger" role="alert" th:if="${msg != null}" th:text="${msg}">
-
-              </div>
-              <div class="alert alert-success" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
-
-              </div>
+              <div class="alert alert-danger" role="alert" th:if="${errorCancelar != null}" th:text="${errorCancelar}"></div>
+              <div class="alert alert-success" role="alert" th:if="${exitoCancelar != null}" th:text="${exitoCancelar}"></div>
+              <div class="alert alert-danger" role="alert" th:if="${msg != null}" th:text="${msg}"></div>
+              <div class="alert alert-success" role="alert" th:if="${msg1 != null}" th:text="${msg1}"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="card mb-3">
         <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-          <table class="table table-striped" id="userList">
+          <table class="table table-striped" id="listaHistorial">
             <thead style="background: #cdeffc">
             <tr>
-              <th class="sort align-middle" style="width: 22%">Id cita</th>
-              <th class="sort align-middle" style="width: 22%">Tipo de Cita</th>
-              <th class="sort align-middle" style="width: 13%">Fecha</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Id cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Tipo de Cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Fecha</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Paciente</th>
-              <th class="sort align-middle" style="width: 15%; text-align: center">Especialidad</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
               <th class="no-sort" style="width: 15%;" ></th>
               <th class="no-sort" style="width: 15%;" ></th>
             </tr>
@@ -75,23 +73,76 @@
               </td>
               <td th:text="${cita.getFullname()}" class="align-middle" style="text-align: center">
               </td>
-              <td th:text="${cita.getNombre_especialidad()}" class="align-middle" style="text-align: center">
+              <td th:text="${cita.getFullnameDoc()}" class="align-middle" style="text-align: center">
               </td>
               <td class="align-middle" align="center">
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
                                     border-radius: 15px" th:data-target="'#Detalles' + ${info.index+1}">Validar</button>
-                <!-- Modal -->
               </td>
-              <!-- Cancelar cita
               <td class="align-middle" align="center">
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"  style="text-align: center;
-                                    border-radius: 15px" th:data-target="">Cancelar</button>
-                 Modal
+                <a th:href="@{'/administrativo/cancelarCita?citaId='+${cita.idcita}+'&dni='+${cita.dni}}">
+                  <button  type="button" class="btn btn-danger btn-sm botones" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey" disabled>Cancelar</button>
+                </a>
+                <input type="hidden" th:class="fecha" th:value="${cita.fecha}"/>
               </td>
-              -->
             </tr>
             </tbody>
           </table>
+          <script>
+            // Obtener datos y botones
+            var botones = document.getElementsByClassName('botones');
+            var fecha = document.getElementsByClassName('fecha');
+
+            // Obtener la fecha y hora actual
+            var fechaActual = new Date();
+
+            for (var i=0;i<botones.length;i++) {
+
+              var fechaString = fecha[i].value;
+
+              // Obtenemos las partes de la fecha
+              var fechaPartes = fechaString.split(' ');
+              var fechaGa = fechaPartes[0];
+              var horaGa = fechaPartes[1];
+
+              var fechaGaPartes = fechaGa.split('-');
+              var dia = fechaGaPartes[0] ;
+              var mes = fechaGaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+              var anio = fechaGaPartes[2];
+
+              // Obtenemos las partes de la hora
+              var horaGaPartes = horaGa.split(':');
+              var hora = horaGaPartes[0];
+              var minutos = horaGaPartes[1];
+
+              // Creamos el objeto de fecha combinando las partes correspondientes
+              var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+              console.log(fechaObjetivo);
+              var fechaInicio = new Date(fechaObjetivo.getTime() - 60 * 60000); // Restar 30 minutos en milisegundos
+              console.log(fechaInicio);
+              //var tiempo=fechaInicio-fechaActual;
+
+              if (fechaActual >= fechaInicio){
+                mostrarBoton(i);
+              }
+            }
+
+            function accionesBoton(parametro) {
+              // Código de la función
+              botones[parametro].disabled = false;
+              botones[parametro].style.background = '#3d8af7';
+              botones[parametro].style.borderColor = '#3d8af7';
+              console.log(botones[parametro]);
+
+            }
+
+            function mostrarBoton(valor) {
+              setTimeout(function() {
+                accionesBoton(valor);
+              }, 0); // Retraso de 2 segundos (2000 milisegundos)
+            }
+          </script>
         </div>
       </div>
 
@@ -161,12 +212,12 @@
 
       <div class="card mb-3">
         <div class="card-body border-top" style="padding-left: 35px; padding-right: 35px">
-          <table class="table table-striped" id="userList">
+          <table class="table table-striped" id="recetalist">
             <thead style="background: #cdeffc">
             <tr>
-              <th class="sort align-middle" style="width: 22%">Id Cita</th>
-              <th class="sort align-middle" style="width: 22%">Medicamento</th>
-              <th class="sort align-middle" style="width: 13%">Comentario</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Id Cita</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Medicamento</th>
+              <th class="sort align-middle" style="width: 15%; text-align: center">Comentario</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Observaciones</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Cantidad</th>
               <th class="no-sort" style="width: 15%;" ></th>
@@ -294,6 +345,34 @@
     //Esta busacando por el ID del tah <table>
     //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
     $('#listaHistorial').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  _MENU_  citas",
+        zeroRecords: "No se encontraron citas pasadas",
+        emptyTable: "No hay citas",
+        info: "Mostrando citas del _START_ al _END_ <br>Total _TOTAL_ citas",
+        infoEmpty: "Mostrando citas del 0 al 0 <br>Total 0 citas pasadas",
+        infoFiltered: "(filtrado de un total de _MAX_ citas)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      lengthMenu: [
+        [5, 10, 15, -1], [5, 10, 15, "Todos"]
+      ],
+      buttons: [
+
+      ]
+    });
+    $('#recetalist').DataTable({
       dom: "<'d-flex justify-content-end pb-4'B>\n" +
               "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
               "<'table-responsive'tr>\n" +

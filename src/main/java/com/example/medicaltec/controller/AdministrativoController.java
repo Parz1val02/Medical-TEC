@@ -2,6 +2,7 @@ package com.example.medicaltec.controller;
 
 import com.example.medicaltec.dao.PersonaDao;
 import com.example.medicaltec.dto.RecetaValidarDto;
+import com.example.medicaltec.dto.Sede1Dto;
 import com.example.medicaltec.dto.ValidarCitaDto;
 import com.example.medicaltec.funciones.Regex;
 import com.example.medicaltec.more.CorreoConEstilos;
@@ -85,7 +86,8 @@ public class AdministrativoController {
             }
         }
 
-
+        Sede1Dto sede = sedeRepository.sedeA(usuarioSession.getSedesIdsedes().getId());
+        model.addAttribute("sede",sede);
         model.addAttribute("listaUsuarios",listaUsuarios);
 
         //Sede sede = sedeRepository.findById(usuarioSession.getSedesIdsedes().getId()).orElse(null);
@@ -593,7 +595,6 @@ public class AdministrativoController {
                                @RequestParam("concepto") String concepto,
                                @RequestParam("seguro") String seguro,
                                @RequestParam("dni") String dni,
-
                                RedirectAttributes attr){
 
         try{
@@ -942,7 +943,40 @@ public class AdministrativoController {
         }
 
     }
-
+    @GetMapping("/cancelarCita")
+    public String cancelarCita(@RequestParam("citaId") String citaId,@RequestParam("dni") String dni,
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+        Optional<Usuario> usuario = usuarioRepository.findById(dni);
+        if(usuario.isPresent()){
+            Usuario usuarioSession = usuario.get();
+            try{
+                Optional<Cita> cita = citaRepository.findById(Integer.parseInt(citaId));
+                if(cita.isPresent()){
+                    Cita citaA = cita.get();
+                    if(Objects.equals(citaA.getPaciente().getId(), usuarioSession.getId())){
+                        citaRepository.cancelarCita(citaA.getId());
+                        attr.addFlashAttribute("exitoCancelar", "Se canceló de manera exitosa la cita");
+                        //Enviar correo cita cancelada
+                        if(citaA.getEspecialidadesIdEspecialidad()!=null){
+                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
+                        }else if(citaA.getExamenMedico()!=null){
+                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
+                        }
+                    }else{
+                        attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
+                    }
+                }
+            }catch (NumberFormatException e){
+                System.out.printf(e.getMessage());
+                attr.addFlashAttribute("errorCancelar", "Id erróneo de cita");
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            attr.addFlashAttribute("errorCancelar", "Id erróneo de usuario");
+        }
+        return "redirect:/administrativo/validarLaCita";
+    }
 
 
 
