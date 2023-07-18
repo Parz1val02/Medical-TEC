@@ -415,11 +415,15 @@ public class AdministrativoController {
         // Obtener la fecha y hora actual
         LocalDateTime fechaHoraActual = LocalDateTime.now();
 
+        LocalDateTime fechaHoraRestada = fechaHoraActual.minusHours(4);
+
         // Crear un formateador de fecha y hora con el formato deseado (d M yyyy hh mm)
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("d-M-yyyy HH-mm");
 
         // Formatear la fecha y hora en el formato deseado
         String fechaHoraFormateada = fechaHoraActual.format(formateador);
+
+        String fechaEmail4horas = fechaHoraRestada.format(formateador);
 
         //guardar fecha-hora, codigo y dni
         verificarRepository.crearInicioInvitacion(id,fechaHoraFormateada);
@@ -456,7 +460,7 @@ public class AdministrativoController {
                             "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
                     "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
                             "34.28.246.152:8080/registro/formPaciente/"+randomNumberStr +"\n"+
-                            "Usted tiene 30 minutos desde el momento que se ha enviado este correo. Fecha Envio: "+fechaHoraFormateada +
+                            "Usted tiene 30 minutos desde el momento que se ha enviado este correo. Fecha Envio: "+fechaEmail4horas +
 
 
                             "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" style='background-image: linear-gradient(-45deg, #014ba7, #0183d0)'>\n" +
@@ -474,11 +478,7 @@ public class AdministrativoController {
                             "\t\t\t\t\t\t\t\t<td colspan=\"3\" style=\"font-size:0;height:15px;line-height:1\">&nbsp;</td>\n" +
                             "\t\t\t\t\t\t\t</tr>\n" +
                             "\t\t\t\t\t\t</tbody></table>\n" +
-                            "\t\t\t\t\t\t<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">\n" +
-                            "\t\t\t\t\t\t\t<tbody><tr>\n" +
-                            "\t\t\t\t\t\t\t\t<td style=\"font-size:0;height:20px;line-height:1\">&nbsp;</td>\n" +
-                            "\t\t\t\t\t\t\t</tr>\n" +
-                            "\t\t\t\t\t\t</tbody></table>\n" +
+
                             "\t\t\t\t\t\t<p><span style=\"font-weight:400\">Atentamente</span></p>\n" +
                             "<p><strong>Clínica Medical-Tec</strong></p>\n" +
                             "\n" +
