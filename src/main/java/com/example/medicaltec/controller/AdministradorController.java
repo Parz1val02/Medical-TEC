@@ -1039,6 +1039,9 @@ public class AdministradorController {
         } else if (a > 0) {
             return "administrador/crearPacientePRUEBA";
         } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(paciente.getFechaNacimiento());
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
             System.out.println("contrasena creada para paciente de id " + paciente.getId() + " es: " + contrasena);
@@ -1054,7 +1057,7 @@ public class AdministradorController {
             int idReciengenerado = historialmedicoGuardadoDefecto.getId();
 
             //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
 
 
             CometChatApi cometChatApi = new CometChatApi();
