@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,44 @@ public class DoctorController {
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
     public String pagPrincipalDoctor(Model model, HttpSession httpSession){
         Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
+
+        LocalDate fechaActual = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+
+        List<Cita> citas = citaRepository.citasParaVer(usuario_doctor.getId());
+
+        for (Cita cita : citas) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate citaFecha = LocalDate.parse(cita.getFecha(), formatter);
+
+            LocalTime citaHoras = cita.getHora();
+
+            if (fechaActual == citaFecha){
+                System.out.println(citaHoras);
+                System.out.println(citaFecha);
+                System.out.println(horaActual);
+
+                Duration diferencia = Duration.between(citaHoras,horaActual); //citasHora - variableHoras
+
+                long horas = diferencia.toHours();
+                long minutos = diferencia.toMinutes() % 60;
+                long segundos = diferencia.getSeconds() % 60;
+
+                System.out.println("Diferencia: " + horas + " horas, " + minutos + " minutos, " + segundos + " segundos.");
+
+                if (horas == 0 && minutos > -10 && minutos < 0){
+                    // Estado 4: En espera
+                    citaRepository.cambiarEstadoCita(4,cita.getId());
+                }else if (horas == 0 && minutos > 30){
+                    // Estado 3: Culminada
+                    citaRepository.cambiarEstadoCita(3,cita.getId());
+                }
+                // Estado 5: En consulta
+                // Se cambia al dar clic en iniciar video
+
+            }
+        }
 
         model.addAttribute("listaPacientes",usuarioRepository.listarPacientes());
         model.addAttribute("listaMensajes",mensajeRepository.listarMensajesPorReceptor(usuario_doctor.getId()));

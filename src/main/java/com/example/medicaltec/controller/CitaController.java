@@ -18,12 +18,13 @@ public class CitaController {
         this.citaRepository = citaRepository;
     }
     //5:00pm
+    /*
     public void cambiarEstadosCitas(){
         //Actualizar estados de las citas
         LocalDate fechaActual = LocalDate.now();
         LocalTime horaActual = LocalTime.now();
 
-        List<Cita> citas = citaRepository.listarCitas();
+        List<Cita> citas = citaRepository.listarCitas(usuario_doctor.getId());
 
         for (Cita cita : citas) {
             LocalDate citaFecha = LocalDate.parse(cita.getFecha());
@@ -49,6 +50,6 @@ public class CitaController {
             }
         }
     }
-
+    */
 
 }

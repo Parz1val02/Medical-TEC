@@ -125,197 +125,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
-                        Añade información relevante:
-                    </h4>
-                    <div style="display: flex; text-align: center">
-                        <a style="flex: 1; width: 100%;">
-                            <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
-                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
-                                Agregar horarios de disponibilidad
-                            </button>
-                        </a>
-                        <a style="flex: 1; width: 100%;">
-                            <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
-                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
-                                Agregar firma digital
-                            </button>
-                        </a>
-                    </div>
-                    <!-- HORARIOS DE DISPONIBILIDAD -->
-                    <div id="div1" style="display:none; padding-left: 15px;">
-                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
-                            Horarios de disponibilidad
-                        </h4>
-                        <form th:action="@{/enviarHorasDoctor}" method="post" >
-                            <label for="mes" class="form-label">Seleccione el mes para agregar disponibilidad:</label>
-                            <select class="form-control" aria-label="Default select example" name="mes" id="mes" style="font-family: 'Open Sans',serif">
-                                <option selected>Select--</option>
-                                <option value="1">Enero</option>
-                                <option value="2">Febrero</option>
-                                <option value="3">Marzo</option>
-                                <option value="4">Abril</option>
-                                <option value="5">Mayo</option>
-                                <option value="6">Junio</option>
-                                <option value="7">Julio</option>
-                                <option value="8">Agosto</option>
-                                <option value="9">Septiembre</option>
-                                <option value="10">Octubre</option>
-                                <option value="11">Noviembre</option>
-                                <option value="12">Diciembre</option>
-                            </select>
-                            <div style="height: 10px;">
-                            </div>
-                            <label for="dia" class="form-label">Seleccione los dias con disponibilidad:</label>
-                            <div style="display: flex;">
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Lunes">Lunes</button>
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Martes">Martes</button>
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Miercoles">Miércoles</button>
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Jueves">Jueves</button>
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Viernes">Viernes</button>
-                                <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;" id="Sabado">Sábado</button>
-                            </div>
 
-                            <div style="width: 100%; display: flex;align-items: center;justify-content: center;padding: 10px 0;">
-                                <input id="dia" name="dia" style="width: 50%; border-radius: 4px;height: 35px;border: 1px solid #d8e2ef;" disabled/>
-                            </div>
-                            <label class="form-label">Seleccione el horario para agregar disponibilidad:</label>
-                            <div style="display: flex;">
-                                <div style="flex: 1; margin-right: 10px;">
-                                    <label class="form-label">Horario Inicio:</label>
-                                    <select class="form-control" aria-label="Default select example" name="horainicial" id="horainicial" style="font-family: 'Open Sans',serif">
-                                        <option selected>Select--</option>
-                                        <option value="08:00">08:00</option>
-                                        <option value="08:30">08:30</option>
-                                        <option value="09:00">09:00</option>
-                                        <option value="09:30">09:30</option>
-                                        <option value="10:00">10:00</option>
-                                        <option value="10:30">10:30</option>
-                                        <option value="11:00">11:00</option>
-                                        <option value="11:30">11:30</option>
-                                        <option value="12:00">12:00</option>
-                                        <option value="12:30">12:30</option>
-                                        <option value="13:00">13:00</option>
-                                        <option value="13:30">13:30</option>
-                                        <option value="14:00">14:00</option>
-                                        <option value="14:30">14:30</option>
-                                        <option value="15:00">15:00</option>
-                                        <option value="15:30">15:30</option>
-                                        <option value="16:00">16:00</option>
-                                        <option value="16:30">16:30</option>
-                                        <option value="17:00">17:00</option>
-                                        <option value="17:30">17:30</option>
-                                        <option value="18:00">18:00</option>
-                                        <option value="18:30">18:30</option>
-                                        <option value="19:00">19:00</option>
-                                        <option value="19:30">19:30</option>
-                                        <option value="20:00">20:00</option>
-                                        <option value="20:30">20:30</option>
-                                        <option value="21:00">21:00</option>
-                                        <option value="21:30">21:30</option>
-                                        <option value="22:00">22:00</option>
-                                    </select>
-                                </div>
-                                <div style="flex: 1; margin-left: 10px;">
-                                    <label class="form-label">Horario Final:</label>
-                                    <select class="form-control" aria-label="Default select example" name="horafinal" id="horafinal" style="font-family: 'Open Sans',serif">
-                                        <option selected>Select--</option>
-                                        <option value="08:00">08:00</option>
-                                        <option value="08:30">08:30</option>
-                                        <option value="09:00">09:00</option>
-                                        <option value="09:30">09:30</option>
-                                        <option value="10:00">10:00</option>
-                                        <option value="10:30">10:30</option>
-                                        <option value="11:00">11:00</option>
-                                        <option value="11:30">11:30</option>
-                                        <option value="12:00">12:00</option>
-                                        <option value="12:30">12:30</option>
-                                        <option value="13:00">13:00</option>
-                                        <option value="13:30">13:30</option>
-                                        <option value="14:00">14:00</option>
-                                        <option value="14:30">14:30</option>
-                                        <option value="15:00">15:00</option>
-                                        <option value="15:30">15:30</option>
-                                        <option value="16:00">16:00</option>
-                                        <option value="16:30">16:30</option>
-                                        <option value="17:00">17:00</option>
-                                        <option value="17:30">17:30</option>
-                                        <option value="18:00">18:00</option>
-                                        <option value="18:30">18:30</option>
-                                        <option value="19:00">19:00</option>
-                                        <option value="19:30">19:30</option>
-                                        <option value="20:00">20:00</option>
-                                        <option value="20:30">20:30</option>
-                                        <option value="21:00">21:00</option>
-                                        <option value="21:30">21:30</option>
-                                        <option value="22:00">22:00</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div style="height: 10px;"></div>
-                            <label class="form-label">Seleccione el horario para su hora libre del día: (Duración: 1 hora)</label>
-                            <div style="display: flex; width: 50%;">
-                                <select class="form-control" aria-label="Default select example" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
-                                    <option selected>Select--</option>
-                                    <option value="0">Sin hora libre</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="08:30">08:30</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="09:30">09:30</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="10:30">10:30</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="11:30">11:30</option>
-                                    <option value="12:00">12:00</option>
-                                    <option value="12:30">12:30</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="13:30">13:30</option>
-                                    <option value="14:00">14:00</option>
-                                    <option value="14:30">14:30</option>
-                                    <option value="15:00">15:00</option>
-                                    <option value="15:30">15:30</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="16:30">16:30</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="17:30">17:30</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="18:30">18:30</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="19:30">19:30</option>
-                                    <option value="20:00">20:00</option>
-                                    <option value="20:30">20:30</option>
-                                    <option value="21:00">21:00</option>
-                                    <option value="21:30">21:30</option>
-                                </select>
-                            </div>
-                            <div style="height: 10px;"></div>
-                            <button type="submit" class="btn btn-primary btn-sm">Finalizar</button>
-                        </form>
-                    </div>
-                    <!-- AGREGAR FIRMA DIGITAL -->
-                    <div id="div2" style="display:none; padding-left: 15px;">
-                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
-                            Firma digital
-                        </h4>
-                        <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
-                        <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
-                        <div style="display: flex;">
-                            <form method="POST" th:action="@{/uploadFirma}"
-                                  class="dropzone"
-                                  id="myGreatDropzone2" style="margin: 10px 15px; width: 50%; flex: 2;"></form>
-                            <div style="flex: 1; padding-left: 20px;">
-                                <p style="padding: 15px 15px 15px 0;">
-                                    Aquí puedes personalizar tu firma agregando una foto.
-                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
-                                </p>
-                                <button class="btn btn-primary btn-sm" type="submit" id="clash">Guardar cambios</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card mb-3">
                 <div class="card-body">
                     <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
@@ -323,32 +133,54 @@
                     </h4>
                     <div style="display: flex; text-align: center">
                         <a style="flex: 1; width: 100%;">
-                            <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                            <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                                 Cambiar foto de perfil
                             </button>
                         </a>
                         <a style="flex: 1; width: 100%;">
-                            <button onclick="mostrarDiv(4)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                            <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                                 Cambiar sede
                             </button>
                         </a>
                         <a style="flex: 1; width: 100%;">
-                            <button onclick="mostrarDiv(5)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                            <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                                 Cambiar contraseña
                             </button>
                         </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(4)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Agregar firma digital
+                            </button>
+                        </a>
+                    </div>
+                    <!-- CAMBIAR FOTO DE PERFIL -->
+                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert">
+                        <br>
+                    </div>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert">
+                        <br>
                     </div>
 
+                    <!-- CAMBIAR CONTRASEÑA -->
+                    <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                    <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+
+                    <!-- CAMBIAR SEDE -->
+                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+
                     <!-- CAMBIAR FOTO DE PERFIL -->
-                    <div id="div3" style="display: none; padding-left: 15px;">
+                    <div id="div1" style="display: none; padding-left: 15px;">
                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
                             Foto de perfil
                         </h4>
-                        <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
-                        <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+
                         <div style="display: flex;">
                             <form method="POST" th:action="@{/uploadDoctor}"
                                   class="dropzone"
@@ -362,27 +194,17 @@
                             </div>
                         </div>
                     </div>
-                    <!--
-                        <div style="height: 30px"></div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="disabledTextInput1" class="form-label">Sede Actual</label>
-                                <input type="text" id="disabledTextInput13" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}" disabled>
-                            </div>
-                        </div>
-                        <div style="">
-                            <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu foto de perfil?</p>
-                            <button type="button" class="btn btn-secondary btn-sm" style="text-align: center;background: #3a85f3;
-                                    border-radius: 15px; border-color: #3a85f3;width: 130px;" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
-                        </div>
-                        <div style="height: 10px"></div>
-                        <div style="height: 10px"></div>
--->
                     <!-- CAMBIAR SEDE -->
-                    <div id="div4" style="display: none;">
+                    <div id="div2" style="display: none;">
                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 15px; ">
                             Cambio de sede
                         </h4>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="disabledTextInput111" class="form-label">Sede actual:</label>
+                                <input type="text" id="disabledTextInput111" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}">
+                            </div>
+                        </div>
                         <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
                               style="padding: 0 15px 15px 15px; display: block;">
                             <div class="form-group" style="display: block;">
@@ -402,49 +224,11 @@
                             </div>
                         </form>
                     </div>
-                    <!--
-                        <p style="margin: 0 0 10px 0; font-weight: bold;"> ¿Deseas cambiar tu sede?</p>
-                        <button onclick="toggleInput()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
-                                    font-size: 15px; color: white">
-                            Cambiar sede
-                        </button>
-
-                        <div style="height: 10px"></div>
-                        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"
-                             style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-
-                        <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
-                              style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
-                            <div class="form-group" style="display: block;">
-
-                                <label for="id" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Elija una nueva Sede:</label>
-                                <select class="form-control" aria-label="Default select example" name="id" id="id" style="font-family: 'Open Sans',serif">
-                                    <option selected>Select--</option>
-                                    <option th:each="sede : ${sedeList}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
-                                </select>
-
-                            </div>
-                            <div class="form-group" style="text-align: right;">
-                                <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7;width: 130px;">Cambiar Sede</button>
-                                <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
-                                    <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
-                                </a>
-                            </div>
-                        </form>
--->
                     <!-- CAMBIAR CONTRASEÑA -->
-                    <div id="div5" style="display: none;">
+                    <div id="div3" style="display: none;">
                         <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 15px;">
                             Cambio de contraseña
                         </h4>
-                        <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
-                             style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                        <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
-                             style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
                         <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
                               style="padding: 15px; display: block;">
                             <div class="form-group">
@@ -479,50 +263,25 @@
                             </div>
                         </form>
                     </div>
-                    <!--
-                        <div style="height: 10px"></div>
-                        <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu contraseña?</p>
-                        <button onclick="toggleInputContra()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
-                                    font-size: 15px; color: white">
-                            Cambiar contraseña
-                        </button>
-                        <div style="height: 10px"></div>
-                        <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
-                             style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                        <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
-                             style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                        <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
-                              style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
-                            <div class="form-group">
-                                <p  style="margin: 0">
-                                    Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
-                                    • Que la contraseña contenga al menos ocho caracteres.<br>
-                                    • Que la contraseña contenga al menos un número.<br>
-                                    • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
-                                    • Que la contraseña contenga al menos una mayúscula. </p>
-                                <label for="passActual" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña actual</label>
-                                <input type="password" class="form-control" id="passActual" name="pass1" style="width: 90%" required>
-                                <div style="height: 5px"></div>
-                                <label for="passNueva" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña nueva</label>
-                                <input type="password" class="form-control" id="passNueva" name="pass2" style="width: 90%" required>
-                                <div style="height: 5px"></div>
-                                <label for="passConfirmar" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Confirmar contraseña nueva</label>
-                                <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 90%" required>
+                    <!-- AGREGAR FIRMA DIGITAL -->
+                    <div id="div4" style="display:none; padding-left: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
+                            Firma digital
+                        </h4>
+                        <div style="display: flex;">
+                            <form method="POST" th:action="@{/uploadFirma}"
+                                  class="dropzone"
+                                  id="myGreatDropzone2" style="margin: 10px 15px; width: 50%; flex: 2;"></form>
+                            <div style="flex: 1; padding-left: 20px;">
+                                <p style="padding: 15px 15px 15px 0;">
+                                    Aquí puedes personalizar tu firma agregando una foto.
+                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                                </p>
+                                <button class="btn btn-primary btn-sm" type="submit" id="clash">Guardar cambios</button>
                             </div>
-                            <div class="form-group" style="text-align: right;">
-                                <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7;width: 190px;">Cambiar Contraseña</button>
-                                <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
-                                    <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
-                                </a>
-                            </div>
-                        </form>
--->
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div>
@@ -601,7 +360,7 @@
             }
 
             function mostrarDiv(numeroDiv) {
-                for (var i = 1; i <= 5; i++) {
+                for (var i = 1; i < 5; i++) {
                     var div = document.getElementById("div" + i);
                     div.style.display = "none";
                 }
