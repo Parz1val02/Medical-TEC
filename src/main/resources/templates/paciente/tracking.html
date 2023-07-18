@@ -32,18 +32,32 @@
     <div class="content" >
       <nav th:replace="~{fragmentos/topbarpaciente.html::topBar}"></nav>
       <div class="content">
-        <div class="card-deck">
-              <div class="card-body text-white fs--1" style="display: flex; align-items: center; justify-content: space-around">
+          <div class="card mb-3 bg-card-gradient">
+              <div class="card-body" style="background: white;">
+                  <div class="row justify-content-between align-items-center">
+                      <div class="col-md-11">
+                          <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                              Delivery de medicamentos
+                          </h1>
+                      </div>
+                      <div class="col-md-11">
+                          <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                            Visualice el progreso del delivery de sus medicamentos
+                          </h5>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        <div class="card mb-3 bg-card-gradient">
+              <div class="card-body" style="display: flex; align-items: center; justify-content: space-around">
                   <span hidden id="porcentajeRecorrido"></span>
-                <div id="map" class="col-sm-12"></div>
+                    <div id="map" class="col-sm-12"></div>
               </div>
-              <div class="card-footer bg-transparent">
-              </div>
-            </div>
-          </div>
-          </div>
         </div>
-      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+      </div>
+        <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+    </div>
+  </div>
 </main>
 <!-- ===============================================-->
 <!--    End of Main Content-->

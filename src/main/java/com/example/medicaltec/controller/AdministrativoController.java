@@ -466,7 +466,7 @@ public class AdministrativoController {
                             "\t\t\t\t\t\t\t<tr>\n" +
                             "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                             "\t\t\t\t\t\t\t\t<td align=\"center\" style=\"text-align:center;font-family:Arial,sans-serif;line-height:1.1\">\n" +
-                            "\t\t\t\t\t\t\t\t\t<a href=\"\" style=\"color:#fff;text-decoration:none;font-weight:bold;display:inline-block;line-height:inherit\" target=\"_blank\" data-saferedirecturl=\"\">Ir a la pagina de inicio de sesión</a>\n" +
+
                             "\t\t\t\t\t\t\t\t</td>\n" +
                             "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                             "\t\t\t\t\t\t\t</tr>\n" +
@@ -753,7 +753,7 @@ public class AdministrativoController {
                                                 "\t\t\t\t\t\t\t<tr>\n" +
                                                 "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                                                 "\t\t\t\t\t\t\t\t<td align=\"center\" style=\"text-align:center;font-family:Arial,sans-serif;line-height:1.1\">\n" +
-                                                "\t\t\t\t\t\t\t\t\t<a href=\"\" style=\"color:#fff;text-decoration:none;font-weight:bold;display:inline-block;line-height:inherit\" target=\"_blank\" data-saferedirecturl=\"\">Ir a la pagina de inicio de sesión</a>\n" +
+
                                                 "\t\t\t\t\t\t\t\t</td>\n" +
                                                 "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                                                 "\t\t\t\t\t\t\t</tr>\n" +
@@ -810,7 +810,7 @@ public class AdministrativoController {
                                                 "\t\t\t\t\t\t\t<tr>\n" +
                                                 "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                                                 "\t\t\t\t\t\t\t\t<td align=\"center\" style=\"text-align:center;font-family:Arial,sans-serif;line-height:1.1\">\n" +
-                                                "\t\t\t\t\t\t\t\t\t<a href=\"\" style=\"color:#fff;text-decoration:none;font-weight:bold;display:inline-block;line-height:inherit\" target=\"_blank\" data-saferedirecturl=\"\">Ir a la pagina de inicio de sesión</a>\n" +
+
                                                 "\t\t\t\t\t\t\t\t</td>\n" +
                                                 "\t\t\t\t\t\t\t\t<td style=\"font-size:0;line-height:1\" width=\"50\">&nbsp;</td>\n" +
                                                 "\t\t\t\t\t\t\t</tr>\n" +

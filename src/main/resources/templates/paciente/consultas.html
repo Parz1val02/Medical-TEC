@@ -72,8 +72,9 @@
                     <table class="table table-striped" id="listaHistorial">
                         <thead style="background: #cdeffc">
                         <tr>
-                            <th class="sort align-middle" style="width: 22%">Tipo de cita</th>
-                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Tipo de cita</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Modalidad</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Fecha</th>
                             <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
                             <th class="no-sort" style="width: 15%;" ></th>
                             <th class="no-sort" style="width: 15%;" ></th>
@@ -83,7 +84,9 @@
                         <tr th:each="cita, info : ${citas}">
                             <td th:text="${cita.tipocitaIdtipocita.tipoCita}" class="align-middle">
                             </td>
-                            <td th:text="${cita.fecha}" class="align-middle">
+                            <td th:text="${cita.modalidad}" class="align-middle" style="text-align: center">
+                            </td>
+                            <td th:text="${cita.fecha}" class="align-middle" style="text-align: center">
                             </td>
                             <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
                             </td>
@@ -223,7 +226,7 @@
                                 <div th:each="receta : ${listaRecetas}">
                                     <div th:if="${cita.getRecetaIdreceta().id}==${receta.receta.id}">
                                         <button type="button" class="btn btn-primary pagarBoletaReceta" th:data-target="'#Pago' + ${info.index+1}" data-toggle="modal" data-dismiss="modal" th:if="${receta.recetaPagada==false && cita.modalidad=='Virtual'}">Pagar Receta</button>
-                                        <a type="button" class="btn btn-primary pagarBoletaReceta" th:if="${receta.recetaPagada==true && cita.modalidad=='Virtual'}" th:href="@{/paciente/tracking}">Iniciar Delivery</a>
+                                        <a type="button" class="btn btn-primary pagarBoletaReceta" th:if="${receta.recetaPagada==true && cita.modalidad=='Virtual'}" th:href="@{/paciente/tracking}">Delivery</a>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
