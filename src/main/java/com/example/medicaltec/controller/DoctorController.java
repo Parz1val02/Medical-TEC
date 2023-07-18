@@ -235,14 +235,39 @@ public class DoctorController {
 
     @GetMapping("/calendario")
     public String verCalendario(HttpSession httpSession, Model model){
+        // Todos los meses
+        ArrayList<String> array = new ArrayList<>();
+        array.add("Enero");
+        array.add("Febrero");
+        array.add("Marzo");
+        array.add("Abril");
+        array.add("Mayo");
+        array.add("Junio");
+        array.add("Julio");
+        array.add("Agosto");
+        array.add("Septiembre");
+        array.add("Octubre");
+        array.add("Noviembre");
+        array.add("Diciembre");
+
+        // Mandar horas doctor de todos los meses
+        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
+        for (int i=0;i<array.size();i++){
+            Optional<Horasdoctor> horasdoctorOptionalgeneral = Optional.ofNullable(horasDoctorRepository.obtenerHorasDoctorEnMes(doctor.getId(), array.get(i)));
+            Horasdoctor horasdoctorgeneral = horasdoctorOptionalgeneral.orElse(null);
+            String nombreHorasDoctor = "horasdoctor"+array.get(i);
+            System.out.println("horasdoctor"+array.get(i));
+            model.addAttribute(nombreHorasDoctor,horasdoctorgeneral);
+        }
+
         // Vemos en que mes estamos
         LocalDate fechaActual = LocalDate.now();
         int mesActual = fechaActual.getMonthValue();
         String mes = obtenerMesPorNumero(mesActual);
         model.addAttribute("mesActual",mes);
 
+
         // Obtenemos si ya tiene horasDoctor en el mes
-        Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
         Optional<Horasdoctor> horasdoctorOptional = Optional.ofNullable(horasDoctorRepository.obtenerHorasDoctorEnMes(doctor.getId(), mes));
 
         if (horasdoctorOptional.isPresent()){
@@ -927,9 +952,9 @@ public class DoctorController {
                 hayError = 1;
                 attr.addFlashAttribute("mesmsg", "Por favor ingrese un mes.");
             }
-            if (dia == null){
+            if (dia == null || dia.equals("")){
                 hayError = 1;
-                attr.addFlashAttribute("msgError", "Por favor seleccione los días de su horario.");
+                attr.addFlashAttribute("diamsg", "Por favor seleccione los días de su horario.");
             }
             if (horainicio == null){
                 hayError = 1;
@@ -975,7 +1000,7 @@ public class DoctorController {
                                         attr.addFlashAttribute("msg", "Horas de doctor se guardaron exitosamente.");
                                         return "redirect:/doctor/calendario";
                                     }else {
-                                        attr.addFlashAttribute("msgError", "Lo sentimos, la hora libre debe tener 3 horas de diferencia como mínimo de la hora final");
+                                        attr.addFlashAttribute("msgError", "Lo sentimos, la hora libre debe tener 1 hora de diferencia como mínimo de la hora final");
                                         return "redirect:/doctor/calendario";
                                     }
                                 }
@@ -998,6 +1023,7 @@ public class DoctorController {
                     return "redirect:/doctor/calendario";
                 }
             }else {
+                attr.addFlashAttribute("msgError", "Debe completar todos los campos.");
                 return "redirect:/doctor/calendario";
             }
         }

@@ -67,85 +67,91 @@
                     </h6>
                     <br>
                     <div class="row no-gutters justify-content-between align-items-center">
-                        <div class="col-sm-6" style="padding: 0">
-                            <div class="card" style="margin: 15px">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Notificaciones
-                                    </h4>
-                                    <div style="height: 250px;">
-                                        <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
-                                             th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
-                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
-                                                <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                        <div style="display: flex; width: 100%;">
+                            <div class="col-sm-6" style="flex: 1;">
+                                <div class="card h-100 mb-3" style="margin: 15px;">
+                                    <div class="card-header h-100  bg-light py-2">
+                                        <div class="row flex-between-center">
+                                            <div class="col-md-6 col-lg-6">
+                                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                                    Calendario
+                                                </h4>
+                                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
+                                            </div>
+                                        </div>
+                                        <div class="row flex-between-center">
+                                            <div class="col-md-12 col-lg-12">
+                                                <div id="calendar"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6" style="padding: 0">
-                            <div class="card" style="margin: 15px">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Mensajería
-                                    </h4>
-                                    <div style="height: 250px;">
-                                        <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
-                                             th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                            <div class="col-sm-6" style="flex: 1;padding: 0">
+                                <div class="card" style="margin: 15px;">
+                                    <div class="card-body" style="padding: 20px 2rem 20px 2rem;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                            Cuestionarios
+                                        </h4>
+                                        <div>
+                                            <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
+                                                 th:if="${iterStatus2.index &lt; 5}" style="padding-bottom: 10px;
                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
-                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
-                                                <div th:text="${mensaje.contenido}"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6" style="padding: 0">
-                            <div class="card">
-                                <div class="card-body" >
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Cuestionarios
-                                    </h4>
-                                    <div>
-                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
-                                             th:if="${iterStatus2.index &lt; 3}" style="padding-bottom: 10px;
-                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="|${cuestionario.nombre}|"></b>
-                                                <div>
-                                                    <button type="button" class="btn btn-light btn-sm" style="background: #00a9b1; border-color: #00a9b1; color: #FFFFFF;
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <b th:text="|${cuestionario.nombre}|"></b>
+                                                    <div>
+                                                        <button type="button" class="btn btn-light btn-sm" style="background: #00a9b1; border-color: #00a9b1; color: #FFFFFF;
                                                 border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${iterStatus2.index+1}">Previsualizar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a th:href="@{/doctor/cuestionarios}">
+                                    <button type="button" class="btn btn-primary">Ir a la sección de cuestionarios</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div style="display: flex">
+                            <div class="col-sm-6" style="flex: 1;padding: 0">
+                                <div class="card" style="margin: 15px">
+                                    <div class="card-body" style="padding: 25px !important;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                            Mensajería
+                                        </h4>
+                                        <div style="height: 250px;">
+                                            <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                                                 th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
+                                                    <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
+                                                    <div th:text="${mensaje.contenido}"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6" style="padding-top: 25px">
-                            <div class="card h-100 mb-3">
-                                <div class="card-header h-100  bg-light py-2">
-                                    <div class="row flex-between-center">
-                                        <div class="col-md-6 col-lg-6">
-                                            <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                                                Calendario
-                                            </h4>
-                                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
-                                        </div>
-                                    </div>
-                                    <div class="row flex-between-center">
-                                        <div class="col-md-12 col-lg-12">
-                                            <div id="calendar"></div>
+                            <div class="col-sm-6" style="flex: 1;padding: 0">
+                                <div class="card" style="margin: 15px">
+                                    <div class="card-body" style="padding: 25px !important;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                            Notificaciones
+                                        </h4>
+                                        <div style="height: 250px;">
+                                            <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                                                 th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
+                                                    <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -176,9 +182,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a  th:href="@{/doctor/cuestionarios}">
-                                    <button type="button" class="btn btn-primary">Ir a cuestionarios</button>
-                                </a>
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
@@ -205,7 +208,7 @@
                             <th class="sort align-middle" style="width: 13%">Nombres</th>
                             <th class="sort align-middle" style="width: 14%">Apellidos</th>
                             <th class="sort align-middle" style="width: 10%">Tipo de Cita</th>
-                            <th class="sort align-middle" style="width: 10%;text-align: center"></th>
+                            <th class="sort align-middle" style="width: 10%;text-align: center">Iniciar Video</th>
                             <th class="sort align-middle" style="width: 20%;text-align: center"></th>
                         </tr>
                         </thead>
