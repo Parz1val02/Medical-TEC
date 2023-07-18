@@ -259,7 +259,7 @@ public class PacienteController {
 
 
         // Construir la URL con los parámetros
-        String url = "http://localhost:8082/clash?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
+        String url = "http://34.132.54.61:8082/clash?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
                 "&rutaOptima=" + rutaOptimaCodificada + "&tiempoDemora=" + tiempoDemora;
 
         // Enviar la solicitud GET al servidor Node.js
