@@ -60,7 +60,6 @@
               <th class="sort align-middle" style="width: 15%; text-align: center">Paciente</th>
               <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
               <th class="no-sort" style="width: 15%;" ></th>
-              <th class="no-sort" style="width: 15%;" ></th>
             </tr>
             </thead>
             <tbody class="bg-white">
@@ -79,70 +78,9 @@
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
                                     border-radius: 15px" th:data-target="'#Detalles' + ${info.index+1}">Validar</button>
               </td>
-              <td class="align-middle" align="center">
-                <a th:href="@{'/administrativo/cancelarCita?citaId='+${cita.idcita}+'&dni='+${cita.dni}}">
-                  <button  type="button" class="btn btn-danger btn-sm botones" style="text-align: center;background: grey;
-                                border-radius: 15px; border-color: grey" disabled>Cancelar</button>
-                </a>
-                <input type="hidden" th:class="fecha" th:value="${cita.fecha}"/>
-              </td>
             </tr>
             </tbody>
           </table>
-          <script>
-            // Obtener datos y botones
-            var botones = document.getElementsByClassName('botones');
-            var fecha = document.getElementsByClassName('fecha');
-
-            // Obtener la fecha y hora actual
-            var fechaActual = new Date();
-
-            for (var i=0;i<botones.length;i++) {
-
-              var fechaString = fecha[i].value;
-
-              // Obtenemos las partes de la fecha
-              var fechaPartes = fechaString.split(' ');
-              var fechaGa = fechaPartes[0];
-              var horaGa = fechaPartes[1];
-
-              var fechaGaPartes = fechaGa.split('-');
-              var dia = fechaGaPartes[0] ;
-              var mes = fechaGaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
-              var anio = fechaGaPartes[2];
-
-              // Obtenemos las partes de la hora
-              var horaGaPartes = horaGa.split(':');
-              var hora = horaGaPartes[0];
-              var minutos = horaGaPartes[1];
-
-              // Creamos el objeto de fecha combinando las partes correspondientes
-              var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
-              console.log(fechaObjetivo);
-              var fechaInicio = new Date(fechaObjetivo.getTime() - 60 * 60000); // Restar 30 minutos en milisegundos
-              console.log(fechaInicio);
-              //var tiempo=fechaInicio-fechaActual;
-
-              if (fechaActual >= fechaInicio){
-                mostrarBoton(i);
-              }
-            }
-
-            function accionesBoton(parametro) {
-              // Código de la función
-              botones[parametro].disabled = false;
-              botones[parametro].style.background = '#3d8af7';
-              botones[parametro].style.borderColor = '#3d8af7';
-              console.log(botones[parametro]);
-
-            }
-
-            function mostrarBoton(valor) {
-              setTimeout(function() {
-                accionesBoton(valor);
-              }, 0); // Retraso de 2 segundos (2000 milisegundos)
-            }
-          </script>
         </div>
       </div>
 
@@ -178,7 +116,7 @@
 
 
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-12">
 
 
                     <div class="form-group">
@@ -194,13 +132,9 @@
                       <input type="text" id="precio"  th:placeholder="${cita.getPrecio_calculado()}" class="form-control" disabled>
                     </div>
                   </div>
-                  <!-- Columna 2 -->
-
                   <button type="submit" class="btn btn-primary">Validar</button>
                   <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
-
                 </div>
-
                 </form>
               </div>
 
@@ -239,15 +173,7 @@
               <td class="align-middle" align="center">
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  style="text-align: center;
                                     border-radius: 15px" th:data-target="'#Details' + ${info.index+1}">Validar</button>
-                <!-- Modal -->
               </td>
-              <!-- Cancelar cita
-              <td class="align-middle" align="center">
-                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"  style="text-align: center;
-                                    border-radius: 15px" th:data-target="">Cancelar</button>
-                 Modal
-              </td>
-              -->
             </tr>
             </tbody>
           </table>
@@ -278,7 +204,7 @@
 
 
                   <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
 
 
                       <div class="form-group">
@@ -295,7 +221,6 @@
                       </div>
                     </div>
                     <!-- Columna 2 -->
-
                     <button type="submit" class="btn btn-primary">Validar</button>
                     <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
 

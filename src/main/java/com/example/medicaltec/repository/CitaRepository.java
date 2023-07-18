@@ -50,6 +50,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1= ?1 and str_to_date(fecha, '%d-%m-%Y')>= current_date() and citacancelada=0 and estadoscita_idestados in (1,2,4,5)",
             nativeQuery = true)
     List<Cita> citasParaVer(String dni);
+    @Query(value = "SELECT * FROM telesystem_2.cita where fecha=?1 and pagada=0 and citacancelada=0 and TIME_FORMAT(hora, '%H:%i')>?2", nativeQuery = true)
+    List<Cita> citasAutomatico(String fecha, String hora);
 
     @Modifying
     @Transactional
