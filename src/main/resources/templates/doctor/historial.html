@@ -119,7 +119,7 @@
                                         <label  class="form-label" style="font-weight: 700 !important;margin: 0;">Mi bitácora (notas personales):</label>
                                         <label  class="form-label" style="font-weight: 500 !important; font-size: 12px">Agregar comentarios acerca del historial clínico:</label>
                                         <input type="hidden" th:value="${informe.id}" class="informeid form-control">
-                                        <textarea class="form-control bitacora" style="border: 1px solid #b6c1d2;width: 100%;" th:text="${informe.bitacora}">
+                                        <textarea class="form-control bitacora" style="border: 1px solid #b6c1d2;width: 100%;" th:text="${informe.bitacora}" placeholder="Ingrese su respuesta.">
                                         </textarea>
 
                                     </div>

@@ -271,7 +271,7 @@
                 data: {
                     dni: doctores[i].dni,
                 },
-                url: 'http://34.28.24.16:8081/api/doctores',
+                url: 'http://34.132.54.61:8081/api/doctores',
                 success: function(response) {
                     var horariosMes = response.horariosMes;
                     $('.calendar').each(function(){
@@ -360,7 +360,7 @@
                                                     hora: info.event.title,
                                                     pacienteDni: pacienteDni
                                                 },
-                                                url: 'http://34.28.24.16:8081/api/agendar2',
+                                                url: 'http://34.132.54.61:8081/api/agendar2',
                                                 success: function(response) {
                                                     alert(response.msg);
                                                     location.reload();
@@ -475,6 +475,23 @@
         renderCards();
 
     });
+</script>
+<script>
+    $(document).ready(function() {
+        // Attach the event handler to the "show.bs.modal" event of the modals
+        $('.modalDoctor').on('shown.bs.modal', function() {
+            // Trigger the click event on the button within the modal
+            const button = $(this).find('.fc-next-button');
+            if (button.length > 0) {
+                button.click();
+            }
+            const button2 = $(this).find('.fc-prev-button');
+            if (button2.length > 0) {
+                button2.click();
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

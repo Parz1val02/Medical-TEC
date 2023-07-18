@@ -5,7 +5,10 @@ import com.example.medicaltec.dto.DoctorDto2;
 import com.example.medicaltec.dto.FinanzasDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.more.CometChatApi;
 import com.example.medicaltec.more.CorreoConEstilos;
+import com.example.medicaltec.pojos.Data;
+import com.example.medicaltec.pojos.Root;
 import com.example.medicaltec.repository.*;
 import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
@@ -20,12 +23,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import com.google.gson.Gson;
 
 
 @Controller
@@ -593,29 +598,55 @@ public class AdministradorController {
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
             usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  Integer.parseInt(especialidad),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
 
-            /*
+
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = doctor.getId();
             String nameAPI = "Dr. " + doctor.getNombre() + " " + doctor.getApellido();
+
             try {
                 cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
             } catch (IOException | InterruptedException e) {
                 System.out.println("ERROR EN LA CREACION DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
                 e.printStackTrace();
                 //throw new RuntimeException(e);
-            }*/
-
-
-            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
-            String destinatario = doctor.getEmail() ;
-            String asunto = "Invitación a la plataforma de Medical-Tec";
-            try {
-                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
-            } catch (MessagingException e) {
-                // Manejar la excepción en caso de que ocurra un error al enviar el correo
-                e.printStackTrace();
-                return "redirect:/administrador/usuarios";
             }
+
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+            List<String> listaUIDsDeCometChat = new ArrayList<>();
+            List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIPacientesyAdministrativosSegunSede(usuarioSession.getSedesIdsedes().getId());
+            try {
+                Gson gson = new Gson();
+                String response = cometChatApi.listarUsuariosEnCometChat();
+                Root root = gson.fromJson(response,Root.class);
+                //System.out.println(root);
+                //java.lang.reflect.Type listaDataJson = new com.google.gson.reflect.TypeToken<List<Data>>(){}.getType();
+                //List<Data> listaData = gson.fromJson(response, listaDataJson);
+                List<Data> listaData = root.getData();
+                for (Data data :  listaData) {
+                    listaUIDsDeCometChat.add(data.getUid());
+                }
+                System.out.println(listaUIDsDeCometChat);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                e.printStackTrace();
+                //throw new RuntimeException(e);
+            }
+
+            List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+            listaUIDsComun.retainAll(listaUIDsDeCometChat);
+            String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+            String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+            System.out.println(arregloListaUIDsComunEnString);
+            //String resultado = "\"" + String.join("\", \"", arregloListaUIDsComunEnString) + "\"";
+            //String resultado = "[" + String.join(", ", Arrays.stream(arregloListaUIDsComun).map(s -> "\\\"" + s.replaceAll("\"", "\\\\\\\\\"") + "\\\"").toArray(String[]::new)) + "]";
+            //System.out.println(resultado);
+            try {
+                cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN anadir amigos DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
+                e.printStackTrace();
+            }
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
 
 
 
@@ -647,6 +678,18 @@ public class AdministradorController {
 
             }
 
+
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = doctor.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                System.out.println("ERROR al enviar correo. crear doctor");
+                //return "redirect:/administrador/usuarios";
+            }
 
 
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
@@ -1013,7 +1056,7 @@ public class AdministradorController {
             //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
             usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
 
-            /*
+
             CometChatApi cometChatApi = new CometChatApi();
             String dniAPI = paciente.getId();
             String nameAPI = "Paciente " + paciente.getNombre() + " " + paciente.getApellido();
@@ -1022,20 +1065,38 @@ public class AdministradorController {
             } catch (IOException | InterruptedException e) {
                 System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR PACIENTE");
                 throw new RuntimeException(e);
-            }*/
-
-
-            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
-            String destinatario = paciente.getEmail() ;
-            String asunto = "Invitación a la plataforma de Medical-Tec";
-            try {
-                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
-            } catch (MessagingException e) {
-                // Manejar la excepción en caso de que ocurra un error al enviar el correo
-                e.printStackTrace();
-                return "redirect:/administrador/usuarios";
             }
 
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+            List<String> listaUIDsDeCometChat = new ArrayList<>();
+            List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+            try {
+                Gson gson = new Gson();
+                String response = cometChatApi.listarUsuariosEnCometChat();
+                Root root = gson.fromJson(response,Root.class);
+                List<Data> listaData = root.getData();
+                for (Data data :  listaData) {
+                    listaUIDsDeCometChat.add(data.getUid());
+                }
+                System.out.println(listaUIDsDeCometChat);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                e.printStackTrace();
+                //throw new RuntimeException(e);
+            }
+
+            List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+            listaUIDsComun.retainAll(listaUIDsDeCometChat);
+            String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+            String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+            System.out.println(arregloListaUIDsComunEnString);
+            try {
+                cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR paciente");
+                e.printStackTrace();
+            }
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
 
             //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
             String id = paciente.getId();
@@ -1053,6 +1114,19 @@ public class AdministradorController {
                 //throw new RuntimeException("An error has occurred while converting the file");
             }
 
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = paciente.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                System.out.println("ERROR al enviar correo. crear paciente");
+                //return "redirect:/administrador/usuarios";
+            }
+
+
 
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
@@ -1062,49 +1136,60 @@ public class AdministradorController {
     }
 
     @GetMapping("/historialPaciente")
-    public String verHistorial(Model model, @RequestParam("id") String id){
+    public String verHistorial(Model model, @RequestParam("id") String id,RedirectAttributes attr){
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("paciente",usuario);
+        if (optionalUsuario.isPresent()){
+            Usuario usuario = optionalUsuario.get();
+            model.addAttribute("paciente",usuario);
 
-        // Nombre completo del sexo de la persona
-        if(usuario.getSexo().equals("M")){
-            usuario.setSexo("Masculino");
-        }else if (usuario.getSexo().equals("F")){
-            usuario.setSexo("Femenino");
-        }
-
-        if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
-
-            // Obtener alergias
-            List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
-            ArrayList<Alergia> listaAlergias = new ArrayList<>();
-            for (Integer idAlergia : idAlergias) {
-                listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+            // Nombre completo del sexo de la persona
+            if(usuario.getSexo().equals("M")){
+                usuario.setSexo("Masculino");
+            }else if (usuario.getSexo().equals("F")){
+                usuario.setSexo("Femenino");
             }
-            model.addAttribute("listaAlergias",listaAlergias);
 
-            // Obtener informes y citas por usuario
-            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+            if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
 
-            // List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            // model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+                // Obtener alergias
+                List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+                ArrayList<Alergia> listaAlergias = new ArrayList<>();
+                for (Integer idAlergia : idAlergias) {
+                    listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+                }
+                model.addAttribute("listaAlergias",listaAlergias);
 
-            return "administrador/historial";
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+                StringJoiner stringJoiner = new StringJoiner(", ");
+                for (Alergia alergia : listaAlergias) {
+                    String nombreAlergia = alergia.getNombre();
+                    stringJoiner.add(nombreAlergia);
+                }
+
+                String resultado = stringJoiner.toString();
+                model.addAttribute("resultado",resultado);
+                return "administrador/historial";
+
+            } else {
+                //attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+                //return "redirect:/administrador/usuarios";
+
+                //model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
+
+                //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+                //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+
+                return "administrador/historial";
+            }
 
         } else {
-
-            model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
-
-            //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
-
-            // Obtener informes y citas por usuario
-            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
-
-            return "administrador/historial";
+            attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+            return "redirect:/administrador/usuarios";
         }
-
     }
 
 
@@ -1282,53 +1367,126 @@ public class AdministradorController {
     @PostMapping("/guardarFormulariosAutoRegistro")
     public String guardarFormulariosAutoRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-
+        int idsSonEnterosSuma = 0;
         if (idsSeleccionados == null)  {
             attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
             return "redirect:/administrador/listaFormulariosAutoRegistro";
         } else {
             for (String idStr : idsSeleccionados) {
-                // Obtienes el registro por ID desde tu servicio o repositorio
-                Integer idInt = Integer.parseInt(idStr);
-                Optional<FormAutoregistro> formAutoregistroOptional = formAutoregistroRepository.findById(idInt);
-
-
-                //CREACION HISTORIAL MEDICO POR DEFECTO
-                Historialmedico historialmedicoDefecto = new Historialmedico();
-                Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(formAutoregistroOptional.get().getSeguroid());
-                Seguro seguroDefecto = seguroDefectoOpt.get();
-                historialmedicoDefecto.setValidahistorial(true);
-                historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
-                Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
-                int idReciengenerado = historialmedicoGuardadoDefecto.getId();
-                //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
-                usuarioRepository.crearPaciente( formAutoregistroOptional.get().getCorreo(),  formAutoregistroOptional.get().getNombres(),   formAutoregistroOptional.get().getApellidos(),  formAutoregistroOptional.get().getCelular(), formAutoregistroOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formAutoregistroOptional.get().getFechanacimiento(), formAutoregistroOptional.get().getDomicilio(), formAutoregistroOptional.get().getSexo(), formAutoregistroOptional.get().getContrasenia(),idReciengenerado,seguroDefecto.getId(),"autoregistro"); //
-                //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
-
-
-                // Actualizar el estado de pendiente a 0. ya no es pendiente.
-                formAutoregistroRepository.actualizarEstadoFormAutoRegistroRevisado(idInt);
-
-                //ENVIAR CORREO CON CONTRASEÑA
-                String destinatario = formAutoregistroOptional.get().getCorreo() ;
-                String asunto = "Invitación a la plataforma de Medical-Tec";
-                String contrasena = "No tiene contraseña por defecto. Usted creó su contraseña en su formulario de auto registro. Para acceder a la plataforma, utilice dicha contraseña";
                 try {
-                    correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
-                } catch (MessagingException e) {
-                    // Manejar la excepción en caso de que ocurra un error al enviar el correo
-                    e.printStackTrace();
-                    return "redirect:/administrador/listaFormulariosAutoRegistro";
+                    Integer idIntPrueba = Integer.parseInt(idStr);
+                } catch (NumberFormatException e){
+                    idsSonEnterosSuma = idsSonEnterosSuma + 1; //hay errores
                 }
-
-
             }
-            attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
-            return "redirect:/administrador/listaFormulariosAutoRegistro";
+
+            if (idsSonEnterosSuma > 0) {
+                //hay errores
+                attr.addFlashAttribute("msgDanger","IDs de formularios inválidos");
+                return "redirect:/administrador/listaFormulariosAutoRegistro";
+            } else {
+                for (String idStr : idsSeleccionados) {
+                    // Obtienes el registro por ID desde tu servicio o repositorio
+                    Integer idInt = Integer.parseInt(idStr);
+                    Optional<FormAutoregistro> formAutoregistroOptional = formAutoregistroRepository.findById(idInt);
+                    if (formAutoregistroOptional.isPresent()) {
+                        //CREACION HISTORIAL MEDICO POR DEFECTO
+                        Historialmedico historialmedicoDefecto = new Historialmedico();
+                        Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(formAutoregistroOptional.get().getSeguroid());
+                        Seguro seguroDefecto = seguroDefectoOpt.get();
+                        historialmedicoDefecto.setValidahistorial(true);
+                        historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                        Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                        int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                        //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                        usuarioRepository.crearPaciente( formAutoregistroOptional.get().getCorreo(),  formAutoregistroOptional.get().getNombres(),   formAutoregistroOptional.get().getApellidos(),  formAutoregistroOptional.get().getCelular(), formAutoregistroOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formAutoregistroOptional.get().getFechanacimiento(), formAutoregistroOptional.get().getDomicilio(), formAutoregistroOptional.get().getSexo(), formAutoregistroOptional.get().getContrasenia(),idReciengenerado,seguroDefecto.getId(),"autoregistro"); //
+                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
+                        // Actualizar el estado de pendiente a 0. ya no es pendiente.
+                        formAutoregistroRepository.actualizarEstadoFormAutoRegistroRevisado(idInt);
+
+
+                        //APICOMETCHAT
+                        CometChatApi cometChatApi = new CometChatApi();
+                        String dniAPI = formAutoregistroOptional.get().getDni();
+                        String nameAPI = "Paciente " + formAutoregistroOptional.get().getNombres() + " " + formAutoregistroOptional.get().getApellidos();
+                        try {
+                            cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            throw new RuntimeException(e);
+                        }
+
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+                        List<String> listaUIDsDeCometChat = new ArrayList<>();
+                        List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+                        try {
+                            Gson gson = new Gson();
+                            String response = cometChatApi.listarUsuariosEnCometChat();
+                            Root root = gson.fromJson(response,Root.class);
+                            List<Data> listaData = root.getData();
+                            for (Data data :  listaData) {
+                                listaUIDsDeCometChat.add(data.getUid());
+                            }
+                            System.out.println(listaUIDsDeCometChat);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                            e.printStackTrace();
+                            //throw new RuntimeException(e);
+                        }
+
+                        List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+                        listaUIDsComun.retainAll(listaUIDsDeCometChat);
+                        String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+                        String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+                        System.out.println(arregloListaUIDsComunEnString);
+                        try {
+                            cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            e.printStackTrace();
+                        }
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+                        //APICOMETCHAT
+
+
+                        //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+                        String id = formAutoregistroOptional.get().getDni();
+                        String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+                        String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+                        try {
+                            File imageFileAvatar = new File(avatarImagePath);
+                            System.out.println(imageFileAvatar.getName());
+                            byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                            Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                            Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                            bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            //throw new RuntimeException("An error has occurred while converting the file");
+                        }
+
+                        //ENVIAR CORREO CON CONTRASEÑA
+                        String destinatario = formAutoregistroOptional.get().getCorreo() ;
+                        String asunto = "Invitación a la plataforma de Medical-Tec";
+                        String contrasena = "No tiene contraseña por defecto. Usted creó su contraseña en su formulario de auto registro. Para acceder a la plataforma, utilice dicha contraseña";
+                        try {
+                            correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+                        } catch (MessagingException e) {
+                            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                            e.printStackTrace();
+                            System.out.println("ERROR al enviar correo. formAutoregistro");
+                            //return "redirect:/administrador/listaFormulariosAutoRegistro";
+                        }
+                    }
+                }
+                attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
+                return "redirect:/administrador/listaFormulariosAutoRegistro";
+            }
+
         }
-
-
-
     }
 
 
@@ -1346,64 +1504,140 @@ public class AdministradorController {
     @PostMapping("/guardarFormulariosRegistro")
     public String guardarFormulariosRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-
+        boolean idsSonEnteros = false;
+        int idsSonEnterosSuma = 0;
         if (idsSeleccionados == null)  {
             attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
             return "redirect:/administrador/listaFormulariosRegistro";
         } else {
             for (String idStr : idsSeleccionados) {
-                // Obtienes el registro por ID desde tu servicio o repositorio
-                Integer idInt = Integer.parseInt(idStr);
-                Optional<FormInvitacion> formInvitacionOptional = formInvitationRepository.findById(idInt);
-
-
-                // Realizas las operaciones necesarias para guardar el registro en la base de datos
-                // ...
-                GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-                String contrasena = generadorDeContrasenha.crearPassword(); //contrasena del usuario sin hash
-                String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-
-                //Linea comentada por el cambio de edad a fechanacimiento en forminvitacion
-                //usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
-
-                //CREACION HISTORIAL MEDICO POR DEFECTO
-                Historialmedico historialmedicoDefecto = new Historialmedico();
-                Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(Integer.parseInt(formInvitacionOptional.get().getIdSeguro()));
-                Seguro seguroDefecto = seguroDefectoOpt.get();
-                historialmedicoDefecto.setValidahistorial(true);
-                historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
-                Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
-                int idReciengenerado = historialmedicoGuardadoDefecto.getId();
-                //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
-                usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(),  formInvitacionOptional.get().getNombres(),   formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formInvitacionOptional.get().getFechanacimiento(), formInvitacionOptional.get().getDomicilio(), formInvitacionOptional.get().getSexo(), contrasenaBCrypt,idReciengenerado,seguroDefecto.getId(),"invitado"); //
-                //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
-
-
-                // Actualizar el estado de pendiente a 0. ya no es pendiente.
-                formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
-
-                //ENVIAR CORREO CON CONTRASEÑA
-                String destinatario = formInvitacionOptional.get().getCorreo() ;
-                String asunto = "Invitación a la plataforma de Medical-Tec";
                 try {
-                    correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
-                } catch (MessagingException e) {
-                    // Manejar la excepción en caso de que ocurra un error al enviar el correo
-                    e.printStackTrace();
-                    return "redirect:/administrador/listaFormulariosRegistro";
+                    Integer idIntPrueba = Integer.parseInt(idStr);
+                } catch (NumberFormatException e){
+                    idsSonEnterosSuma = idsSonEnterosSuma + 1; //hay errores
                 }
-
-
             }
-            attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
-            return "redirect:/administrador/listaFormulariosRegistro";
+
+            if (idsSonEnterosSuma > 0) {
+                //hay errores
+                attr.addFlashAttribute("msgDanger","IDs de formularios inválidos");
+                return "redirect:/administrador/listaFormulariosRegistro";
+            } else {
+                for (String idStr : idsSeleccionados) {
+                    // Obtienes el registro por ID desde tu servicio o repositorio
+                    Integer idInt = Integer.parseInt(idStr);
+                    Optional<FormInvitacion> formInvitacionOptional = formInvitationRepository.findById(idInt);
+                    if (formInvitacionOptional.isPresent()) {
+                        // Realizas las operaciones necesarias para guardar el registro en la base de datos
+                        // ...
+                        GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
+                        String contrasena = generadorDeContrasenha.crearPassword(); //contrasena del usuario sin hash
+                        String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
+
+                        //Linea comentada por el cambio de edad a fechanacimiento en forminvitacion
+                        //usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
+
+                        //CREACION HISTORIAL MEDICO POR DEFECTO
+                        Historialmedico historialmedicoDefecto = new Historialmedico();
+                        Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(Integer.parseInt(formInvitacionOptional.get().getIdSeguro()));
+                        Seguro seguroDefecto = seguroDefectoOpt.get();
+                        historialmedicoDefecto.setValidahistorial(true);
+                        historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                        Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                        int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                        //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                        usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(),  formInvitacionOptional.get().getNombres(),   formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formInvitacionOptional.get().getFechanacimiento(), formInvitacionOptional.get().getDomicilio(), formInvitacionOptional.get().getSexo(), contrasenaBCrypt,idReciengenerado,seguroDefecto.getId(),"invitado"); //
+                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
+                        // Actualizar el estado de pendiente a 0. ya no es pendiente.
+                        formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
+
+
+                        //APICOMETCHAT
+                        CometChatApi cometChatApi = new CometChatApi();
+                        String dniAPI = formInvitacionOptional.get().getDni();
+                        String nameAPI = "Paciente " + formInvitacionOptional.get().getNombres() + " " + formInvitacionOptional.get().getApellidos();
+                        try {
+                            cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            throw new RuntimeException(e);
+                        }
+
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+                        List<String> listaUIDsDeCometChat = new ArrayList<>();
+                        List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+                        try {
+                            Gson gson = new Gson();
+                            String response = cometChatApi.listarUsuariosEnCometChat();
+                            Root root = gson.fromJson(response,Root.class);
+                            List<Data> listaData = root.getData();
+                            for (Data data :  listaData) {
+                                listaUIDsDeCometChat.add(data.getUid());
+                            }
+                            System.out.println(listaUIDsDeCometChat);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                            e.printStackTrace();
+                            //throw new RuntimeException(e);
+                        }
+
+                        List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+                        listaUIDsComun.retainAll(listaUIDsDeCometChat);
+                        String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+                        String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+                        System.out.println(arregloListaUIDsComunEnString);
+                        try {
+                            cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            e.printStackTrace();
+                        }
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+                        //APICOMETCHAT
+
+
+
+                        //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+                        String id = formInvitacionOptional.get().getDni();
+                        String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+                        String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+                        try {
+                            File imageFileAvatar = new File(avatarImagePath);
+                            System.out.println(imageFileAvatar.getName());
+                            byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                            Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                            Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                            bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            //throw new RuntimeException("An error has occurred while converting the file");
+                        }
+
+
+                        //ENVIAR CORREO CON CONTRASEÑA
+                        String destinatario = formInvitacionOptional.get().getCorreo() ;
+                        String asunto = "Invitación a la plataforma de Medical-Tec";
+                        try {
+                            correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+                        } catch (MessagingException e) {
+                            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                            e.printStackTrace();
+                            System.out.println("ERROR al enviar correo. formRegistro");
+                            //return "redirect:/administrador/listaFormulariosRegistro";
+                        }
+
+                    }  //si no esta presente el id, significa que debo saltar a la siguiente iteracion para seguir probando
+
+                }
+                attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
+                return "redirect:/administrador/listaFormulariosRegistro";
+            }
+
         }
 
-
-
     }
-
-
-
 
 }
