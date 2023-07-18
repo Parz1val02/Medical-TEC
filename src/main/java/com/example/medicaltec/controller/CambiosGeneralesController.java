@@ -51,19 +51,19 @@ public class CambiosGeneralesController {
         }
     }
     @PostMapping("/editarUxUi")
-    public String guardarColor(@RequestParam("colorPicker") String colorPicker, @RequestParam("colorPicker1") String colorPicker1) {
+    public String guardarColor(@RequestParam("colorPicker1") String colorPicker1) {
         UxUi uxUi = uxUiRepository.findById(5).orElse(null);
         assert uxUi != null;
-        uxUi.setColorBar(colorPicker);
+        uxUi.setColorBar(colorPicker1);
         uxUi.setColorBack(colorPicker1);
-        uxUiRepository.editarUxUi(colorPicker, colorPicker1);
+        uxUiRepository.editarUxUi(colorPicker1, colorPicker1);
 
         // Crear un objeto ModelAndView y establecer la vista y los datos del modelo
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/superAdmin/dashboard");
 
         // Actualizar los colores en el almacenamiento local
-        actualizarColoresEnAlmacenamientoLocal(colorPicker, colorPicker1, modelAndView);
+        actualizarColoresEnAlmacenamientoLocal(colorPicker1, colorPicker1, modelAndView);
 
         return modelAndView.getViewName();
     }
