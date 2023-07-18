@@ -1278,7 +1278,7 @@ public class AdministradorController {
         return "administrador/mensajeria";
     }
 
-
+    /*
     @GetMapping("/formatos")
     public String formatos(){
 
@@ -1289,7 +1289,7 @@ public class AdministradorController {
     public String notificaciones(){
 
         return "administrador/notificaciones";
-    }
+    }*/
 
     @GetMapping("/settings")
     public String settings(Model model, HttpServletRequest httpServletRequest){
