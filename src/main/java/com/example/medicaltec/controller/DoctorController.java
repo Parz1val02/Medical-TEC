@@ -20,10 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 // BCryptPasswordEncoder().encode(plainTextPassword);
 // GOOGLE_APPLICATION_CREDENTIALS=C:\Users\Labtel\Downloads\glowing-hearth-316315-3a00093f1823.json
@@ -394,31 +391,57 @@ public class DoctorController {
     }
 
     @GetMapping("/elegirPlantilla")
-    public String elegirPlantilla (@RequestParam("idCita") String idCita,@RequestParam("idUsuario") String idUsuario,
+    public String elegirPlantilla (@RequestParam("idCita") String idCita,@RequestParam("idUsuario") String idUsuario,RedirectAttributes attr,
                                    Model model,HttpSession httpSession){
         citaRepository.cambiarEstadoCita(5, Integer.parseInt(idCita));
+
+
         if (esNumeroEntero(idCita)){
             Integer iddecita = Integer.parseInt(idCita);
             Optional<Cita> optionalCita = citaRepository.findById(iddecita);
             if (optionalCita.isPresent()){
                 Cita citas = optionalCita.get();
-                httpSession.removeAttribute("idcitaparainforme");
-                httpSession.setAttribute("idcitaparainforme",citas.getId());
-                List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
-                for (InformeNuevo informes : listainformes){
-                    String entrada1 = informes.getCampos();
-                    List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
-                    informes.setListacampos((listacampos));
+
+                // Validar que esté 30 minutos antes
+                LocalDate fechaActual = LocalDate.now(); //fecha de hoy
+                LocalTime horaActual = LocalTime.now(); //hora
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate fechaCita   = LocalDate.parse(citas.getFecha(), formatter);
+
+                LocalTime horaCita = citas.getHora();
+
+                Duration diferencia = Duration.between(horaActual,horaCita); // Cita - Actual < 30 minutos
+
+                long horas = diferencia.toHours();
+                long minutos = diferencia.toMinutes() % 60;
+
+                if (fechaCita.isEqual(fechaActual) && horas == 0 && minutos<=30){
+                    httpSession.removeAttribute("idcitaparainforme");
+                    httpSession.setAttribute("idcitaparainforme",citas.getId());
+                    List<InformeNuevo> listainformes = informeNuevoRepository.findAll();
+                    for (InformeNuevo informes : listainformes){
+                        String entrada1 = informes.getCampos();
+                        List<String> listacampos = List.of(entrada1.split(">%%%%%<%%%%>%%%%%<"));
+                        informes.setListacampos((listacampos));
+                    }
+                    model.addAttribute("informeList", listainformes);
+                    model.addAttribute("idUsuario",idUsuario);
+                    return "doctor/elegirPlantilla";
+                }else {
+                    attr.addFlashAttribute("mensajeError","Usted solo puede iniciar una cita como máximo 30 minutos antes de la hora.");
+                    return "redirect:/doctor/principal";
                 }
-                model.addAttribute("informeList", listainformes);
-                model.addAttribute("idUsuario",idUsuario);
-                return "doctor/elegirPlantilla";
             }else {
-                return "redirect:/doctor/citas";
+                attr.addFlashAttribute("mensajeError","Lo sentimos, hubo un problema al iniciar la cita. Vuelva a intentarlo.");
+                return "redirect:/doctor/principal";
             }
         }else {
-            return "redirect:/doctor/citas";
+            attr.addFlashAttribute("mensajeError","Lo sentimos, hubo un problema al iniciar la cita. Vuelva a intentarlo.");
+            return "redirect:/doctor/principal";
         }
+
+
     }
 
     @GetMapping("/llenarInforme")

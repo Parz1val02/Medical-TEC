@@ -40,12 +40,13 @@
                     </div>
                 </div>
             </div>
+            <div th:if="${mensajeError != null}" th:text="${mensajeError}" class="alert alert-danger" role="alert"></div>
 
             <div style="display: flex; text-align: center">
                 <a style="flex: 1; width: 100%;">
                     <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
-                        Notificaciones, Mensajería y Calendario
+                        Ponte al día
                     </button>
                 </a>
                 <a style="flex: 1; width: 100%;">
@@ -108,13 +109,14 @@
                                         </div>
                                         <div style="display: flex; justify-content: right;">
                                             <a th:href="@{/doctor/cuestionarios}">
-                                                <button type="button" class="btn btn-primary">Ir a la sección de cuestionarios</button>
+                                                <button type="button" class="btn btn-primary" style="border-radius: 15px;">Ir a la sección de cuestionarios</button>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!--
                         <div style="display: flex">
                             <div class="col-sm-6" style="flex: 1;padding: 0">
                                 <div class="card" style="margin: 15px">
@@ -156,6 +158,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
