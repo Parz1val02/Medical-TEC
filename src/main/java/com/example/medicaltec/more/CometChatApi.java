@@ -23,5 +23,33 @@ public class CometChatApi {
         System.out.println(response.body());
     }
 
+    public String listarUsuariosEnCometChat() throws IOException, InterruptedException {
+        String appID = "24272539e9e89a98";
+        String apiKey = "9ab4636d565de4ad3ba6e57e3d361608b9d33986";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://" + appID + ".api-us.cometchat.io/v3/users"))
+                .header("accept", "application/json")
+                .header("apikey", apiKey)
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        return response.body();
+    }
+
+    public void anadirAmigosADeterminadoUsuario(String dni, String uidAmigos) throws IOException, InterruptedException {
+        String appID = "24272539e9e89a98";
+        String apiKey = "9ab4636d565de4ad3ba6e57e3d361608b9d33986";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://"+ appID +".api-us.cometchat.io/v3/users/"+dni+"/friends"))
+                .header("accept", "application/json")
+                .header("content-type", "application/json")
+                .header("apikey", apiKey)
+                .method("POST", HttpRequest.BodyPublishers.ofString("{\"accepted\":"+uidAmigos+"}"))
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+
 
 }

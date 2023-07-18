@@ -33,11 +33,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -154,20 +150,9 @@ public class PacienteController {
         return "redirect:/paciente/principal";
     }
 
-    @CrossOrigin
-    @RequestMapping(value = "/tracking")
-    public String tracking(Model model, HttpSession httpSession, HttpServletRequest httpServletRequest, Authentication authentication){
-        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",SPA);
-        Usuario usuario = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        SedeDto sedeUsuario = sedeRepository.getSede(usuario.getId());
-        model.addAttribute("sedeUsuario", sedeUsuario);
-        List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
-        model.addAttribute("listaSedes1",listaSedes1);
-
+    public Map<String, Object> tracking(Usuario SPA){
         Sede sede = sedeRepository.findById(SPA.getSedesIdsedes().getId()).orElse(null);
-        model.addAttribute("sede",sede);
-
+        String rutaOptimaCodificada = "";
         String apiKey = "AIzaSyC2fZLkVLhfgmyjt4sC_c4E61ibz_fa7yQ";
         String direccion = SPA.getDireccion();
         double latitud= 0;
@@ -259,7 +244,7 @@ public class PacienteController {
                 JsonNode route = routes.get(0);
                 rutaOptima = route.get("overview_polyline").get("points").asText();
                 tiempoDemora = route.get("legs").get(0).get("duration").get("text").asText();
-
+                rutaOptimaCodificada = URLEncoder.encode(rutaOptima, "UTF-8");
                 System.out.println("Ruta óptima: " + rutaOptima);
                 System.out.println("Tiempo de demora: " + tiempoDemora);
             } else {
@@ -269,33 +254,23 @@ public class PacienteController {
             e.printStackTrace();
         }
 
-        model.addAttribute("longitud_actual");
-        model.addAttribute("ruta",rutaOptima);
-        model.addAttribute("tiempo",tiempoDemora);
-
         String latitud1 = String.valueOf(origen_latitud);
         String longitud1 = String.valueOf(origen_longitud);
+
+
         // Construir la URL con los parámetros
-        String url = "http://localhost:8082/paciente/tracking?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
-                "&rutaOptima=" + rutaOptima + "&tiempoDemora=" + tiempoDemora;
+        String url = "http://localhost:8082/clash?latitud1=" + latitud1 + "&longitud1=" + longitud1 +
+                "&rutaOptima=" + rutaOptimaCodificada + "&tiempoDemora=" + tiempoDemora;
 
         // Enviar la solicitud GET al servidor Node.js
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-        // Comprobar el código de estado de la respuesta
-        if (response.getStatusCode().is2xxSuccessful()) {
-            // La solicitud se realizó correctamente
-
-            // Devolver la vista paciente/tracking
-            return "paciente/tracking";
-        } else {
-            // La solicitud no se realizó correctamente
-            // Manejar el error de acuerdo a tus necesidades
-
-            // Devolver una vista de error o manejar el error de otra manera
-            return "error";
-        }
+        Map<String, Object> resultado = new HashMap<>();
+        resultado.put("response.getStatusCode().is2xxSuccessful()", response.getStatusCode().is2xxSuccessful());
+        resultado.put("rutaOptima", rutaOptima);
+        resultado.put("tiempoDemora", tiempoDemora);
+        return resultado;
     }
 
     @RequestMapping("/perfil")
@@ -766,7 +741,7 @@ public class PacienteController {
                                @RequestParam("cardNumber") String cardNumber,
                                @RequestParam("expDate")String expDate,
                                @RequestParam("cvv") String cvv,
-                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
+                               RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication, Model model){
         Regex regex = new Regex();
         Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",SPA);
@@ -788,6 +763,7 @@ public class PacienteController {
                         } catch (MessagingException e) {
                             throw new RuntimeException(e);
                         }
+
                     }else{
                         attr.addFlashAttribute("errorReceta", "Error al intentar pagar la receta");
                     }
@@ -800,5 +776,35 @@ public class PacienteController {
             attr.addFlashAttribute("errorReceta", "Id erróneo de cita");
         }
         return "redirect:/paciente/consultas";
+    }
+
+    @GetMapping("/tracking")
+    public String vistaBlueBeetle(RedirectAttributes attr,HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication, Model model) {
+        Usuario SPA = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario", SPA);
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        Sede sede = sedeRepository.findById(SPA.getSedesIdsedes().getId()).orElse(null);
+
+        Map<String, Object> resultado = tracking(SPA);
+        String rutaOptima = (String) resultado.get("rutaOptima");
+        String tiempoDemora = (String) resultado.get("tiempoDemora");
+
+        model.addAttribute("sede",sede);
+        model.addAttribute("tiempo",tiempoDemora);
+        model.addAttribute("ruta",rutaOptima);
+
+        Boolean blueBeetle = (Boolean) resultado.get("response.getStatusCode().is2xxSuccessful()");
+
+        // Comprobar el código de estado de la respuesta
+        if (blueBeetle) {
+            // La solicitud se realizó correctamente
+            // Devolver la vista paciente/tracking
+            return "paciente/tracking";
+        } else {
+            // La solicitud no se realizó correctamente
+            // Manejar el error de acuerdo a tus necesidades
+            // Devolver una vista de error o manejar el error de otra manera
+            return "redirect:/paciente/consultas";
+        }
     }
 }
