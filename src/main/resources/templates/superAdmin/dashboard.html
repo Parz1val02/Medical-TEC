@@ -91,42 +91,6 @@
                             <h1>Cambio de interfaz</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <!--<div class="modal-body">
-                            <label for="zonasHorarias">Selecciona una zona horaria:</label>
-                            <select id="zonasHorarias" name="zonasHorarias">
-                                <option th:each="sede : ${sedesList}"
-                                th:value="${sede.zonaHoraria}">UTC-00:00</option>
-                                <option value="-11">UTC-01:00</option>
-                                <option value="-10">UTC-02:00</option>
-                                <option value="-12">UTC-03:00</option>
-                                <option value="-11">UTC-04:00</option>
-                                <option value="-10">UTC-05:00</option>
-                                <option value="-12">UTC-06:00</option>
-                                <option value="-11">UTC-07:00</option>
-                                <option value="-10">UTC-08:00</option>
-                                <option value="-12">UTC-09:00</option>
-                                <option value="-11">UTC-10:00</option>
-                                <option value="-10">UTC-11:00</option>
-                                <option value="-12">UTC-12:00</option>
-                                <option value="-11">UTC-13:00</option>
-                                <option value="-10">UTC-14:00</option>
-                                <option value="-12">UTC-15:00</option>
-                                <option value="-11">UTC-16:00</option>
-                                <option value="-10">UTC-17:00</option>
-                                <option value="-10">UTC-18:00</option>
-                                <option value="-12">UTC-19:00</option>
-                                <option value="-11">UTC-20:00</option>
-                                <option value="-10">UTC-21:00</option>
-                                <option value="-12">UTC-22:00</option>
-                                <option value="-11">UTC-23:00</option>
-                                <Agrega más opciones según tus necesidades
-                            </select>
-
-                            <button >Cambiar Zona Horaria</button>
-                            <div>
-                                <h4>Fecha actual:</h4>
-                                <p th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></p>
-                            </div>-->
                             <div class="modal-body">
                                 <p>Escoja el color del topbar y sidebar </p>
                                 <input type="color" id="colorPicker" name="colorPicker">
@@ -137,7 +101,7 @@
                                 <div class="d-flex align-items-center py-3"><img class="rounded-circle" th:src="@{/logo}" width="50px" height="50px" /></div>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#CambiarFoto" data-bs-dismiss="modal">Cambiar foto</button>
                                     <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
                                     <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
                                 </div>
