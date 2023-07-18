@@ -96,7 +96,7 @@
                                         <div>
                                             <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
                                                  th:if="${iterStatus2.index &lt; 5}" style="padding-bottom: 10px;
-                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
                                                 <div class="card-body" style="overflow: hidden; padding: 10px !important;">
                                                     <b th:text="|${cuestionario.nombre}|"></b>
                                                     <div>
@@ -106,11 +106,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div style="display: flex; justify-content: right;">
+                                            <a th:href="@{/doctor/cuestionarios}">
+                                                <button type="button" class="btn btn-primary">Ir a la sección de cuestionarios</button>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <a th:href="@{/doctor/cuestionarios}">
-                                    <button type="button" class="btn btn-primary">Ir a la sección de cuestionarios</button>
-                                </a>
                             </div>
                         </div>
                         <div style="display: flex">
@@ -220,7 +222,8 @@
                             <td th:text="|${cita.hora} hrs|" style="vertical-align: middle !important;">
                                 00:00hrs
                             </td>
-                            <td th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}" style="vertical-align: middle !important;">
+                            <td th:value="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}" class="estado"
+                                th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}" style="vertical-align: middle !important;">
                                 Próxima cita
                             </td>
                             <td th:text="|${cita.paciente.nombre}|" style="vertical-align: middle !important;">
@@ -241,8 +244,6 @@
                                     <button  type="button" class="btn btn-primary btn-sm botones" style="text-align: center;background: grey;
                                 border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
                                 </a>
-
-
                             </td>
                             <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual' || cita.reunionVirtual != null}">
                                 No disponible
@@ -252,9 +253,11 @@
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
                             <td class="align-middle" style="text-align: center; vertical-align: middle !important;">
+                                <input type="hidden" th:class="fechacita" th:value="${cita.fecha}" />
+                                <input type="hidden" th:class="horacita" th:value="${cita.hora}" />
                                 <a th:href="@{'/doctor/elegirPlantilla?idCita='+${cita.id}+'&idUsuario='+${cita.paciente.id}}">
-                                    <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
-                                border-radius: 15px; border-color: white">Iniciar cita</button>
+                                    <button type="button" class="btn btn-primary btn-sm iniciarcita" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey;" disabled>Iniciar cita</button>
                                 </a>
                             </td>
                         </tr>
@@ -297,10 +300,47 @@
 
                     if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
                         mostrarBoton(i);
+
                     }
                 }
 
-                function accionesBoton(parametro) {
+                var iniciarcita = document.getElementsByClassName('iniciarcita');
+                var estado = document.getElementsByClassName('estado');
+                var fechacita = document.getElementsByClassName('fechacita');
+                var horacita = document.getElementsByClassName('horacita');
+
+                for (var j=0;j<iniciarcita.length;j++){
+                    var fechaString1 = fechacita[i].value;
+                    var horaString1 = horacita[i].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes1 = fechaString1.split('-');
+                    var dia1 = fechaPartes1[0];
+                    var mes1 = fechaPartes1[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio1 = fechaPartes1[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes1 = horaString1.split(':');
+                    var hora1 = horaPartes1[0];
+                    var minutos1 = horaPartes1[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo1 = new Date(anio1, mes1, dia1, hora1, minutos1); //Objeto DATE
+                    var fechaInicio1 = new Date(fechaObjetivo1.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFi1n = new Date(fechaObjetivo1.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                    //var tiempo=fechaInicio-fechaActual;
+
+                    if (fechaActual >= fechaInicio1 && fechaActual <= fechaFin1){
+                        mostrarBoton2(i);
+                    }
+
+                    if (estado[i].value === 'En consulta'){
+                        mostrarBoton3(i);
+                    }
+                }
+
+                function accionesBotonIniciarVideo(parametro) {
                     // Código de la función
                     botones[parametro].disabled = false;
                     botones[parametro].style.background = '#3d8af7';
@@ -311,12 +351,38 @@
 
                 function mostrarBoton(valor) {
                     setTimeout(function() {
-                        accionesBoton(valor);
+                        accionesBotonIniciarVideo(valor);
                     }, 0); // Retraso de 2 segundos (2000 milisegundos)
                 }
 
-                function myStopFunction() {
-                    clearTimeout(myTimeout);
+                function accionesBotonIniciarCita(parametro) {
+                    // Código de la función
+                    iniciarcita[parametro].disabled = false;
+                    iniciarcita[parametro].style.background = '#00a9b1';
+                    iniciarcita[parametro].style.borderColor = '#00a9b1';
+                    console.log(botones[parametro]);
+
+                }
+
+                function desactivarIniciarCita(parametro) {
+                    // Código de la función
+                    iniciarcita[parametro].disabled = true;
+                    iniciarcita[parametro].style.background = 'grey';
+                    iniciarcita[parametro].style.borderColor = 'grey';
+                    console.log(botones[parametro]);
+
+                }
+
+                function mostrarBoton2(valor) {
+                    setTimeout(function() {
+                        accionesBotonIniciarCita(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+                function mostrarBoton3(valor) {
+                    setTimeout(function() {
+                        desactivarIniciarCita(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
                 }
 
                 function mostrarDiv(numeroDiv) {
