@@ -72,8 +72,9 @@
                     <table class="table table-striped" id="listaHistorial">
                         <thead style="background: #cdeffc">
                         <tr>
-                            <th class="sort align-middle" style="width: 22%">Tipo de cita</th>
-                            <th class="sort align-middle" style="width: 13%">Fecha</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Tipo de cita</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Modalidad</th>
+                            <th class="sort align-middle" style="width: 15%; text-align: center">Fecha</th>
                             <th class="sort align-middle" style="width: 15%; text-align: center">Doctor</th>
                             <th class="no-sort" style="width: 15%;" ></th>
                             <th class="no-sort" style="width: 15%;" ></th>
@@ -83,7 +84,9 @@
                         <tr th:each="cita, info : ${citas}">
                             <td th:text="${cita.tipocitaIdtipocita.tipoCita}" class="align-middle">
                             </td>
-                            <td th:text="${cita.fecha}" class="align-middle">
+                            <td th:text="${cita.modalidad}" class="align-middle" style="text-align: center">
+                            </td>
+                            <td th:text="${cita.fecha}" class="align-middle" style="text-align: center">
                             </td>
                             <td th:text="|${cita.getDoctor.nombre} ${cita.getDoctor.apellido}|" class="align-middle" style="text-align: center">
                             </td>
