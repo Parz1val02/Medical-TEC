@@ -110,6 +110,13 @@ public class PacienteController {
         model.addAttribute("sedeUsuario", sedeUsuario);
         List<Sede1Dto> listaSedes1 = sedeRepository.sedeMapa();
         model.addAttribute("listaSedes1",listaSedes1);
+        List<CuestionariosUsuarios> cuestionariosUsuariosList = cuestionariosUsuariosRepository.cuestionarioXPacienteNoRespondido(SPA.getId());
+        model.addAttribute("cuestionarios",cuestionariosUsuariosList);
+        if(cuestionariosUsuariosList.size()>0){
+            model.addAttribute("OWO","SI");
+        }else {
+            model.addAttribute("OWO","NO");
+        }
         return "paciente/principal";
    }
 

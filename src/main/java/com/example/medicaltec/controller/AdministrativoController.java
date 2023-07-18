@@ -739,7 +739,7 @@ public class AdministrativoController {
                                                 "\t\t<tr>\n" +
                                                 "\t\t\t<td valign=\"top\" bgcolor=\"#fff\" style=\"background:#fff;padding-right:30px;padding-left:30px;padding-bottom:25px;font-size:15px;font-family:Arial;color:#000;line-height:22px\">\n" +
                                                 "\t\t\t\t<p><span style=\"font-weight:400\"><strong>Cita Cancelada</strong></span></p>\n" +
-                                                "<p>Debido al plazo de espera de pago máximo de 10 minutos previo al inicio de la sesion vencido</p>\n" +
+                                                "<p>Debido al plazo de espera de pago máximo de una hora previo al inicio de la sesion vencido</p>\n" +
                                                 "<p><strong>Su cita del dia de hoy ha sido cancelada</strong>, Recuerde tomar en consideracion el horario pactado para estas sesiones para asi evitar inconvenientes. </p>\n" +
 
                                                 "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad "
@@ -796,7 +796,7 @@ public class AdministrativoController {
                                                 "\t\t<tr>\n" +
                                                 "\t\t\t<td valign=\"top\" bgcolor=\"#fff\" style=\"background:#fff;padding-right:30px;padding-left:30px;padding-bottom:25px;font-size:15px;font-family:Arial;color:#000;line-height:22px\">\n" +
                                                 "\t\t\t\t<p><span style=\"font-weight:400\"><strong>Cita Cancelada</strong></span></p>\n" +
-                                                "<p>Debido al plazo de espera de pago máximo de 10 minutos previo al inicio de la sesion vencido</p>\n" +
+                                                "<p>Debido al plazo de espera de pago máximo de una hora previo al inicio de la sesion vencido</p>\n" +
                                                 "<p><strong>Su cita del dia de hoy ha sido cancelada</strong>, Recuerde tomar en consideracion el horario pactado para estas sesiones para asi evitar inconvenientes. </p>\n" +
 
                                                 "Su examen médico agendado para la fecha  "+citaA.getFecha() +

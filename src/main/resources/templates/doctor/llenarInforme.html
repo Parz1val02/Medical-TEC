@@ -150,8 +150,8 @@
                                         <label for="disabledTextInput333" class="form-label">Fecha cita pasada: </label>
                                         <input type="text" id="disabledTextInput333" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${examenmedico.fecha}">
                                     </div>
-                                    <div th:if="${msgFecha != null}" th:text="${msgFecha}"></div>
                                 </div>
+                                <p th:if="${msgFecha != null}" th:text="${msgFecha}"></p>
 
                                 <h6>Informe</h6>
                                 <div class="row" style="padding: 0 1.75rem;margin-bottom: 1rem;">
