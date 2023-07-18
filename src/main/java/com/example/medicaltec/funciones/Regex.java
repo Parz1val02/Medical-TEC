@@ -5,12 +5,31 @@ import java.util.regex.Pattern;
 
 public class Regex {
     public boolean contrasenaisValid(String pass2) {
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&*]).{8,}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(pass2);
-        return matcher.find();
+        if(pass2.length()<8){
+            return false;
+        }
+        // Verificar al menos un número
+        if (!pass2.matches(".*\\d.*")) {
+            return false;
+        }
+
+        // Verificar al menos un carácter especial
+        if (!pass2.matches(".*[!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?].*")) {
+            return false;
+        }
+
+        // Verificar al menos una mayúscula
+        if (!pass2.matches(".*[A-Z].*")) {
+            return false;
+        }
+
+        // Si la contraseña cumple con todos los requisitos, retornar true
+        return true;
     }
     public  boolean contrasenadoctor(String pass1){
+        if(pass1.length()<8){
+            return false;
+        }
         // Verificar al menos un número
         if (!pass1.matches(".*\\d.*")) {
             return false;
