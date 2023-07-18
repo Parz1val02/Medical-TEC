@@ -40,6 +40,7 @@ public class DoctorController {
     final ReunionVirtualRepository reunionVirtualRepository;
     final HorasDoctorRepository horasDoctorRepository;
     final CuestionariosRepository cuestionariosRepository;
+    final CorreoConEstilos correoConEstilos;
     @Autowired
     RecetaRepository recetaRepository;
 
@@ -52,7 +53,7 @@ public class DoctorController {
     @Autowired
     ExamenMedicoRepository examenMedicoRepository;
 
-    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository, CuestionariosRepository cuestionariosRepository, RecetaRepository recetaRepository) {
+    public DoctorController(SedeRepository sedeRepository, CuestionarioRepository cuestionarioRepository, UsuarioRepository usuarioRepository, MensajeRepository mensajeRepository, NotificacioneRepository notificacioneRepository, CitaRepository citaRepository, HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2, AlergiaRepository alergiaRepository, InformeRepository informeRepository, ReunionVirtualRepository reunionVirtualRepository, HorasDoctorRepository horasDoctorRepository, CuestionariosRepository cuestionariosRepository, RecetaRepository recetaRepository, CorreoConEstilos correoConEstilos) {
         this.sedeRepository = sedeRepository;
         this.cuestionarioRepository = cuestionarioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -66,6 +67,7 @@ public class DoctorController {
         this.horasDoctorRepository = horasDoctorRepository;
         this.cuestionariosRepository = cuestionariosRepository;
         this.recetaRepository = recetaRepository;
+        this.correoConEstilos = correoConEstilos;
     }
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET,RequestMethod.POST})
@@ -925,39 +927,48 @@ public class DoctorController {
     @PostMapping("/enviarCuest")
     public String enviarCuest(Model model,@RequestParam("usuario") String paciente,
             @RequestParam("mensaje") String mensaje,@RequestParam("cuest") String cuestionarioid,RedirectAttributes attr,
-                              HttpSession httpSession){
+                              HttpSession httpSession) {
         Usuario doctor = (Usuario) httpSession.getAttribute("usuario");
         System.out.println(paciente);
         System.out.println(mensaje);
         System.out.println(cuestionarioid);
         int a = 0;
-        String alerta  = "Se han producido los siguientes errores: ";
-        if (!(paciente.length()==8)){
-            a = a+1;
+        String alerta = "Se han producido los siguientes errores: ";
+        if (!(paciente.length() == 8)) {
+            a = a + 1;
             String alerta1 = "|Dni erroneo| ";
             alerta = alerta + alerta1;
         }
-        if (cuestionarioid.isEmpty() || cuestionarioid.isBlank()){
-            a = a+1;
+        if (cuestionarioid.isEmpty() || cuestionarioid.isBlank()) {
+            a = a + 1;
             String alerta2 = "|id de cuestionario vacío| ";
             alerta = alerta + alerta2;
 
-        }else {
-            if(!esNumeroEntero(cuestionarioid)){
-                a = a+1;
+        } else {
+            if (!esNumeroEntero(cuestionarioid)) {
+                a = a + 1;
                 String alerta3 = "|id de cuestionario no es un número|";
                 alerta = alerta + alerta3;
             }
         }
-        if (a==0){
+        if (a == 0) {
             int idcuest = Integer.parseInt(cuestionarioid);
-            cuestionariosRepository.asignarCuestionario(idcuest,paciente,"",0,doctor.getId());
-            attr.addFlashAttribute("cuestionario_enviado","Cuestionario enviado exitosamente.");
-            return "redirect:/doctor/cuestionarios";
-        }else {
-            attr.addFlashAttribute("cuestionario_noenviado",alerta);
-            return "redirect:/doctor/cuestionarios";
+            cuestionariosRepository.asignarCuestionario(idcuest, paciente, "", 0, doctor.getId());
+            attr.addFlashAttribute("cuestionario_enviado", "Cuestionario enviado exitosamente.");
+            Optional<Usuario> usuarioOptional = usuarioRepository.findById(paciente);
+            if (usuarioOptional.isPresent()) {
+                Usuario usuario = usuarioOptional.get();
+                try {
+                    correoConEstilos.sendEmailEstilos2(usuario.getEmail(), "Envío de cuestionario", "Estimado/a " + usuario.getNombre() + " " + usuario.getApellido() + ":\nSe le notifica que tiene disponible un nuevo cuestionario por rellenar. Podrá visualizarlo en la sección del mismo nombre en su dasboard de paciente.\n" +
+                            "Por favor, rellenarlo a la mayor brevedad posible, pues su doctor solicita esta información.");
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else{
+            attr.addFlashAttribute("cuestionario_noenviado", alerta);
         }
+        return "redirect:/doctor/cuestionarios";
     }
 
     @PostMapping("/cambiarContrasena")
@@ -973,7 +984,7 @@ public class DoctorController {
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacíos");
             return "redirect:/doctor/config";
         } else if (!passwordActualCoincide ) {
-            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            attr.addFlashAttribute("errorPass", "La contraseña actual ingresada no es correcta");
             return "redirect:/doctor/config";
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las contraseñas ingresadas no coinciden");

@@ -1,9 +1,13 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
 import com.example.medicaltec.repository.*;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +23,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.exceptions.TemplateOutputException;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -593,19 +604,34 @@ public class SuperController {
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             a = a+1;
         }
-        if(edad.isEmpty()){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            a =a+1;
-        } else if (esNumeroEntero(edad)) {
-             int edad1 = Integer.parseInt(edad);
-            if (edad1 <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                a = a+1;
+        //VALIDACION FECHA NACIMIENTO
+        if (edad!=null && !edad.isBlank()){
+            System.out.println(edad);
+            //SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
+            // formatoDeseado = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaRecibidaDate.format(formatter);
+                LocalDate fechaFormateadaDate = LocalDate.parse(fechaFormateada, formatter);
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaMayorEdad = fechaActual.minusYears(18);
+                //copiar esto para crear paciente porque paciente aun usa solo Date y no LocalDate
+                boolean esFechaValida = !fechaFormateadaDate.isAfter(fechaMayorEdad);
+                if (!esFechaValida) {
+                    attr.addFlashAttribute("nacimientomsg", "La fecha seleccionada debe corresponder con la mayoria de edad.");
+                    a = a + 1;
+                }
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("nacimientomsg","La informacion ingresada no es valida");
+                a = a + 1;
             }
         } else {
-            a=a+1;
-            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
+            attr.addFlashAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
+            a = a+1;
         }
+        //VALIDACION FECHA NACIMIENTO
         if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             a =a+1;
@@ -649,10 +675,27 @@ public class SuperController {
             attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
         if(a == 0){
+            System.out.println(password);
             int estado=1;
-            int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
-            usuarioRepository.crearAdmSede(dni, new BCryptPasswordEncoder().encode(password),correo, nombre,apellido,  edad2,  telefono,  sexo,  address, sede2, estado);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
+            usuarioRepository.crearAdmSede(dni, new BCryptPasswordEncoder().encode(password),correo, nombre,apellido,  fechaFormateada,  telefono,  sexo,  address, sede2, estado);
+            String id = dni;
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
@@ -736,19 +779,35 @@ public class SuperController {
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             b = b+1;
         }
-        if(edad.isEmpty()){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            b =b+1;
-        } else if (esNumeroEntero(edad)) {
-            int edad1 = Integer.parseInt(edad);
-            if (edad1 <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                b = b+1;
+        //VALIDACION FECHA NACIMIENTO
+        if (edad!=null && !edad.isBlank()){
+            System.out.println(edad);
+            //SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
+            // formatoDeseado = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaRecibidaDate.format(formatter);
+                LocalDate fechaFormateadaDate = LocalDate.parse(fechaFormateada, formatter);
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaMayorEdad = fechaActual.minusYears(18);
+                //copiar esto para crear paciente porque paciente aun usa solo Date y no LocalDate
+                boolean esFechaValida = !fechaFormateadaDate.isAfter(fechaMayorEdad);
+                if (!esFechaValida) {
+                    attr.addFlashAttribute("nacimientomsg", "La fecha seleccionada debe corresponder con la mayoria de edad.");
+                    b = b + 1;
+                }
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("nacimientomsg","La informacion ingresada no es valida");
+                b = b + 1;
             }
         } else {
-            b=b+1;
-            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
+            attr.addFlashAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
+            b = b+1;
         }
+        //VALIDACION FECHA NACIMIENTO
+
         if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             b =b+1;
@@ -791,12 +850,30 @@ public class SuperController {
             b=b+1;
             attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
+
         if(b == 0){
             int estado=1;
-            int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
             int especialidad2 = Integer.parseInt(especialidad);
-            usuarioRepository.crearAdmT( dni,   new BCryptPasswordEncoder().encode(password), correo, nombre,apellido,  edad2,  telefono,  sexo,  address,  sede2, estado, especialidad2);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
+            usuarioRepository.crearAdmT( dni,   new BCryptPasswordEncoder().encode(password), correo, nombre,apellido,  fechaFormateada,  telefono,  sexo,  address,  sede2, estado, especialidad2);
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+            String id = dni;
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {

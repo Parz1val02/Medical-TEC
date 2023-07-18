@@ -1039,6 +1039,9 @@ public class AdministradorController {
         } else if (a > 0) {
             return "administrador/crearPacientePRUEBA";
         } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(paciente.getFechaNacimiento());
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
             System.out.println("contrasena creada para paciente de id " + paciente.getId() + " es: " + contrasena);
@@ -1054,7 +1057,7 @@ public class AdministradorController {
             int idReciengenerado = historialmedicoGuardadoDefecto.getId();
 
             //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getFechaNacimiento(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
 
 
             CometChatApi cometChatApi = new CometChatApi();
@@ -1136,49 +1139,60 @@ public class AdministradorController {
     }
 
     @GetMapping("/historialPaciente")
-    public String verHistorial(Model model, @RequestParam("id") String id){
+    public String verHistorial(Model model, @RequestParam("id") String id,RedirectAttributes attr){
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("paciente",usuario);
+        if (optionalUsuario.isPresent()){
+            Usuario usuario = optionalUsuario.get();
+            model.addAttribute("paciente",usuario);
 
-        // Nombre completo del sexo de la persona
-        if(usuario.getSexo().equals("M")){
-            usuario.setSexo("Masculino");
-        }else if (usuario.getSexo().equals("F")){
-            usuario.setSexo("Femenino");
-        }
-
-        if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
-
-            // Obtener alergias
-            List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
-            ArrayList<Alergia> listaAlergias = new ArrayList<>();
-            for (Integer idAlergia : idAlergias) {
-                listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+            // Nombre completo del sexo de la persona
+            if(usuario.getSexo().equals("M")){
+                usuario.setSexo("Masculino");
+            }else if (usuario.getSexo().equals("F")){
+                usuario.setSexo("Femenino");
             }
-            model.addAttribute("listaAlergias",listaAlergias);
 
-            // Obtener informes y citas por usuario
-            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+            if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
 
-            // List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            // model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+                // Obtener alergias
+                List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+                ArrayList<Alergia> listaAlergias = new ArrayList<>();
+                for (Integer idAlergia : idAlergias) {
+                    listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+                }
+                model.addAttribute("listaAlergias",listaAlergias);
 
-            return "administrador/historial";
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+                StringJoiner stringJoiner = new StringJoiner(", ");
+                for (Alergia alergia : listaAlergias) {
+                    String nombreAlergia = alergia.getNombre();
+                    stringJoiner.add(nombreAlergia);
+                }
+
+                String resultado = stringJoiner.toString();
+                model.addAttribute("resultado",resultado);
+                return "administrador/historial";
+
+            } else {
+                //attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+                //return "redirect:/administrador/usuarios";
+
+                //model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
+
+                //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+                //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+
+                return "administrador/historial";
+            }
 
         } else {
-
-            model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
-
-            //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
-
-            // Obtener informes y citas por usuario
-            model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
-
-            return "administrador/historial";
+            attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+            return "redirect:/administrador/usuarios";
         }
-
     }
 
 
@@ -1267,7 +1281,7 @@ public class AdministradorController {
         return "administrador/mensajeria";
     }
 
-
+    /*
     @GetMapping("/formatos")
     public String formatos(){
 
@@ -1278,7 +1292,7 @@ public class AdministradorController {
     public String notificaciones(){
 
         return "administrador/notificaciones";
-    }
+    }*/
 
     @GetMapping("/settings")
     public String settings(Model model, HttpServletRequest httpServletRequest){

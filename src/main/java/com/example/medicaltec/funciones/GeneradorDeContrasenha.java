@@ -14,7 +14,7 @@ public class GeneradorDeContrasenha {
     /* Array de caracteres para las letras mayusculas [A-Z]. */
     char[] letras_mayusculas = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'C', 'W', 'X', 'Y', 'Z' };
     /* Array de caracteres especiales. */
-    char[] caracteres_especiales = { '!', '@', '#', '$', '^', '&', '(', ')', '_', '=', '+', '-', '*', '/', '%', '<', '>', '?', '[', ']', '{', '}' };
+    char[] caracteres_especiales = {'@', '#', '$', '&', '*','%'};
 
     /**
      * Constructor principal. Se almacenan los distintos tipos de arrays de

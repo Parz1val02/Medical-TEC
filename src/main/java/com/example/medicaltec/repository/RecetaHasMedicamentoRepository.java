@@ -18,7 +18,7 @@ public interface RecetaHasMedicamentoRepository extends JpaRepository<RecetaHasM
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value ="insert into receta_has_medicamentos (receta_idreceta, medicamentos_idmedicamentos, cantidad, observaciones) values (?1,?2,?3,'?4')" )
+    @Query(nativeQuery = true, value ="insert into receta_has_medicamentos (receta_idreceta, medicamentos_idmedicamentos, cantidad, observaciones) values (?1,?2,?3,?4)" )
     void llenarRecMed(Integer idReceta,Integer idMedicam, Integer cantidad, String observaciones );
 
 }
