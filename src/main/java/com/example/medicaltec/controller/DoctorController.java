@@ -161,11 +161,7 @@ public class DoctorController {
                     model.addAttribute("paciente",paciente);
                     httpSession.setAttribute("dniusuario",paciente.getId());
                     // Nombre completo del sexo de la persona
-                    if(paciente.getSexo().equals("M")){
-                        paciente.setSexo("Masculino");
-                    }else if (paciente.getSexo().equals("F")){
-                        paciente.setSexo("Femenino");
-                    }
+
                     // Obtener alergias
                     int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
                     List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
@@ -202,11 +198,7 @@ public class DoctorController {
             Usuario paciente = optionalUsuario.get();
             model.addAttribute("paciente",paciente);
             // Nombre completo del sexo de la persona
-            if(paciente.getSexo().equals("M")){
-                paciente.setSexo("Masculino");
-            }else if (paciente.getSexo().equals("F")){
-                paciente.setSexo("Femenino");
-            }
+
             // Obtener alergias
             int id_paciente = paciente.getHistorialmedicoIdhistorialmedico().getId();
             List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(id_paciente);
@@ -447,25 +439,74 @@ public class DoctorController {
     }
 
     @GetMapping("/llenarInforme")
-    public String llenarInforme(@RequestParam("idInforme") String idinforme,
+    public String llenarInforme(@RequestParam("idInforme") String idinforme,RedirectAttributes attr,
                                 HttpSession httpSession,Model model){
         if(esNumeroEntero(idinforme)){
             Integer iddinforme = Integer.parseInt(idinforme);
             Optional<InformeNuevo> optionalInformeNuevo = informeNuevoRepository.findById(iddinforme);
             if(optionalInformeNuevo.isPresent()){
-                httpSession.removeAttribute("iddelinforme");
-                httpSession.setAttribute("iddelinforme",iddinforme);
-                InformeNuevo informeNuevo = optionalInformeNuevo.get();
-                model.addAttribute("titulo",informeNuevo.getNombre());
-                String campostexto = informeNuevo.getCampos();
-                List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
-                informeNuevo.setListacampos(listadecampos);
-                model.addAttribute("informe",informeNuevo);
-                List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
-                model.addAttribute("listmedic", listademedicamentos);
-                List<ExamenMedico> listaexamenes = examenMedicoRepository.findAll();
-                model.addAttribute("examen",listaexamenes);
-                return "doctor/llenarInforme";
+                // Ver el estado del paciente
+                int iddelacita = (int) httpSession.getAttribute("idcitaparainforme");
+                Optional<Cita> optionalCita = citaRepository.findById(iddelacita);
+
+                if (optionalCita.isPresent()){
+
+                    int estadopaciente = optionalCita.get().getPaciente().getEstadosIdestado().getId();
+                    model.addAttribute("estadopaciente",estadopaciente);
+
+                    if (estadopaciente==8){
+                        Usuario doctor = optionalCita.get().getDoctor();
+                        Usuario paciente = optionalCita.get().getPaciente();
+                        Cita citaUltima =citaRepository.obtenerCitaPorPacienteyDoctor(doctor.getId(),paciente.getId());
+                        if (citaUltima.getExamenMedico() != null){
+                            //hacer lo de las citas
+                            String nombreexamen = citaUltima.getExamenMedico().getNombre();
+                            Cita examenmedico = citaRepository.obtenerExamenPorPacienteyDoctor(nombreexamen,paciente.getId());
+
+                            model.addAttribute("verificador",1);
+                            model.addAttribute("citaUltima",citaUltima);
+                            model.addAttribute("examenmedico",examenmedico);
+
+                            // Hallamos la resta de tiempo
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            LocalDate citaFecha = LocalDate.parse(citaUltima.getFecha(), formatter);
+
+                            LocalDate examenFecha = LocalDate.parse(examenmedico.getFecha(), formatter);
+
+                            // Obtener la fecha límite que es 7 días después de la fecha de la cita
+                            LocalDate fechaLimite = citaFecha.plusDays(7);
+
+                            // Verificar si la fecha del examen está dentro del rango permitido
+                            if (examenFecha.isBefore(fechaLimite) || examenFecha.isEqual(fechaLimite)) {
+                                // La fecha del examen está dentro del rango permitido
+                                // Puedes continuar con el procesamiento
+                                citaRepository.cambiarPagadoCita(citaUltima.getId());
+                                attr.addFlashAttribute("msgFecha","La fecha del examen fue antes del plazo de 7 días establecido, la cita no tendrá costo.");
+                            } else {
+                                // La fecha del examen está fuera del rango permitido
+                                attr.addFlashAttribute("msgFecha","La fecha del examen fue posterior al plazo de 7 días establecido, la cita tendrá costo.");
+                            }
+
+                        }
+                    }
+
+                    httpSession.removeAttribute("iddelinforme");
+                    httpSession.setAttribute("iddelinforme",iddinforme);
+                    InformeNuevo informeNuevo = optionalInformeNuevo.get();
+                    model.addAttribute("titulo",informeNuevo.getNombre());
+                    String campostexto = informeNuevo.getCampos();
+                    List<String> listadecampos = List.of(campostexto.split(">%%%%%<%%%%>%%%%%<"));
+                    informeNuevo.setListacampos(listadecampos);
+                    model.addAttribute("informe",informeNuevo);
+                    List<Medicamento> listademedicamentos = medicamentoRepository.findAll();
+                    model.addAttribute("listmedic", listademedicamentos);
+                    List<ExamenMedico> listaexamenes = examenMedicoRepository.findAll();
+                    model.addAttribute("examen",listaexamenes);
+
+                    return "doctor/llenarInforme";
+                }else {
+                    return "redirect:/doctor/citas";
+                }
             }else {
                 return "redirect:/doctor/citas";
             }
@@ -1162,13 +1203,6 @@ public class DoctorController {
     public String verConfiguracion(Model model, HttpSession httpSession){
         Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario",usuario);
-
-        if(usuario.getSexo().equals("M")){
-            usuario.setSexo("Masculino");
-        }else if (usuario.getSexo().equals("F")){
-            usuario.setSexo("Femenino");
-        }
-
 
         List<Sede> sedeList = sedeRepository.sedesMenosActual(usuario.getSedesIdsedes().getId());
         model.addAttribute("sedeList",sedeList);

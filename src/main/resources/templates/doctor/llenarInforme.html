@@ -121,23 +121,36 @@
                                     <button type="button" class="btn btn-secondary" style="background-color: #0eb4fd " onclick="agregarMedicamento()">Agregar medicamento</button>
                                 </div>
 
-                                <div class="form-check pb-2" style="margin-left: 13px;">
-                                    <input class="form-check-input" th:if="${checkedd == null}" type="checkbox" name="checkboxName" id="checkboxName">
-                                    <input class="form-check-input"  th:if="${checkedd != null}" type="checkbox" name="checkboxName" id="checkboxName" checked>
-                                    <label class="form-check-label">¿Necesita un examen medico?</label>
-                                </div>
-                                <div th:if="${examenmsg != null}" th:text="${examenmsg}" class="alert alert-danger" role="alert"></div>
-                                <div class="d-flex align-items-center" style="display: block" id="divparaexmamen">
-                                    <label for="medicamento" class="mr-2" id="labelexamen"  th:if="${checkedd == null}" style="display: none" >Examen</label>
-                                    <select class="form-control" th:if="${checkedd == null}"  th:classappend="${examenmsg != null ? 'is-invalid' : ''}" name="examen" id="examen" style="display: none">
-                                        <option th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}"></option>
-                                    </select>
-                                    <label for="medicamento" class="mr-2" id="labelexamen" th:if="${checkedd != null}" style="display: block" >Examen</label>
-                                    <select class="form-control" th:if="${checkedd != null}" th:classappend="${examenmsg != null ? 'is-invalid' : ''}" name="examen" id="examen" style="display: block">
-                                        <option th:if="${seleccionado == null}" th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}"></option>
-                                        <option th:if="${seleccionado != null}" th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}" th:selected="${exa.id == seleccionado}"></option>
-                                    </select>
+                                <div th:if="${estadopaciente != 8}">
+                                    <div class="form-check pb-2" style="margin-left: 13px;">
+                                        <input class="form-check-input" th:if="${checkedd == null}" type="checkbox" name="checkboxName" id="checkboxName">
+                                        <input class="form-check-input"  th:if="${checkedd != null}" type="checkbox" name="checkboxName" id="checkboxName" checked>
+                                        <label class="form-check-label">¿Necesita un examen medico?</label>
+                                    </div>
+                                    <div th:if="${examenmsg != null}" th:text="${examenmsg}" class="alert alert-danger" role="alert"></div>
+                                    <div class="d-flex align-items-center" style="display: block" id="divparaexmamen">
+                                        <label for="medicamento" class="mr-2" id="labelexamen"  th:if="${checkedd == null}" style="display: none" >Examen</label>
+                                        <select class="form-control" th:if="${checkedd == null}"  th:classappend="${examenmsg != null ? 'is-invalid' : ''}" name="examen" id="examen" style="display: none">
+                                            <option th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}"></option>
+                                        </select>
+                                        <label for="medicamento" class="mr-2" id="labelexamen" th:if="${checkedd != null}" style="display: block" >Examen</label>
+                                        <select class="form-control" th:if="${checkedd != null}" th:classappend="${examenmsg != null ? 'is-invalid' : ''}" name="examen" id="examen" style="display: block">
+                                            <option th:if="${seleccionado == null}" th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}"></option>
+                                            <option th:if="${seleccionado != null}" th:each="exa : ${examen}" th:value="${exa.id}" th:text="${exa.nombre}" th:selected="${exa.id == seleccionado}"></option>
+                                        </select>
 
+                                    </div>
+                                </div>
+                                <div th:if="${verificador != null}">
+                                    <div class="mb-3">
+                                        <label for="disabledTextInput222" class="form-label">Fecha cita pasada: </label>
+                                        <input type="text" id="disabledTextInput222" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${citaUltima.fecha}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="disabledTextInput333" class="form-label">Fecha cita pasada: </label>
+                                        <input type="text" id="disabledTextInput333" class="form-control" style="border: 1px solid #b6c1d2;" th:placeholder="${examenmedico.fecha}">
+                                    </div>
+                                    <div th:if="${msgFecha != null}" th:text="${msgFecha}"></div>
                                 </div>
 
                                 <h6>Informe</h6>
