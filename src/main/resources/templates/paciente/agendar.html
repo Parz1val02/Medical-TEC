@@ -134,7 +134,7 @@
     $(document).ready(function(){
         flatpickr('#fecha', {
             dateFormat: 'd-m-Y',
-            minDate: new Date().fp_incr(1),
+            minDate: new Date(),
             placeholder: 'Seleccionar una fecha'
         });
         $('#examen').hide();
@@ -183,7 +183,7 @@
                         especialidadId: especialidadId,
                         examenId: examenId
                     },
-                    url: 'http://34.28.24.16:8081/api/agendar1',
+                    url: 'http://34.132.54.61:8081/api/agendar1',
                     dataType: 'json',
                     success: function(response) {
                         var infoDoctores = response.infoDoctores;
@@ -193,7 +193,7 @@
                         }else{
                             var modalidades = response.modalidades;
                             $.ajax({
-                                url: 'http://34.28.24.16:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
+                                url: 'http://34.132.54.61:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
                                 type: 'GET',
                                 dataType: 'html',
                                 success: function(response) {
@@ -286,7 +286,7 @@
                                                 hora: hora,
                                                 pacienteDni: pacienteDni
                                             },
-                                            url: 'http://34.28.24.16:8081/api/agendar2',
+                                            url: 'http://34.132.54.61:8081/api/agendar2',
                                             success: function(response) {
                                                 alert(response.msg);
                                                 location.reload();

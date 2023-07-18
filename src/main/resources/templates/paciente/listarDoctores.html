@@ -271,7 +271,7 @@
                 data: {
                     dni: doctores[i].dni,
                 },
-                url: 'http://34.28.24.16:8081/api/doctores',
+                url: 'http://34.132.54.61:8081/api/doctores',
                 success: function(response) {
                     var horariosMes = response.horariosMes;
                     $('.calendar').each(function(){
@@ -360,7 +360,7 @@
                                                     hora: info.event.title,
                                                     pacienteDni: pacienteDni
                                                 },
-                                                url: 'http://34.28.24.16:8081/api/agendar2',
+                                                url: 'http://34.132.54.61:8081/api/agendar2',
                                                 success: function(response) {
                                                     alert(response.msg);
                                                     location.reload();
