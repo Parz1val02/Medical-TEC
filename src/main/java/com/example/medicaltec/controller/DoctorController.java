@@ -686,9 +686,9 @@ public class DoctorController {
                 }
                 if(b==1){
                     usuarioRepository.actualizarEstadoPacientePendienteExa(dniusuario);
-                    CorreoConEstilos correoConEstilos = new CorreoConEstilos();
-                    correoConEstilos.sendEmailEstilos2(usuarioRepository.findByid(dniusuario).getEmail(), "Cambio a nuevo estado", "Su estado actual es " + usuarioRepository.findByid(dniusuario).getEstadosIdestado().getNombre() );
-                    correoConEstilos.sendEmailEstilos2(usuarioRepository.findByid(dniusuario).getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
+                    System.out.println(cita.getPaciente().getEmail());
+                    correoConEstilos.sendEmailEstilos2(cita.getPaciente().getEmail(), "Cambio a nuevo estado", "Su estado actual es " + "pendiente de examenes" );
+                    correoConEstilos.sendEmailEstilos2(cita.getPaciente().getEmail(), "Recordatorio", "Recuerde separar el examen medico pendiente en un maximo de 7 dias " );
                 }
                 httpSession.removeAttribute("iddelinforme");
                 httpSession.removeAttribute("idcitaparainforme");
