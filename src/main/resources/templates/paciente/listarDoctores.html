@@ -476,5 +476,22 @@
 
     });
 </script>
+<script>
+    $(document).ready(function() {
+        // Attach the event handler to the "show.bs.modal" event of the modals
+        $('.modalDoctor').on('shown.bs.modal', function() {
+            // Trigger the click event on the button within the modal
+            const button = $(this).find('.fc-next-button');
+            if (button.length > 0) {
+                button.click();
+            }
+            const button2 = $(this).find('.fc-prev-button');
+            if (button2.length > 0) {
+                button2.click();
+            }
+        });
+    });
+
+</script>
 </body>
 </html>
