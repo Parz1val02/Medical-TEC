@@ -600,7 +600,7 @@ public class DoctorController {
                                   @RequestParam("listamedicamentos") String medicamente,
                                   @RequestParam("listacantidades") String cantidad,
                                   @RequestParam("listaobservaciones") String observaciones,
-                                  @RequestParam("examen")String examen,
+                                  @RequestParam(value = "examen",required = false)String examen,
                                   @RequestParam("comentario") String comentario,@RequestParam("listarespuestas") String respuestas,
                                   @RequestParam(value = "checkboxName",required = false) Boolean valorCheckbox,
                                 RedirectAttributes attr, HttpSession httpSession) throws MessagingException {
@@ -898,7 +898,7 @@ public class DoctorController {
                                   @RequestParam("listamedicamentos") String medicamente,
                                   @RequestParam("listacantidades") String cantidad,
                                   @RequestParam("listaobservaciones") String observaciones,
-                                  @RequestParam("examen")String examen,
+                                  @RequestParam(value = "examen",required = false)String examen,
                                   @RequestParam("comentario") String comentario,@RequestParam("listarespuestas") String respuestas,
                                   @RequestParam(value = "checkboxName",required = false) Boolean valorCheckbox,
                                   RedirectAttributes attr, HttpSession httpSession) throws MessagingException {
