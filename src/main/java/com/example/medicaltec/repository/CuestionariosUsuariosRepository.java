@@ -18,6 +18,13 @@ public interface CuestionariosUsuariosRepository extends JpaRepository<Cuestiona
             "  AND c.activo = 1;\n")
     List<CuestionariosUsuarios> cuestionarioXPaciente(String dni);
 
+    @Query(nativeQuery = true, value = "SELECT cu.*\n" +
+            "FROM telesystem_2.cuestionarios_usuarios cu\n" +
+            "JOIN telesystem_2.cuestionarios c ON cu.idcuestionario = c.idcuestionario\n" +
+            "WHERE cu.dnipaciente = ?1 AND cu.respondido=0\n" +
+            "  AND c.activo = 1;\n")
+    List<CuestionariosUsuarios> cuestionarioXPacienteNoRespondido(String dni);
+
 
     @Transactional
     @Modifying
