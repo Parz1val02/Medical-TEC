@@ -66,6 +66,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario,String> {
 
     @Query(nativeQuery = true,value = "select u.ceduladoctor from usuario u where u.roles_idroles = 1")
     List<String> obtenerTodasCedulasDoctor();
+
+    @Query(nativeQuery = true,value = "SELECT dni FROM usuario where roles_idroles=1 and sedes_idsedes=?1")
+    List<String> obtenerDNIDoctoresSegunSede(Integer sede);
+
+    @Query(nativeQuery = true,value = "SELECT dni FROM telesystem_2.usuario where (roles_idroles=2 or roles_idroles=3) and sedes_idsedes=?1")
+    List<String> obtenerDNIPacientesyAdministrativosSegunSede(Integer sede);
+
     /*FIN QUERYS USADOS POR ADMINISTRADOR*/
     /* ************************************ */
     /* ************************************ */
