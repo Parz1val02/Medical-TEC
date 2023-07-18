@@ -14,26 +14,22 @@ public class Boleta {
     @Column(name = "idboletas", nullable = false)
     private Integer id;
 
-    @Column(name = "conceptopago", nullable = false, length = 100)
+    @Column(name = "conceptopago", length = 100, nullable = false)
     private String conceptopago;
-
-    @Column(name = "monto", nullable = false)
-    private Double monto;
-
-    @ManyToOne
-    @JoinColumn(name = "seguros_id_seguro", nullable = false)
-    private Seguro segurosIdSeguro;
+    @Column(name = "monto_cita", nullable = false)
+    private Double montoCita;
 
     @ManyToOne
     @JoinColumn(name = "receta_idreceta")
     private Receta recetaIdreceta;
 
     @ManyToOne
-    @JoinColumn(name = "cita_idcita", nullable = false)
+    @JoinColumn(name = "cita_idcita")
     private Cita citaIdcita;
 
+    @Column(name = "monto_receta")
+    private Double montoReceta;
     @ManyToOne
-    @JoinColumn(name = "examen_medico_idexamen", nullable = false)
-    private ExamenMedico examenMedicoIdexamen;
-
+    @JoinColumn(name = "seguros_id_seguro")
+    private Seguro seguro;
 }

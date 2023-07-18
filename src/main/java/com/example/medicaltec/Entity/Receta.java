@@ -18,8 +18,13 @@ public class Receta implements Serializable {
     private Integer id;
 
 
-    @Size(max = 100, message = "por favor sea breve")
-    @Column(name = "observaciones", length = 100)
-    private String observaciones;
+    @Size(max = 500, message = "por favor sea breve")
+    @Column(name = "comentario", length = 500)
+    private String comentario;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "informe_idinforme")
+    private Informe informe;
+
 
 }

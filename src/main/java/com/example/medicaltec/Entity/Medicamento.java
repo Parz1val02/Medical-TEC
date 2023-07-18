@@ -24,12 +24,4 @@ public class Medicamento {
     @Column(name = "precio", nullable = false)
     private Float precio;
 
-    @Max(value = 50)
-    @Min(value = 0)
-    @Column(name = "cantidad", nullable = false)
-    private Integer cantidad;
-
-    @Column(name = "frecuencia", nullable = false, length = 45)
-    private String frecuencia;
-
 }

@@ -1,23 +1,36 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
+import com.example.medicaltec.dto.DoctorDto;
+import com.example.medicaltec.dto.DoctorDto2;
+import com.example.medicaltec.dto.FinanzasDto;
 import com.example.medicaltec.funciones.GeneradorDeContrasenha;
 import com.example.medicaltec.funciones.Regex;
+import com.example.medicaltec.more.CometChatApi;
 import com.example.medicaltec.more.CorreoConEstilos;
+import com.example.medicaltec.pojos.Data;
+import com.example.medicaltec.pojos.Root;
 import com.example.medicaltec.repository.*;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.*;
-import jakarta.validation.Valid;
+import org.apache.commons.io.FileUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import com.google.gson.Gson;
 
 
 @Controller
@@ -37,6 +50,22 @@ public class AdministradorController {
     final AlergiaRepository alergiaRepository;
     final HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2;
     final FormInvitationRepository formInvitationRepository;
+
+    final BoletaRepository boletaRepository;
+
+    final InformeRepository informeRepository;
+
+    final HistorialMedicoRepository historialMedicoRepository;
+
+    final SeguroRepository seguroRepository;
+
+    final SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository;
+
+    final EspecialidadRepository especialidadRepository;
+
+    final FormAutoregistroRepository formAutoregistroRepository;
+
+    final UxUiRepository uxUiRepository;
     public AdministradorController (
             CitaRepository citaRepository,
             UsuarioRepository usuarioRepository,
@@ -44,7 +73,15 @@ public class AdministradorController {
             AlergiaRepository alergiaRepository,
             HistorialMedicoHasAlergiaRepository2 historialMedicoHasAlergiaRepository2,
             FormInvitationRepository formInvitationRepository,
-            CorreoConEstilos correoConEstilos
+            CorreoConEstilos correoConEstilos,
+            BoletaRepository boletaRepository,
+            InformeRepository informeRepository,
+            HistorialMedicoRepository historialMedicoRepository,
+            SeguroRepository seguroRepository,
+            SedeHasEspecialidadeRepository sedeHasEspecialidadeRepository,
+            EspecialidadRepository especialidadRepository,
+            FormAutoregistroRepository formAutoregistroRepository,
+            UxUiRepository uxUiRepository
             ) {
         this.usuarioRepository = usuarioRepository;
         this.especialidadeRepository = especialidadeRepository;
@@ -53,6 +90,14 @@ public class AdministradorController {
         this.historialMedicoHasAlergiaRepository2 = historialMedicoHasAlergiaRepository2;
         this.formInvitationRepository = formInvitationRepository;
         this.correoConEstilos = correoConEstilos;
+        this.boletaRepository = boletaRepository;
+        this.informeRepository = informeRepository;
+        this.historialMedicoRepository = historialMedicoRepository;
+        this.seguroRepository = seguroRepository;
+        this.sedeHasEspecialidadeRepository = sedeHasEspecialidadeRepository;
+        this.especialidadRepository = especialidadRepository;
+        this.formAutoregistroRepository = formAutoregistroRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
 
@@ -61,7 +106,7 @@ public class AdministradorController {
     public String pagprincipal(Model model, HttpServletRequest httpServletRequest){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         List listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        List listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        List<DoctorDto2> listaDoctores = usuarioRepository.obtenerlistaDoctores2(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
         return "administrador/principal";
@@ -73,44 +118,45 @@ public class AdministradorController {
         //model.addAttribute("listaCitas",citaRepository.pacientesAtendidos());
         List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
         List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        List<DoctorDto2> listaDoctores = usuarioRepository.obtenerlistaDoctores2(usuarioSession.getSedesIdsedes().getId());
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         model.addAttribute("listaPacientes",listaPacientes);
         model.addAttribute("listaDoctores",listaDoctores);
+
+
+        /*ENVIAR CORREO CON CONTRASEÑA A MI MISMO PRUEBA
+        String destinatario = usuarioSession.getEmail() ;
+        String asunto = "Invitación a la plataforma de Medical-Tec";
+        try {
+            correoConEstilos.sendEmailUserCreation(destinatario, asunto, "PRUEBA DE CONTRASENA");
+        } catch (MessagingException e) {
+            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+            e.printStackTrace();
+            return "redirect:/administrador/usuarios";
+        }*/
+
+
         return "administrador/usuarios";
     }
 
 
-    /*
-    @PostMapping("/editarDoctor")
-    public String editarDoctor(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("especialidad") int especialidad,
-            @RequestParam("telefono") String telefono,
-            RedirectAttributes attr
-
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( email,  nombre,  apellido,  telefono,  especialidad,  dni,  sede );
-        return "redirect:/administrador/usuarios";
-    }*/
-
-
-
-
     @GetMapping("/editarDoctorPagina")
     public String editarDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         Optional<Usuario> optDoctor = usuarioRepository.findById(dni);
         if (optDoctor.isPresent()){
             doctor = optDoctor.get();
-            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+            List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+            ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+            for(int i=0;i<especialidadesxSedeId.size();i++){
+                listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+            }
             model.addAttribute("listaEspecialidades",listaEspecialidades);
             model.addAttribute("doctor",doctor);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected",doctor.getEspecialidadesIdEspecialidad().getId());
+            httpServletRequest.getSession().setAttribute("idDelDoctorAEditar", dni);
+
             return "administrador/editarDoctor";
         } else {
             attr.addFlashAttribute("msgDanger","El doctor a editar no existe");
@@ -121,219 +167,536 @@ public class AdministradorController {
 
     @PostMapping("/editarDoctor")
     public String editarDoctor(
-            @ModelAttribute("doctor") @Valid Usuario doctor,
-            BindingResult bindingResult,
+            @ModelAttribute("doctor") Usuario doctor,
+            @RequestParam(value = "especialidad", required = false) String especialidad,
             RedirectAttributes attr,
             Model model,
             HttpServletRequest httpServletRequest
 
     ){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        System.out.println(bindingResult.getAllErrors());
-        if(bindingResult.hasErrors()){
-            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
+        Regex regex = new Regex();
+
+        int a = 0;
+        boolean existeDoctor = false;
+        boolean dniNulo = false;
+        if  ( doctor.getId()!=null && (!doctor.getId().isBlank())) {
+            System.out.println("########################");
+            System.out.println("########################");
+            System.out.println(doctor.getId());
+            System.out.println("########################");
+            System.out.println("########################");
+            try {
+                int dniEntero = Integer.parseInt(doctor.getId());
+                if (dniEntero<10000000 || dniEntero>99999999){ //11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
+                    a = a + 1;
+                } else {
+                    List<Usuario> listaDoctores = usuarioRepository.findAll();
+
+                    for (Usuario doctorLista : listaDoctores) {
+                        if (doctor.getId().equalsIgnoreCase(doctorLista.getId()) ) {
+                            existeDoctor = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
+                a = a + 1;
+            }
+        } else {
+            // model.addAttribute("dnimsg","El DNI no puede ser nulo");
+            dniNulo = true;
+        }
+
+        boolean correoDuplicado = false;
+        int contadorDuplicadosCorreo = 0;
+        if  ( doctor.getEmail()!=null && (!doctor.getEmail().isBlank())) {
+            System.out.println("########################");
+            System.out.println("########################");
+            System.out.println(doctor.getEmail());
+            System.out.println("########################");
+            System.out.println("########################");
+            if ( doctor.getEmail().length() > 100  ||  (!regex.emailValid(doctor.getEmail()))) {
+                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
+                a = a + 1;
+            } else {
+                if ( !dniNulo  && existeDoctor) {
+                    List<Usuario> listaDoctores = usuarioRepository.findAll();
+                    for (Usuario doctorLista : listaDoctores) {
+                        if (doctor.getEmail().equals(doctorLista.getEmail()) ) {
+                            if ( !doctor.getId().equals(doctorLista.getId())) {
+                                contadorDuplicadosCorreo = contadorDuplicadosCorreo + 1;
+                            }
+
+                        }
+                    }
+                    if (contadorDuplicadosCorreo > 0) {
+                        correoDuplicado = true;
+                    }
+                }
+            }
+
+        } else {
+            model.addAttribute("emailmsg","El correo no puede ser nulo");
+            a = a + 1;
+        }
+
+
+        //VALIDACION NOMBRE
+        if(doctor.getNombre() == null || doctor.getNombre().isBlank()){
+            model.addAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getNombre().length() > 45 ){  // || !regex.inputisValid(doctor.getNombre())
+            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION NOMBRE
+
+        //VALIDACION APELLIDO
+        if(doctor.getApellido() == null || doctor.getApellido().isBlank()){
+            model.addAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getApellido().length() > 45 ){ //  || !regex.inputisValid(doctor.getApellido())
+            model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION APELLIDO
+
+        //VALIDACION DIRECCION
+        if(doctor.getDireccion() == null || doctor.getDireccion().isBlank() ){
+            model.addAttribute("direccionmsg","La dirección no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getDireccion().length() > 200 ){
+            model.addAttribute("direccionmsg","La dirección debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION DIRECCION
+
+        //VALIDACION TELEFONO
+        if ( doctor.getTelefono() != null  && (!doctor.getTelefono().isBlank()) ) {
+            try {
+                int telefonoEntero = Integer.parseInt(doctor.getTelefono());
+                if (telefonoEntero > 999999999 || telefonoEntero < 9999999 ) {
+                    model.addAttribute("telefonomsg","El teléfono debe ser un número entero de máximo 9 digitos");
+                    a = a + 1;
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("telefonomsg","El teléfono debe ser un número entero de máximo 9 digitos");
+                a = a + 1;
+            }
+        } else {
+            model.addAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a = a + 1;
+        }
+        //VALIDACION TELEFONO
+
+        //VALIDACION ESPECIALIDAD
+        if ( especialidad != null  && (!especialidad.isBlank()) ) {
+            try {
+                int especialidadEntero = Integer.parseInt(especialidad);
+                if (especialidadEntero < 1 || (!especialidadesxSedeId.contains(especialidadEntero)) ) {
+                    model.addAttribute("especialidadmsg","Especialidad no existente en la sede");
+                    a = a + 1;
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("especialidadmsg","Valor de especialidad invalido");
+                a = a + 1;
+            }
+        } else {
+            model.addAttribute("especialidadmsg","La especialidad no puede ser nulo");
+            a = a + 1;
+        }
+        //VALIDACION ESPECIALIDAD
+
+        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelDoctorAEditar");
+        System.out.println(idNecesario);
+        int idEspecialidadParaFuncionarElSelected = 0;
+        Optional<Usuario> optDoctorParaSelectedDeEspecialidad = usuarioRepository.findById(idNecesario);
+        if (optDoctorParaSelectedDeEspecialidad.isPresent()) {
+            Usuario doctorParaSelectedDeEspecialidad  = optDoctorParaSelectedDeEspecialidad.get();
+            idEspecialidadParaFuncionarElSelected = doctorParaSelectedDeEspecialidad.getEspecialidadesIdEspecialidad().getId();
+        }
+        System.out.println("especialidad entero:" +  idEspecialidadParaFuncionarElSelected);
+
+        /*
+        Usuario usuarioParaEnviarEstado = usuarioRepository.findByid(idNecesario);
+        paciente.getEstadosIdestado().setNombre("");*/
+        if ( !existeDoctor || dniNulo) {
+            attr.addFlashAttribute("msgDanger","El DNI del doctor ingresado no existe o no puede ser nulo");
+            String retorno = "redirect:/administrador/editarDoctorPagina?id="+ idNecesario;
+            System.out.println("DNI NULO ");
+            return retorno;
+        } else if (correoDuplicado) {
+            model.addAttribute("msgDanger","El correo del doctor ingresado ya existe");
             model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected", idEspecialidadParaFuncionarElSelected);
+            System.out.println("EXISTECORREO");
+            return "administrador/editarDoctor";
+        } else if (a > 0) {
+            System.out.println("ALGUN ERROR ESTA SALTANDO");
+            model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("idEspecialidadParaQueFuncioneSelected", idEspecialidadParaFuncionarElSelected);
             return "administrador/editarDoctor";
         } else {
             attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-            usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(), doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId());
+            usuarioRepository.editarDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(), Integer.parseInt(especialidad), doctor.getDireccion() ,doctor.getId(), usuarioSession.getSedesIdsedes().getId() );
             return "redirect:/administrador/usuarios";
         }
-
-
     }
 
-    /*
-    @PostMapping("/crearDoctor")
-    public String crearDoctor(
-            @RequestParam("sede") int sede,
-            @RequestParam("edad") int edad,
-            @RequestParam("direccion") String direccion,
-            @RequestParam("sexo") String sexo,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("especialidad") int especialidad,
-            @RequestParam("telefono") String telefono,
-            RedirectAttributes attr
-
-    ){
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctores();
-        System.out.println(nombre);
-        boolean existeDoctor = false;
-        for (Usuario doctor : listaDoctores) {
-            if (dni.equalsIgnoreCase(doctor.getId()) ) {
-                existeDoctor = true;
-            }
-        }
-
-
-        if ( existeDoctor) {
-            attr.addFlashAttribute("msgDanger","El doctor ingresado ya existe");
-            return "redirect:/administrador/usuarios";
-        } else {
-            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-            String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearDoctor( email,  nombre,  apellido,  telefono,  especialidad,  dni,  sede, edad, direccion, sexo, contrasena );
-            attr.addFlashAttribute("msg","Doctor creado exitosamente");
-            return "redirect:/administrador/usuarios";
-        }
-    }*/
-
-
     @GetMapping("/crearDoctorPagina")
-    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, RedirectAttributes attr, HttpServletRequest httpServletRequest){
-        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+    public String crearDoctorPagina(Model model, @ModelAttribute("doctor") Usuario doctor, @ModelAttribute("especialidad") String especialidad, HttpServletRequest httpServletRequest){
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
         model.addAttribute("listaEspecialidades",listaEspecialidades);
         return "administrador/crearDoctor";
     }
 
     @PostMapping("/crearDoctor")
     public String crearDoctor(
-            @ModelAttribute("doctor") @Valid Usuario doctor,
-            BindingResult bindingResult,
+            @ModelAttribute("doctor") Usuario doctor,
+            @RequestParam(value = "especialidad", required = false) String especialidad,
             RedirectAttributes attr,
             Model model,
             HttpServletRequest httpServletRequest
-
     ){
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        /*
+
+        //List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        List<Integer> especialidadesxSedeId = sedeHasEspecialidadeRepository.listarEspecialidadesPorId(usuarioSession.getSedesIdsedes().getId());
+        ArrayList<Especialidade> listaEspecialidades = new ArrayList<>();
+        for(int i=0;i<especialidadesxSedeId.size();i++){
+            listaEspecialidades.add(especialidadRepository.obtenerEspecialidadId(especialidadesxSedeId.get(i)));
+        }
+
+        Regex regex = new Regex();
+
         int a = 0;
-        if(doctor.getNombre().isEmpty()){
-            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
-            a = a+1;
-        }
-        if(doctor.getApellido().isEmpty()){
-            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
-            a = a+1;
-        }
-        if (doctor.getEmail().isEmpty()){
-            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
-            a = a+1;
-        }
-        if (doctor.getEdad() == null){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            a = a+1;
-        } else {
-            if (doctor.getEdad()  <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                a = a+1;
-            }
-        }
-        if (doctor.getTelefono().isEmpty()){
-            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
-            a = a+1;
-        }
-        if (doctor.getTelefono().length()!=9){
-            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
-            a = a+1;
-        }
-        if(doctor.getDireccion().isEmpty()) {
-            attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
-            a = a+1;
-        }
-        if(doctor.getId().isEmpty()){
-            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
-            a = a+1;
-        } else if (doctor.getId().length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
-            a = a+1;
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(doctor.getId());
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
-                a = a+1;
-            }
-        }
-        if(a == 0){
-            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-            String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearDoctor( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasena );
-            attr.addFlashAttribute("msg","doctor creado exitosamente");
-            return "redirect:/administrador/usuarios";
-        }else {
-            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "administrador/crearPaciente";
-        }*/
-        int a = 0;
-        if (doctor.getEdad()!=null){
-            if (doctor.getEdad()<0) {
-                model.addAttribute("edadmsg","La edad debe ser un numero entero positivo");
-                a = a+1;
-            }
-
-
-        }
-
-        try {
-            int dniEntero = Integer.parseInt(doctor.getId());
-            if (dniEntero<0){
-                model.addAttribute("dnimsg","Deber ser un numero de DNI valido de maximo 8 digitos");
-            }
-        } catch (NumberFormatException e) {
-            model.addAttribute("dnimsg","Deber ser un numero de DNI valido de maximo 8 digitos");
-            a = a + 1;
-        }
-
-
-        try {
-            int telefonoEntero = Integer.parseInt(doctor.getTelefono());
-        } catch (NumberFormatException e) {
-            model.addAttribute("telefonomsg","El telefono debe ser un numero entero de máximo 9 digitos");
-            a = a + 1;
-        }
-
-
-        List<Usuario> listaDoctores = usuarioRepository.obtenerlistaDoctoresAdmin(usuarioSession.getSedesIdsedes().getId());
+        //VALIDACION EXISTE PACIENTE
         boolean existeDoctor = false;
-        for (Usuario doctorLista : listaDoctores) {
-            if (doctor.getId().equalsIgnoreCase(doctorLista.getId()) ) {
-                existeDoctor = true;
+        if  ( doctor.getId()!=null && (!doctor.getId().isBlank())) {
+            System.out.println("########################");
+            System.out.println("########################");
+            System.out.println(doctor.getId());
+            System.out.println("########################");
+            System.out.println("########################");
+            try {
+                int dniEntero = Integer.parseInt(doctor.getId());
+                if ( (dniEntero<10000000) || (dniEntero>99999999)){ //  11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
+                    a = a + 1;
+                } else {
+                    List<Usuario> listaPacientes = usuarioRepository.findAll();
+                    for (Usuario pacienteLista : listaPacientes) {
+                        if (doctor.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
+                            existeDoctor = true;
+                            break;
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
+                a = a + 1;
             }
+        } else {
+            model.addAttribute("dnimsg","El DNI no puede ser nulo");
+            a = a + 1;
         }
+        //VALIDACION EXISTE PACIENTE
 
-        if ( existeDoctor && bindingResult.hasErrors()) {
-            attr.addFlashAttribute("msgDanger","El doctor ingresado ya existe");
-            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        //VALIDACION EXISTE CORREO
+        boolean existeCorreo = false;
+        if  ( doctor.getEmail()!=null && (!doctor.getEmail().isBlank())) {
+
+            System.out.println("########################");
+            System.out.println("########################");
+            System.out.println(doctor.getEmail());
+            System.out.println("########################");
+            System.out.println("########################");
+            if ( doctor.getEmail().length() > 100  ||  (!regex.emailValid(doctor.getEmail()))) {
+                model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
+                a = a + 1;
+            } else {
+                List<Usuario> listaPacientes = usuarioRepository.findAll();
+                for (Usuario pacienteLista : listaPacientes) {
+                    if (doctor.getEmail().equals(pacienteLista.getEmail()) ) {
+                        existeCorreo=true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            model.addAttribute("emailmsg","El correo no puede ser nulo");
+            a = a + 1;
+        }
+        //VALIDACION EXISTE CORREO
+
+        //VALIDACION NOMBRE
+        if(doctor.getNombre() == null || doctor.getNombre().isBlank()){
+            model.addAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getNombre().length() > 45 ){  // || !regex.inputisValid(doctor.getNombre())
+            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION NOMBRE
+
+
+        //VALIDACION APELLIDO
+        if(doctor.getApellido() == null || doctor.getApellido().isBlank()){
+            model.addAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getApellido().length() > 45 ){   // || !regex.inputisValid(doctor.getApellido())
+            model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION APELLIDO
+
+        //VALIDACION NUMERO COLEGIATURA O CEDULA DOCTOR
+        List<String> listaTodasCedulasDoctor = usuarioRepository.obtenerTodasCedulasDoctor();
+        if(doctor.getCeduladoctor() == null || doctor.getCeduladoctor().isBlank()){
+            model.addAttribute("ceduladoctormsg","El número de colegiatura no puede ser nulo");
+            a = a+1;
+        } else if (!regex.cedulaDoctorValid(doctor.getCeduladoctor()) ){   // || !regex.inputisValid(doctor.getApellido())
+            model.addAttribute("ceduladoctormsg","El número de colegiatura ingresado es inválido. Deben ser solo números entre 5 y 45 dígitos");
+            a = a+1;
+        } else if ( listaTodasCedulasDoctor.contains(doctor.getCeduladoctor())) {
+            model.addAttribute("ceduladoctormsg","El número de colegiatura ingresado ya existe");
+            a = a+1;
+        }
+        //VALIDACION NUMERO COLEGIATURA O CEDULA DOCTOR
+
+
+
+        //VALIDACION DIRECCION
+        if(doctor.getDireccion() == null || doctor.getDireccion().isBlank() ){
+            model.addAttribute("direccionmsg","La dirección no puede ser nulo");
+            a = a+1;
+        } else if (doctor.getDireccion().length() > 200 ){
+            model.addAttribute("direccionmsg","La dirección debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION DIRECCION
+
+
+        //VALIDACION SEXO
+        if(doctor.getSexo() == null || doctor.getSexo().isBlank() ){
+            model.addAttribute("sexomsg","El sexo del paciente no puede ser nulo");
+            a = a+1;
+        } else if ( !doctor.getSexo().equals("F") && !doctor.getSexo().equals("M") ){
+            model.addAttribute("sexomsg","El sexo debe ser masculino o femenino");
+            a = a+1;
+        }
+        System.out.println(doctor.getSexo());
+        //VALIDACION SEXO
+
+
+        //VALIDACION TELEFONO
+        if ( doctor.getTelefono() != null  && (!doctor.getTelefono().isBlank()) ) {
+            try {
+                int telefonoEntero = Integer.parseInt(doctor.getTelefono());
+                if (telefonoEntero > 999999999 || telefonoEntero < 9999999 ) {
+                    model.addAttribute("telefonomsg","El teléfono debe ser un número entero de máximo 9 digitos");
+                    a = a + 1;
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("telefonomsg","El teléfono debe ser un número entero de máximo 9 digitos");
+                a = a + 1;
+            }
+        } else {
+            model.addAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a = a + 1;
+        }
+        //VALIDACION TELEFONO
+
+
+        //VALIDACION FECHA NACIMIENTO
+        if (doctor.getFechaNacimiento()!=null && !doctor.getFechaNacimiento().isBlank()){
+            System.out.println(doctor.getFechaNacimiento());
+            //SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
+            // formatoDeseado = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                LocalDate fechaRecibidaDate = LocalDate.parse(doctor.getFechaNacimiento());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaRecibidaDate.format(formatter);
+                LocalDate fechaFormateadaDate = LocalDate.parse(fechaFormateada, formatter);
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaMayorEdad = fechaActual.minusYears(28);
+                //copiar esto para crear paciente porque paciente aun usa solo Date y no LocalDate
+                boolean esFechaValida = !fechaFormateadaDate.isAfter(fechaMayorEdad);
+                if (!esFechaValida) {
+                    model.addAttribute("nacimientomsg", "La fecha seleccionada debe corresponder con la mayoria de edad.");
+                    a = a + 1;
+                }
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                model.addAttribute("nacimientomsg","La informacion ingresada no es valida");
+                a = a + 1;
+            }
+        } else {
+            model.addAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
+            a = a+1;
+        }
+        //VALIDACION FECHA NACIMIENTO
+
+        //VALIDACION ESPECIALIDAD
+        if ( especialidad != null  && (!especialidad.isBlank()) ) {
+            try {
+                int especialidadEntero = Integer.parseInt(especialidad);
+                if (especialidadEntero < 1 || (!especialidadesxSedeId.contains(especialidadEntero)) ) {
+                    model.addAttribute("especialidadmsg","Especialidad no existente en la sede");
+                    a = a + 1;
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("especialidadmsg","Valor de especialidad invalido");
+                a = a + 1;
+            }
+        } else {
+            model.addAttribute("especialidadmsg","La especialidad no puede ser nulo");
+            a = a + 1;
+        }
+        //VALIDACION ESPECIALIDAD
+
+        if (existeDoctor) {
+            model.addAttribute("msgDanger","El DNI del doctor ingresado ya existe");
+            System.out.println(existeDoctor);
             model.addAttribute("listaEspecialidades",listaEspecialidades);
             return "administrador/crearDoctor";
-        } else if (bindingResult.hasErrors()) {
-            List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        } else if (existeCorreo) {
+            model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("msgDanger","El correo del doctor ingresado ya existe");
+            return "administrador/crearDoctor";
+        } else if (existeDoctor && existeCorreo) {
+            model.addAttribute("listaEspecialidades",listaEspecialidades);
+            model.addAttribute("msgDanger","El DNI y correo del doctor ingresado ya existe");
+            return "administrador/crearDoctor";
+        } else if (a > 0) {
             model.addAttribute("listaEspecialidades",listaEspecialidades);
             return "administrador/crearDoctor";
         } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(doctor.getFechaNacimiento());
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
+            System.out.println("contrasena creada para doctor de id " + doctor.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  doctor.getEspecialidadesIdEspecialidad().getId(),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), doctor.getEdad(), doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
+            usuarioRepository.crearDoctor( doctor.getEmail(),  doctor.getNombre(),  doctor.getApellido(),  doctor.getTelefono(),  Integer.parseInt(especialidad),  doctor.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, doctor.getDireccion(), doctor.getSexo(), contrasenaBCrypt );
+
+
+            CometChatApi cometChatApi = new CometChatApi();
+            String dniAPI = doctor.getId();
+            String nameAPI = "Dr. " + doctor.getNombre() + " " + doctor.getApellido();
+
+            try {
+                cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN LA CREACION DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
+                e.printStackTrace();
+                //throw new RuntimeException(e);
+            }
+
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+            List<String> listaUIDsDeCometChat = new ArrayList<>();
+            List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIPacientesyAdministrativosSegunSede(usuarioSession.getSedesIdsedes().getId());
+            try {
+                Gson gson = new Gson();
+                String response = cometChatApi.listarUsuariosEnCometChat();
+                Root root = gson.fromJson(response,Root.class);
+                //System.out.println(root);
+                //java.lang.reflect.Type listaDataJson = new com.google.gson.reflect.TypeToken<List<Data>>(){}.getType();
+                //List<Data> listaData = gson.fromJson(response, listaDataJson);
+                List<Data> listaData = root.getData();
+                for (Data data :  listaData) {
+                    listaUIDsDeCometChat.add(data.getUid());
+                }
+                System.out.println(listaUIDsDeCometChat);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                e.printStackTrace();
+                //throw new RuntimeException(e);
+            }
+
+            List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+            listaUIDsComun.retainAll(listaUIDsDeCometChat);
+            String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+            String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+            System.out.println(arregloListaUIDsComunEnString);
+            //String resultado = "\"" + String.join("\", \"", arregloListaUIDsComunEnString) + "\"";
+            //String resultado = "[" + String.join(", ", Arrays.stream(arregloListaUIDsComun).map(s -> "\\\"" + s.replaceAll("\"", "\\\\\\\\\"") + "\\\"").toArray(String[]::new)) + "]";
+            //System.out.println(resultado);
+            try {
+                cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN anadir amigos DE USUARIO DOCTOR EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR DOCTOR");
+                e.printStackTrace();
+            }
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+
+
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO DOCTOR (AVATAR.JPE)
+
+            String id = doctor.getId();
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            String firmaImagePath = "src/main/resources/static/img/team/subasufirma.JPG";
+            String nombreArchivoFima = "fotosFirma/firma-" + id;
+
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+
+                File imageFileFirma = new File(firmaImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataFirma = FileUtils.readFileToByteArray(imageFileFirma);
+                Storage storageFirma = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketFirma = storageFirma.get("wenas", Storage.BucketGetOption.fields());
+                bucketFirma.create(nombreArchivoFima + ".jpeg", fileDataFirma);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+
+            }
+
+
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = doctor.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                System.out.println("ERROR al enviar correo. crear doctor");
+                //return "redirect:/administrador/usuarios";
+            }
+
+
             attr.addFlashAttribute("msg","Doctor creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
     }
 
-
-
-
-    /*
-    @PostMapping("/editarPaciente")
-    public String editarPaciente(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("telefono") String telefono,
-            RedirectAttributes attr
-
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente( email,  nombre,  apellido,  telefono, dni,  sede );
-        return "redirect:/administrador/usuarios";
-    }
-    */
 
     @GetMapping("/editarPacientePagina")
     public String editarPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr, HttpServletRequest httpServletRequest){
@@ -341,7 +704,7 @@ public class AdministradorController {
         if (optPaciente.isPresent()){
             paciente = optPaciente.get();
             model.addAttribute("paciente",paciente);
-            httpServletRequest.getSession().setAttribute("idDelUsuarioAEditar", dni);
+            httpServletRequest.getSession().setAttribute("idDelPacienteAEditar", dni);
             return "administrador/editarPacientePRUEBA";
         } else {
             attr.addFlashAttribute("msgDanger","El paciente a editar no existe");
@@ -370,21 +733,21 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(paciente.getId());
-                if (dniEntero<0 || dniEntero>99999999){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos aaaa");
+                if (dniEntero<10000000 || dniEntero>99999999){ // 11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
-                    List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+                    List<Usuario> listaPacientes = usuarioRepository.findAll();
 
                     for (Usuario pacienteLista : listaPacientes) {
                         if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
                             existePaciente = true;
-
+                            break;
                         }
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos xd");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                 a = a + 1;
             }
         } else {
@@ -392,7 +755,8 @@ public class AdministradorController {
             dniNulo = true;
         }
 
-        boolean existeCorreo = false;
+        boolean correoDuplicado = false;
+        int contadorDuplicadosCorreo = 0;
         if  ( paciente.getEmail()!=null && (!paciente.getEmail().isBlank())) {
             System.out.println("########################");
             System.out.println("########################");
@@ -403,10 +767,18 @@ public class AdministradorController {
                 model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
                 a = a + 1;
             } else {
-                List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-                for (Usuario pacienteLista : listaPacientes) {
-                    if (paciente.getEmail().equals(pacienteLista.getEmail()) ) {
-                        existeCorreo= true;
+                if ( !dniNulo  && existePaciente) {
+                    List<Usuario> listaPacientes = usuarioRepository.findAll();
+                    for (Usuario pacienteLista : listaPacientes) {
+                        if (paciente.getEmail().equals(pacienteLista.getEmail()) ) {
+                            if ( !paciente.getId().equals(pacienteLista.getId())) {
+                                contadorDuplicadosCorreo = contadorDuplicadosCorreo + 1;
+                            }
+
+                        }
+                    }
+                    if (contadorDuplicadosCorreo > 0) {
+                        correoDuplicado = true;
                     }
                 }
             }
@@ -417,23 +789,38 @@ public class AdministradorController {
         }
 
 
-
+        //VALIDACION NOMBRE
         if(paciente.getNombre() == null || paciente.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (paciente.getNombre().length() > 45 || !regex.inputisValid(paciente.getNombre())){
+        } else if (paciente.getNombre().length() > 45 ){ // || !regex.inputisValid(paciente.getNombre())
             model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
+        //VALIDACION NOMBRE
 
+        //VALIDACION APELLIDO
         if(paciente.getApellido() == null || paciente.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (paciente.getApellido().length() > 45 || !regex.inputisValid(paciente.getApellido())){
+        } else if (paciente.getApellido().length() > 45 ){ //  || !regex.inputisValid(paciente.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
+        //VALIDACION APELLIDO
 
+        //VALIDACION DIRECCION
+        if(paciente.getDireccion() == null || paciente.getDireccion().isBlank() ){
+            model.addAttribute("direccionmsg","La dirección no puede ser nulo");
+            a = a+1;
+        } else if (paciente.getDireccion().length() > 200 ){
+            model.addAttribute("direccionmsg","La dirección debe ser un conjunto de caracteres valido de máximo 45 letras");
+            a = a+1;
+        }
+        //VALIDACION DIRECCION
+
+
+        //VALIDACION TELEFONO
         if ( paciente.getTelefono() != null  && (!paciente.getTelefono().isBlank()) ) {
             try {
                 int telefonoEntero = Integer.parseInt(paciente.getTelefono());
@@ -449,7 +836,9 @@ public class AdministradorController {
             model.addAttribute("telefonomsg","El teléfono no puede ser nulo");
             a = a + 1;
         }
-        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelUsuarioAEditar");
+        //VALIDACION TELEFONO
+
+        String idNecesario = (String) httpServletRequest.getSession().getAttribute("idDelPacienteAEditar");
         System.out.println(idNecesario);
         /*
         Usuario usuarioParaEnviarEstado = usuarioRepository.findByid(idNecesario);
@@ -459,225 +848,39 @@ public class AdministradorController {
             String retorno = "redirect:/administrador/editarPacientePagina?id="+ idNecesario;
             System.out.println("DNI NULO ");
             return retorno;
-        } /*
-        else if (existeCorreo) {
+        } else if (correoDuplicado) {
             model.addAttribute("msgDanger","El correo del paciente ingresado ya existe");
             System.out.println("EXISTECORREO");
             return "administrador/editarPacientePRUEBA";
-            */
-        else if (a > 0) {
+        } else if (a > 0) {
             System.out.println("ALGUN ERROR ESTA SALTANDO");
             return "administrador/editarPacientePRUEBA";
         } else {
             attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), usuarioSession.getSedesIdsedes().getId() );
+            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getDireccion() ,paciente.getId(), usuarioSession.getSedesIdsedes().getId() );
             return "redirect:/administrador/usuarios";
         }
 
     }
-
-
-    /*
-    @PostMapping("/editarPaciente")
-    public String editarPaciente(
-           @ModelAttribute("paciente") @Valid Usuario paciente,
-            BindingResult bindingResult,
-            RedirectAttributes attr,
-            Model model,
-            HttpServletRequest httpServletRequest
-    ){
-        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-        if(bindingResult.hasErrors()){
-            return "administrador/editarPaciente";
-        } else {
-            attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-            usuarioRepository.editarPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(), usuarioSession.getSedesIdsedes().getId() );
-            return "redirect:/administrador/usuarios";
-        }
-    }
-
-
-    @PostMapping("/crearPaciente")
-    public String crearPaciente(
-            @RequestParam("sede") int sede,
-            @RequestParam("edad") int edad,
-            @RequestParam("direccion") String direccion,
-            @RequestParam("sexo") String sexo,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("telefono") String telefono,
-            RedirectAttributes attr
-
-    ){
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes();
-        System.out.println(nombre);
-        boolean existePaciente = false;
-        for (Usuario paciente : listaPacientes) {
-            if (dni.equalsIgnoreCase(paciente.getId()) ) {
-                existePaciente = true;
-            }
-        }
-
-
-        if ( existePaciente) {
-            attr.addFlashAttribute("msgDanger","El paciente ingresado ya existe");
-            return "redirect:/administrador/usuarios";
-        } else {
-            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-            String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearPaciente( email,  nombre,  apellido,  telefono, dni,  sede, edad, direccion, sexo, contrasena );
-            attr.addFlashAttribute("msg","Paciente creado exitosamente");
-            return "redirect:/administrador/usuarios";
-        }
-    }
-    */
 
     @GetMapping("/crearPacientePagina")
     public String crearPacientePagina(Model model, @ModelAttribute("paciente") Usuario paciente,
-                                      @ModelAttribute("edadParam") String edad,
                                       RedirectAttributes attr){
         return "administrador/crearPacientePRUEBA";
     }
 
-
-    /*
-    @PostMapping("/crearPaciente")
-    public String crearPaciente(
-            @ModelAttribute("paciente") @Valid Usuario paciente,
-            BindingResult bindingResult,
-            RedirectAttributes attr,
-            Model model,
-            HttpServletRequest httpServletRequest
-
-    ){
-        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-
-        int a = 0;
-        if(paciente.getNombre().isEmpty()){
-            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
-            a = a+1;
-        }
-        if(paciente.getApellido().isEmpty()){
-            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
-            a = a+1;
-        }
-        if (paciente.getEmail().isEmpty()){
-            attr.addFlashAttribute("correomsg","El correo no puede ser nulo");
-            a = a+1;
-        }
-        if (paciente.getEdad() == null){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            a = a+1;
-        } else {
-            if (paciente.getEdad()  <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                a = a+1;
-            }
-        }
-        if (paciente.getTelefono().isEmpty()){
-            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
-            a = a+1;
-        }
-        if (paciente.getTelefono().length()!=9){
-            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
-            a = a+1;
-        }
-        if(paciente.getDireccion().isEmpty()) {
-            attr.addFlashAttribute("addressmsg","La dirección no puede ser nula");
-            a = a+1;
-        }
-        if(paciente.getId().isEmpty()){
-            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
-            a = a+1;
-        } else if (paciente.getId().length()!=8) {
-            attr.addFlashAttribute("dnimsg","El DNI tiene que tener 8 dígitos");
-            a = a+1;
-        } else {
-            Optional<Usuario> u = usuarioRepository.findById(paciente.getId());
-            if(u.isPresent()){
-                attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
-                a = a+1;
-            }
-        }
-        if(a == 0){
-            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-            String contrasena = generadorDeContrasenha.crearPassword();
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  paciente.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasena );
-            attr.addFlashAttribute("msg","Paciente creado exitosamente");
-            return "redirect:/administrador/usuarios";
-        }else {
-            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "administrador/crearPaciente";
-        }
-
-
-        int a = 0;
-        if (paciente.getEdad()!=null){
-           if (paciente.getEdad()<0) {
-               model.addAttribute("edadmsg","La edad debe ser un numero entero positivo");
-               a = a+1;
-           }
-
-
-        }
-        try {
-            int dniEntero = Integer.parseInt(paciente.getId());
-            if (dniEntero<0){
-                model.addAttribute("dnimsg","Deber ser un numero de DNI valido de maximo 8 digitos");
-            }
-        } catch (NumberFormatException e) {
-            model.addAttribute("dnimsg","Deber ser un numero de DNI valido de maximo 8 digitos");
-            a = a + 1;
-        }
-        try {
-            int telefonoEntero = Integer.parseInt(paciente.getTelefono());
-        } catch (NumberFormatException e) {
-            model.addAttribute("telefonomsg","El telefono debe ser un numero entero de máximo 9 digitos");
-            a = a + 1;
-        }
-
-
-        List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-        boolean existePaciente = false;
-        for (Usuario pacienteLista : listaPacientes) {
-            if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
-                existePaciente = true;
-            }
-        }
-
-
-
-        if ( existePaciente && bindingResult.hasErrors()) {
-            attr.addFlashAttribute("msgDanger","El paciente ingresado ya existe");
-            return "administrador/crearPaciente";
-        } else if (bindingResult.hasErrors()) {
-            return "administrador/crearPaciente";
-        } else {
-            GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-            String contrasena = generadorDeContrasenha.crearPassword();
-            String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), paciente.getEdad(), paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
-            attr.addFlashAttribute("msg","Paciente creado exitosamente");
-            return "redirect:/administrador/usuarios";
-        }
-
-    }  */
-
-
     @PostMapping("/crearPaciente")
     public String crearPaciente(
             @ModelAttribute("paciente") Usuario paciente,
-            @ModelAttribute("edadParam") String edad,
             RedirectAttributes attr,
             Model model,
             HttpServletRequest httpServletRequest
 
-    ){
+    ) {
         Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         int a = 0;
+        //VALIDACION EXISTE PACIENTE
         boolean existePaciente = false;
         if  ( paciente.getId()!=null && (!paciente.getId().isBlank())) {
             System.out.println("########################");
@@ -687,30 +890,32 @@ public class AdministradorController {
             System.out.println("########################");
             try {
                 int dniEntero = Integer.parseInt(paciente.getId());
-                if (dniEntero<0 || dniEntero>99999999){
-                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos aaaa");
+                if ( (dniEntero<10000000) || (dniEntero>99999999)){ //10000000 11111111
+                    model.addAttribute("dnimsg","Deber ser un número de DNI válido de 8 dígitos");
                     a = a + 1;
                 } else {
-                    List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
-
+                    List<Usuario> listaPacientes = usuarioRepository.findAll();
                     for (Usuario pacienteLista : listaPacientes) {
                         if (paciente.getId().equalsIgnoreCase(pacienteLista.getId()) ) {
                             existePaciente = true;
-
+                            break;
                         }
                     }
                 }
             } catch (NumberFormatException e) {
-                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos xd");
+                model.addAttribute("dnimsg","Deber ser un número de DNI válido de maximo 8 dígitos");
                 a = a + 1;
             }
         } else {
             model.addAttribute("dnimsg","El DNI no puede ser nulo");
             a = a + 1;
         }
+        //VALIDACION EXISTE PACIENTE
 
+        //VALIDACION EXISTE CORREO
         boolean existeCorreo = false;
         if  ( paciente.getEmail()!=null && (!paciente.getEmail().isBlank())) {
+
             System.out.println("########################");
             System.out.println("########################");
             System.out.println(paciente.getEmail());
@@ -720,10 +925,11 @@ public class AdministradorController {
                 model.addAttribute("emailmsg","El correo es de máximo 100 caracteres válidos. Es necesario el caracter @");
                 a = a + 1;
             } else {
-                List<Usuario> listaPacientes = usuarioRepository.obtenerListaPacientes2(usuarioSession.getSedesIdsedes().getId());
+                List<Usuario> listaPacientes = usuarioRepository.findAll();
                 for (Usuario pacienteLista : listaPacientes) {
                     if (paciente.getEmail().equals(pacienteLista.getEmail()) ) {
-                        existeCorreo= true;
+                        existeCorreo=true;
+                        break;
                     }
                 }
             }
@@ -731,25 +937,30 @@ public class AdministradorController {
             model.addAttribute("emailmsg","El correo no puede ser nulo");
             a = a + 1;
         }
+        //VALIDACION EXISTE CORREO
 
-
-
+        //VALIDACION NOMBRE
         if(paciente.getNombre() == null || paciente.getNombre().isBlank()){
             model.addAttribute("nombremsg","El nombre no puede ser nulo");
             a = a+1;
-        } else if (paciente.getNombre().length() > 45 || !regex.inputisValid(paciente.getNombre())){
-            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras");
+        } else if (paciente.getNombre().length() > 45 ){  //   || !regex.inputisValid(paciente.getNombre())
+            model.addAttribute("nombremsg","El nombre debe ser un conjunto de caracteres valido de máximo 45 letras.");
             a = a+1;
         }
+        //VALIDACION NOMBRE
 
+
+        //VALIDACION APELLIDO
         if(paciente.getApellido() == null || paciente.getApellido().isBlank()){
             model.addAttribute("apellidomsg","El apellido no puede ser nulo");
             a = a+1;
-        } else if (paciente.getApellido().length() > 45 || !regex.inputisValid(paciente.getApellido())){
+        } else if (paciente.getApellido().length() > 45 ){  //   || !regex.inputisValid(paciente.getApellido())
             model.addAttribute("apellidomsg","El apellido debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
+        //VALIDACION APELLIDO
 
+        //VALIDACION DIRECCION
         if(paciente.getDireccion() == null || paciente.getDireccion().isBlank() ){
             model.addAttribute("direccionmsg","La dirección no puede ser nulo");
             a = a+1;
@@ -757,7 +968,10 @@ public class AdministradorController {
             model.addAttribute("direccionmsg","La dirección debe ser un conjunto de caracteres valido de máximo 45 letras");
             a = a+1;
         }
+        //VALIDACION DIRECCION
 
+
+        //VALIDACION SEXO
         if(paciente.getSexo() == null || paciente.getSexo().isBlank() ){
             model.addAttribute("sexomsg","El sexo del paciente no puede ser nulo");
             a = a+1;
@@ -766,11 +980,10 @@ public class AdministradorController {
             a = a+1;
         }
         System.out.println(paciente.getSexo());
+        //VALIDACION SEXO
 
 
-
-
-
+        //VALIDACION TELEFONO
         if ( paciente.getTelefono() != null  && (!paciente.getTelefono().isBlank()) ) {
             try {
                 int telefonoEntero = Integer.parseInt(paciente.getTelefono());
@@ -786,26 +999,34 @@ public class AdministradorController {
             model.addAttribute("telefonomsg","El teléfono no puede ser nulo");
             a = a + 1;
         }
+        //VALIDACION TELEFONO
 
-        Integer edadEntero = 0;
-        if (edad!=null && !edad.isBlank()){
+
+        //VALIDACION FECHA NACIMIENTO
+        if (paciente.getFechaNacimiento()!=null && !paciente.getFechaNacimiento().isBlank()){
+            System.out.println();
+            SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                edadEntero = Integer.parseInt(edad);
-                if (edadEntero<0 || edadEntero>120) {
-                    model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
-                    a = a+1;
+                Date fechanacimientoDate = formatoRecibido.parse(paciente.getFechaNacimiento());
+                java.sql.Date sqlDate = new java.sql.Date(fechanacimientoDate.getTime());
+                System.out.println("Fecha Nacimiento exitoso SQL: " + sqlDate);
+                Date fechaActual = new Date();
+                if (fechanacimientoDate.after(fechaActual)) {
+                    model.addAttribute("nacimientomsg", "La fecha seleccionada debe ser pasada o igual a la fecha actual.");
+                    a = a + 1;
                 }
-            } catch (NumberFormatException e) {
-                model.addAttribute("edadmsg","La edad debe ser un número entero entre 0 y 120 años");
+            } catch (ParseException e) {
+                e.printStackTrace();
+                model.addAttribute("nacimientomsg","La informacion ingresada no es valida");
                 a = a + 1;
             }
-
         } else {
-            model.addAttribute("edadmsg","La edad no puede ser nulo");
+            model.addAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
             a = a+1;
         }
+        //VALIDACION FECHA NACIMIENTO
 
-        if ( existePaciente) {
+        if (existePaciente) {
             model.addAttribute("msgDanger","El DNI del paciente ingresado ya existe");
             System.out.println(existePaciente);
             return "administrador/crearPacientePRUEBA";
@@ -818,57 +1039,241 @@ public class AdministradorController {
         } else if (a > 0) {
             return "administrador/crearPacientePRUEBA";
         } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(paciente.getFechaNacimiento());
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
             GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
             String contrasena = generadorDeContrasenha.crearPassword();
+            System.out.println("contrasena creada para paciente de id " + paciente.getId() + " es: " + contrasena);
             String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), edadEntero, paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt );
+
+            //CREACION HISTORIAL MEDICO POR DEFECTO ASIGNADO A PACIENTE;
+            Historialmedico historialmedicoDefecto = new Historialmedico();
+            Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(7);
+            Seguro seguroDefecto = seguroDefectoOpt.get();
+            historialmedicoDefecto.setValidahistorial(true);
+            historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+            Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+            int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+
+            //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+            usuarioRepository.crearPaciente( paciente.getEmail(),  paciente.getNombre(),  paciente.getApellido(),  paciente.getTelefono(), paciente.getId(),  usuarioSession.getSedesIdsedes().getId(), fechaFormateada, paciente.getDireccion() , paciente.getSexo(), contrasenaBCrypt,idReciengenerado,7,"invitado"); //seguro: sin seguro cuando lo creo yo
+
+
+            CometChatApi cometChatApi = new CometChatApi();
+            String dniAPI = paciente.getId();
+            String nameAPI = "Paciente " + paciente.getNombre() + " " + paciente.getApellido();
+            try {
+                cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR PACIENTE");
+                throw new RuntimeException(e);
+            }
+
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+            List<String> listaUIDsDeCometChat = new ArrayList<>();
+            List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+            try {
+                Gson gson = new Gson();
+                String response = cometChatApi.listarUsuariosEnCometChat();
+                Root root = gson.fromJson(response,Root.class);
+                List<Data> listaData = root.getData();
+                for (Data data :  listaData) {
+                    listaUIDsDeCometChat.add(data.getUid());
+                }
+                System.out.println(listaUIDsDeCometChat);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                e.printStackTrace();
+                //throw new RuntimeException(e);
+            }
+
+            List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+            listaUIDsComun.retainAll(listaUIDsDeCometChat);
+            String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+            String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+            System.out.println(arregloListaUIDsComunEnString);
+            try {
+                cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+            } catch (IOException | InterruptedException e) {
+                System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. METODO CREAR paciente");
+                e.printStackTrace();
+            }
+            //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+            String id = paciente.getId();
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
+
+            //ENVIAR CORREO CON CONTRASEÑA A PACIENTE RECIEN CREADO
+            String destinatario = paciente.getEmail() ;
+            String asunto = "Invitación a la plataforma de Medical-Tec";
+            try {
+                correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+            } catch (MessagingException e) {
+                // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                e.printStackTrace();
+                System.out.println("ERROR al enviar correo. crear paciente");
+                //return "redirect:/administrador/usuarios";
+            }
+
+
+
             attr.addFlashAttribute("msg","Paciente creado exitosamente");
             return "redirect:/administrador/usuarios";
         }
 
+
     }
 
     @GetMapping("/historialPaciente")
-    public String verHistorial(Model model, @RequestParam("id") String id){
+    public String verHistorial(Model model, @RequestParam("id") String id,RedirectAttributes attr){
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-        Usuario usuario = optionalUsuario.get();
-        model.addAttribute("paciente",usuario);
+        if (optionalUsuario.isPresent()){
+            Usuario usuario = optionalUsuario.get();
+            model.addAttribute("paciente",usuario);
 
-
-        if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
-            List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
-            ArrayList<Alergia> listaAlergias = new ArrayList<>();
-            for (Integer idAlergia : idAlergias) {
-                listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+            // Nombre completo del sexo de la persona
+            if(usuario.getSexo().equals("M")){
+                usuario.setSexo("Masculino");
+            }else if (usuario.getSexo().equals("F")){
+                usuario.setSexo("Femenino");
             }
-            model.addAttribute("listaAlergias",listaAlergias);
-            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
 
-            return "administrador/historial";
+            if (usuario.getHistorialmedicoIdhistorialmedico()!= null ) {
+
+                // Obtener alergias
+                List<Integer> idAlergias = historialMedicoHasAlergiaRepository2.listarAlergiasPorId(usuario.getHistorialmedicoIdhistorialmedico().getId());
+                ArrayList<Alergia> listaAlergias = new ArrayList<>();
+                for (Integer idAlergia : idAlergias) {
+                    listaAlergias.add(alergiaRepository.obtenerAlergia(idAlergia));
+                }
+                model.addAttribute("listaAlergias",listaAlergias);
+
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+                StringJoiner stringJoiner = new StringJoiner(", ");
+                for (Alergia alergia : listaAlergias) {
+                    String nombreAlergia = alergia.getNombre();
+                    stringJoiner.add(nombreAlergia);
+                }
+
+                String resultado = stringJoiner.toString();
+                model.addAttribute("resultado",resultado);
+                return "administrador/historial";
+
+            } else {
+                //attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+                //return "redirect:/administrador/usuarios";
+
+                //model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
+
+                //List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
+                //model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
+
+                // Obtener informes y citas por usuario
+                model.addAttribute("informesPorUsuario",informeRepository.listarInformesPorPaciente(usuario.getId()));
+
+                return "administrador/historial";
+            }
 
         } else {
-            model.addAttribute("msgSinHistorial","El usuario no tiene registros de historial clínico");
-            List<Cita> listaCitasPorUsuario = citaRepository.citasPorUsuario(id);
-            model.addAttribute("listaCitasPorUsuario",listaCitasPorUsuario);
-            return "administrador/historial";
+            attr.addFlashAttribute("historial_noexiste","El historial médico a ver no existe");
+            return "redirect:/administrador/usuarios";
         }
-
     }
 
 
 
     @GetMapping("/calendario")
-    public String calendario(){
-
+    public String calendario(HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         return "administrador/calendario";
     }
 
     @GetMapping("/finanzas")
-    public String finanzas(){
-
+    public String finanzas(Model model){
+        model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasPrincipal());
         return "administrador/finanzas";
     }
+
+    @PostMapping("/filtrarFinanzas")
+    public String filtrarFinanzas(Model model,
+                                  @RequestParam("tipoFiltro") String tipoFiltro,
+                                  @RequestParam("filtrado") String filtrado,
+                                  RedirectAttributes attr){
+
+        //validamos segun el filtro padre : tipoFiltro
+        if (tipoFiltro!=null && !tipoFiltro.isBlank()) {
+            try {
+                int filtradoValidado = Integer.parseInt(filtrado);
+                System.out.println(filtradoValidado);
+                System.out.println(Integer.valueOf(filtradoValidado).getClass());
+                switch (tipoFiltro){
+                    case "1":
+                        if ( filtradoValidado>=1 && filtradoValidado<=19) {
+                            model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasEspecialidad(filtradoValidado));
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "2":
+                        if ( filtradoValidado>=1 && filtradoValidado<=7) {
+                            model.addAttribute("listaBoletasDto", boletaRepository.tablaFinanzasSeguro(filtradoValidado));
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "3":
+                        if ( filtradoValidado>=1 && filtradoValidado<=12) {
+                            List<FinanzasDto> tablaFinanzasPorMes = new ArrayList<>();
+                            List<FinanzasDto> tablaFinanzasPrincipal = boletaRepository.tablaFinanzasPrincipal();
+                            for ( FinanzasDto boleta : tablaFinanzasPrincipal  ) {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                LocalDate fechaLocalDate = LocalDate.parse(boleta.getFecha(), formatter);
+                                int mes = fechaLocalDate.getMonthValue();
+                                if (mes == filtradoValidado) {
+                                    tablaFinanzasPorMes.add(boleta);
+                                }
+                            }
+                            model.addAttribute("listaBoletasDto", tablaFinanzasPorMes);
+                            return "administrador/finanzas";
+                        } else {
+                            attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                            return "redirect:/administrador/finanzas";
+                        }
+                    case "0":
+                    default:
+                        attr.addFlashAttribute("msgError","Seleccione un tipo de filtro valido.");
+                        return "redirect:/administrador/finanzas";
+                }
+            } catch (NumberFormatException e) {
+                attr.addFlashAttribute("msgError","Seleccione un filtrado valido.");
+                return "redirect:/administrador/finanzas";
+            }
+        } else {
+            attr.addFlashAttribute("msgError","Seleccione un tipo de filtro valido.");
+            return "redirect:/administrador/finanzas";
+        }
+
+
+
+    }
+
 
     @GetMapping("/mensajeria")
     public String mensajeria(){
@@ -876,7 +1281,7 @@ public class AdministradorController {
         return "administrador/mensajeria";
     }
 
-
+    /*
     @GetMapping("/formatos")
     public String formatos(){
 
@@ -887,7 +1292,7 @@ public class AdministradorController {
     public String notificaciones(){
 
         return "administrador/notificaciones";
-    }
+    }*/
 
     @GetMapping("/settings")
     public String settings(Model model, HttpServletRequest httpServletRequest){
@@ -919,6 +1324,7 @@ public class AdministradorController {
                                  @RequestParam("pass2") String pass2,
                                  @RequestParam("pass3") String pass3, RedirectAttributes attr, HttpServletRequest httpServletRequest)
     {
+        Regex regex = new Regex();
         Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         String passwordAntiguabCrypt = usuarioRepository.buscarPasswordPropioUsuario(usuarioSession.getId());
         //String pass1BCrypt = new BCryptPasswordEncoder().encode(pass1);
@@ -942,13 +1348,153 @@ public class AdministradorController {
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las nuevas contraseñas no coinciden");
             return "redirect:/administrador/password";
-        }else {
+        } else if(!regex.contrasenaisValid(pass2)) {
+            attr.addFlashAttribute("errorPass", "La nueva contraseña no coincide con los requerimientos.");
+            return "redirect:/administrador/password";
+        } else {
             usuarioRepository.cambiarContra(new BCryptPasswordEncoder().encode(pass3), usuarioSession.getId());
             attr.addFlashAttribute("msgContrasenia","Su contraseña ha sido cambiada exitosamente");
             return "redirect:/administrador/settings";
         }
 
     }
+
+    @GetMapping("/listaFormulariosAutoRegistro")
+    public String listaFormulariosAutoRegistro(Model model, HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        List<FormAutoregistro> listaFormulariosAutoRegistroPorInvitar = formAutoregistroRepository.findFormAutoRegistroBySede(usuarioSession.getSedesIdsedes().getId());
+        model.addAttribute("listaFormulariosAutoRegistroPorInvitar",listaFormulariosAutoRegistroPorInvitar);
+        return "administrador/listaFormulariosAutoRegistro";
+    }
+
+    @PostMapping("/guardarFormulariosAutoRegistro")
+    public String guardarFormulariosAutoRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        int idsSonEnterosSuma = 0;
+        if (idsSeleccionados == null)  {
+            attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
+            return "redirect:/administrador/listaFormulariosAutoRegistro";
+        } else {
+            for (String idStr : idsSeleccionados) {
+                try {
+                    Integer idIntPrueba = Integer.parseInt(idStr);
+                } catch (NumberFormatException e){
+                    idsSonEnterosSuma = idsSonEnterosSuma + 1; //hay errores
+                }
+            }
+
+            if (idsSonEnterosSuma > 0) {
+                //hay errores
+                attr.addFlashAttribute("msgDanger","IDs de formularios inválidos");
+                return "redirect:/administrador/listaFormulariosAutoRegistro";
+            } else {
+                for (String idStr : idsSeleccionados) {
+                    // Obtienes el registro por ID desde tu servicio o repositorio
+                    Integer idInt = Integer.parseInt(idStr);
+                    Optional<FormAutoregistro> formAutoregistroOptional = formAutoregistroRepository.findById(idInt);
+                    if (formAutoregistroOptional.isPresent()) {
+                        //CREACION HISTORIAL MEDICO POR DEFECTO
+                        Historialmedico historialmedicoDefecto = new Historialmedico();
+                        Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(formAutoregistroOptional.get().getSeguroid());
+                        Seguro seguroDefecto = seguroDefectoOpt.get();
+                        historialmedicoDefecto.setValidahistorial(true);
+                        historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                        Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                        int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                        //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                        usuarioRepository.crearPaciente( formAutoregistroOptional.get().getCorreo(),  formAutoregistroOptional.get().getNombres(),   formAutoregistroOptional.get().getApellidos(),  formAutoregistroOptional.get().getCelular(), formAutoregistroOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formAutoregistroOptional.get().getFechanacimiento(), formAutoregistroOptional.get().getDomicilio(), formAutoregistroOptional.get().getSexo(), formAutoregistroOptional.get().getContrasenia(),idReciengenerado,seguroDefecto.getId(),"autoregistro"); //
+                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
+                        // Actualizar el estado de pendiente a 0. ya no es pendiente.
+                        formAutoregistroRepository.actualizarEstadoFormAutoRegistroRevisado(idInt);
+
+
+                        //APICOMETCHAT
+                        CometChatApi cometChatApi = new CometChatApi();
+                        String dniAPI = formAutoregistroOptional.get().getDni();
+                        String nameAPI = "Paciente " + formAutoregistroOptional.get().getNombres() + " " + formAutoregistroOptional.get().getApellidos();
+                        try {
+                            cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            throw new RuntimeException(e);
+                        }
+
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+                        List<String> listaUIDsDeCometChat = new ArrayList<>();
+                        List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+                        try {
+                            Gson gson = new Gson();
+                            String response = cometChatApi.listarUsuariosEnCometChat();
+                            Root root = gson.fromJson(response,Root.class);
+                            List<Data> listaData = root.getData();
+                            for (Data data :  listaData) {
+                                listaUIDsDeCometChat.add(data.getUid());
+                            }
+                            System.out.println(listaUIDsDeCometChat);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                            e.printStackTrace();
+                            //throw new RuntimeException(e);
+                        }
+
+                        List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+                        listaUIDsComun.retainAll(listaUIDsDeCometChat);
+                        String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+                        String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+                        System.out.println(arregloListaUIDsComunEnString);
+                        try {
+                            cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            e.printStackTrace();
+                        }
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+                        //APICOMETCHAT
+
+
+                        //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+                        String id = formAutoregistroOptional.get().getDni();
+                        String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+                        String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+                        try {
+                            File imageFileAvatar = new File(avatarImagePath);
+                            System.out.println(imageFileAvatar.getName());
+                            byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                            Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                            Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                            bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            //throw new RuntimeException("An error has occurred while converting the file");
+                        }
+
+                        //ENVIAR CORREO CON CONTRASEÑA
+                        String destinatario = formAutoregistroOptional.get().getCorreo() ;
+                        String asunto = "Invitación a la plataforma de Medical-Tec";
+                        String contrasena = "No tiene contraseña por defecto. Usted creó su contraseña en su formulario de auto registro. Para acceder a la plataforma, utilice dicha contraseña";
+                        try {
+                            correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+                        } catch (MessagingException e) {
+                            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                            e.printStackTrace();
+                            System.out.println("ERROR al enviar correo. formAutoregistro");
+                            //return "redirect:/administrador/listaFormulariosAutoRegistro";
+                        }
+                    }
+                }
+                attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
+                return "redirect:/administrador/listaFormulariosAutoRegistro";
+            }
+
+        }
+    }
+
+
+
+
 
     @GetMapping("/listaFormulariosRegistro")
     public String listaFormulariosRegistro(Model model, HttpServletRequest httpServletRequest){
@@ -959,181 +1505,142 @@ public class AdministradorController {
     }
 
     @PostMapping("/guardarFormulariosRegistro")
-    public String guardarFormulariosRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr){
-        //Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
-
+    public String guardarFormulariosRegistro(@RequestParam(value = "seleccionados", required = false) List<String> idsSeleccionados, RedirectAttributes attr,HttpServletRequest httpServletRequest){
+        Usuario usuarioSession = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
+        boolean idsSonEnteros = false;
+        int idsSonEnterosSuma = 0;
         if (idsSeleccionados == null)  {
             attr.addFlashAttribute("msgDanger","No se ha seleccionado ningún formulario");
             return "redirect:/administrador/listaFormulariosRegistro";
         } else {
             for (String idStr : idsSeleccionados) {
-                // Obtienes el registro por ID desde tu servicio o repositorio
-                Integer idInt = Integer.parseInt(idStr);
-                Optional<FormInvitacion> formInvitacionOptional = formInvitationRepository.findById(idInt);
-
-
-                // Realizas las operaciones necesarias para guardar el registro en la base de datos
-                // ...
-                GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
-                String contrasena = generadorDeContrasenha.crearPassword();
-                String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
-                usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
-                // Actualizar el estado de pendiente a 0. ya no es pendiente.
-                formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
-                //ENVIAR CORREO CON CONTRASEÑA
-                String destinatario = formInvitacionOptional.get().getCorreo() ;
-                String asunto = "Invitación a la plataforma de Medical-Tec";
-                String contenido = "<!DOCTYPE html>\n" +
-                        "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
-                        "<head>\n" +
-                        "  <meta charset=\"utf-8\">\n" +
-                        "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n" +
-                        "  <meta name=\"x-apple-disable-message-reformatting\">\n" +
-                        "  <title></title>\n" +
-                        "  <!--[if mso]>\n" +
-                        "  <style>\n" +
-                        "    table {border-collapse:collapse;border-spacing:0;border:none;margin:0;}\n" +
-                        "    div, td {padding:0;}\n" +
-                        "    div {margin:0 !important;}\n" +
-                        "  </style>\n" +
-                        "  <noscript>\n" +
-                        "    <xml>\n" +
-                        "      <o:OfficeDocumentSettings>\n" +
-                        "        <o:PixelsPerInch>96</o:PixelsPerInch>\n" +
-                        "      </o:OfficeDocumentSettings>\n" +
-                        "    </xml>\n" +
-                        "  </noscript>\n" +
-                        "  <![endif]-->\n" +
-                        "  <style>\n" +
-                        "    table, td, div, h1, p {\n" +
-                        "      font-family: Arial, sans-serif;\n" +
-                        "    }\n" +
-                        "    @media screen and (max-width: 530px) {\n" +
-                        "      .unsub {\n" +
-                        "        display: block;\n" +
-                        "        padding: 8px;\n" +
-                        "        margin-top: 14px;\n" +
-                        "        border-radius: 6px;\n" +
-                        "        background-color: #555555;\n" +
-                        "        text-decoration: none !important;\n" +
-                        "        font-weight: bold;\n" +
-                        "      }\n" +
-                        "      .col-lge {\n" +
-                        "        max-width: 100% !important;\n" +
-                        "      }\n" +
-                        "    }\n" +
-                        "    @media screen and (min-width: 531px) {\n" +
-                        "      .col-sml {\n" +
-                        "        max-width: 27% !important;\n" +
-                        "      }\n" +
-                        "      .col-lge {\n" +
-                        "        max-width: 73% !important;\n" +
-                        "      }\n" +
-                        "    }\n" +
-                        "  </style>\n" +
-                        "</head>\n" +
-                        "<body style=\"margin:0;padding:0;word-spacing:normal;background-color:#939297;\">\n" +
-                        "  <div role=\"article\" aria-roledescription=\"email\" lang=\"en\" style=\"text-size-adjust:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#939297;\">\n" +
-                        "    <table role=\"presentation\" style=\"width:100%;border:none;border-spacing:0;\">\n" +
-                        "      <tr>\n" +
-                        "        <td align=\"center\" style=\"padding:0;\">\n" +
-                        "          <!--[if mso]>\n" +
-                        "          <table role=\"presentation\" align=\"center\" style=\"width:600px;\">\n" +
-                        "          <tr>\n" +
-                        "          <td>\n" +
-                        "          <![endif]-->\n" +
-                        "          <table role=\"presentation\" style=\"width:94%;max-width:600px;border:none;border-spacing:0;text-align:left;font-family:Arial,sans-serif;font-size:16px;line-height:22px;color:#363636;\">\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:40px 30px 30px 30px;text-align:center;font-size:24px;font-weight:bold;\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/logo.png\" width=\"165\" alt=\"Logo\" style=\"width:165px;max-width:80%;height:auto;border:none;text-decoration:none;color:#ffffff;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;background-color:#ffffff;\">\n" +
-                        "                <h1 style=\"margin-top:0;margin-bottom:16px;font-size:26px;line-height:32px;font-weight:bold;letter-spacing:-0.02em;\">Bienvenido a la plataforma de Medical-TEC!</h1>\n" +
-                        "                <p style=\"margin:0;\"> TEXTO DE BIENVENIDA <a href=\"http://www.example.com/\" style=\"color:#e50d70;text-decoration:underline;\"></a></p>\n" +
-                        " <p style=\"margin:0;\"> Su contraseña predeterminada es " + contrasena + " </p> " +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:0;font-size:24px;line-height:28px;font-weight:bold;\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/1200x800-2.png\" width=\"600\" alt=\"\" style=\"width:100%;height:auto;display:block;border:none;text-decoration:none;color:#363636;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:35px 30px 11px 30px;font-size:0;background-color:#ffffff;border-bottom:1px solid #f0f0f5;border-color:rgba(201,201,207,.35);\">\n" +
-                        "                <!--[if mso]>\n" +
-                        "                <table role=\"presentation\" width=\"100%\">\n" +
-                        "                <tr>\n" +
-                        "                <td style=\"width:145px;\" align=\"left\" valign=\"top\">\n" +
-                        "                <![endif]-->\n" +
-                        "                <div class=\"col-sml\" style=\"display:inline-block;width:100%;max-width:145px;vertical-align:top;text-align:left;font-family:Arial,sans-serif;font-size:14px;color:#363636;\">\n" +
-                        "                  <img src=\"https://assets.codepen.io/210284/icon.png\" width=\"115\" alt=\"\" style=\"width:115px;max-width:80%;margin-bottom:20px;\">\n" +
-                        "                </div>\n" +
-                        "                <!--[if mso]>\n" +
-                        "                </td>\n" +
-                        "                <td style=\"width:395px;padding-bottom:20px;\" valign=\"top\">\n" +
-                        "                <![endif]-->\n" +
-                        "                <div class=\"col-lge\" style=\"display:inline-block;width:100%;max-width:395px;vertical-align:top;padding-bottom:20px;font-family:Arial,sans-serif;font-size:16px;line-height:22px;color:#363636;\">\n" +
-                        "                  <p style=\"margin-top:0;margin-bottom:12px;\">Nullam mollis sapien vel cursus fermentum. Integer porttitor augue id ligula facilisis pharetra. In eu ex et elit ultricies ornare nec ac ex. Mauris sapien massa, placerat non venenatis et, tincidunt eget leo.</p>\n" +
-                        "                  <p style=\"margin-top:0;margin-bottom:18px;\">Nam non ante risus. Vestibulum vitae eleifend nisl, quis vehicula justo. Integer viverra efficitur pharetra. Nullam eget erat nibh.</p>\n" +
-                        "                  <p style=\"margin:0;\"><a href=\"https://example.com/\" style=\"background: #ff3884; text-decoration: none; padding: 10px 25px; color: #ffffff; border-radius: 4px; display:inline-block; mso-padding-alt:0;text-underline-color:#ff3884\"><!--[if mso]><i style=\"letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt\">&nbsp;</i><![endif]--><span style=\"mso-text-raise:10pt;font-weight:bold;\">Claim yours now</span><!--[if mso]><i style=\"letter-spacing: 25px;mso-font-width:-100%\">&nbsp;</i><![endif]--></a></p>\n" +
-                        "                </div>\n" +
-                        "                <!--[if mso]>\n" +
-                        "                </td>\n" +
-                        "                </tr>\n" +
-                        "                </table>\n" +
-                        "                <![endif]-->\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;font-size:24px;line-height:28px;font-weight:bold;background-color:#ffffff;border-bottom:1px solid #f0f0f5;border-color:rgba(201,201,207,.35);\">\n" +
-                        "                <a href=\"http://www.example.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/1200x800-1.png\" width=\"540\" alt=\"\" style=\"width:100%;height:auto;border:none;text-decoration:none;color:#363636;\"></a>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;background-color:#ffffff;\">\n" +
-                        "                <p style=\"margin:0;\">Duis sit amet accumsan nibh, varius tincidunt lectus. Quisque commodo, nulla ac feugiat cursus, arcu orci condimentum tellus, vel placerat libero sapien et libero. Suspendisse auctor vel orci nec finibus.</p>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "            <tr>\n" +
-                        "              <td style=\"padding:30px;text-align:center;font-size:12px;background-color:#404040;color:#cccccc;\">\n" +
-                        "                <p style=\"margin:0 0 8px 0;\"><a href=\"http://www.facebook.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/facebook_1.png\" width=\"40\" height=\"40\" alt=\"f\" style=\"display:inline-block;color:#cccccc;\"></a> <a href=\"http://www.twitter.com/\" style=\"text-decoration:none;\"><img src=\"https://assets.codepen.io/210284/twitter_1.png\" width=\"40\" height=\"40\" alt=\"t\" style=\"display:inline-block;color:#cccccc;\"></a></p>\n" +
-                        "                <p style=\"margin:0;font-size:14px;line-height:20px;\">&reg; Someone, Somewhere 2021<br><a class=\"unsub\" href=\"http://www.example.com/\" style=\"color:#cccccc;text-decoration:underline;\">Unsubscribe instantly</a></p>\n" +
-                        "              </td>\n" +
-                        "            </tr>\n" +
-                        "          </table>\n" +
-                        "          <!--[if mso]>\n" +
-                        "          </td>\n" +
-                        "          </tr>\n" +
-                        "          </table>\n" +
-                        "          <![endif]-->\n" +
-                        "        </td>\n" +
-                        "      </tr>\n" +
-                        "    </table>\n" +
-                        "  </div>\n" +
-                        "</body>\n" +
-                        "</html>";
-
                 try {
-                    correoConEstilos.sendEmailEstilos(destinatario, asunto, contenido);
-                } catch (MessagingException e) {
-                    // Manejar la excepción en caso de que ocurra un error al enviar el correo
-                    e.printStackTrace();
-                    return "redirect:/administrador/listaFormulariosRegistro";
+                    Integer idIntPrueba = Integer.parseInt(idStr);
+                } catch (NumberFormatException e){
+                    idsSonEnterosSuma = idsSonEnterosSuma + 1; //hay errores
                 }
-
-
             }
-            attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
-            return "redirect:/administrador/listaFormulariosRegistro";
+
+            if (idsSonEnterosSuma > 0) {
+                //hay errores
+                attr.addFlashAttribute("msgDanger","IDs de formularios inválidos");
+                return "redirect:/administrador/listaFormulariosRegistro";
+            } else {
+                for (String idStr : idsSeleccionados) {
+                    // Obtienes el registro por ID desde tu servicio o repositorio
+                    Integer idInt = Integer.parseInt(idStr);
+                    Optional<FormInvitacion> formInvitacionOptional = formInvitationRepository.findById(idInt);
+                    if (formInvitacionOptional.isPresent()) {
+                        // Realizas las operaciones necesarias para guardar el registro en la base de datos
+                        // ...
+                        GeneradorDeContrasenha generadorDeContrasenha=new GeneradorDeContrasenha();
+                        String contrasena = generadorDeContrasenha.crearPassword(); //contrasena del usuario sin hash
+                        String contrasenaBCrypt = new BCryptPasswordEncoder().encode(contrasena);
+
+                        //Linea comentada por el cambio de edad a fechanacimiento en forminvitacion
+                        //usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(), formInvitacionOptional.get().getNombres(),  formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  Integer.parseInt(formInvitacionOptional.get().getIdSede()), Integer.parseInt(formInvitacionOptional.get().getEdad()), formInvitacionOptional.get().getDomicilio() , formInvitacionOptional.get().getSexo(), contrasenaBCrypt );
+
+                        //CREACION HISTORIAL MEDICO POR DEFECTO
+                        Historialmedico historialmedicoDefecto = new Historialmedico();
+                        Optional<Seguro> seguroDefectoOpt = seguroRepository.findById(Integer.parseInt(formInvitacionOptional.get().getIdSeguro()));
+                        Seguro seguroDefecto = seguroDefectoOpt.get();
+                        historialmedicoDefecto.setValidahistorial(true);
+                        historialmedicoDefecto.setSegurosIdSeguro(seguroDefecto);
+                        Historialmedico historialmedicoGuardadoDefecto = historialMedicoRepository.save(historialmedicoDefecto);
+                        int idReciengenerado = historialmedicoGuardadoDefecto.getId();
+                        //CREAMOS PACIENTE CON SU NUEVO HISTORIAL MEDICO POR DEFECTO
+                        usuarioRepository.crearPaciente( formInvitacionOptional.get().getCorreo(),  formInvitacionOptional.get().getNombres(),   formInvitacionOptional.get().getApellidos(),  formInvitacionOptional.get().getCelular(), formInvitacionOptional.get().getDni(),  usuarioSession.getSedesIdsedes().getId(), formInvitacionOptional.get().getFechanacimiento(), formInvitacionOptional.get().getDomicilio(), formInvitacionOptional.get().getSexo(), contrasenaBCrypt,idReciengenerado,seguroDefecto.getId(),"invitado"); //
+                        //Ahora ya no hay edad en formInvitacion, se maneja fechanacimiento
+
+
+                        // Actualizar el estado de pendiente a 0. ya no es pendiente.
+                        formInvitationRepository.actualizarEstadoFormRegistroRevisado(idInt);
+
+
+                        //APICOMETCHAT
+                        CometChatApi cometChatApi = new CometChatApi();
+                        String dniAPI = formInvitacionOptional.get().getDni();
+                        String nameAPI = "Paciente " + formInvitacionOptional.get().getNombres() + " " + formInvitacionOptional.get().getApellidos();
+                        try {
+                            cometChatApi.crearUsuarioCometChat(dniAPI,nameAPI);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN LA CREACION DE USUARIO PACIENTE EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            throw new RuntimeException(e);
+                        }
+
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+                        List<String> listaUIDsDeCometChat = new ArrayList<>();
+                        List<String> listaDniBaseDeDatos = usuarioRepository.obtenerDNIDoctoresSegunSede(usuarioSession.getSedesIdsedes().getId());
+                        try {
+                            Gson gson = new Gson();
+                            String response = cometChatApi.listarUsuariosEnCometChat();
+                            Root root = gson.fromJson(response,Root.class);
+                            List<Data> listaData = root.getData();
+                            for (Data data :  listaData) {
+                                listaUIDsDeCometChat.add(data.getUid());
+                            }
+                            System.out.println(listaUIDsDeCometChat);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN obtener lista de usuarios de la apichat");
+                            e.printStackTrace();
+                            //throw new RuntimeException(e);
+                        }
+
+                        List<String> listaUIDsComun = new ArrayList<>(listaDniBaseDeDatos);
+                        listaUIDsComun.retainAll(listaUIDsDeCometChat);
+                        String[] arregloListaUIDsComun = listaUIDsComun.toArray(new String[0]);
+                        String arregloListaUIDsComunEnString = Arrays.toString(arregloListaUIDsComun);
+                        System.out.println(arregloListaUIDsComunEnString);
+                        try {
+                            cometChatApi.anadirAmigosADeterminadoUsuario(dniAPI,arregloListaUIDsComunEnString);
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("ERROR EN anadir amigos DE USUARIO paciente EN COMETCHAT. REVISAR ADMINISTRADOR CONTROLLER. FORMAUTOREGISTRO");
+                            e.printStackTrace();
+                        }
+                        //PROCESO PARA ANADIR AMIGOS A UN USUARIO
+
+                        //APICOMETCHAT
+
+
+
+                        //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+                        String id = formInvitacionOptional.get().getDni();
+                        String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+                        String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+                        try {
+                            File imageFileAvatar = new File(avatarImagePath);
+                            System.out.println(imageFileAvatar.getName());
+                            byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                            Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                            Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                            bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            //throw new RuntimeException("An error has occurred while converting the file");
+                        }
+
+
+                        //ENVIAR CORREO CON CONTRASEÑA
+                        String destinatario = formInvitacionOptional.get().getCorreo() ;
+                        String asunto = "Invitación a la plataforma de Medical-Tec";
+                        try {
+                            correoConEstilos.sendEmailUserCreation(destinatario, asunto, contrasena);
+                        } catch (MessagingException e) {
+                            // Manejar la excepción en caso de que ocurra un error al enviar el correo
+                            e.printStackTrace();
+                            System.out.println("ERROR al enviar correo. formRegistro");
+                            //return "redirect:/administrador/listaFormulariosRegistro";
+                        }
+
+                    }  //si no esta presente el id, significa que debo saltar a la siguiente iteracion para seguir probando
+
+                }
+                attr.addFlashAttribute("msg","Pacientes invitados exitosamente");
+                return "redirect:/administrador/listaFormulariosRegistro";
+            }
+
         }
 
-
-
     }
-
-
-
 
 }

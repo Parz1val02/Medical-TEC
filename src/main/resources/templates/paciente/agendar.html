@@ -38,83 +38,78 @@
             <!--    static Content-->
             <!-- ===============================================-->
             <div class="card mb-3 bg-card-gradient">
+                <div class="card-body ">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md">
+                            <h4 class="mb-2 mb-md-0 text-white" style="font-weight: bold">
+                                Sede
+                            </h4>
+                            <div class="form-group" style="text-align: center">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" id="disabledTextInput1" class="form-control" th:placeholder="${sedeUsuario.nombre}" disabled readonly>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a type="button" class="btn btn-info" th:href="@{'/paciente/otraSede?sedeId='+${sedeUsuario.id}}">Agendar cita en otra sede</a>
+                                        <br>
+                                        <div th:if="${error != null}" th:text="${error}" class="alert alert-warning" role="alert"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3 bg-card-gradient">
                <div class="card-body" style="background-color: white">
                    <div class="container">
-                       <form th:action="@{/paciente/guardarCita}" method="post" th:object="${cita}">
+                       <div id="original-form" class="form-container">
                            <div class="row">
-                               <!-- columna 1 -->
                                <div class="col-sm-6">
                                    <div class="form-group">
-                                       <input type="hidden" name="paciente.id" th:value="${session.usuario.id}" class="form-control">
-                                       <label for="especialidadesIdEspecialidad">Especialidad:</label>
-                                       <select th:field="*{especialidadesIdEspecialidad}" class="form-control" >
-                                           <option  th:each="especialidad : ${especialidades}"
-                                                    th:value="${especialidad.id}"
-                                                    th:text="${especialidad.nombreEspecialidad}"></option>
-                                       </select>
-                                   </div>
-                                   <div class="form-group">
+                                       <input type="text" name="sedeId" id="sede" class="form-control" th:value="${sedeUsuario.id}" hidden="">
                                        <label for="fecha">Fecha:</label>
-                                       <input type="date" th:field="*{fecha}" class="form-control" th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}">
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                                       <input type="text" name="fecha" id="fecha" class="form-control" placeholder="Seleccione una fecha" required>
+                                       <div class="invalid-feedback" id="invalidFecha" style="display: none"></div>
                                    </div>
+                               </div>
+                               <div class="col-sm-6">
                                    <div class="form-group">
-                                       <label for="tipocitaIdtipocita">Tipo de cita: </label>
-                                       <select th:field="*{tipocitaIdtipocita}" class="form-control">
+                                       <label for="tipo">Tipo de cita: </label>
+                                       <select  class="form-control" name="tipoCitaId" id="tipo">
                                            <option  th:each="tipo : ${tipos}"
                                                     th:value="${tipo.id}"
                                                     th:text="${tipo.tipoCita}"></option>
                                        </select>
                                    </div>
-                                   <div class="form-group">
-                                       <label for="modalidad">Modalidad:</label>
-                                       <select th:field="*{modalidad}" class="form-control" th:classappend="${#fields.hasErrors('modalidad')?'is-invalid':''}">
-                                           <option th:each="arch : ${modalidades}"
-                                                   th:value="${arch}"
-                                                   th:text="${arch}"></option>
-                                       </select>
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('modalidad')}" th:errors="*{modalidad}"></div>
-                                   </div>
                                </div>
-                               <!-- columna 2 -->
-                               <div class="col-sm-6">
-                                   <div class="form-group">
-                                       <label for="doctor.id">Doctor:</label>
-                                       <select th:field="*{doctor.id}" class="form-control" th:classappend="${errorUsuario != null?'is-invalid':''}">>
-                                           <option  th:each="Doctor : ${doctores}"
-                                                    th:value="${Doctor.id}"
-                                                    th:text="|${Doctor.nombre} ${Doctor.apellido}|"></option>
-                                       </select>
-                                       <div class="invalid-feedback" th:if="${errorUsuario}" th:text="${errorUsuario}"></div>
-                                   </div>
-                                   <div class="form-group">
-                                       <label for="hora">Hora</label>
-                                       <input type="time" th:field="*{hora}" class="form-control" th:classappend="${#fields.hasErrors('hora')?'is-invalid':''}">
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('hora')}" th:errors="*{hora}"></div>
-                                   </div>
-                                   <div class="form-group">
-                                       <label for="sedesIdsedes">Sede de atencion:</label>
-                                       <select th:field="*{sedesIdsedes}" class="form-control">
-                                           <option  th:each="sede : ${sedes}"
-                                                    th:value="${sede.id}"
-                                                    th:text="${sede.nombre}"></option>
+                           </div>
+                           <div class="row" >
+                               <div class="col-sm-12">
+                                   <div class="form-group" id="especialidad">
+                                       <label for="inputEspecialidad">Especialidad:</label>
+                                       <select  class="form-control" name="especialidadId" id="inputEspecialidad">
+                                           <option  th:each="especialidad : ${especialidades}"
+                                                    th:value="${especialidad.id}"
+                                                    th:text="${especialidad.nombreEspecialidad}"></option>
                                        </select>
                                    </div>
-                                   <div class="form-group">
-                                       <label for="formapago">Forma de pago:</label>
-                                       <select th:field="*{formapago}" class="form-control" th:classappend="${#fields.hasErrors('formapago')?'is-invalid':''}">
-                                           <option th:each="arch : ${pagos}"
-                                                   th:value="${arch}"
-                                                   th:text="${arch}"></option>
+                                   <div class="form-group" id="examen">
+                                       <label for="inputExamen">Examen:</label>
+                                       <select  class="form-control" name="examenId" id="inputExamen">
+                                           <option  th:each="examen : ${examenes}"
+                                                    th:value="${examen.id}"
+                                                    th:text="${examen.nombre}"></option>
                                        </select>
-                                       <div class="invalid-feedback" th:if="${#fields.hasErrors('formapago')}" th:errors="*{formapago}"></div>
                                    </div>
                                </div>
                            </div>
                            <!-- botón de envío -->
-                           <button class="btn btn-primary submit">Registrar cita</button>
-                           <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/principal}">Cancelar</a>
-                       </form>
+                           <button class="btn btn-primary submit" id="arch">Continuar</button>
+                           <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/principal}" id="arch2">Cancelar</a>
+                       </div>
+                       <div id="next-form" class="form-container" style="display: none">
+                       </div>
                    </div>
                </div>
             </div>
@@ -134,8 +129,194 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        flatpickr('#fecha', {
+            dateFormat: 'd-m-Y',
+            minDate: new Date(),
+            placeholder: 'Seleccionar una fecha'
+        });
+        $('#examen').hide();
+        $('#inputExamen').prop("disabled", true);
+        $('#tipo').on('change', function () {
+            var tipo = ($(this).val());
+            if(tipo=='1'){
+                $('#especialidad').show();
+                $('#inputEspecialidad').prop("disabled", false);
+                $('#examen').hide();
+                $('#inputExamen').prop("disabled", true);
+            }
+            if(tipo=='2'){
+                $('#especialidad').hide();
+                $('#inputEspecialidad').prop("disabled", true);
+                $('#examen').show();
+                $('#inputExamen').prop("disabled", false);
+            }
+        });
 
+    });
+</script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        $("#arch").click(function (){
+            var fecha = $("#fecha").val();
+            if(fecha!=''){
+                $("#fecha").removeClass('is-invalid')
+                $("#invalidFecha").hide();
+                var sedeId = $("#sede").val();
+                var tipoCitaId = $("#tipo").val();
+                var especialidadId;
+                var examenId;
+                if(tipoCitaId=='1'){
+                    especialidadId = $("#inputEspecialidad option:selected").val();
+                }
+                if(tipoCitaId=='2'){
+                    examenId = $("#inputExamen option:selected").val();
+                }
+                $.ajax({
+                    method: 'GET',
+                    data: {
+                        sedeId: sedeId,
+                        fecha: fecha,
+                        tipoCitaId: tipoCitaId,
+                        especialidadId: especialidadId,
+                        examenId: examenId
+                    },
+                    url: 'http://34.132.54.61:8081/api/agendar1',
+                    dataType: 'json',
+                    success: function(response) {
+                        var infoDoctores = response.infoDoctores;
+                        console.log(infoDoctores);
+                        if(infoDoctores.length===0){
+                            alert("Por el momento no contamos con horarios disponibles para esa fecha. Por favor, pruebe otra o intente en otra sede.")
+                        }else{
+                            var modalidades = response.modalidades;
+                            $.ajax({
+                                url: 'http://34.132.54.61:8081/api/htmlSegundoForm', // Replace with your API endpoint URL
+                                type: 'GET',
+                                dataType: 'html',
+                                success: function(response) {
+                                    // 'response' contains the received HTML content
+                                    // Further processing of the HTML content
+                                    $('#next-form').html(response);
+                                    $(".form-container").toggle("slide", { direction: "left" }, 500);
+                                    $('#arch').hide();
+                                    $('#arch2').hide();
+                                    $('#fecha').prop("disabled", true);
+                                    $('#tipo').prop("disabled", true);
+                                    $('#inputEspecialidad').prop("disabled", true);
+                                    $('#inputExamen').prop("disabled", true);
+                                    var select = $('#modalidad');
+                                    // Option 1
+                                    var option1 = $('<option>', {
+                                        value: modalidades[0],
+                                        text: modalidades[0]
+                                    });
+                                    select.append(option1);
+                                    if(tipoCitaId=='1'){
+                                        // Option 2
+                                        var option2 = $('<option>', {
+                                            value: modalidades[1],
+                                            text: modalidades[1]
+                                        });
+                                        select.append(option2);
+                                    }
+                                    for (var i = 0; i < infoDoctores.length; i++) {
+                                        var info = infoDoctores[i];
+                                        var doctor = info.doctorDto;
+                                        var select2 = $('#doctor');
+                                        var option = $('<option>', {
+                                            value: doctor.dni,
+                                            text:  doctor.nombre + ' ' + doctor.apellido
+                                        });
+                                        select2.append(option);
+                                        if(i==0){
+                                            var horas = info.horas;
+                                            var select3 = $('#hora');
+                                            select3.empty();
+                                            for (var j = 0; j<horas.length; j++){
+                                                var time = horas[j];
+                                                var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
+                                                var option = $('<option>', {
+                                                    value: time,
+                                                    text: formattedTime
+                                                });
+                                                select3.append(option);
+                                            }
+                                        }
+                                    }
+                                    $('#doctor').on('change', function () {
+                                        var doc = ($(this).val());
+                                        for (var i = 0; i < infoDoctores.length; i++) {
+                                            var info = infoDoctores[i];
+                                            var doctor = info.doctorDto;
+                                            if(doc==doctor.dni){
+                                                var horas = info.horas;
+                                                var select3 = $('#hora');
+                                                select3.empty();
+                                                for (var j = 0; j<horas.length; j++){
+                                                    var time = horas[j];
+                                                    var formattedTime = moment(time, "HH:mm:ss").format("h:mm A");
+                                                    var option = $('<option>', {
+                                                        value: time,
+                                                        text: formattedTime
+                                                    });
+                                                    select3.append(option);
+                                                }
+                                            }
+                                        }
+                                    });
+                                    $('#clash').on('click', function (){
+                                        var modalidad = $("#modalidad") .val();
+                                        var doctorDni = $("#doctor").val();
+                                        var hora = $("#hora").val();
+                                        var pacienteDni = [[${session.usuario.id}]];
+                                        console.log(modalidad + ' ' + fecha + ' ' + hora + ' ' + pacienteDni);
+                                        $.ajax({
+                                            method: 'POST',
+                                            data: {
+                                                sedeId: sedeId,
+                                                fecha: fecha,
+                                                tipoCitaId: tipoCitaId,
+                                                especialidadId: especialidadId,
+                                                examenId: examenId,
+                                                modalidad: modalidad,
+                                                doctorDni: doctorDni,
+                                                hora: hora,
+                                                pacienteDni: pacienteDni
+                                            },
+                                            url: 'http://34.132.54.61:8081/api/agendar2',
+                                            success: function(response) {
+                                                alert(response.msg);
+                                                location.reload();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                // Error handling
+                                                console.log(error);
+                                            }
+                                        });
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    // Error handling
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }else{
+                $("#fecha").addClass('is-invalid')
+                $("#invalidFecha").show().text("Seleccionar un formato de fecha válido");
+            }
+        });
+    });
+</script>
+</body>
 </html>>
 
 

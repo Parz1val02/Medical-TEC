@@ -2,19 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<nav th:fragment="topBar" class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand">
- <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button" data-toggle="collapse" data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+<nav th:fragment="topBar" id="change2" class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand">
+ <button class="btn navbar-toggler-humburger-icon navbar-toggler mr-1 mr-sm-3" type="button" data-toggle="collapse"
+         data-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false"
+         aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
  <ul class="navbar-nav navbar-nav-icons ml-auto flex-row align-items-center">
      <li class="nav-item">
-         <div class="col-md">
-             <h5 class="mb-0" id="top_navbar_name" style="font-size: 1rem">Doctor/a</h5>
-             <p style="margin: 0px" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|">  </p>
+         <div class="col-md" style="text-align: right;">
+             <h5 class="mb-0" id="top_navbar_name" style="font-size: 1rem">Doctor</h5>
+             <p style="margin: 0" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|">  </p>
          </div>
+     </li>
+     <li class="nav-item">
+         <a class="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill icon-indicator" th:href="@{/doctor/mensajeria}"><span class="fab fa-facebook-messenger fs-4" data-fa-transform="shrink-7"></span><span class="notification-indicator-number"></span></a>
      </li>
      <li class="nav-item dropdown">
          <a class="nav-link pr-0" id="navbarDropdownUser" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
              <div class="avatar avatar-xl">
-                 <img class="rounded-circle" th:src="@{/img/team/3-thumb.png}" alt="" />
+                 <img class="rounded-circle" th:src="@{/fotoPerfil}" alt="" />
 
              </div>
          </a>
@@ -24,7 +29,7 @@
              </div>
              <div class="bg-white rounded-soft py-2">
                  <form th:action="@{/logout}" method="post">
-                     <input class="dropdown-item" type="submit" value="Cerrar Sesión">
+                     <input class="dropdown-item" type="submit" value="Cerrar Sesión" onclick="logout();">
                  </form>
              </div>
          </div>

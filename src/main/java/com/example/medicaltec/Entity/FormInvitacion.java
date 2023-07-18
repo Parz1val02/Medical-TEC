@@ -29,8 +29,7 @@ public class FormInvitacion {
     @Column(name = "dni", length = 45)
     private String dni;
 
-    @Column(name = "edad", length = 45)
-    private String edad;
+
 
     @Column(name = "sexo", length = 45)
     private String sexo;
@@ -46,6 +45,8 @@ public class FormInvitacion {
     @Column(name = "id_seguro", length = 45)
     private String idSeguro;
 
+
+
     @NotBlank
     @Min(value=100000000)
     @Max(value=999999999)
@@ -53,12 +54,8 @@ public class FormInvitacion {
     private String celular;
 
     @NotBlank
-    @Column(name = "medicamentos", length = 200)
-    private String medicamentos;
-
-    @NotBlank
-    @Column(name = "alergias", length = 200)
-    private String alergias;
+    @Column(name="fechanacimiento", length = 45)
+    private String fechanacimiento;
 
     private boolean pendiente;
 

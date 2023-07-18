@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<title>Cuestionarios</title>
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Cuestionarios')}">
 </head>
 
@@ -49,6 +49,8 @@
                         <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 30px; text-align: left">
                             Responda el cuestionario que se acaba de enviar
                         </h5>
+                        <div th:if="${respondido != null}" th:text="${respondido}" class="alert alert-success" role="alert"></div>
+                        <div th:if="${cuestionario_noexiste != null}" th:text="${cuestionario_noexiste}" class="alert alert-danger" role="alert"></div>
                         <br>
                         <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
                             <div th:if="${#lists.size(cuestionarios)==0}">
@@ -63,14 +65,18 @@
                                                     <div style="height: 15px"></div>
 
                                                     <div style="height: 10px"></div>
-                                                    <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                                    <h5 class="card-title mb-2" th:text="${cuestionario.idcuestionario.nombre}">Título de Cuestionario</h5>
                                                 </div>
                                                 <div class="col-md-6" align="center" style="align-items: center">
                                                     <!--<button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
                                                 border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>-->
                                                     <div style="height: 15px"></div>
-                                                    <a class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario}">Responder</a>
+                                                    <!-- Si cuestionario.respondido == 1, muestra el botón "Responder" -->
+                                                    <a th:if="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario(idCuestionario=${cuestionario.id})}">Responder</a>
+
+                                                    <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
+                                                    <a th:unless="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/verRespuestas(idCuestionario=${cuestionario.id})}">Ver respuestas</a>
+
                                                 </div>
                                             </div>
                                         </div>

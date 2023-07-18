@@ -1,34 +1,36 @@
 package com.example.medicaltec.controller;
 import com.example.medicaltec.Entity.*;
-import com.example.medicaltec.config.CustomUserDetails;
 import com.example.medicaltec.repository.*;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.medicaltec.controller.ExampController;
+import org.thymeleaf.exceptions.TemplateOutputException;
 
 
-import javax.print.attribute.standard.Sides;
+import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -47,14 +49,14 @@ public class SuperController {
     final EstadoRepository estadoRepository;
     final CitaRepository citaRepository;
     final HistorialMedicoRepository historialMedicoRepository;
-
     final SedeRepository sedeRepository;
+    final UxUiRepository uxUiRepository;
     private final EspecialidadeRepository especialidadeRepository;
 
     public SuperController(UsuarioRepository usuarioRepository, FormulariosRegistroRepository formulariosRegistroRepository, InformeRepository informeRepository, CuestionarioRepository cuestionarioRepository,
                            PreguntaRepository preguntaRepository,
                            RespuestaRepository respuestaRepository, EstadoRepository estadoRepository,
-                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository) {
+                           CitaRepository citaRepository, HistorialMedicoRepository historialMedicoRepository, EspecialidadeRepository especialidadeRepository, SedeRepository sedeRepository, UxUiRepository uxUiRepository) {
         this.usuarioRepository = usuarioRepository;
         this.formulariosRegistroRepository = formulariosRegistroRepository;
         this.informeRepository = informeRepository;
@@ -66,6 +68,7 @@ public class SuperController {
         this.historialMedicoRepository = historialMedicoRepository;
         this.especialidadeRepository = especialidadeRepository;
         this.sedeRepository = sedeRepository;
+        this.uxUiRepository = uxUiRepository;
     }
 
     @GetMapping(value = {"/dashboard", ""})
@@ -73,7 +76,7 @@ public class SuperController {
         Usuario previo = (Usuario) httpSession.getAttribute("usuario");
         if (previo!= null){
             if (!Objects.equals(authentication.getName(), previo.getEmail())){
-                System.out.println("DEBES BORRAR LA SESIÓN ANTERIOR");
+                //System.out.println("DEBES BORRAR LA SESIÓN ANTERIOR");
             }
         }
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
@@ -114,7 +117,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmS")
-    public String actualizarAdministrador(Model model, RedirectAttributes attr,
+    public String actualizarAdministrador( RedirectAttributes attr,
                                           @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                           @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
                                            @RequestParam("sede") String sede, @RequestParam("estadosIdestado") String estadosIdestado,
@@ -122,8 +125,6 @@ public class SuperController {
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         String dnieditable = (String) httpSession.getAttribute("dnieditable");
-        System.out.println(dnieditable);
-        System.out.println("si hay dni editable de sesión: "+dnieditable );
         int a = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -203,7 +204,7 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarAdmT")
-    public String actualizarAdministrativo(Model model, RedirectAttributes attr,
+    public String actualizarAdministrativo(RedirectAttributes attr,
                                            @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                            @RequestParam("correo") String correo, @RequestParam("especialidadesIdEspecialidad") String especialidad,
                                            @RequestParam("telefono") String telefono,
@@ -212,8 +213,6 @@ public class SuperController {
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         String dnieditable = (String) httpSession.getAttribute("dnieditable");
-        System.out.println(dnieditable);
-        System.out.println("si hay dni editable de sesión: "+dnieditable );
         int a = 0;
         if(nombre.isEmpty()){
             System.out.println("nombre vació");
@@ -268,8 +267,6 @@ public class SuperController {
         } else if (esNumeroEntero(especialidad)) {
             int num_esp = listaEspecialidades.size();
             int espeee = Integer.parseInt(especialidad);
-            System.out.println("LA CANTIAD DE ESPECIALIDADES ESSSANDSKNDAJLDNAJSD "+num_esp);
-            System.out.println("LA ESPECIALDIAD ES" + espeee);
             if (!(espeee<=17 && espeee>=1)){
                 attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
                 a = a+1;
@@ -282,7 +279,6 @@ public class SuperController {
             int sede1 = Integer.parseInt(sede);
             int estado = Integer.parseInt(estadosIdestado);
             int especialidad1 = Integer.parseInt(especialidad);
-            System.out.println(dnieditable);
             attr.addFlashAttribute("administrativo_actualizado", "Administrativo actualizado exitosamente");
             usuarioRepository.editarAdministrativo(correo, nombre, apellido,sede1, telefono, estado, especialidad1, dnieditable);
             httpSession.removeAttribute("dnieditable");
@@ -294,7 +290,8 @@ public class SuperController {
         }
     }
     @GetMapping("/editarDoctor")
-    public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    public String editarDoctor(Model model, @ModelAttribute("doctor") Usuario doctor, @RequestParam("id") String dni,
+                               RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(dni);
@@ -304,6 +301,8 @@ public class SuperController {
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            httpSession.removeAttribute("dnieditabledoctor");
+            httpSession.setAttribute("dnieditabledoctor",dni);
             return "superAdmin/editarDoctor";
         } else {
             attr.addFlashAttribute("doctor_noexiste","El doctor a editar no existe");
@@ -311,22 +310,90 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarDoctor")
-    public String actualizarDoctor(@ModelAttribute("doctor") @Valid Usuario doctor, BindingResult bindingResult, Model model, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    public String actualizarDoctor(RedirectAttributes attr,
+                                           @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                           @RequestParam("correo") String correo, @RequestParam("especialidadesIdEspecialidad") String especialidad,
+                                           @RequestParam("telefono") String telefono,
+                                           @RequestParam("sede") String sede, @RequestParam("estadosIdestado") String estadosIdestado,
+                                           HttpSession httpSession, Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        if(bindingResult.hasErrors()){
-            model.addAttribute("sedesList", sedeRepository.findAll());
-            model.addAttribute("estadosList", estadoRepository.findAll());
-            model.addAttribute("especialidadList", especialidadeRepository.findAll());
-            return "superAdmin/editarDoctor";
+        String dnieditable = (String) httpSession.getAttribute("dnieditabledoctor");
+        int a = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
         }
-        else {
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            a = a+1;
+        }
+        if(estadosIdestado.isBlank() ){
+            attr.addFlashAttribute("estadomsg","El estado no puede ser nulo");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2")){
+            attr.addFlashAttribute("estadomsg","El estado ingresada es incorrecto");
+            a = a+1;
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        }
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            a = a + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            a = a + 1;
+        }
+        if(telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a =a+1;
+        } else if (telefono.length()!=9) {
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            a = a+1;
+        } else if (esNumeroEntero(telefono)) {
+            int telefono1 = Integer.parseInt(telefono);
+            if (telefono1 <=0){
+                attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                a = a+1;
+            }
+        }else {
+            a=a+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
+        }
+        List<Especialidade> listaEspecialidades = especialidadeRepository.findAll();
+        if(especialidad.isBlank() ){
+            attr.addFlashAttribute("espemsg","La especialidad no puede ser nula");
+            a =a+1;
+        } else if (esNumeroEntero(especialidad)) {
+            int num_esp = listaEspecialidades.size();
+            int espeee = Integer.parseInt(especialidad);
+            if (!(espeee<=17 && espeee>=1)){
+                attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+                a = a+1;
+            }
+        } else {
+            attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
+            a = a+1;
+        }
+        if(a == 0){
+            int sede1 = Integer.parseInt(sede);
+            int estado = Integer.parseInt(estadosIdestado);
+            int especialidad1 = Integer.parseInt(especialidad);
             attr.addFlashAttribute("doctor_actualizado", "Doctor actualizado exitosamente");
-            usuarioRepository.editarDoctor(doctor.getEmail(), doctor.getNombre(), doctor.getApellido(), doctor.getSedesIdsedes().getId(), doctor.getTelefono(), doctor.getEstadosIdestado().getId(), doctor.getEspecialidadesIdEspecialidad().getId(), doctor.getId());
+            usuarioRepository.editarDoctor(correo,nombre, apellido, sede1, telefono, estado, especialidad1, dnieditable);
+            httpSession.removeAttribute("dnieditabledoctor");
             return "redirect:/superAdmin/dashboard";
+        }else {
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            String url = "redirect:/superAdmin/editarDoctor?id="+dnieditable;
+            return url;
         }
     }
-
     @GetMapping("/editarPaciente")
     public String editarPaciente(Model model, @ModelAttribute("paciente") Usuario paciente, @RequestParam("id") String dni, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
@@ -338,6 +405,8 @@ public class SuperController {
             model.addAttribute("sedesList", sedeRepository.findAll());
             model.addAttribute("estadosList", estadoRepository.findAll());
             model.addAttribute("especialidadList", especialidadeRepository.findAll());
+            httpSession.removeAttribute("dnieditablepaciente");
+            httpSession.setAttribute("dnieditablepaciente",dni);
             return "superAdmin/editarPaciente";
         } else {
             attr.addFlashAttribute("paciente_noexiste","El paciente a editar no existe");
@@ -345,92 +414,76 @@ public class SuperController {
         }
     }
     @PostMapping("/actualizarPaciente")
-    public String actualizarPaciente(@ModelAttribute("paciente") @Valid Usuario paciente, BindingResult bindingResult, Model model,
-                                     RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+    public String actualizarPaciente( RedirectAttributes attr,
+                                   @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+                                   @RequestParam("correo") String correo,
+                                   @RequestParam("telefono") String telefono,
+                                   @RequestParam("sede") String sede, @RequestParam("estadosIdestado") String estadosIdestado,
+                                   HttpSession httpSession, Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        if(bindingResult.hasErrors()){
-            model.addAttribute("sedesList", sedeRepository.findAll());
-            model.addAttribute("estadosList", estadoRepository.findAll());
-            model.addAttribute("especialidadList", especialidadeRepository.findAll());
-            return "superAdmin/editarPaciente";
+        String dnieditable = (String) httpSession.getAttribute("dnieditablepaciente");
+        int a = 0;
+        if(nombre.isEmpty()){
+            attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
+            a = a+1;
         }
-        attr.addFlashAttribute("paciente_actualizado", "Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente(paciente.getEmail(), paciente.getNombre(), paciente.getApellido(), paciente.getSedesIdsedes().getId(), paciente.getTelefono(), paciente.getEstadosIdestado().getId(), paciente.getId());
-        return "redirect:/superAdmin/dashboard";
+        if(sede.isBlank() ){
+            attr.addFlashAttribute("sedemsg","La sede no puede ser nula");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2") && !sede.equals("3")){
+            attr.addFlashAttribute("sedemsg","La sede ingresada es incorrecta");
+            a = a+1;
+        }
+        if(estadosIdestado.isBlank() ){
+            attr.addFlashAttribute("estadomsg","El estado no puede ser nulo");
+            a = a+1;
+        } else if ( !sede.equals("1") && !sede.equals("2")){
+            attr.addFlashAttribute("estadomsg","El estado ingresada es incorrecto");
+            a = a+1;
+        }
+        if(apellido.isEmpty()){
+            attr.addFlashAttribute("apellidomsg","El apellido no puede ser nulo");
+            a = a+1;
+        }
+        if (correo.isEmpty()) {
+            attr.addFlashAttribute("correomsg", "El correo no puede ser nulo");
+            a = a + 1;
+        } else if (!isValidEmail(correo)) {
+            attr.addFlashAttribute("correomsg", "El formato del correo no es válido");
+            a = a + 1;
+        }
+        if(telefono.isEmpty()){
+            attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
+            a =a+1;
+        } else if (telefono.length()!=9) {
+            attr.addFlashAttribute("telefonomsg", "El número de teléfono debe tener 9 dígitos");
+            a = a+1;
+        } else if (esNumeroEntero(telefono)) {
+            int telefono1 = Integer.parseInt(telefono);
+            if (telefono1 <=0){
+                attr.addFlashAttribute("telefonomsg","El número de teléfono no puede ser negativa");
+                a = a+1;
+            }
+        }else {
+            a=a+1;
+            attr.addFlashAttribute("telefonomsg","El teléfono debe ser un número enteror");
+        }
+        if(a == 0){
+            int sede1 = Integer.parseInt(sede);
+            int estado = Integer.parseInt(estadosIdestado);
+            attr.addFlashAttribute("paciente_actualizado", "Paciente actualizado exitosamente");
+            usuarioRepository.editarPaciente(correo, nombre, apellido, sede1, telefono,estado, dnieditable);
+            httpSession.removeAttribute("dnieditablepaciente");
+            return "redirect:/superAdmin/dashboard";
+        }else {
+            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            String url = "redirect:/superAdmin/editarPaciente?id="+dnieditable;
+            return url;
+        }
     }
-   /* @PostMapping("/editarPacientes")
-    public String editarPaciente(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("email") String email,
-            @RequestParam("id") String id,
-
-            @RequestParam("telefono") String telefono,
-            @RequestParam("estado") int estado,
-            RedirectAttributes attr
-
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Paciente actualizado exitosamente");
-        usuarioRepository.editarPaciente( email,  nombre, sede, id, telefono, estado);
-        return "redirect:/superAdmin/dashboard/Paciente";
-    }
-    @PostMapping("/editarDoctores")
-    public String editarDoctor(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("telefono") String telefono,
-            @RequestParam("especialidad") int especialidad,
-            @RequestParam("estado") int estado,
-            RedirectAttributes attr
 
 
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Doctor actualizado exitosamente");
-        usuarioRepository.editarDoctor( email, nombre, apellido, sede, telefono, estado, especialidad, dni);
-        return "redirect:/superAdmin/dashboard/Doctor";
-    }
-    @PostMapping("/editarAdministrativos")
-    public String editarAdministrativo(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("telefono") String telefono,
-            @RequestParam("especialidad") int especialidad,
-            @RequestParam("estado") int estado,
-            RedirectAttributes attr
-
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Administrativo actualizado exitosamente");
-        usuarioRepository.editarAdministrativo( email, nombre, apellido, sede, telefono, estado, especialidad, dni);
-        return "redirect:/superAdmin/dashboard/AdmT";
-    }
-    @PostMapping("/editarAdmS")
-    public String editarAdministrador(
-            @RequestParam("sede") int sede,
-            @RequestParam("nombre") String nombre,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("email") String email,
-            @RequestParam("id") String dni,
-            @RequestParam("telefono") String telefono,
-            @RequestParam("estado") int estado,
-            RedirectAttributes attr
-
-    ){
-        System.out.println(nombre);
-        attr.addFlashAttribute("msg","Administrador actualizado exitosamente");
-        usuarioRepository.editarAdministradores( email, nombre, apellido, sede, telefono, estado, dni);
-        return "redirect:/superAdmin/dashboard/Adm";
-    }
-    */
     @RequestMapping(value = {"/forms"},method = RequestMethod.GET)
     public String forms(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
@@ -438,16 +491,6 @@ public class SuperController {
         List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
         model.addAttribute("formularioList", listaFormularios);
         return "superAdmin/forms";
-    }
-
-    @RequestMapping(value = {"/edit/CAntecedentes"},method = RequestMethod.POST)
-    public String cuestionarioAntecedente(Model model, @RequestParam("num") int num, HttpSession httpSession,Authentication authentication){
-        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
-        httpSession.setAttribute("usuario",superadmin);
-        //List<FormulariosRegistro> listaFormularios = formulariosRegistroRepository.findAll();
-        //model.addAttribute("formularioList", listaFormularios);
-        String vista = "superAdmin/cuestionario" + num; // Concatenar el valor de num con el nombre de la vista
-        return vista; // Retornar el nombre de la vista concatenado
     }
 
     @RequestMapping(value = {"/Crear/AdmSede"},method = RequestMethod.GET)
@@ -511,7 +554,7 @@ public class SuperController {
         return pattern.matcher(email).matches();
     }
     @PostMapping(value = "/Guardar/AdmSede")
-    public String guardarAdmSede(Model model, RedirectAttributes attr,
+    public String guardarAdmSede(RedirectAttributes attr,
                                  @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
                                  @RequestParam("correo") String correo, @RequestParam("password") String password,
                                  @RequestParam(value = "edad",required = false) String edad, @RequestParam("telefono") String telefono,
@@ -561,19 +604,34 @@ public class SuperController {
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             a = a+1;
         }
-        if(edad.isEmpty()){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            a =a+1;
-        } else if (esNumeroEntero(edad)) {
-             int edad1 = Integer.parseInt(edad);
-            if (edad1 <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                a = a+1;
+        //VALIDACION FECHA NACIMIENTO
+        if (edad!=null && !edad.isBlank()){
+            System.out.println(edad);
+            //SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
+            // formatoDeseado = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaRecibidaDate.format(formatter);
+                LocalDate fechaFormateadaDate = LocalDate.parse(fechaFormateada, formatter);
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaMayorEdad = fechaActual.minusYears(18);
+                //copiar esto para crear paciente porque paciente aun usa solo Date y no LocalDate
+                boolean esFechaValida = !fechaFormateadaDate.isAfter(fechaMayorEdad);
+                if (!esFechaValida) {
+                    attr.addFlashAttribute("nacimientomsg", "La fecha seleccionada debe corresponder con la mayoria de edad.");
+                    a = a + 1;
+                }
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("nacimientomsg","La informacion ingresada no es valida");
+                a = a + 1;
             }
         } else {
-            a=a+1;
-            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
+            attr.addFlashAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
+            a = a+1;
         }
+        //VALIDACION FECHA NACIMIENTO
         if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             a =a+1;
@@ -595,10 +653,7 @@ public class SuperController {
             a = a+1;
         }
         if(dni.isEmpty()){
-            //attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
-            //model.addAttribute("dnimsg1","El DNI no puede ser nulo");
             attr.addFlashAttribute("dnimsg1","El DNI no puede ser nulo");
-            System.out.println("hola ajdilasdoahdiahdlsanadoi");
             a = a+1;
         } else if (dni.length()!=8) {
             attr.addFlashAttribute("dnimsg1","El DNI tiene que tener 8 dígitos");
@@ -620,14 +675,39 @@ public class SuperController {
             attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
         if(a == 0){
+            System.out.println(password);
             int estado=1;
-            int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
-            usuarioRepository.crearAdmSede(dni, new BCryptPasswordEncoder().encode(password),correo, nombre,apellido,  edad2,  telefono,  sexo,  address, sede2, estado);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
+            usuarioRepository.crearAdmSede(dni, new BCryptPasswordEncoder().encode(password),correo, nombre,apellido,  fechaFormateada,  telefono,  sexo,  address, sede2, estado);
+            String id = dni;
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
             attr.addFlashAttribute("msg","Administrador de Sede creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
             attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
+            attr.addFlashAttribute("nombre",  nombre);
+            attr.addFlashAttribute("apellido",apellido);
+            attr.addFlashAttribute("correo",correo);
+            attr.addFlashAttribute("edad",edad);
+            attr.addFlashAttribute("telefono",telefono);
+            attr.addFlashAttribute("address",address);
+            attr.addFlashAttribute("dni",dni);
+            attr.addFlashAttribute("password",password);
             return "redirect:/superAdmin/Crear/AdmSede";
         }
     }
@@ -654,7 +734,6 @@ public class SuperController {
         } else if (esNumeroEntero(especialidad)) {
             int num_esp = listaEspecialidades.size();
             int espeee = Integer.parseInt(especialidad);
-            System.out.println("LA CANTIAD DE ESPECIALIDADES ESSSANDSKNDAJLDNAJSD "+num_esp);
             if (!(espeee<=17 && espeee>=1)){
                 attr.addFlashAttribute("espemsg","La especialidad enviada es incorrecta");
                 b = b+1;
@@ -700,19 +779,35 @@ public class SuperController {
             attr.addFlashAttribute("passwordmsg","La contraseña no puede ser nula");
             b = b+1;
         }
-        if(edad.isEmpty()){
-            attr.addFlashAttribute("edadmsg","La edad no puede ser nula");
-            b =b+1;
-        } else if (esNumeroEntero(edad)) {
-            int edad1 = Integer.parseInt(edad);
-            if (edad1 <0){
-                attr.addFlashAttribute("edadmsg","La edad no puede ser negativa");
-                b = b+1;
+        //VALIDACION FECHA NACIMIENTO
+        if (edad!=null && !edad.isBlank()){
+            System.out.println(edad);
+            //SimpleDateFormat formatoRecibido = new SimpleDateFormat("yyyy-MM-dd");
+            // formatoDeseado = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String fechaFormateada = fechaRecibidaDate.format(formatter);
+                LocalDate fechaFormateadaDate = LocalDate.parse(fechaFormateada, formatter);
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaMayorEdad = fechaActual.minusYears(18);
+                //copiar esto para crear paciente porque paciente aun usa solo Date y no LocalDate
+                boolean esFechaValida = !fechaFormateadaDate.isAfter(fechaMayorEdad);
+                if (!esFechaValida) {
+                    attr.addFlashAttribute("nacimientomsg", "La fecha seleccionada debe corresponder con la mayoria de edad.");
+                    b = b + 1;
+                }
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                attr.addFlashAttribute("nacimientomsg","La informacion ingresada no es valida");
+                b = b + 1;
             }
         } else {
-            b=b+1;
-            attr.addFlashAttribute("edadmsg","La edad debe ser un número enteror");
+            attr.addFlashAttribute("nacimientomsg","La fecha de nacimiento no puede ser nulo");
+            b = b+1;
         }
+        //VALIDACION FECHA NACIMIENTO
+
         if(telefono.isEmpty()){
             attr.addFlashAttribute("telefonomsg","El teléfono no puede ser nulo");
             b =b+1;
@@ -734,10 +829,7 @@ public class SuperController {
             b = b+1;
         }
         if(dni.isEmpty()){
-            //attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
-            //model.addAttribute("dnimsg1","El DNI no puede ser nulo");
             attr.addFlashAttribute("dnimsg1","El DNI no puede ser nulo");
-            System.out.println("hola ajdilasdoahdiahdlsanadoi");
             b = b+1;
         } else if (dni.length()!=8) {
             attr.addFlashAttribute("dnimsg1","El DNI tiene que tener 8 dígitos");
@@ -758,16 +850,42 @@ public class SuperController {
             b=b+1;
             attr.addFlashAttribute("dnimsg1","El dnimsg debe ser un número enteror");
         }
+
         if(b == 0){
             int estado=1;
-            int edad2 = Integer.parseInt(edad);
             int sede2 = Integer.parseInt(sede);
             int especialidad2 = Integer.parseInt(especialidad);
-            usuarioRepository.crearAdmT( dni,   new BCryptPasswordEncoder().encode(password), correo, nombre,apellido,  edad2,  telefono,  sexo,  address,  sede2, estado, especialidad2);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate fechaRecibidaDate = LocalDate.parse(edad);
+            String fechaFormateada = fechaRecibidaDate.format(formatter);
+            usuarioRepository.crearAdmT( dni,   new BCryptPasswordEncoder().encode(password), correo, nombre,apellido,  fechaFormateada,  telefono,  sexo,  address,  sede2, estado, especialidad2);
+            //CODIGO PARA SUBIR IMAGEN POR DEFECTO PACIENTE (AVATAR.JPE)
+            String id = dni;
+            String nombreArchivoAvatar = "fotosPerfil/perfil-" + id;
+            String avatarImagePath = "src/main/resources/static/img/team/genericavatar.jpg";
+            try {
+                File imageFileAvatar = new File(avatarImagePath);
+                System.out.println(imageFileAvatar.getName());
+                byte[] fileDataAvatar = FileUtils.readFileToByteArray(imageFileAvatar);
+                Storage storageAvatar = StorageOptions.newBuilder().setProjectId("glowing-hearth-316315 ").build().getService();
+                Bucket bucketAvatar = storageAvatar.get("wenas", Storage.BucketGetOption.fields());
+                bucketAvatar.create(nombreArchivoAvatar + ".jpeg", fileDataAvatar);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new RuntimeException("An error has occurred while converting the file");
+            }
             attr.addFlashAttribute("msg","Administrativo creado exitosamente");
             return "redirect:/superAdmin/dashboard";
         }else {
             attr.addFlashAttribute("msg","Hubieron errores en el llenado de los campos");
+            attr.addFlashAttribute("nombre",  nombre);
+            attr.addFlashAttribute("apellido",apellido);
+            attr.addFlashAttribute("correo",correo);
+            attr.addFlashAttribute("edad",edad);
+            attr.addFlashAttribute("telefono",telefono);
+            attr.addFlashAttribute("address",address);
+            attr.addFlashAttribute("dni",dni);
+            attr.addFlashAttribute("password",password);
             return "redirect:/superAdmin/Crear/AdmT";
         }
 
@@ -791,7 +909,7 @@ public class SuperController {
     public String informes(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        model.addAttribute("informeList", informeRepository.listarInforme());
+        model.addAttribute("informeList", informeNuevoRepository.findAll());
         return "superAdmin/informes";
     }
     @GetMapping("/informes/delete")
@@ -810,17 +928,9 @@ public class SuperController {
     }
     @RequestMapping(value = {"/confSup"},method = RequestMethod.GET)
     public String confSup(Model model, RedirectAttributes attr, HttpServletRequest httpServletRequest, HttpSession httpSession, Authentication authentication){
-        System.out.println("Entrando A Perfil de SuperAdmin");
-        //Usuario user1 =
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
-        //Usuario superadmin = (Usuario) httpServletRequest.getSession().getAttribute("usuario");
         httpSession.setAttribute("usuario",superadmin);
         System.out.println("Se saco el usuario de sesión");
-        //Usuario usuario_doctor = (Usuario) httpSession.getAttribute("usuario");
-        //System.out.println("se saco usuario_doctor");
-        //System.out.println(usuario_doctor.getNombre() + " y su " + usuario_doctor.getTelefono());
-        //System.out.println(superadmin.getNombre() + " y su " + superadmin.getTelefono());
-        //Usuario user = usuarioRepository.obtenerSuperAdmin();
         model.addAttribute("superadmin",superadmin);
         return "superAdmin/confSup";
     }
@@ -915,11 +1025,13 @@ public class SuperController {
         httpSession.setAttribute("usuario",superadmin);
         return "cuestionario1";
     }
+    @Autowired
+    CuestionariosRepository cuestionariosRepository;
     @RequestMapping(value = {"/cuestionarios"},method = RequestMethod.GET)
     public String cuestionarios(Model model, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        List<Cuestionario> listaCuestionarios = cuestionarioRepository.findAll();
+        List<Cuestionarios> listaCuestionarios = cuestionariosRepository.findAll();
         model.addAttribute("cuestionarioList", listaCuestionarios);
         return "superAdmin/cuestionarios";
     }
@@ -930,10 +1042,10 @@ public class SuperController {
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
 
-        Optional<Cuestionario> optionalCuestionario = cuestionarioRepository.findById(id);
+        Optional<Cuestionarios> optionalCuestionarios = cuestionariosRepository.findById(id);
 
-        if (optionalCuestionario.isPresent() && active) {
-            cuestionarioRepository.updateActivoByActivo(false,id);
+        if (optionalCuestionarios.isPresent() && active) {
+            cuestionariosRepository.updateActivoByActivo(false,id);
             attr.addFlashAttribute("msg","Cuestionario borrado exitosamente");
         }
         return "redirect:/superAdmin/cuestionarios";
@@ -961,24 +1073,10 @@ public class SuperController {
     @PostMapping(value = "/editSave/Perfil")
     public String editSuperAdmin(Model model, RedirectAttributes attr,
                               @RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
-                              @RequestParam("correo") String correo, @RequestParam("telefono") String telefono,
-                              @RequestParam("dni") String dni, HttpSession httpSession,Authentication authentication){
+                              @RequestParam("correo") String correo, @RequestParam("telefono") String telefono, 
+                                 HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        /*public String editSuperAdmin(@ModelAttribute("sA") @Valid Usuario sA,BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr,
-                                 HttpServletRequest httpServletRequest){
-        *//*
-        if(bindingResult.hasErrors()){
-            attr.addFlashAttribute("msg1","Hubieron errores en el llenado de los campos");
-            return "redirect:/superAdmin/confSup";
-        }
-        else {
-            usuarioRepository.editSuperAdmin(sA.getNombre(),sA.getApellido(),sA.getEmail(),sA.getTelefono(),sA.getId(),superadmin.getId());
-            attr.addFlashAttribute("msg","SuperAdmin editado exitosamente");
-            return "redirect:/superAdmin/confSup";
-        }
-        }*/
         int c = 0;
         if(nombre.isEmpty()){
             attr.addFlashAttribute("nombremsg","El nombre no puede ser nulo");
@@ -1015,35 +1113,9 @@ public class SuperController {
             attr.addFlashAttribute("telefonomsg","El número de teléfono debe ser un número entero");
             telefono = superadmin.getTelefono();
         }
-        if(dni.isEmpty()){
-            attr.addFlashAttribute("dnimsg","El DNI no puede ser nulo");
-            c = c+1;
-            dni = superadmin.getId();
-        } else if (esNumeroEntero(dni)) {
-            if (dni.length()!=8) {
-                attr.addFlashAttribute("dnimsg","El DNI debe tener una longitud de 8 dígitos");
-                c = c+1;
-                dni = superadmin.getId();
-            } else {
-                Optional<Usuario> u = usuarioRepository.findById(dni);
-                if(u.isPresent()){
-                    if(u.get().getId().equals(superadmin.getId())){
-
-                    } else {
-                        attr.addFlashAttribute("dnimsg","El DNI ya se encuentra registrado.");
-                        c = c+1;
-                        dni = superadmin.getId();
-                    }
-                }
-            }
-        } else {
-            c=c+1;
-            attr.addFlashAttribute("dnimsg","El número de DNI debe ser un número entero");
-            dni = superadmin.getId();
-        }
         if(c == 0){
-            usuarioRepository.editSuperAdmin(nombre,apellido,superadmin.getEmail(),telefono,dni,superadmin.getId());
-            Usuario nuevaUsuario = usuarioRepository.findByid(dni);
+            usuarioRepository.editSuperAdmin(nombre,apellido,superadmin.getEmail(),telefono,superadmin.getId());
+            Usuario nuevaUsuario = usuarioRepository.findByid(superadmin.getId());
             attr.addFlashAttribute("msg","Usuario(SuperAdmin) ha sido editado exitosamente, el correo no puede ser editado por motivos de sesión");
             httpSession.setAttribute("usuario",nuevaUsuario);
             return "redirect:/superAdmin/confSup";
@@ -1125,6 +1197,7 @@ public class SuperController {
 
             HttpSession httpSession = request.getSession();
             //httpSession.setAttribute("usuario", usuarioRepository.findByEmail(authentication.getName()));
+            httpSession.removeAttribute("usuario");
             httpSession.setAttribute("usuario", usuarioRepository.findByEmail(user.getEmail()));
             System.out.println("se establecio la sesión");
             Usuario aaaaa = (Usuario) request.getSession().getAttribute("usuario");
@@ -1140,6 +1213,8 @@ public class SuperController {
             rol = user.getRolesIdroles().getNombreRol();
             switch (rol) {
                 case "paciente":
+                    String dnipaciente = user.getEmail();
+                    httpSession.setAttribute("emailpacienteloginasuser",dnipaciente);
                     return "redirect:/paciente/principal";
                 case "administrativo":
                     return "redirect:/administrativo/dashboard";
@@ -1154,51 +1229,83 @@ public class SuperController {
 
             }
         } else {
-            // Manejar el caso cuando no se encuentra el usuario
             return "redirect:/404.html"; // Página de no encontrado
         }
     }
-    @PostMapping("/guardarFoto")
-    public String guardarFoto(@RequestParam("file") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+
+    @RequestMapping(value = {"/crear/formulario"},method = RequestMethod.GET)
+    public String crearFormulario(HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
-        if(file.isEmpty()){
-            attr.addFlashAttribute("foto", "Debe subir un archivo");
-            return "redirect:/superAdmin/editarPerfil";
-        }
-        String filename = file.getOriginalFilename();
-        if(filename.contains("..")){
-            attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
-            return "redirect:/superAdmin/editarPerfil";
-        }
-        try{
-            superadmin.setFoto(file.getBytes());
-            superadmin.setFotonombre(filename);
-            superadmin.setFotocontenttype(file.getContentType());
-            usuarioRepository.save(superadmin);
-            attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
-            return "redirect:/superAdmin/editarPerfil";
-        } catch (IOException e) {
-            e.printStackTrace();
-            attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
-            return "redirect:/superAdmin/editarPerfil";
-        }
+        return "superAdmin/plantillaFormulario";
     }
-    @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") String id){
-        Optional<Usuario> opt = usuarioRepository.findById(id);
-        if(opt.isPresent()){
-            Usuario u = opt.get();
-            byte[] imagenComoBytes = u.getFoto();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(u.getFotocontenttype()));
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-        }else{
-            return null;
-        }
+
+    @RequestMapping(value = {"/crear/informe"},method = RequestMethod.GET)
+    public String crearInforme(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme";
     }
-    @PostMapping("/editarLogo")
-    public String editarLogo(Model model, @ModelAttribute("sede") Sede sede, @RequestParam("file") MultipartFile file, @RequestParam("id") int id, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
+
+    @RequestMapping(value = {"/crear/informe2"},method = RequestMethod.GET)
+    public String crearInforme2(HttpSession httpSession,Authentication authentication){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        return "superAdmin/plantillaInforme2";
+    }
+
+    @PostMapping(value = "/guardarFormulario")
+    public String guardarFormulario(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        System.out.println(salida);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/forms";
+    }
+
+    @Autowired
+    InformeNuevoRepository informeNuevoRepository;
+
+    @PostMapping(value = "/guardarInforme")
+    public String guardarInforme(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
+        Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
+        int i = 0;
+        for (String pregunta : preguntasSeparadas){
+            System.out.println(pregunta);
+            System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
+        }
+        //System.out.println(salida);
+        informeNuevoRepository.crearInforme(nombre,listaPreguntas);
+        //cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/informes";
+    }
+
+    @PostMapping("/guardarLogo")
+    public String editarLogo(Model model, @RequestParam("archivo") MultipartFile file, RedirectAttributes attr, HttpSession httpSession,Authentication authentication){
         Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
         if(file.isEmpty()){
@@ -1210,15 +1317,17 @@ public class SuperController {
             attr.addFlashAttribute("foto", "No se permiten caracteres especiales");
             return "redirect:/superAdmin/dashboard";
         }
+        if(filename.length() > 100){
+            attr.addFlashAttribute("foto", "Nombre de la imagen excede límite de 100 carácteres");
+            return "redirect:/superAdmin/dashboard";
+        }
+        UxUi uxUi= uxUiRepository.findById(5).orElse(null);
             try {
-                sede.setLogo(file.getBytes());
-                sede.setLogonombre(filename);
-                sede.setLogocontenttype(file.getContentType());
-                //superadmin.setFoto(file.getBytes());
-                //superadmin.setFotonombre(filename);
-                //superadmin.setFotocontenttype(file.getContentType());
-                //usuarioRepository.save(superadmin);
-                sedeRepository.save(sede);
+                assert uxUi != null;
+                uxUi.setLogo(file.getBytes());
+                uxUi.setLogoNombre(filename);
+                uxUi.setLogoContentType(file.getContentType());
+                uxUiRepository.cambiarLogo(file.getBytes(),filename,file.getContentType());
                 attr.addFlashAttribute("fotoSiu", "Foto actualizada de manera exitosa");
                 return "redirect:/superAdmin/dashboard";
             } catch (IOException e) {
@@ -1226,19 +1335,6 @@ public class SuperController {
                 attr.addFlashAttribute("foto", "Error al intentar actualizar foto");
                 return "redirect:/superAdmin/dashboard";
             }
-    }
-    @GetMapping("/logo/{id}")
-    public ResponseEntity<byte[]> mostrarLogo(@PathVariable("id") int id){
-        Optional<Sede> opt = sedeRepository.findById(id);
-        if(opt.isPresent()){
-            Sede sede = opt.get();
-            byte[] imagenComoBytes = sede.getLogo();
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(sede.getLogocontenttype()));
-            return new ResponseEntity<>(imagenComoBytes, httpHeaders, HttpStatus.OK);
-        }else{
-            return null;
-        }
     }
 
     @RequestMapping(value = {"/crear/cuestionario"},method = RequestMethod.GET)
@@ -1248,21 +1344,57 @@ public class SuperController {
         return "superAdmin/plantillas";
     }
 
-    @ResponseBody
+    //@ResponseBody
     @PostMapping(value = "/guardarPlantilla")
-    public String guardarPlantilla(@RequestParam("listaPreguntas") List<String> listaPreguntas, HttpSession httpSession, Authentication authentication){
+    public String guardarPlantilla(Model model,@RequestParam("nombre") String nombre,@RequestParam("listaPreguntas") String listaPreguntas, HttpSession httpSession, Authentication authentication){
         Usuario superadmin =usuarioRepository.findByEmail(authentication.getName());
         httpSession.setAttribute("usuario",superadmin);
+        String salida ="";
+        String separador ="#!%&%!#";
+        String[] preguntasSeparadas = listaPreguntas.split(">%%%%%<%%%%>%%%%%<");
         int i = 0;
-        for (String pregunta : listaPreguntas){
+        for (String pregunta : preguntasSeparadas){
             System.out.println(pregunta);
-            i++;
             System.out.println(i);
+            if (i==0){
+                salida = salida+pregunta;
+            }else {
+                salida = salida + separador + pregunta;
+            }
+            i++;
         }
-        //return "redirect:/superAdmin/cuestionarios";
-        return "Hola";
+        System.out.println(salida);
+        cuestionariosRepository.crearCuestionarios(nombre,1,salida);
+        return "redirect:/superAdmin/cuestionarios";
     }
 
+    @ExceptionHandler(TemplateOutputException.class)
+    @ResponseBody
+    public String gestionException(HttpSession httpSession){
+        System.out.println("SE AGARRO EL ERRORRR");
+        return "holaaa";
+    }
+
+    @RequestMapping(value = {"/ver/cuestionario"},method = RequestMethod.POST)
+    public String createCuest(Model model, @RequestParam("id") String id
+            ,HttpSession httpSession,Authentication authentication, RedirectAttributes attr){
+        Usuario superadmin = usuarioRepository.findByEmail(authentication.getName());
+        httpSession.setAttribute("usuario",superadmin);
+        int idd = Integer.parseInt(id);
+        Optional<Cuestionarios> optionalCuestionarios = cuestionariosRepository.findById(idd);
+        if (optionalCuestionarios.isPresent()) {
+            Cuestionarios cuestionarios = optionalCuestionarios.get();
+            String entrada = cuestionarios.getPreguntas();
+            List<String> listapreguntas = List.of(entrada.split("#!%&%!#"));
+            cuestionarios.setListapreguntas(listapreguntas);
+            model.addAttribute("cuestionarios", cuestionarios);
+            return "superAdmin/verplantilla";
+
+        } else {
+            attr.addFlashAttribute("doctor_noexiste","El cuestionario a ver no existe");
+            return "redirect:/superAdmin/dashboard";
+        }
+    }
 
 
 }

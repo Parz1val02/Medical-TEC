@@ -49,6 +49,30 @@
         <option value="3">Lince</option>
       </select>
       <br></br> -->
+      <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-body" style="background: #FFFFFF">
+          <div class="row justify-content-between align-items-center no-gutters">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-sm-8" style="display: flex;align-items: center; justify-content: center; font-weight: 600">
+                  Crea un nuevo informe:
+                </div>
+                <div class="col-sm-4" style="display: flex; padding: 0; text-align: center">
+                  <a th:href="@{/superAdmin/crear/informe}" style="flex: 1">
+                    <button type="submit" class="btn btn-primary" style="background: #0032aa; border: 5px solid #0032aa;
+                                        margin-right: 5px; margin-left: 5px; padding: 2px !important;">
+                      Crear informe
+                    </button>
+                  </a>
+                </div>
+                <div class="col-sm-4" style="display: flex; padding: 0; text-align: center">
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+      </div>
 
       <div class="card mb-3">
         <div class="card-body border-top">
@@ -56,17 +80,15 @@
             <thead class="bg-200">
             <tr>
               <th class="sort align-middle" style="width: 30%">N° Informe</th>
-              <th class="sort align-middle" style="width: 20%">Especialidad</th>
-              <th class="sort align-middle" style="width: 20%">Diagnóstico</th>
+              <th class="sort align-middle" style="width: 20%">Nombre</th>
               <th class="sort align-middle" style="width: 20%">Descargar</th>
               <th class="sort align-middle" style="width: 10%">Borrar</th>
             </tr>
             </thead>
             <tbody class="bg-white">
-            <tr th:each="informe, info : ${informeList} "th:if="${informe.getIdinforme()!= null && informe.getActivo() == true}">
+            <tr th:each="informe, info : ${informeList} "th:if="${informe.getId()!= null && informe.getActivo() == true}">
               <td th:text="${info.index+1}"></td>
-              <td th:text="${informe.getNombre()}"></td>
-              <td th:text="${informe.getDiagnostico()}"></td>
+              <td th:text="${informe.nombre}"></td>
               <td class="align-middle">
                 <!-- A esto me referia con opciones-->
                 <div class="dropdown font-sans-serif">
@@ -94,7 +116,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${informe.getIdinforme()} + '&active='+ ${informe.getActivo()}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
+                            <a th:href="@{'/superAdmin/informes/delete?id=' + ${informe.getId()} + '&active='+ ${informe.getActivo()}}"  class="btn btn-secondary" style="text-align: center;background: #BD362F;
           border-radius: 15px; border-color: #FFFFFF">Borrar informe</a>
                           </div>
                         </div>

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}"></head>
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Configuración')}"></head>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
+
 
 <body class="">
 
 <!-- ===============================================-->
 <!--    Main Content-->
 <!-- ===============================================-->
-<main class="main" id="top">
+<main style="padding: 0 50px 50px 50px;" id="top">
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -33,20 +37,20 @@
             </div>
             <div class="card mb-3">
                 <div class="card-header position-relative min-vh-25 mb-7">
-                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/22.png);">
+                    <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/20.jpg)">
                     </div>
                     <!--/.bg-holder-->
-                    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" th:src="@{|/paciente/image/${session.usuario.id}|}" width="200" alt="" /></div>
+                    <div class="avatar avatar-5xl avatar-profile">
+                        <img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" />
+                    </div>
                 </div>
                 <br>
-                <div class="col">
-                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
-                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
-                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <h4 class="mb-1" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+                    <div>
+                        <div>
+                            <h4 class="mb-1" style="font-weight: 600;" th:text="|${session.usuario.nombre.toUpperCase()} ${session.usuario.apellido.toUpperCase()}|">
+                                <small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2">
+                                </small>
                             </h4>
                             <form>
                                 <fieldset disabled>
@@ -76,174 +80,296 @@
                                             <input type="text" id="disabledTextInput3" class="form-control" th:placeholder="${session.usuario.direccion}">
                                         </div>
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput4" class="form-label">Número telefonico</label>
+                                            <label for="disabledTextInput4" class="form-label">Número telefónico</label>
                                             <input type="text" id="disabledTextInput4" class="form-control" th:placeholder="${session.usuario.telefono}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput5" class="form-label">Correo</label>
+                                            <label for="disabledTextInput7" class="form-label">Correo</label>
                                             <input type="text" id="disabledTextInput7" class="form-control" th:placeholder="${session.usuario.email}">
                                         </div>
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput6" class="form-label">Estado</label>
+                                            <label for="disabledTextInput8" class="form-label">Estado</label>
                                             <input type="text" id="disabledTextInput8" class="form-control" th:placeholder="${#strings.capitalize(session.usuario.estadosIdestado.nombre)}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput5" class="form-label">Edad</label>
-                                            <input type="text" id="disabledTextInput9" class="form-control" th:placeholder="|${session.usuario.edad} años|">
+                                            <label for="disabledTextInput9" class="form-label">Fecha de Nacimiento:</label>
+                                            <input type="text" id="disabledTextInput9" class="form-control" th:placeholder="|${session.usuario.fechaNacimiento}|">
                                         </div>
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput6" class="form-label">Sexo</label>
+                                            <label for="disabledTextInput10" class="form-label">Sexo</label>
                                             <input type="text" id="disabledTextInput10" class="form-control" th:placeholder="${session.usuario.sexo}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput5" class="form-label">Especialidad</label>
+                                            <label for="disabledTextInput11" class="form-label">Especialidad</label>
                                             <input type="text" id="disabledTextInput11" class="form-control" th:placeholder="${session.usuario.especialidadesIdEspecialidad.nombreEspecialidad}">
                                         </div>
                                         <div class="col mb-3">
-                                            <label for="disabledTextInput6" class="form-label">Cédula</label>
+                                            <label for="disabledTextInput12" class="form-label">Nro. de Colegiatura</label>
                                             <input type="text" id="disabledTextInput12" class="form-control" th:placeholder="${session.usuario.ceduladoctor}">
                                         </div>
                                     </div>
                                 </fieldset>
                             </form>
-                        </div>
-                        <div class="col-lg-5">
-                            <!-- CAMBIAR FOTO DE PERFIL -->
-                            <div style="height: 30px"></div>
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="disabledTextInput1" class="form-label">Sede Actual</label>
-                                    <input type="text" id="disabledTextInput13" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}" disabled>
-                                </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <label for="disabledTextInput11" class="form-label">Mi firma digital actual:</label>
+                                <img th:src="@{'/fotoFirmaDoctor?dni='+${session.usuario.id}}" width="200" alt="" style="background: #edf2f9;border-radius: 5px;
+                                height: 100px;width: 300px;border: 1px solid #d8e2ef;"/>
                             </div>
-                            <div style="">
-                                <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu foto de perfil?</p>
-                                <button type="button" class="btn btn-secondary btn-sm" style="text-align: center;background: #3a85f3;
-                                    border-radius: 15px; border-color: #3a85f3;width: 130px;" data-toggle="modal" data-target="#CambiarFoto">Cambiar foto</button>
-                            </div>
-                            <div style="height: 10px"></div>
-                            <div style="height: 10px"></div>
-
-                            <!-- CAMBIAR SEDE -->
-                            <p style="margin: 0 0 10px 0; font-weight: bold;"> ¿Deseas cambiar tu sede?</p>
-                            <button onclick="toggleInput()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
-                                    font-size: 15px; color: white">
-                                Cambiar sede
-                            </button>
-
-                            <div style="height: 10px"></div>
-                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"
-                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-
-                            <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
-                                  style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
-                                <div class="form-group" style="display: block;">
-
-                                    <label for="id" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Elija una nueva Sede:</label>
-                                    <select class="form-control" aria-label="Default select example" name="id" id="id" style="font-family: 'Open Sans',serif">
-                                        <option selected>Select--</option>
-                                        <option th:each="sede : ${sedeList}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
-                                    </select>
-
-                                </div>
-                                <div class="form-group" style="text-align: right;">
-                                    <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7;width: 130px;">Cambiar Sede</button>
-                                    <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
-                                        <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
-                                    </a>
-                                </div>
-                            </form>
-
-                            <!-- CAMBIAR CONTRASEÑA -->
-                            <div style="height: 10px"></div>
-                            <p style="margin: 0 15px 0 0;line-height: 40px; font-weight: bold;"> ¿Deseas cambiar tu contraseña?</p>
-                            <button onclick="toggleInputContra()" class="btn btn-primary btn-sm" style="font-family: 'Open Sans',serif;
-                                    border: 1px solid #3a85f3; border-radius: 1rem; background: #3a85f3;
-                                    font-size: 15px; color: white">
-                                Cambiar contraseña
-                            </button>
-                            <div style="height: 10px"></div>
-                            <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
-                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                            <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
-                                 style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
-                            <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
-                                  style="padding: 15px;border: 1px solid #b6c1d2;border-radius: 2px;">
-                                <div class="form-group">
-                                    <p  style="margin: 0">
-                                        Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
-                                        • Que la contraseña contenga al menos ocho caracteres.<br>
-                                        • Que la contraseña contenga al menos un número.<br>
-                                        • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
-                                        • Que la contraseña contenga al menos una mayúscula. </p>
-                                    <label for="passActual" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña actual</label>
-                                    <input type="password" class="form-control" id="passActual" name="pass1" style="width: 90%" required>
-                                    <div style="height: 5px"></div>
-                                    <label for="passNueva" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Contraseña nueva</label>
-                                    <input type="password" class="form-control" id="passNueva" name="pass2" style="width: 90%" required>
-                                    <div style="height: 5px"></div>
-                                    <label for="passConfirmar" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Confirmar contraseña nueva</label>
-                                    <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 90%" required>
-
-                                    <!--
-                                    <label for="contrasena" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba su nueva contraseña:</label>
-                                    <input type="password" class="form-control" id="contrasena" name="contrasena">
-                                    <label for="contrasena_repetida" style="font-weight: bold !important; margin: 0;
-                                    font-family: 'Open Sans',serif;font-size: medium;margin-bottom: 10px;">Escriba nuevamente su nueva contraseña:</label>
-                                    <input type="password" class="form-control" id="contrasena_repetida" name="contrasena_repetida">
-                                    -->
-                                </div>
-                                <div class="form-group" style="text-align: right;">
-                                    <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
-                                    border-radius: 15px; border-color: #3d8af7;width: 190px;">Cambiar Contraseña</button>
-                                    <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
-                                        <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 100px;">Cancelar</button>
-                                    </a>
-                                </div>
-                            </form>
-
                         </div>
-
                     </div>
                 </div>
             </div>
-            <script>
-                function toggleInput() {
-                    var inputContainer = document.getElementById("formscontainersede");
-                    if (inputContainer.style.display === "none") {
-                        inputContainer.style.display = "block";
-                    } else {
-                        inputContainer.style.display = "none";
-                    }
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;; padding-bottom: 5px">
+                        Realiza cambios a tu perfil
+                    </h4>
+                    <div style="display: flex; text-align: center">
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Cambiar foto de perfil
+                            </button>
+                        </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Cambiar sede
+                            </button>
+                        </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(3)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Cambiar contraseña
+                            </button>
+                        </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(4)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Agregar firma digital
+                            </button>
+                        </a>
+                    </div>
+                    <!-- CAMBIAR FOTO DE PERFIL -->
+                    <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert">
+                        <br>
+                    </div>
+                    <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert">
+                        <br>
+                    </div>
+
+                    <!-- CAMBIAR CONTRASEÑA -->
+                    <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+                    <div th:if="${errorPass != null}" th:text="${errorPass}" class="alert alert-danger" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+
+                    <!-- CAMBIAR SEDE -->
+                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"
+                         style="margin-bottom: 10px; font-family: 'Open Sans',serif"></div>
+
+                    <!-- CAMBIAR FOTO DE PERFIL -->
+                    <div id="div1" style="display: none; padding-left: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
+                            Foto de perfil
+                        </h4>
+
+                        <div style="display: flex;">
+                            <form method="POST" th:action="@{/uploadDoctor}"
+                                  class="dropzone"
+                                  id="myGreatDropzone" style="margin: 10px 15px; width: 50%; flex: 2; "></form>
+                            <div style="flex: 1;    padding-left: 20px;">
+                                <p style="padding: 15px 15px 15px 0;">
+                                    Aquí puedes personalizar tu perfil agregando una foto.
+                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                                </p>
+                                <button class="btn btn-primary btn-sm" type="submit" id="arch">Guardar cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CAMBIAR SEDE -->
+                    <div id="div2" style="display: none;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 15px; ">
+                            Cambio de sede
+                        </h4>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="disabledTextInput111" class="form-label">Sede actual:</label>
+                                <input type="text" id="disabledTextInput111" class="form-control" th:placeholder="${session.usuario.sedesIdsedes.nombre}">
+                            </div>
+                        </div>
+                        <form th:action="@{/doctor/cambiarSede}" method="post" class="input-hidden" id="formscontainersede"
+                              style="padding: 0 15px 15px 15px; display: block;">
+                            <div class="form-group" style="display: block;">
+                                <label for="id" class="form-label">Seleccione su nueva sede:</label>
+                                <select class="form-control" aria-label="Default select example" name="id" id="id" style="font-family: 'Open Sans',serif">
+                                    <option selected>Select--</option>
+                                    <option th:each="sede : ${sedeList}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                                <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-color: #3d8af7;width: 130px;">Cambiar Sede</button>
+                                <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
+                                    <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
+                                   border-color: #9da9bb;width: 100px;">Cancelar</button>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- CAMBIAR CONTRASEÑA -->
+                    <div id="div3" style="display: none;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 15px;">
+                            Cambio de contraseña
+                        </h4>
+                        <form th:action="@{/doctor/cambiarContrasena}" method="post" class="input-hidden" id="formscontainercontra"
+                              style="padding: 15px; display: block;">
+                            <div class="form-group">
+                                <p  style="margin: 0; font-size: 15px;">
+                                    Para ingresar su contraseña nueva, considere las siguientes restricciones:<br>
+                                    • Que la contraseña contenga al menos ocho caracteres.<br>
+                                    • Que la contraseña contenga al menos un número.<br>
+                                    • Que la contraseña contenga al menos un carácter especial (@#$%&*).<br>
+                                    • Que la contraseña contenga al menos una mayúscula y una minúscula..
+                                </p>
+                                <div style="height: 10px"></div>
+                                <div style="width: 100%; display: flex; flex-direction: column ;justify-content: center;align-items: center;">
+                                    <div style="width: 60%;">
+                                        <label for="passActual" class="form-label">Contraseña actual: </label>
+                                        <input type="password" class="form-control" id="passActual" name="pass1" style="width: 100%" required>
+                                        <div style="height: 5px"></div>
+                                        <label for="passNueva" class="form-label">Contraseña nueva: </label>
+                                        <input type="password" class="form-control" id="passNueva" name="pass2" style="width: 100%" required>
+                                        <div style="height: 5px"></div>
+                                        <label for="passConfirmar" class="form-label">Confirmar contraseña nueva: </label>
+                                        <input type="password" class="form-control" id="passConfirmar" name="pass3" style="width: 100%" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                                <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
+                                    border-color: #3d8af7;width: 190px;">Cambiar Contraseña</button>
+                                <a th:href="@{/doctor/config}" style="padding-left: 5px; color: #3d4858">
+                                    <button class="btn btn-secondary btn-sm" style="text-align: center;background: #9da9bb;
+                                    border-color: #9da9bb;width: 100px;">Cancelar</button>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- AGREGAR FIRMA DIGITAL -->
+                    <div id="div4" style="display:none; padding-left: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
+                            Firma digital
+                        </h4>
+                        <div style="display: flex;">
+                            <form method="POST" th:action="@{/uploadFirma}"
+                                  class="dropzone"
+                                  id="myGreatDropzone2" style="margin: 10px 15px; width: 50%; flex: 2;"></form>
+                            <div style="flex: 1; padding-left: 20px;">
+                                <p style="padding: 15px 15px 15px 0;">
+                                    Aquí puedes personalizar tu firma agregando una foto.
+                                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                                </p>
+                                <button class="btn btn-primary btn-sm" type="submit" id="clash">Guardar cambios</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+            </div>
+        </div>
+        <script>
+            var input = document.getElementById('dia');
+            var valor;
+            var nuevoValor;
+            var botonLunes = document.getElementById('Lunes');
+            console.log(botonLunes);
+            console.log(input)
+            var botonMartes = document.getElementById('Martes');
+            var botonMiercoles = document.getElementById('Miercoles');
+            var botonJueves = document.getElementById('Jueves');
+            var botonViernes = document.getElementById('Viernes');
+            var botonSabado = document.getElementById('Sabado');
+
+            // Agrega un evento click al botón
+            botonLunes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Lunes";
+                input.value = nuevoValor;
+            });
+
+            botonMartes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Martes";
+                input.value = nuevoValor;
+            });
+
+            botonMiercoles.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Miercoles";
+                input.value = nuevoValor;
+            });
+
+            botonJueves.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Jueves";
+                input.value = nuevoValor;
+            });
+
+            botonViernes.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Viernes";
+                input.value = nuevoValor;
+            });
+
+            botonSabado.addEventListener("click", function() {
+                valor = input.value;
+                nuevoValor = valor+"Sabado";
+                input.value = nuevoValor;
+            });
+
+
+        </script>
+        <script>
+            function toggleInput() {
+                var inputContainer = document.getElementById("formscontainersede");
+                if (inputContainer.style.display === "none") {
+                    inputContainer.style.display = "block";
+                } else {
+                    inputContainer.style.display = "none";
+                }
+            }
+
+            function toggleInputContra() {
+                var inputContainer = document.getElementById("formscontainercontra");
+                if (inputContainer.style.display === "none") {
+                    inputContainer.style.display = "block";
+                } else {
+                    inputContainer.style.display = "none";
+                }
+            }
+
+            function mostrarDiv(numeroDiv) {
+                for (var i = 1; i < 5; i++) {
+                    var div = document.getElementById("div" + i);
+                    div.style.display = "none";
                 }
 
-                function toggleInputContra() {
-                    var inputContainer = document.getElementById("formscontainercontra");
-                    if (inputContainer.style.display === "none") {
-                        inputContainer.style.display = "block";
-                    } else {
-                        inputContainer.style.display = "none";
-                    }
-                }
-            </script>
-            <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
-        </div>
-    </div>
+                // Mostrar el div seleccionado
+                var divMostrar = document.getElementById("div" + numeroDiv);
+                divMostrar.style.display = "block";
+            }
+        </script>
     </div>
 </main>
 <!-- ===============================================-->
@@ -257,6 +383,8 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<!--    Scripts de Dropzone -->
+<script th:src="@{/lib/dropzone/dropzone.min.js}"></script>
 
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
@@ -271,9 +399,108 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+    Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+        paramName: "file", // The name that will be used to transfer the file
+        maxFiles: 1,
+        autoProcessQueue: false,
+        acceptedFiles: ".jpg,.jpeg",
+        maxFilesize: 2,
+        addRemoveLinks: true,
+        dictResponseError: 'Server not Configured',
+        init:function(){
+            var self = this;
+            // Update selector to match your button
+            $("#arch").click(function (e) {
+                e.preventDefault();
+                self.processQueue();
+                // config
+                self.options.addRemoveLinks = true;
+                self.options.dictRemoveFile = "Delete";
+                //New file added
+                self.on("addedfile", function (file) {
+                    console.log('new file added ', file);
+                });
+                // Send file starts
+                self.on("sending", function (file) {
+                    console.log('upload started', file);
+                    $('.meter').show();
+                });
+
+                // File upload Progress
+                self.on("totaluploadprogress", function (progress) {
+                    console.log("progress ", progress);
+                    $('.roller').width(progress + '%');
+                });
+
+                self.on("queuecomplete", function (progress) {
+                    $('.meter').delay(999).slideUp(999);
+                });
+
+                // On removing file
+                self.on("removedfile", function (file) {
+                    console.log(file);
+                });
+            });
+            this.on("queuecomplete", function(progress) {
+                // File upload is complete
+                location.reload();
+            });
+        }
+    };
+    Dropzone.options.myGreatDropzone2 = { // camelized version of the `id`
+        paramName: "file", // The name that will be used to transfer the file
+        maxFiles: 1,
+        autoProcessQueue: false,
+        acceptedFiles: ".jpg,.jpeg",
+        maxFilesize: 2,
+        addRemoveLinks: true,
+        dictResponseError: 'Server not Configured',
+        init:function(){
+            var self = this;
+            // Update selector to match your button
+            $("#clash").click(function (e) {
+                e.preventDefault();
+                self.processQueue();
+                // config
+                self.options.addRemoveLinks = true;
+                self.options.dictRemoveFile = "Delete";
+                //New file added
+                self.on("addedfile", function (file) {
+                    console.log('new file added ', file);
+                });
+                // Send file starts
+                self.on("sending", function (file) {
+                    console.log('upload started', file);
+                    $('.meter').show();
+                });
+
+                // File upload Progress
+                self.on("totaluploadprogress", function (progress) {
+                    console.log("progress ", progress);
+                    $('.roller').width(progress + '%');
+                });
+
+                self.on("queuecomplete", function (progress) {
+                    $('.meter').delay(999).slideUp(999);
+                });
+
+                // On removing file
+                self.on("removedfile", function (file) {
+                    console.log(file);
+                });
+            });
+            this.on("queuecomplete", function(progress) {
+                // File upload is complete
+                location.reload();
+            });
+        }
+    };
+</script>
+
+<script>
     $(document).ready(function () {
-        //Esta busacando por el ID del tah <table>
-        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
+        //Esta buscando por el ID del tah <table>
+        //para que entiendan bien lo que se está haciendo, leer la documentación de datatable
         $('#userList').DataTable({
             dom: "<'d-flex justify-content-end pb-4'B>\n" +
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +

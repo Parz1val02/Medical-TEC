@@ -15,7 +15,7 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -53,19 +53,21 @@
                             <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionariosList}">
                                 <div class="card" style="height: 100%">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6 align-content-center"  style="align-items: center">
+                                        <div>
+                                            <div class="align-content-center"  style="align-items: center">
                                                 <div style="height: 15px"></div>
                                                 <h6 class="card-subtitle" th:text="|Cuestionario ${i.index+1}|">Cuestionario #</h6>
                                                 <div style="height: 10px"></div>
-                                                <h5 class="card-title mb-2" th:text="${cuestionario.nombrecuestionario}">Título de Cuestionario</h5>
+                                                <h5 class="card-title mb-2" th:text="${cuestionario.nombre}">Título de Cuestionario</h5>
                                             </div>
-                                            <div class="col-md-6" align="center" style="align-items: center">
+                                            <br>
+                                            <div  style="align-items: center;display: flex;justify-content: center;">
                                                 <button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
-                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>
+                                                border-radius: 15px; margin-right: 10px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Previsualizar</button>
                                                 <div style="height: 15px"></div>
-                                                <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                    border-radius: 15px; border-color: #b38df7;">Seleccionar</button>
+                                                <button type="button" th:attr="onclick=|cambiarCuestionario('${cuestionario.id}', '${cuestionario.nombre}')|"
+                                                        class="btn btn-primary btn-sm" style="text-align: center;background: #00a9b1;
+                                                        border-radius: 15px; border-color: #00a9b1;">Seleccionar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +81,7 @@
             <div th:each="cuestionario, i : ${cuestionariosList}">
                 <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Cuestionario' + ${i.index+1}">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content" style="min-width: 660px;">
                             <!-- Aquí puedes agregar el contenido del modal -->
                             <div class="modal-header">
                                 <h5 class="modal-title">Información del Cuestionario #</h5>
@@ -87,39 +89,21 @@
                             </div>
                             <div class="modal-body">
                                 <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <!-- aquí iría el logo de la empresa -->
-                                            <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
-                                        </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <!-- aquí iría el logo de la empresa -->
+                                        <img class="mr-2" src="/img/illustrations/shield.png" alt="" width="50">
+                                        <span class="text-sans-serif" style="font-size: 25px; margin-left: 10px;" >MedicalTec</span>
                                     </div>
                                     <br>
                                     <b>Nombre:  </b>
-                                    <p th:text="|${cuestionario.nombrecuestionario}|">Título del Cuestionario</p>
-
-                                    <b>Pregunta 1</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 2</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 3</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 4</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
-                                    <b>Pregunta 5</b>
-                                    <p style="margin: 0px"> Información de Pregunta</p>
-                                    <input disabled>
-                                    <div style="width: 10px;height: 20px;"></div>
+                                    <p th:text="|${cuestionario.nombre}|">Título del Cuestionario</p>
+                                    <div th:each="pregunta, iterStatus2  : ${cuestionario.listapreguntas}">
+                                        <b th:text="|Pregunta ${i.index+1}|"></b>
+                                        <p style="margin: 0px" th:text="${pregunta}"> Información de Pregunta</p>
+                                        <input disabled>
+                                        <div style="width: 10px;height: 20px;"></div>
+                                    </div>
                                 </div>
-
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
@@ -130,49 +114,63 @@
             </div>
 
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
-                <div class="card-body" style="background: #FFFFFF; padding-bottom: 20px !important;">
-                    <div class="row justify-content-between align-items-center">
-                        <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px">
-                            Redacción para el remitente (Asunto + Descripción)
-                        </h5>
+                <div class="card-body" style="background: #FFFFFF;">
+                    <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px">
+                        Redacción para el remitente
+                    </h5>
+                    <br>
+                    <div th:if="${cuestionario_enviado != null}" th:text="${cuestionario_enviado}" class="alert alert-success" role="alert"
+                         style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
+                    <div th:if="${cuestionario_noenviado != null}" th:text="${cuestionario_noenviado}" class="alert alert-danger" role="alert"
+                         style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
+                    <div th:if="${usuario_vacio != null}" th:text="${usuario_vacio}" class="alert alert-danger" role="alert"
+                         style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif">
+                        A simple danger alert—check it out!
                     </div>
-                </div>
-                <div th:if="${cuestionario_enviado != null}" th:text="${cuestionario_enviado}" class="alert alert-success" role="alert"
-                     style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif"></div>
-                <div th:if="${usuario_vacio != null}" th:text="${usuario_vacio}" class="alert alert-danger" role="alert"
-                     style= "margin: 25px; margin-top: 1px !important; font-family: 'Open Sans',serif">
-                    A simple danger alert—check it out!
-                </div>
-                <form th:action="@{/doctor/enviarCuest}" method="post" style="padding-left: 35px; padding-right: 15px">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4" style="display: flex; flex-direction: column">
-                                <label for="usuario" class="mb-2 mb-md-0" style="">Para:</label>
-                                <select class="form-select" aria-label="Default select example" name="usuario" id="usuario" style="font-family: 'Open Sans',serif;
+                    <form th:action="@{/doctor/enviarCuest}" method="post" style="padding-left: 15px;">
+                        <div class="form-group">
+                            <label for="usuario" class="mb-2 mb-md-0" style="">Para:</label>
+                            <select class="form-select" aria-label="Default select example" name="usuario" id="usuario" style="font-family: 'Open Sans',serif;
                                 color: #9da9bb;font-size: 15px;border: 1px solid #d8e2ef;border-radius: 5px; height: 35px; padding: 0.3125rem 1rem; width: 100%; margin-top: 5px;">
-                                    <option selected>Seleccionar usuario</option>
-                                    <option th:each="paciente : ${listaPacientes}" th:value="${paciente.id}"
-                                            th:text="|${paciente.nombre} ${paciente.apellido} - ${paciente.id}|" style="font-family: 'Open Sans',serif"></option>
-                                </select>
-                            </div>
-                            <div class="col-md-8" style="display: flex; flex-direction: column">
-                                <label for="mensaje" class="mb-2 mb-md-0" style="font-weight: bold; ">Mensaje:</label>
-                                <input type="text" class="form-control" id="mensaje" name="mensaje" style="width: 100%; font-family: 'Open Sans',serif; color: #9da9bb;
+                                <option selected>Seleccionar usuario</option>
+                                <option th:each="paciente : ${listaPacientes}" th:value="${paciente.id}"
+                                        th:text="|${paciente.nombre} ${paciente.apellido} - ${paciente.id}|" style="font-family: 'Open Sans',serif"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje" class="mb-2 mb-md-0" style="font-weight: bold; ">Mensaje:</label>
+                            <input type="text" class="form-control" id="mensaje" name="mensaje" style="width: 100%; font-family: 'Open Sans',serif; color: #9da9bb;
                                 margin-top: 5px; " placeholder="Escriba su mensaje">
+                        </div>
+                        <div class="form-group">
+                            <label for="cuestionarioseleccionado" class="mb-2 mb-md-0" style="font-weight: bold;">Cuestionario seleccionado:</label>
+                            <input type="hidden" id="cuest" name="cuest" value="idcuestionario">
+                            <div class="form-control" id="cuestionarioseleccionado" name="cuestionario" style="width: 100%; font-family: 'Open Sans', serif; color: #9da9bb; margin-top: 5px; border: none; background: none; padding: 0;">
+                                Seleccione un cuestionario
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group" style="text-align: center">
-                        <!-- Button trigger modal -->
-                        <button type="submit" class="btn btn-secondary " style="text-align: center;background: #3d8af7;
+                        <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center;background: #3d8af7;
                                     border-radius: 15px; border-color: #3d8af7;">Enviar Cuestionario </button>
-                        <a th:href="@{/doctor/cuestionarios}" style="padding-left: 5px; color: #3d4858">
-                            <button class="btn btn-secondary" style="text-align: center;background: #9da9bb;
-                                    border-radius: 15px; border-color: #9da9bb;width: 110px;">Cancelar</button>
-                        </a>
-                    </div>
-                    <br>
-                </form>
+                        <br>
+                        <script>
+                            function cambiarCuestionario(idCuestionario,nombrecuestionario) {
+                                // Obtener el elemento del nombre del cuestionario
+                                const cuestionarioDisplay = document.getElementById('cuestionarioseleccionado');
+
+                                // Cambiar el nombre del cuestionario
+                                cuestionarioDisplay.textContent = nombrecuestionario;
+                                console.log(idCuestionario);
+                                console.log(nombrecuestionario);
+
+                                // Cambiar el valor del atributo "value" del botón
+                                const inputcuest = document.getElementById('cuest');
+                                inputcuest.value = idCuestionario;
+                            }
+
+                        </script>
+                    </form>
+                </div>
+
             </div>
             <br>
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>

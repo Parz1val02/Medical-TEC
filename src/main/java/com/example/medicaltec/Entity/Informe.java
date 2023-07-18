@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -14,21 +16,34 @@ public class Informe {
     @Column(name = "idinforme", nullable = false)
     private Integer id;
 
-    @Column(name = "diagnostico", nullable = false, length = 200)
-    private String diagnostico;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_dni", referencedColumnName = "dni")
+    private Usuario paciente;
 
-    @Column(name = "firma", nullable = false)
-    private byte[] firma;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cita_idcita", referencedColumnName = "idcita")
+    private Cita cita;
+    @Column(name = "diagnostico", length = 200)
+    private String diagnostico;
 
     @Column(name = "bitacora", length = 500)
     private String bitacora;
 
-    @ManyToOne
-    @JoinColumn(name = "historialmedico_idhistorialmedico", nullable = false)
-    private Historialmedico historialmedicoIdhistorialmedico;
+    @Column(name = "tratamiento", length = 100)
+    private String tratamiento;
 
     @Column(name = "activo")
     private Boolean activo;
+
+    @Column(name = "camposllenados")
+    private String campos;
+
+    @Transient
+    private List<String> listacamposllenados;
+
+    @ManyToOne
+    @JoinColumn(name = "informe_nuevo_idinforme")
+    private InformeNuevo informeNuevo;
 
 
 

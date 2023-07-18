@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Mensajeria')}">
 </head>
-
 
 <body class="">
 
@@ -28,13 +27,17 @@
             </div>
             <div class="col-md-11">
               <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                Revisa la información correspondiente a mensajes, citas y más.                            </h5>
+                Revisa la información correspondiente a mensajes </h5>
             </div>
           </div>
         </div>
       </div>
 
-      <div th:replace="~{fragmentos/messages.html::messages}"></div>
+      <!-- <div th:replace="~{fragmentos/messages.html::messages}"></div> -->
+      <div class="card d-flex justify-content-center align-items-center" style="padding: 3%">
+        <div id="cometchat" style="z-index: 1" class="d-flex justify-content-center align-items-center"></div>
+      </div>
+
 
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
@@ -51,6 +54,19 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+
+<!--    Scripts de CometChat -->
+<script th:src="@{/js/CometChat.js}"></script>
+
+
+<script th:inline="javascript">
+
+  let usuarioId = [[${session.usuario.id}]];
+
+</script>
+
+
 
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>

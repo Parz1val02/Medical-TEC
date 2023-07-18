@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Historial')}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
 
@@ -14,6 +15,7 @@
 
   <div class="container" data-layout="container">
     <nav th:replace="~{fragmentos/sidebaradministrador.html::sideBar}"></nav>
+
     <div class="content" >
       <nav th:replace="~{fragmentos/topbaradministrador.html::topBar}"></nav>
 
@@ -38,225 +40,166 @@
 
       <br>
       <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF">
-        <div class="card-body" style="background: #FFFFFF">
-          <div>
-            <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
-              Información del paciente
-            </h5>
-          </div>
+        <div class="card-body">
+          <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+            Información del paciente
+          </h5>
           <br>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Nombre: </p>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
-            </div>
-          </div>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Edad: </p>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="${paciente.edad}"></p>
-            </div>
-          </div>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">DNI: </p>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="${paciente.id}"></p>
-            </div>
-          </div>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Sexo: </p>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
-            </div>
-          </div>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Dirección: </p>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
-            </div>
-          </div>
-
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Seguro: </p>
-            </div>
-            <div class="col-md-6">
-              <div th:if="${paciente.segurosIdSeguro!=null}">
-                <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
-              </div>
-              <div th:if="${paciente.segurosIdSeguro==null}">
-                <p style="font-weight: normal" th:text="${'El paciente no está afiliado a ningún seguro'}"></p>
-              </div>
-            </div>
-          </div>
-
-          <div th:if="${msgSinHistorial==null}">
-            <div class="row" style="width: 60%;">
-              <div class="col-md-6">
-                <p style="font-weight: bold">Alergias: </p>
-              </div>
-              <div class="col-md-6">
-                <div th:if="${#lists.size(listaAlergias)==0}">
-                  <div>
-                    <p style="font-weight: normal"> No tiene alergias registradas</p>
-                  </div>
-                </div>
-                <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
-              </div>
-            </div>
-
-            <div class="row" style="width: 60%;">
-              <div class="col-md-6">
-                <p style="font-weight: bold">Tratamiento: </p>
-              </div>
-              <div class="col-md-6">
-                <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
-              </div>
-            </div>
-
-          </div>
-          <br>
-          <div th:if="${msgSinHistorial!=null}" >
-            <h5 class="mb-2 mb-md-0" th:text="${msgSinHistorial}" style="font-weight: bold"> </h5>
-          </div>
-
-
-          <!--
-          <div class="row" style="width: 60%;">
-            <div class="col-md-6">
-              <p style="font-weight: bold">Nombre: </p>
-              <p style="font-weight: bold">Edad: </p>
-              <p style="font-weight: bold">DNI: </p>
-              <p style="font-weight: bold">Sexo: </p>
-
-              <p style="font-weight: bold">Dirección: </p>
-              <div th:if="${msgSinHistorial==null}">
-                <p style="font-weight: bold">Alergias: </p>
-                <p style="font-weight: bold">Tratamiento: </p>
-                <p style="font-weight: bold">Seguro: </p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <p style="font-weight: normal" th:text="|${#strings.capitalize(paciente.nombre)} ${#strings.capitalize(paciente.apellido)}|"></p>
-              <p style="font-weight: normal" th:text="${paciente.edad}"></p>
-              <p style="font-weight: normal" th:text="${paciente.id}"></p>
-              <p style="font-weight: normal" th:text="${paciente.sexo=='M'?'Masculino':'Femenino'}"></p>
-              <p style="font-weight: normal" th:text="${paciente.direccion}"></p>
-              <div th:if="${msgSinHistorial==null}">
-                <div th:if="${#lists.size(listaAlergias)==0}">
-                  <div>
-                    <p style="font-weight: normal"> No tiene alergias registradas</p>
-                  </div>
-                </div>
-                <p style="font-weight: normal" th:each="alergia : ${listaAlergias}" th:text="${#strings.capitalize(alergia.nombre)}"></p>
-                <p style="font-weight: normal" th:text="${#strings.capitalize(paciente.historialmedicoIdhistorialmedico.tratamiento)}"></p>
-              </div>
-              <div th:if="${msgSinHistorial==null}">
-                <div th:if="${paciente.segurosIdSeguro!=null}">
-                  <p style="font-weight: normal" th:text="${paciente.segurosIdSeguro.nombreSeguro}"></p>
-                </div>
-              </div>
-            </div>
-
-            <div th:if="${msgSinHistorial!=null}">
-              <h5 th:text="${msgSinHistorial}"> </h5>
-            </div>
-
-
-          </div>-->
-          <br>
-          <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
-                          border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->
-        </div>
-      </div>
-
-      <div>
-        <div class="card h-100 mb-3">
-          <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
-            <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
-              Citas/consultas pasadas y bitácora de notas:
-            </h5>
-            <br>
-            <div class="card" th:if="${#lists.size(listaCitasPorUsuario)==0}">
-              <div class="card-body">
-                <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
-              </div>
-            </div>
-            <div class="row no-gutters" th:each="cita, i : ${listaCitasPorUsuario}">
-              <div class="col-md">
-                <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px;">
+          <div class="">
+            <div class="">
+              <h4 class="mb-1" style="font-weight: 700;" th:text="|${paciente.nombre.toUpperCase()} ${paciente.apellido.toUpperCase()}|"><small class="fas fa-check-circle text-primary ml-1" data-toggle="tooltip" data-placement="right" title="Verified" data-fa-transform="shrink-4 down-2"></small>
+              </h4>
                   <div class="row">
-                    <div class="col-sm">
-                      <b th:text="|${cita.fecha} - ${cita.hora}: ${cita.tipocitaIdtipocita.tipoCita}|"></b>
-                      <p th:text="|${cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${cita.sedesIdsedes.nombre}|">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput1" class="form-label">Correo</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput1" class="form-control " th:text="${paciente.email}"> </div>
                     </div>
-                    <div class="col-sm-2" th:align="right">
-                      <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
-                                            background: #3d8af7; border-radius: 15px; font-family: 'Open Sans';" data-toggle="modal"
-                              data-target="#exampleModal" th:data-target="'#Reporte' + ${i.index+1}">
-                        <i class="fa fa-file"></i> Ver Reporte
-                      </button>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput2" class="form-label">DNI</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput2" class="form-control" th:text="${paciente.id}"> </div>
                     </div>
                   </div>
-
-                </div>
-              </div>
-
-
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput3" class="form-label">Dirección</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput3" class="form-control" th:text="${paciente.direccion}"> </div>
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput4" class="form-label">Teléfono</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput4" class="form-control" th:text="${paciente.telefono}"> </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput5" class="form-label">Fecha de nacimiento</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput5" class="form-control" th:text="${paciente.fechaNacimiento}"> </div>
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput6" class="form-label">Sexo</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput6" class="form-control" th:text="${paciente.sexo}"> </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label for="disabledTextInput5" class="form-label">Sede</label>
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput7" class="form-control" th:text="${paciente.sedesIdsedes.nombre}"> </div>
+                    </div>
+                    <div class="col mb-3">
+                      <label for="disabledTextInput6" class="form-label">Seguro</label>
+                      <div th:if="${paciente.segurosIdSeguro!=null}">
+                        <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput8" class="form-control" th:text="${paciente.segurosIdSeguro.nombreSeguro}"> </div>
+                      </div>
+                      <div th:if="${paciente.segurosIdSeguro==null}">
+                        <div style="background-color: #edf2f9;opacity: 1;height: auto" id="" class="form-control" th:text="${'El paciente no está afiliado a ningún seguro.'}"> </div>
+                      </div>
+                      </div>
+                  </div>
+                  <label for="disabledTextInput9" class="form-label">Alergias</label>
+                  <div id="disabledTextInput9" class="form-control" style="background-color: #edf2f9;opacity: 1;" th:text="${resultado}"> </div>
+            </div>
+            <br>
+            <!--button type="button" class="btn btn-secondary" style="text-align: center;background: #b38df7;
+                            border-radius: 15px; border-color: #FFFFFF">Ver Documentos Anexados</button-->
+          </div>
+          <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+            Citas pasadas e informes respectivos:
+          </h5>
+          <br>
+          <div class="card" th:if="${#lists.size(informesPorUsuario)==0}">
+            <div class="card-body">
+              <b style="margin-bottom: 0">Lo sentimos, no hay ninguna consulta o examen médico pasado.</b>
             </div>
           </div>
-        </div>
-      </div>
-
-
-
-      <div th:each="cita, i : ${listaCitasPorUsuario}">
-        <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Reporte' + ${i.index+1}">
-          <div class="modal-dialog" style="max-width: 800px !important;">
-            <div class="modal-content">
-              <!-- Aquí puedes agregar el contenido del modal -->
-              <div class="modal-header">
-                <h5 class="modal-title">Boleta de cita</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-
+          <div class="row no-gutters" th:each="informe, i : ${informesPorUsuario}">
+            <div class="col-md-12">
+              <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF;text-align: left;padding: 15px;margin-bottom: 10px; border: 1px solid #b6c1d2;">
                 <div class="row">
-                  <div class="col-md-4" >
-                    <p style="font-weight: bold">Diagnóstico: </p>
-                    <p style="font-weight: bold">Bitácora: </p>
+                  <div class="col-sm-9" style="display: flex;flex-direction: column;">
+                    <b th:text="${#strings.capitalize(informe.cita.tipocitaIdtipocita.tipoCita)}"> </b>
+                    <label th:text="|Fecha: ${informe.cita.fecha} - ${informe.cita.hora} hrs|" style="margin: 0;"></label>
+                    <label th:text="|${informe.cita.especialidadesIdEspecialidad.nombreEspecialidad} - ${informe.cita.sedesIdsedes.nombre}|"></label>
                   </div>
-                  <div class="col-md-8">
-                    <p style="font-weight: normal" th:text="|${#strings.capitalize(cita.informeIdinforme.diagnostico)}|"></p>
-                    <p style="font-weight: normal" th:text="${cita.informeIdinforme.bitacora}"></p>
+                  <div class="col-sm-3" th:align="right">
+                    <button type="button" class="btn btn-primary btn-sm" style="text-align: center;
+                                            background: #3780ef; border-radius: 15px; font-family: 'Open Sans',serif; border: 1px solid white; padding: 5px 15px;" data-toggle="modal"
+                            data-target="#exampleModal" th:data-target="'#Informe' + ${i.index+1}">
+                      Ver informe médico
+                    </button>
                   </div>
+                  </div>
+                <div class="row" style="padding: 7px">
+                  <label  class="form-label" style="font-weight: 700 !important;margin: 0;">Bitácora:</label>
+                  <input class="form-control bitacora" style="border: 1px solid #b6c1d2;width: 100%;" th:value="${informe.bitacora}" placeholder="Información de bitacora del doctor" readonly>
                 </div>
 
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+
+          <br>
+          <br>
+          <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+        </div>
+
+
+        <div th:each="informe, i : ${informesPorUsuario}">
+          <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Informe' + ${i.index+1}">
+            <div class="modal-dialog" style="max-width: 800px !important;">
+              <div class="modal-content">
+                <!-- Aquí puedes agregar el contenido del modal -->
+                <div class="modal-header">
+                  <h5 class="modal-title">Información de cita</h5>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                  <div>
+                    <h3 style="font-size: 30px; color: #5e6e82;">Información de cita:</h3>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="servicio" class="form-label" style="font-weight: 700 !important;">Servicio</label>
+                        <p type="text" id="servicio" th:text="${informe.cita.tipocitaIdtipocita.tipoCita}"></p>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="fechahora" class="form-label" style="font-weight: 700 !important;">Fecha y hora</label>
+                        <p type="text" id="fechahora" th:text="|${informe.cita.fecha} - ${informe.cita.hora}hrs|"></p>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="especialidad" class="form-label" style="font-weight: 700 !important;">Especialidad</label>
+                        <p type="text" id="especialidad" th:text="${informe.cita.especialidadesIdEspecialidad.nombreEspecialidad}"></p>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="sede" class="form-label" style="font-weight: 700 !important;">Sede</label>
+                        <p type="text" id="sede" th:text="${informe.cita.sedesIdsedes.nombre}"></p>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="doctor" class="form-label" style="font-weight: 700 !important;">Doctor</label>
+                        <p type="text" id="doctor" th:text="|${informe.cita.doctor.nombre} ${informe.cita.doctor.apellido}|"></p>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="paciente" class="form-label" style="font-weight: 700 !important;">Paciente</label>
+                        <p type="text" id="paciente" th:text="|${informe.cita.paciente.nombre} ${informe.cita.paciente.apellido}|"></p>
+                      </div>
+                    </div>
+                    <div style="height: 20px"></div>
+                    <h3 style="font-size: 30px; color: #5e6e82;">Reporte de cita:</h3>
+
+                    <label for="diagnostico" class="form-label" style="font-weight: 700 !important;">Diagnóstico</label>
+                    <p type="text" id="diagnostico" th:text="${informe.diagnostico}"></p>
+                    <label for="bitacora" class="form-label" style="font-weight: 700 !important;">Bitácora</label>
+                    <p type="text" id="bitacora" th:text="${informe.bitacora}"></p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
+
+      </div>
     </div>
   </div>
 </main>

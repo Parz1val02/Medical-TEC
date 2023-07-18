@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Editar Doctor')}">
 
 </head>
 
@@ -37,79 +37,97 @@
 
                     <div class="row">
                         <div class="col-lg">
-
+                            <div th:if="${msgDanger != null}" th:text="${msgDanger}" class="alert alert-danger" role="alert"></div>
                             <form method="post" th:action="@{/administrador/editarDoctor}" th:object="${doctor}">
                                 <fieldset >
-                                    <input type="hidden" id="sedesIdsedes" name="sedesIdsedes"  value="1" class="form-control" >
-                                    <input type="hidden" th:field="*{direccion}" class="form-control" >
-                                    <input type="hidden"  th:field="*{sexo}" class="form-control" >
-                                    <input type="hidden"  th:field="*{edad}" class="form-control" >
-                                    <div class="row">
-                                        <div class="col mb-3 form-group">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${#fields.hasErrors('nombre')?'is-invalid':''}" >
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col mb-3 form-group">
-                                            <label  class="form-label">Apellido</label>
-                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${#fields.hasErrors('apellido')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col mb-3 form-group">
-                                            <label  class="form-label">Email</label>
-                                            <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="row">
-                                        <div class="col mb-3 form-group">
-                                            <label for="especialidadesIdEspecialidad">Especialidad</label>
-                                            <select class="form-control" name="especialidadesIdEspecialidad" id="especialidadesIdEspecialidad">
-                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}"
-                                                        th:selected="${especialidad.id == doctor.especialidadesIdEspecialidad.id}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="row">
-                                        <div class="col mb-3 form-group">
-                                            <label  class="form-label">Telefono</label>
-                                            <input type="text" th:field="*{telefono}" class="form-control" th:classappend="${#fields.hasErrors('telefono')?'is-invalid':''}">
-                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
-                                        </div>
-
-                                    </div>
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
                                             <label  class="form-label">DNI</label>
                                             <input type="hidden" th:field="*{id}" class="form-control"  >
-                                            <input type="text" th:value="${doctor.id}" class="form-control" disabled >
+                                            <div style="background-color: #edf2f9;opacity: 1;" th:text="${doctor.id}" class="form-control" ></div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
                                         <div class="col mb-3 form-group">
-                                            <label  class="form-label">Estado</label>
-                                            <input type="hidden" th:field="*{estadosIdestado}" class="form-control"  >
-                                            <input type="text" th:value="${#strings.capitalize(doctor.estadosIdestado.nombre)}" class="form-control" disabled>
+                                            <label class="form-label">Nombre</label>
+                                            <input type="text" th:field="*{nombre}" class="form-control" th:classappend="${nombremsg !=null?'is-invalid':''}" >
+                                            <div class="invalid-feedback" th:if="${nombremsg !=null}" th:text="${nombremsg}"></div>
                                         </div>
 
                                     </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label  class="form-label">Apellido</label>
+                                            <input type="text" th:field="*{apellido}" class="form-control" th:classappend="${apellidomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${apellidomsg !=null}" th:text="${apellidomsg}"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label  class="form-label">Direccion</label>
+                                            <input type="text" th:field="*{direccion}" class="form-control"  th:classappend="${direccionmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${direccionmsg != null}" th:text="${direccionmsg}"></div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label >Sexo  </label>
+                                            <div style="background-color: #edf2f9;opacity: 1;" th:text="${doctor.sexo}" class="form-control" ></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Fecha de nacimiento</label>
+                                        <div style="background-color: #edf2f9;opacity: 1;" th:text="${doctor.fechaNacimiento}" class="form-control" ></div>
+                                    </div>-->
+
+
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label  class="form-label">Email</label>
+                                            <input type="email" th:field="*{email}" class="form-control" th:classappend="${emailmsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${emailmsg !=null}" th:text="${emailmsg}"></div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label for="especialidad">Especialidad</label>
+                                            <select class="form-control form-select" th:classappend="${especialidadmsg !=null?'is-invalid':''}" name="especialidad" id="especialidad">
+                                                <option th:each="especialidad : ${listaEspecialidades}" th:value="${especialidad.id}" th:text="${especialidad.nombreEspecialidad}" th:selected="${especialidad.id==idEspecialidadParaQueFuncioneSelected}"
+                                                ></option>
+                                            </select>
+                                            <div class="invalid-feedback" th:if="${especialidadmsg !=null}" th:text="${especialidadmsg}"></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label  class="form-label">Telefono</label>
+                                            <input type="text" th:field="*{telefono}" maxlength="9" class="form-control" th:classappend="${telefonomsg !=null?'is-invalid':''}">
+                                            <div class="invalid-feedback" th:if="${telefonomsg !=null}" th:text="${telefonomsg}"></div>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="row">
+                                        <div class="col mb-3 form-group">
+                                            <label  class="form-label">Estado</label>
+                                            <div style="background-color: #edf2f9;opacity: 1;" th:text="${doctor.estadosIdestado.nombre}" class="form-control" ></div>
+                                        </div>
+                                    </div>-->
 
                                 </fieldset>
 
@@ -153,6 +171,19 @@
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
+
+    $(document).ready(function () {
+        $("#telefono").on('input', function (evt) {
+            // Allow only numbers.
+            $(this).val(jQuery(this).val().replace(/[^0-9]/g, ''));
+            var valor = $(this).val();
+            if (valor.length > $(this).attr('maxlength')) {
+                $(this).val(valor.slice(0, $(this).attr('maxlength')));
+            }
+        });
+    });
+
+
     $(document).ready(function () {
         //Esta busacando por el ID del tah <table>
         //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable

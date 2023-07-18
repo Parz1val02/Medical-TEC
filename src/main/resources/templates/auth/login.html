@@ -2,9 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Inicio de Sesión')}"></head>
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Inicio de Sesión')}">
+<script th:src="@{/js/jquery.min.js}"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script src="../../js/colores.js" defer></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
-<body class="bg-white">
+</head>
+<body>
 
 <!-- ===============================================-->
 <!--    Main Content-->
@@ -13,42 +18,43 @@
 
 
   <div class="container-fluid">
-    <div class="row min-vh-100 bg-100">
+    <div class="row min-vh-100 bg-100 specific-class" id="change">
       <div class="col-6 d-none d-lg-block">
         <div class="bg-holder" th:style="'background-image:url(' + @{/img/login/login.jpg} + ');background-position: 50% 20%;'">
         </div>
         <!--/.bg-holder-->
 
       </div>
-      <div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5">
+      <div class="col-sm-10 col-md-6 px-sm-0 align-self-center mx-auto py-5" id="change2">
         <div class="row justify-content-center no-gutters">
           <div class="col-lg-9 col-xl-8 col-xxl-6">
             <div class="card">
-              <div class="card-header bg-circle-shape text-center p-2"><span class="text-white text-sans-serif font-weight-extra-bold fs-4 z-index-1 position-relative">MEDICAL-TEC</span></div>
+              <div class="card-header bg-circle-shape text-center p-2" ><span class="text-white text-sans-serif font-weight-extra-bold fs-4 z-index-1 position-relative">MEDICAL-TEC</span></div>
               <div class="card-body p-4">
                 <div class="align-items-center justify-content-between">
                   <h3>Inicio de Sesión</h3>
-                  <p class="mb-0 fs--1"><span class="font-weight-semi-bold">¿Nuevo usuario? </span><a href="#">Crear una cuenta</a></p>
+                  <p class="mb-0 fs--1"><span class="font-weight-semi-bold">¿Nuevo usuario? </span><a th:href="@{/register}" style="color: #0032aa;">Registrarse</a></p>
                 </div>
                 <div th:if="${param.error != null}"  class="alert alert-warning" role="alert">Usuario y/o contrasena incorrectos</div>
                 <form th:action="@{/login}" method="post">
                   <div class="form-group">
                     <label for="split-login-email">Correo Electrónico</label>
-                    <input class="form-control" id="split-login-email" type="email" name="username"/>
+                    <input class="form-control" id="split-login-email" type="email" name="username" required/>
                   </div>
                   <div class="form-group">
                     <div class="d-flex justify-content-between">
-                      <label for="split-login-password">Contraseña</label><a class="fs--1" href="#">¿Olvidaste tu contraseña?</a>
+                      <label for="split-login-password">Contraseña</label>
+                      <a class="fs--1" th:href="@{/cambiarcontrasena}" style="color: #0032aa;">¿Olvidaste tu contraseña?</a>
                     </div>
-                    <input class="form-control" id="split-login-password" type="password" name="password"/>
+                    <input class="form-control" id="split-login-password" type="password" name="password" required/>
                   </div>
-                  <div class="form-group" style="text-align: center">
+                  <div class="form-group" style="text-align: center; margin: 4px;">
                     <!-- Cambie esto a tag a para hacer una redirección al dashboard, pero esto debe ser un button son submit-->
-                    <button class="btn btn-primary" type="submit" >Iniciar Sesión</button>
+                    <button class="btn btn-primary" type="submit" style="background: #3083f1; border: 1px solid #3083f1;">Iniciar Sesión</button>
                   </div>
                 </form>
                 <div style="text-align: center">
-                  <a th:href="@{'/'}">
+                  <a th:href="@{'/'}" style="color: #0032aa; font-size: 12px;">
                     Volver a la página principal
                   </a>
                 </div>

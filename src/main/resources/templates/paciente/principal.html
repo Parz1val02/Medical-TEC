@@ -10,6 +10,8 @@
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
         crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src='https://8x8.vc/libs/external_api.min.js' async></script>      
 <style>
   #map {
     height: 300px;
@@ -22,6 +24,8 @@
 <!--    Main Content-->
 <!-- ===============================================-->
 <main class="main" id="top">
+  <button type="button" id="openModalButton" data-toggle="modal" data-target="#exampleModal" style="display: none;"></button>
+  <input id="siono" th:value="${OWO}" hidden="hidden">
   <div class="container" data-layout="container">
     <nav th:replace="~{fragmentos/sidebarpaciente.html::sideBar}"></nav>
     <div class="content" >
@@ -79,14 +83,36 @@
                 <div class="form-group" style="text-align: center">
                   <div class="row">
                     <div class="col-sm-6">
-                      <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
-                      <div th:if="${msg3!= null}" th:text="${msg3}" class="alert alert-warning" role="alert"></div>
-                      <select class="form-control" id="zona">
+                      <select class="form-control" id="zona" >
                         <option  th:each="sede : ${listaSedes1}"
                                  th:value="${sede.idsedes}"
                                  th:text="${sede.nombre}"
                                  th:selected="${sede.idsedes==sedeUsuario.id}"></option>
                       </select>
+                    </div>
+                   <div class="col-sm-6">
+                     <!-- Button trigger modal -->
+                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#cambioSede">¿Desea cambiar de sede?</button>
+                   </div>
+
+                    <!-- Modal -->
+                      <div class="modal fade" id="cambioSede" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <div class="modal-dialog">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title fs-5" id="exampleModalLabel">Cambio de sede</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                              ¿Está seguro que desea cambiar su sede?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-primary" data-dismiss="modal" id="arch">Confirmar</button>
+                            </div>
+                        </div>
+                      </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -98,7 +124,8 @@
                   <h5 class="mb-2 mb-md-0" style="color: #FFFFFF; font-weight: bold; margin-top: 20px;">
                     Consentimientos:
                   </h5>
-                  <a href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
+                  <a id="downloadPDF" href="#" style="color: #FFFFFF">Descargue los consentimientos accedidos</a>
+
               </div>
             </div>
           </div>
@@ -109,9 +136,9 @@
                   <span class="far fa-credit-card" style="font-size: 3em; color: #0032aa"></span>
                   <hr style="height: 1px; background-color: #333; border: none">
                   <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
-                    Sección de Pagos
+                    Sección de Boletas
                   </h4>
-                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas y pagos de las citas</h6>
+                  <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">Podrá visualizar sus boletas emitidas por citas y recetas</h6>
                   <a style="margin-top: 1rem; margin-bottom: 1rem" class="btn btn-info" th:href="@{/paciente/pagos}">Ingresar</a>
                 </div>
               </div>
@@ -133,6 +160,63 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" >
+        <div class="modal-dialog" style="max-width: 800px !important;">
+          <div class="modal-content">
+            <!-- Aquí puedes agregar el contenido del modal -->
+            <div class="modal-header">
+              <h5 class="modal-title">Cuestionarios Asignados</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+              <div class="card h-100 mb-3">
+                <br>
+                <h5 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 30px; text-align: left">
+                  Responda el cuestionario que se acaba de enviar
+                </h5>
+                <div th:if="${respondido != null}" th:text="${respondido}" class="alert alert-success" role="alert"></div>
+                <div th:if="${cuestionario_noexiste != null}" th:text="${cuestionario_noexiste}" class="alert alert-danger" role="alert"></div>
+                <br>
+                <div class="card-body" style="max-height:30rem; overflow-y: auto; text-align: center">
+                  <div th:if="${#lists.size(cuestionarios)==0}">
+                    Lo sentimos, no hay cuestionarios
+                  </div>
+                  <div class="row" style="align-items: stretch">
+                    <div class="col-sm-4 mb-3" th:each="cuestionario, i : ${cuestionarios}">
+                      <div class="card" style="height: 100%">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-6 align-content-center"  style="align-items: center">
+                              <div style="height: 15px"></div>
+
+                              <div style="height: 10px"></div>
+                              <h5 class="card-title mb-2" th:text="${cuestionario.idcuestionario.nombre}">Título de Cuestionario</h5>
+                            </div>
+                            <div class="col-md-6" align="center" style="align-items: center">
+                              <!--<button type="button" class="btn btn-light btn-sm" style="background: #dde3ed; border-color: #b6c1d2;
+                          border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${i.index+1}">Ver más</button>-->
+                              <div style="height: 15px"></div>
+                              <!-- Si cuestionario.respondido == 1, muestra el botón "Responder" -->
+                              <a th:if="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/responderCuestionario(idCuestionario=${cuestionario.id})}">Responder</a>
+
+                              <!-- Si cuestionario.respondido != 1, muestra el botón "Ver respuestas" -->
+                              <a th:unless="${cuestionario.respondido == false}" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7; border-radius: 15px; border-color: #b38df7;" th:href="@{/paciente/verRespuestas(idCuestionario=${cuestionario.id})}">Ver respuestas</a>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
     </div>
   </div>
@@ -147,9 +231,27 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script>
+  // Obtener el valor del parámetro "haycuestionario" (asumiendo que esté definido en el contexto de JavaScript)
+  var inputElement = document.getElementById('siono');
+
+  // Obtener el valor del input
+  var valor = inputElement.value;
+  console.log(valor);
+
+  // Verificar si "haycuestionario" no es nulo o indefinido
+  if (valor === "SI") {
+    // Mostrar el modal automáticamente al cargar la página
+    var openModalButton = document.getElementById('openModalButton');
+    if (openModalButton) {
+      console.log("entra a boton");
+      openModalButton.click();
+      console.log("presiona boton");
+    }
+  }
+</script>
 <script th:inline="javascript">
   $(document).ready(function () {
-
     $('#zona').on('change', function () {
       set_map($(this).val());
     });
@@ -169,8 +271,7 @@
       console.log(clash)
       console.log(clash.idsedes)
       console.log(value)
-
-      var latitud,longitud,nombre
+      var latitud,longitud,nombre;
       // Iterar sobre la lista de zonas
       for (var i = 0; i < arregloSedes.length; i++) {
         var sede = arregloSedes[i];
@@ -200,6 +301,294 @@
     set_map($('#zona').val())
     /*]]>*/
   });
+</script>
+<script>
+  $(document).ready(function(){
+    var sede = $("#zona option:selected").val();
+    console.log("Sede valor: " + sede);
+    $('#zona').on('change', function () {
+      sede = ($(this).val());
+      console.log("Sede valor: " + sede);
+    });
+    $("#arch").click(function (){
+      $.ajax({
+        method: 'POST',
+        data: {
+          id: sede,
+          dni: [[${session.usuario.id}]]
+        },
+        url: 'http://34.132.54.61:8081/api/cambioSede'
+      }).done(function (data){
+          alert(data.msg);
+          console.log(data.msg);
+      }).fail(function (error){
+          alert(error.msg);
+          console.log(error.msg);
+      })
+    });
+  });
+</script>
+<!--para descarga de consentimientos en pdf-->
+<script>
+
+  var enlaceDescarga = document.getElementById("downloadPDF");
+  var consentimiento =`\t\t\tConsentimiento Informado\t\t\t\n
+
+Yo,  declaro que he sido informado(a) y comprendo los siguientes puntos:
+
+1. He sido informado(a) sobre los objetivos, procedimientos y posibles riesgos.
+
+2. He tenido la oportunidad de hacer preguntas y se me han proporcionado respuestas satisfactorias.
+
+3. Entiendo que se mantendrá la confidencialidad de mi información personal y que solo se utilizará con fines de investigación y atención médica.
+
+4. He recibido una copia de este consentimiento informado y se me ha explicado su contenido de manera clara y comprensible.`;
+
+
+  var consentimiento_teleconsulta = "CONSENTIMIENTO INFORMADO TELECONSULTA MEDICAL TEC\n" +
+          "\n" +
+          "\n" +
+          "\n" +
+          "Yo, entiendo y acepto que estoy participando en una teleconsulta \n" +
+          "a través de un medio de comunicación electrónico, como videoconferencia \n" +
+          "o llamada telefónica, en lugar de una consulta médica tradicional en persona. " +
+          "A continuación, se detallan los aspectos importantes de esta teleconsulta:\n" +
+          "\n" +
+          "Objetivo de la Teleconsulta:\n" +
+          "La teleconsulta tiene como objetivo brindar servicios médicos a distancia, permitiéndome \n" +
+          "recibir evaluación, diagnóstico, tratamiento, recomendaciones y/o asesoramiento médico \n" +
+          "sin la necesidad de estar físicamente presente en la consulta médica.\n" +
+          "\n" +
+          "Limitaciones de la Teleconsulta:\n" +
+          "Reconozco que existen limitaciones en la teleconsulta en comparación con una consulta en persona. \n" +
+          "Estas limitaciones pueden incluir, pero no se limitan a, la falta de examen físico completo, \n" +
+          "restricciones en la evaluación visual, limitaciones técnicas o de calidad en la comunicación, \n" +
+          "así como la posibilidad de interrupciones o fallas técnicas.\n" +
+          "\n" +
+          "Confidencialidad:\n" +
+          "Comprendo que se tomarán medidas para garantizar la confidencialidad de mi información médica \n" +
+          "durante la teleconsulta. Se utilizarán tecnologías y prácticas de seguridad adecuadas para proteger \n" +
+          "la privacidad y confidencialidad de mi información personal y médica.\n" +
+          "\n" +
+          "Responsabilidades y Riesgos:\n" +
+          "Entiendo que es mi responsabilidad proporcionar información precisa y completa durante la teleconsulta. \n" +
+          "Además, reconozco que existen riesgos inherentes a la comunicación electrónica, como la pérdida de datos, \n" +
+          "el acceso no autorizado o la intercepción de la información durante la transmisión. \n" +
+          "Aunque se tomarán precauciones razonables para proteger mi información, no se puede garantizar una seguridad \n" +
+          "completa.\n" +
+          "\n" +
+          "Alternativas y Derivaciones:\n" +
+          "Me han informado sobre las alternativas disponibles, incluyendo la opción de una consulta médica en persona. \n" +
+          "Además, comprendo que durante la teleconsulta, el médico puede recomendar una consulta en persona si lo \n" +
+          "considera necesario para un diagnóstico más preciso o un tratamiento adecuado.\n" +
+          "\n" +
+          "Consentimiento Voluntario:\n" +
+          "Certifico que he leído y comprendido la información proporcionada anteriormente y que he tenido la oportunidad \n" +
+          "de hacer preguntas y aclarar cualquier duda antes de la teleconsulta. Acepto participar en esta teleconsulta \n" +
+          "de manera voluntaria y doy mi consentimiento para recibir servicios médicos a través de medios electrónicos.\n" +
+          "\n" ;
+
+
+  enlaceDescarga.addEventListener('click', function () {
+
+    generaPDF(consentimiento,'consentimiento_informado.pdf' );
+      //descargarPDF(pdfData, 'consentimiento_informado.pdf');
+
+    generaPDF(consentimiento_teleconsulta, 'consentimiento_teleconsulta.pdf');
+        //descargarPDF(pdfData, 'consentimiento_teleconsulta.pdf');
+  });
+
+
+    // Crea un nuevo documento PDF
+
+
+    // Genera los datos del PDF en formato Data URL
+    //var dataURL = doc.output("dataurlstring");
+
+    // Establece el contenido del atributo href con los datos del PDF
+    //enlaceDescarga.href = dataURL;
+
+    // Establece el nombre del archivo descargado
+    //enlaceDescarga.download = "consentimiento.pdf";
+  //} );
+
+
+  function generaPDF(contenido, nombreArchivo) {
+    return new Promise(function(resolve, reject) {
+    //aqui va el contenido de la generacion del pdf
+
+      var doc = new jspdf.jsPDF();
+
+      // Configuración del tamaño de página
+      var textWidth = 170; // Ancho del área de texto en unidades de puntos
+      var textHeight = 250; // Altura del área de texto en unidades de puntos
+
+      // Establecer el tamaño de página personalizado
+
+      // Margen superior e inferior
+      var marginVertical = 20;
+      var marginHorizontal = 20;
+
+      //var fontSize = 11;
+      var tipoLetra = "Helvetica";
+
+      // Tamaño del texto
+      var fontSize = 12;
+      var lineHeight = fontSize * 1.2;
+
+      // Cargar la imagen desde una URL
+      var imageUrl = "static/img/logo.png";
+      var imageWidth = 100; // Ancho de la imagen en unidades de puntos
+      var imageHeight = 60; // Altura de la imagen en unidades de puntos
+
+      // Agregar la imagen en la página actual
+      //doc.addImage(imageUrl, "PNG", 10, 10, imageWidth, imageHeight);
+
+      doc.setFont(tipoLetra,'bold');
+      doc.setFontSize(fontSize);
+
+      //doc.setFontStyle(tipoLetra);
+
+      // Dividir el texto en líneas
+      var lines = doc.splitTextToSize(contenido, textWidth );
+
+      // Calcular el número de páginas necesarias
+      var totalPages = Math.ceil(lines.length / (textHeight / lineHeight));
+      console.log(totalPages);
+
+      // Iterar sobre cada página
+      for (var i = 0; i < totalPages; i++) {
+        // Agregar una nueva página
+        if (i > 0) {
+          doc.addPage();
+        }
+
+        // Imprimir las líneas correspondientes a la página actual
+        var startIndex = i * (textHeight / lineHeight);
+        var endIndex = (i + 1) * (textHeight / lineHeight);
+        var pageLines = lines.slice(startIndex, endIndex);
+
+        // Calcular la posición de inicio del área de texto en la página actual
+        var startX = marginHorizontal;
+        var startY = marginVertical;
+
+        // Imprimir cada línea
+        pageLines.forEach(function (line) {
+          doc.text(line, startX, startY);
+          startY += lineHeight;
+        });
+
+        startY = marginVertical;
+      }
+
+      doc.save(nombreArchivo);
+
+      // Obtener los datos del PDF en formato blob
+      /*var pdfData = doc.output('blob');
+      console.log(pdfData);
+
+      // Crear un enlace de descarga temporal
+      var link = enlaceDescarga;
+      link.href = URL.createObjectURL(pdfData);
+      link.download = nombreArchivo;
+
+      // Disparar el evento de clic en el enlace
+      link.click();
+
+      // Liberar la URL del objeto PDF
+      URL.revokeObjectURL(link.href);*/
+
+    });
+
+  }
+
+  
+</script>
+
+<script>
+  //para el enlace de la reunion que se le enviara por correo al cliente
+
+  //import jwt from 'jsonwebtoken';
+  //const jwt = require('jsonwebtoken');
+  /*function createScheduledMeeting(date, duration) {
+    const domain = '8x8.vc';
+    const options = {
+      roomName: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/SampleAppUniqueSplitsAbolishQuickly',
+      width: 800,
+      height: 600,
+      parentNode: document.querySelector('#jitsi-container'),
+      configOverwrite: {
+        enableFeaturesBasedOnToken: true,
+      },
+      onload: function () {
+        // Set the scheduled start time and duration
+        const scheduledStart = new Date(date);
+        const scheduledEnd = new Date(date);
+        scheduledEnd.setMinutes(scheduledEnd.getMinutes() + duration);
+
+        // Generate the JWT token with scheduled meeting parameters
+        const token = generateScheduledMeetingToken(scheduledStart, scheduledEnd);
+        console.log(token);
+
+        // Set the JWT token as the JWT parameter for authentication
+        api.executeCommand('authenticate', { jwt: token });
+      },
+    };
+
+    const api = new JitsiMeetExternalAPI(domain, options);
+  }
+
+  function generateScheduledMeetingToken(start, end) {
+    // Implement your logic here to generate a JWT token with scheduled meeting parameters
+    // You'll need to use a JWT library or Jitsi Meet token generator to create the token
+    // Ensure the token includes the scheduled start time and duration
+    // Example: return jwtGenerator.generateToken({ start: start.getTime(), end: end.getTime() });
+
+    const secret = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/aae24d'; // Replace with your secret key used for signing the token
+    let duration = end - start;
+    const scheduledStart = Math.floor(start.getTime() / 1000); // Convert to Unix timestamp
+    const scheduledEnd = Math.floor((start.getTime() + duration * 60 * 1000) / 1000); // Convert to Unix timestamp
+
+    const payload = {
+      context: {
+        user: {
+          //avatar: 'your-avatar-url', // Replace with the URL of the user's avatar
+          email: 'luis.ramost@pucp.edu.pe', // Replace with the user's email address
+          name: 'luis.ramost', // Replace with the user's name
+        },
+      },
+      aud: 'jitsi', // Replace with your API domain
+      iss: 'MedicalTec', // Replace with the issuer of the token
+      room: 'scheduled-room-name', // Replace with the scheduled room name
+      sub: 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524', // Replace with the subject of the token
+      exp: scheduledEnd, // Set the token expiration time
+      nbf: scheduledStart, // Set the token not-before time
+    };
+
+    const token = jwt.sign(payload, secret);
+    console.log(token);
+    return token;
+
+
+  }*/
+  //console.log(token)
+  //para obtener el enlace de una reunion
+  function generateScheduledMeetingLink(apiDomain, roomName) {
+    const link = `https://${apiDomain}/${roomName}`;
+
+    return link;
+  }
+
+  /*document.addEventListener('DOMContentLoaded', () => {
+    // Trigger scheduled meeting creation on page load
+    createScheduledMeeting('2023-06-30T10:00:00', 60); /// fecha, tiempo en minutos
+  });*/
+
+
+  const apiDomain = '8x8.vc';
+  const roomName = 'vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal';
+  let link = generateScheduledMeetingLink(apiDomain, roomName);
+  console.log(link);
 </script>
 </body>
 </html>

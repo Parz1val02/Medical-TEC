@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Calendario')}">
 </head>
 
 
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="card mb-3">
+      <div class="card" style="padding: 3%">
         <div id="calendar"></div>
       </div>
 
@@ -46,16 +46,77 @@
 <!--    End of Main Content-->
 <!-- ===============================================-->
 
-
+<div class="modal fade" id="modalCitasCalendario" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita</h3>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <!-- columna 1 -->
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="tipocita">Tipo de cita: </label>
+                <input type="text" name="tipocita" id="tipocita" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="doctor">Doctor:</label>
+                <input type="text" name="doctor" id="doctor" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="text" name="fecha" id="fecha" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="especialidad">Especialidad:</label>
+                <input type="text" name="especialidad" id="especialidad" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="estado">Estado de cita:</label>
+                <input type="text" name="estado" id="estado" class="form-control" readonly="" placeholder="">
+              </div>
+            </div>
+            <!-- columna 2 -->
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="modalidad">Modalidad:</label>
+                <input type="text" name="modalidad" id="modalidad" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="paciente">Paciente:</label>
+                <input type="text" name="paciente" id="paciente" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="hora">Hora:</label>
+                <input type="text" name="hora" id="hora" class="form-control" readonly="" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="forma">Forma de pago:</label>
+                <input type="text" name="forma" id="forma" class="form-control" readonly="" placeholder="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
-<!--    Scripts de Calendar -->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -66,44 +127,6 @@
 <script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
 <script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
 <script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
-
-<!-- Initialize DataTable in JavaScript -->
-<script>
-  $(document).ready(function () {
-    //Esta busacando por el ID del tah <table>
-    //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
-    $('#userList').DataTable({
-      dom: "<'d-flex justify-content-end pb-4'B>\n" +
-              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
-              "<'table-responsive'tr>\n" +
-              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
-      language: {
-        processing: "Procesando...",
-        lengthMenu: "Mostrar  _MENU_  usuarios",
-        zeroRecords: "No se encontraron usuarios",
-        emptyTable: "No hay usuarios",
-        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
-        loadingRecords: "Cargando...",
-        search: "Buscar:",
-        paginate: {
-          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
-          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
-        }
-      },
-      autoWidth: false,
-      lengthMenu: [
-        [10, 25, 50, -1], [10, 25, 50, "Todos"]
-      ],
-      buttons: [
-        {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
-        {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
-      ]
-    });
-  });
-</script>
-
 
 <script th:inline="javascript">
   document.addEventListener('DOMContentLoaded', function() {
@@ -130,10 +153,76 @@
       locale: 'es',
       allDay: false,
       displayEventTime: true,
+      eventClick: function (info){
+        let modalA = $('#modalCitasCalendario');
+        modalA.modal('show');
+        modalA.on('shown.bs.modal', function() {
+          let time = moment(info.event.extendedProps.hora, 'HH:mm');
+          let formattedTime = time.format('h:mm A');
+          let date = moment(info.event.start, 'YYYY-MM-DD');
+          let formattedDate = date.format('DD-MM-YYYY');
+          let tipoCita = $("#tipocita");
+          let modalidad = $("#modalidad");
+          let especialidad = $("#especialidad");
+          let paciente = $("#paciente");
+          let fecha = $("#fecha");
+          let horaGa = $("#hora");
+          let estadoCita = $("#estado");
+          let doctor = $("#doctor");
+          let formaPago = $("#forma");
+          tipoCita.attr('placeholder', info.event.title);
+          modalidad.attr('placeholder', info.event.extendedProps.modalidad);
+          especialidad.attr('placeholder', info.event.extendedProps.especialidad);
+          paciente.attr('placeholder', info.event.extendedProps.paciente);
+          horaGa.attr('placeholder', formattedTime);
+          fecha.attr('placeholder', formattedDate);
+          estadoCita.attr('placeholder', info.event.extendedProps.estado);
+          doctor.attr('placeholder', info.event.extendedProps.doctor);
+          formaPago.attr('placeholder', info.event.extendedProps.formaPago);
+        })
+      }
+    });
+    // AJAX request to fetch events
+    $.ajax({
+      url: 'http://34.132.54.61:8081/api/citasSede', // Replace with your API endpoint URL
+      type: 'GET',
+      data: {
+        idSede: [[${session.usuario.sedesIdsedes.id}]] // Specify the GET parameter
+      },
+      headers: {
+        'Content-Type': 'application/json' // Set the Content-Type header
+      },
+      success: function(response) {
+        // Parse and format the received data
+        var events = [];
+        response.forEach(function(eventData) {
+          var dateString = eventData.start;
+          var date = moment(dateString, 'DD/MM/YYYY');
+          var fechaFormateada = date.format('YYYY-MM-DD');
+          var event = {
+            title: eventData.title,
+            start: fechaFormateada,
+            modalidad: eventData.modalidad,
+            hora: eventData.hora,
+            paciente: eventData.paciente,
+            doctor: eventData.doctor,
+            formaPago: eventData.formaPago,
+            especialidad: eventData.especialidad,
+            estado: eventData.estado
+            // Add more properties as needed
+          };
+          events.push(event);
+        });
+
+        // Add the events to FullCalendar
+        calendar.addEventSource(events);
+      },
+      error: function(xhr, status, error) {
+        console.log('Error:', error);
+      }
     });
     calendar.render();
   });
 </script>
-
 </body>
 </html>

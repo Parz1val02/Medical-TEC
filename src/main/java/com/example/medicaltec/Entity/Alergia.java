@@ -18,7 +18,7 @@ public class Alergia implements Serializable {
     private Integer id;
 
     @Size(max = 100, message = "Maximo 100 caracteres")
-    @Column(name = "nombre", length = 100)
+    @Column(name = "nombre", length = 100, nullable = false)
     private String nombre;
 
     @Column(name = "enabled", nullable = false)

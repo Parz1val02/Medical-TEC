@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Ver Calendario')}">
 </head>
 
 
@@ -13,31 +13,1013 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
 
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-11">
-                            <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
-                                Calendario
-                            </h1>
-                        </div>
-                        <div class="col-md-11">
-                            <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
-                                Revisa la información correspondiente a mensajes, citas y más.
-                            </h5>
-                        </div>
-                    </div>
+                    <h1 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding-left: 15px; padding-bottom: 5px">
+                        Calendario
+                    </h1>
+                    <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; padding-left: 15px">
+                        Revisa la información correspondiente a mensajes, citas y más.
+                    </h5>
                 </div>
             </div>
-
             <div class="card mb-3">
-                <div id="calendar"></div>
+                <div class="card-body">
+                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${msgError != null}" th:text="${msgError}" class="alert alert-danger" role="alert"></div>
+                    <div th:if="${borrado != null}" th:text="${borrado}" class="alert alert-success" role="alert"></div>
+                    <div th:if="${horasdoctornoexiste != null}" th:text="${horasdoctornoexiste}" class="alert alert-danger" role="alert"></div>
+                    <div style="display: flex; flex-wrap: wrap; text-align: center">
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Ver mis horas de disponibilidad
+                            </button>
+                        </a>
+                        <a style="flex: 1; width: 100%;">
+                            <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                                margin-right: 5px; margin-left: 5px; padding: 1px !important;">
+                                Agregar horas de disponibilidad
+                            </button>
+                        </a>
+                    </div>
+                    <div id="div1" style="display:none; padding: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                            Mis horas de disponibilidad:
+                        </h4>
+
+                        <h6 style="color: #3d8af7;font-weight: 600;">
+                            Visualizar el horario de este mes
+                        </h6>
+                        <div style="display: flex;  flex-wrap: wrap;">
+                            <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes Actual:</p>
+                            <p th:text="${mesActual}" style="margin: 0 10px;"></p>
+                        </div>
+                        <!-- Hay horas doctor -->
+                        <div th:if="${valor}==1">
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                <p th:text="${horasDoctor.dias}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                <p th:text="${horasDoctor.horainicio}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                <p th:text="${horasDoctor.horafin}" style="margin: 0 10px;"></p>
+                            </div>
+                            <div style="display: flex">
+                                <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                <p th:text="${horasDoctor.horalibre}" style="margin: 0 10px;"></p>
+                            </div>
+
+                            <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                            <a th:href="@{'/doctor/borrarHorario?id='+${horasDoctor.id}}">
+                                <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                            </a>
+
+                        </div>
+                        <!-- no hay horas doctor -->
+                        <div th:if="${valor}==0">
+                            <p> Debe ingresar sus horas disponibles para este mes.</p>
+                        </div>
+                        <br>
+                        <h4 style="color: #0032aa; font-weight: bold;">
+                            Visualizar el horario de todos los meses:
+                        </h4>
+
+                        <div style="width: 100%;display: flex; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-outline-primary" id="enero" style="flex: 1;">Enero</button>
+                            <button type="button" class="btn btn-outline-primary" id="febrero" style="flex: 1;">Febrero</button>
+                            <button type="button" class="btn btn-outline-primary" id="marzo" style="flex: 1;">Marzo</button>
+                            <button type="button" class="btn btn-outline-primary" id="abril" style="flex: 1;">Abril</button>
+                            <button type="button" class="btn btn-outline-primary" id="mayo" style="flex: 1;">Mayo</button>
+                            <button type="button" class="btn btn-outline-primary" id="junio" style="flex: 1;">Junio</button>
+                            <button type="button" class="btn btn-outline-primary" id="julio" style="flex: 1;">Julio</button>
+                            <button type="button" class="btn btn-outline-primary" id="agosto" style="flex: 1;">Agosto</button>
+                            <button type="button" class="btn btn-outline-primary" id="septiembre" style="flex: 1;">Septiembre</button>
+                            <button type="button" class="btn btn-outline-primary" id="octubre" style="flex: 1;">Octubre</button>
+                            <button type="button" class="btn btn-outline-primary" id="noviembre" style="flex: 1;">Noviembre</button>
+                            <button type="button" class="btn btn-outline-primary" id="diciembre" style="flex: 1;">Diciembre</button>
+                        </div>
+                        <br>
+                        <div id="divenero" style="display: none">
+                            <div th:if="${horasdoctorEnero == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Enero.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorEnero == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorEnero.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorEnero.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorEnero.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorEnero.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorEnero.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorEnero.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divfebrero" style="display: none">
+                            <div th:if="${horasdoctorFebrero == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Febrero.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorFebrero == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorFebrero.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorFebrero.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorFebrero.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorFebrero.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorFebrero.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorFebrero.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div id="divmarzo" style="display: none">
+                            <div th:if="${horasdoctorMarzo == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Marzo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorMarzo == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorMarzo.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorMarzo.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorMarzo.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorMarzo.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorMarzo.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorMarzo.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divabril" style="display: none">
+                            <div th:if="${horasdoctorAbril == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Abril.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorAbril == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorAbril.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorAbril.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorAbril.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorAbril.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorAbril.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorAbril.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divmayo" style="display: none">
+                            <div th:if="${horasdoctorMayo == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Mayo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorMayo == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorMayo.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorMayo.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorMayo.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorMayo.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorMayo.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorMayo.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divjunio" style="display: none">
+                            <div th:if="${horasdoctorJunio == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Junio</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorJunio == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorJunio.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorJunio.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorJunio.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorJunio.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorJunio.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorJunio.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divjulio" style="display: none">
+                            <div th:if="${horasdoctorJulio == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Julio.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorJulio == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorJulio.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorJulio.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorJulio.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorJulio.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorJulio.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorJulio.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divagosto" style="display: none">
+                            <div th:if="${horasdoctorAgosto == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Agosto.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorAgosto == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorAgosto.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorAgosto.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorAgosto.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorAgosto.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorAgosto.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorAgosto.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divseptiembre" style="display: none">
+                            <div th:if="${horasdoctorSeptiembre == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Septiembre.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div th:unless="${horasdoctorSeptiembre == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorSeptiembre.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorSeptiembre.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorSeptiembre.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorSeptiembre.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorSeptiembre.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorSeptiembre.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divoctubre" style="display: none">
+                            <div th:if="${horasdoctorOctubre == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Octubre.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorOctubre == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorOctubre.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorOctubre.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorOctubre.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorOctubre.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorOctubre.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorOctubre.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divnoviembre" style="display: none">
+                            <div th:if="${horasdoctorNoviembre == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Noviembre.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:unless="${horasdoctorNoviembre == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorNoviembre.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorNoviembre.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorNoviembre.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorNoviembre.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorNoviembre.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorNoviembre.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="divdiciembre" style="display: none">
+                            <div th:if="${horasdoctorDiciembre == null}">
+                                <!-- no existe horario del mes de enero -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p>No tiene un horario de disponibilidad para el mes de Diciembre.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div th:unless="${horasdoctorDiciembre == null}">
+                                <!-- existe horario del mes de enero -->
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
+                                    <p th:text="${horasdoctorDiciembre.mes}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
+                                    <p th:text="${horasdoctorDiciembre.dias}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
+                                    <p th:text="${horasdoctorDiciembre.horainicio}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
+                                    <p th:text="${horasdoctorDiciembre.horafin}" style="margin: 0 10px;"></p>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
+                                    <p th:text="${horasdoctorDiciembre.horalibre}" style="margin: 0 10px;"></p>
+                                </div>
+
+                                <p> En caso desee cambiar sus horarios disponibles, de click en el botón borrar y cree un nuevo horario de disponibilidad.</p>
+                                <a th:href="@{'/doctor/borrarHorario?id='+${horasdoctorDiciembre.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm">Borrar horario</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="div2" style="display:block; padding: 15px;">
+                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold;">
+                            Horas de disponibilidad
+                        </h4>
+                        <form th:action="@{/doctor/enviarHorasDoctor}" method="post">
+
+                            <div class="form-group">
+                                <label for="mes" class="form-label">Seleccione el mes para agregar disponibilidad:</label>
+                                <select class="form-control" aria-label="Default select example" th:if="${mes != null}" th:value="${mes}" th:classappend="${mesmsg != null ? 'is-invalid' : ''}"
+                                        name="mes" id="mes" style="font-family: 'Open Sans',serif" required>
+                                    <option disabled selected>Select--</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <select class="form-control" aria-label="Default select example" th:if="${mes == null}"  th:classappend="${mesmsg != null ? 'is-invalid' : ''}"
+                                        name="mes" id="mes" style="font-family: 'Open Sans',serif" required>
+                                    <option disabled selected>Select--</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${mesmsg != null}" th:text="${mesmsg}">
+                                    Debe escoger el mes para las horas de disponibilidad.
+                                </div>
+                            </div>
+
+                            <div style="height: 10px;"></div>
+
+                            <div class="form-group">
+                                <label for="dia" class="form-label">Seleccione los dias con disponibilidad:</label>
+                                <div style="display: flex;">
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin-right: 10px;" id="Lunes">Lunes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Martes">Martes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Miercoles">Miércoles</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Jueves">Jueves</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin: 0 10px;" id="Viernes">Viernes</button>
+                                    <button type="button" class="btn btn-light" style="border: 1px solid #d8e2ef;flex: 1;margin-left: 10px;" id="Sabado">Sábado</button>
+                                </div>
+                                <input id="dia" type="hidden" name="dia" style="width: 50%; border-radius: 4px;height: 35px;border: 1px solid #d8e2ef;">
+                                <div th:if="${diamsg != null}" th:text="${diamsg}" style="font-family: Poppins, -apple-system, BlinkMacSystemFont,
+                                'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                                color: #e63757;font-size: 13px;"></div>
+                            </div>
+
+                            <div style="height: 5px;"></div>
+
+                            <div class="form-group">
+                                <label class="form-label">Seleccione el horario para agregar disponibilidad:</label>
+                                <div style="display: flex;">
+                                    <div style="flex: 1; margin-right: 10px;">
+                                        <label class="form-label">Horario Inicio:</label>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horainicio != null}" th:value="${horainicio}" th:classappend="${iniciomsg != null ? 'is-invalid' : ''}"
+                                                name="horainicio" id="horainicio" style="font-family: 'Open Sans',serif" required>
+                                            <option selected disabled>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horainicio == null}"  th:classappend="${iniciomsg != null ? 'is-invalid' : ''}" name="horainicio" id="horainicio" style="font-family: 'Open Sans',serif" required>
+                                            <option selected disabled>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${iniciomsg != null}" th:text="${iniciomsg}"></div>
+                                    </div>
+                                    <div style="flex: 1; margin-left: 10px;">
+                                        <label class="form-label">Horario Final:</label>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horafin != null}" th:value="${horafin}" th:classappend="${finmsg != null ? 'is-invalid' : ''}" name="horafin" id="horafin" style="font-family: 'Open Sans',serif" required>
+                                            <option disabled selected>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <select class="form-control" aria-label="Default select example" th:if="${horafin == null}"  th:classappend="${finmsg != null ? 'is-invalid' : ''}" name="horafin" id="horafin" style="font-family: 'Open Sans',serif" required>
+                                            <option disabled selected>Select--</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="08:30">08:30</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="09:30">09:30</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="10:30">10:30</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="11:30">11:30</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="15:30">15:30</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="16:30">16:30</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="17:30">17:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                            <option value="21:30">21:30</option>
+                                            <option value="22:00">22:00</option>
+                                        </select>
+                                        <div class="invalid-feedback" th:if="${finmsg != null}" th:text="${finmsg}"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="height: 10px;"></div>
+
+                            <div class="form-group">
+                                <label class="form-label">Seleccione el horario para su hora libre del día:</label>
+                                <label  class="form-label" style="font-weight: 500 !important; font-size: 12px">Se le recomienda elegir acorde a su horario de comida y/o otras actividades</label>
+                                <div style="display: flex; width: 50%;">
+                                    <select class="form-control" aria-label="Default select example" th:if="${horalibre != null}" th:value="${horalibre}" th:classappend="${libremsg != null ? 'is-invalid' : ''}" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
+                                        <option selected>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                    </select>
+                                    <select class="form-control" aria-label="Default select example" th:if="${horalibre == null}" th:classappend="${libremsg != null ? 'is-invalid' : ''}" name="horalibre" id="horalibre" style="font-family: 'Open Sans',serif">
+                                        <option selected disabled>Select--</option>
+                                        <option value="08:00">08:00</option>
+                                        <option value="08:30">08:30</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="09:30">09:30</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="10:30">10:30</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="11:30">11:30</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="12:30">12:30</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="13:30">13:30</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="14:30">14:30</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="15:30">15:30</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="16:30">16:30</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="17:30">17:30</option>
+                                        <option value="18:00">18:00</option>
+                                        <option value="18:30">18:30</option>
+                                        <option value="19:00">19:00</option>
+                                        <option value="19:30">19:30</option>
+                                        <option value="20:00">20:00</option>
+                                        <option value="20:30">20:30</option>
+                                        <option value="21:00">21:00</option>
+                                        <option value="21:30">21:30</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback" th:if="${libremsg != null}" th:text="${libremsg}"></div>
+
+                            </div>
+
+                            <div style="height: 10px;"></div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="stringDias()">Finalizar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <div id="calendar"></div>
+                </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                // Botones de ver horario y crear horario
+                function mostrarDiv(numeroDiv) {
+                    // Ocultar todos los divs
+                    document.getElementById("div1").style.display = "none";
+                    document.getElementById("div2").style.display = "none";
+
+                    // Mostrar el div seleccionado
+                    document.getElementById("div" + numeroDiv).style.display = "block";
+                }
+
+                var array = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+                // Creamos los botones
+                var enero = document.getElementById('enero');
+                var febrero = document.getElementById('febrero');
+                var marzo = document.getElementById('marzo');
+                var abril = document.getElementById('abril');
+                var mayo = document.getElementById('mayo');
+                var junio = document.getElementById('junio');
+                var julio = document.getElementById('julio');
+                var agosto = document.getElementById('agosto');
+                var septiembre = document.getElementById('septiembre');
+                var octubre = document.getElementById('octubre');
+                var noviembre = document.getElementById('noviembre');
+                var diciembre = document.getElementById('diciembre');
+
+                // Activar función
+                enero.addEventListener("click", () => activarDiv("divenero"));
+                febrero.addEventListener("click", () => activarDiv("divfebrero"));
+                marzo.addEventListener("click", () => activarDiv("divmarzo"));
+                abril.addEventListener("click", () => activarDiv("divabril"));
+                mayo.addEventListener("click", () => activarDiv("divmayo"));
+                junio.addEventListener("click", () => activarDiv("divjunio"));
+                julio.addEventListener("click", () => activarDiv("divjulio"));
+                agosto.addEventListener("click", () => activarDiv("divagosto"));
+                septiembre.addEventListener("click", () => activarDiv("divseptiembre"));
+                octubre.addEventListener("click", () => activarDiv("divoctubre"));
+                noviembre.addEventListener("click", () => activarDiv("divnoviembre"));
+                diciembre.addEventListener("click", () => activarDiv("divdiciembre"));
+
+                // Definir la función que se activará al hacer clic en el botón
+                function activarDiv(divmes) {
+                    for (var j = 0; j < array.length; j++) {
+                        var string2 = "div" + array[j];
+                        document.getElementById(string2).style.display = "none";
+                    }
+                    document.getElementById(divmes).style.display = "block";
+                }
+            </script>
+            <script>
+                var condicionalLunes = 0;
+                var condicionalMartes = 0;
+                var condicionalMiercoles = 0;
+                var condicionalJueves = 0;
+                var condicionalViernes = 0;
+                var condicionalSabado = 0;
+
+                document.getElementById('Lunes').addEventListener("click", function() {
+                    if (condicionalLunes === 0){
+                        condicionalLunes = 1;
+                        document.getElementById('Lunes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalLunes = 0;
+                        document.getElementById('Lunes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Martes').addEventListener("click", function() {
+                    if (condicionalMartes === 0){
+                        condicionalMartes = 1;
+                        document.getElementById('Martes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalMartes = 0;
+                        document.getElementById('Martes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Miercoles').addEventListener("click", function() {
+                    if (condicionalMiercoles === 0){
+                        condicionalMiercoles = 1;
+                        document.getElementById('Miercoles').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalMiercoles = 0;
+                        document.getElementById('Miercoles').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Jueves').addEventListener("click", function() {
+                    if (condicionalJueves === 0){
+                        condicionalJueves = 1;
+                        document.getElementById('Jueves').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalJueves = 0;
+                        document.getElementById('Jueves').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Viernes').addEventListener("click", function() {
+                    if (condicionalViernes === 0){
+                        condicionalViernes = 1;
+                        document.getElementById('Viernes').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalViernes = 0;
+                        document.getElementById('Viernes').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                document.getElementById('Sabado').addEventListener("click", function() {
+                    if (condicionalSabado === 0){
+                        condicionalSabado = 1;
+                        document.getElementById('Sabado').style.border = "1px solid #0032aa";
+                    }else {
+                        condicionalSabado = 0;
+                        document.getElementById('Sabado').style.border = "1px solid #d8e2ef";
+                    }
+                });
+
+                function stringDias(){
+                    var dias = [];
+                    console.log(condicionalLunes)
+                    console.log(condicionalMartes)
+                    console.log(condicionalMiercoles)
+                    console.log(condicionalJueves)
+                    console.log(condicionalViernes)
+                    console.log(condicionalSabado)
+
+                    if (condicionalLunes===1){
+                        dias.push("Lunes");
+                    }
+                    if (condicionalMartes===1){
+                        dias.push("Martes");
+                    }
+                    if (condicionalMiercoles===1){
+                        dias.push("Miercoles");
+                    }
+                    if (condicionalJueves===1){
+                        dias.push("Jueves");
+                    }
+                    if (condicionalViernes===1){
+                        dias.push("Viernes");
+                    }
+                    if (condicionalSabado===1){
+                        dias.push("Sabado");
+                    }
+
+                    document.getElementById('dia').value = dias.join(",");
+                    document.getElementById('dia').form.submit();
+                    console.log(typeof document.getElementById('dia').value)
+                }
+
+                // Agrega un evento click al botón
+                /*botonMartes.addEventListener("click", function() {
+                    valor = input.value;
+                    nuevoValor = valor+"Martes";
+                    input.value = nuevoValor;
+                });*/
+
+            </script>
 
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
@@ -48,14 +1030,92 @@
 <!--    End of Main Content-->
 <!-- ===============================================-->
 
+<div class="modal fade" id="modalCitasCalendario" role="dialog" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true" data-backdrop="false" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="exampleModalLabel">Información Cita</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <!-- columna 1 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="tipocita">Tipo de cita: </label>
+                                <input type="text" name="tipocita" id="tipocita" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="especialidad">Especialidad:</label>
+                                <input type="text" name="especialidad" id="especialidad" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha:</label>
+                                <input type="text" name="fecha" id="fecha" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="estado">Estado de cita:</label>
+                                <input type="text" name="estado" id="estado" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="forma">Forma de pago:</label>
+                                <input type="text" name="forma" id="forma" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                        <!-- columna 2 -->
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="modalidad">Modalidad:</label>
+                                <input type="text" name="modalidad" id="modalidad" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="paciente">Paciente:</label>
+                                <input type="text" name="paciente" id="paciente" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="hora">Hora:</label>
+                                <input type="text" name="hora" id="hora" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="sede">Sede:</label>
+                                <input type="text" name="sede" id="sede" class="form-control" readonly="" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="pago">Monto a cobrar:</label>
+                                <input type="text" name="pago" id="pago" class="form-control" readonly="" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <!-- ===============================================-->
 <!--    JavaScripts-->
 <!-- ===============================================-->
-<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+<script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
+<!--    Scripts de DataTable -->
+<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -82,57 +1142,79 @@
             locale: 'es',
             allDay: false,
             displayEventTime: true,
+            eventClick: function (info){
+                let modalA = $('#modalCitasCalendario');
+                modalA.modal('show');
+                modalA.on('shown.bs.modal', function() {
+                    let time = moment(info.event.extendedProps.hora, 'HH:mm');
+                    let formattedTime = time.format('h:mm A');
+                    let date = moment(info.event.start, 'YYYY-MM-DD');
+                    let formattedDate = date.format('DD-MM-YYYY');
+                    let tipoCita = $("#tipocita");
+                    let modalidad = $("#modalidad");
+                    let especialidad = $("#especialidad");
+                    let paciente = $("#paciente");
+                    let fecha = $("#fecha");
+                    let horaGa = $("#hora");
+                    let estadoCita = $("#estado");
+                    let sede = $("#sede");
+                    let formaPago = $("#forma");
+                    let montoCobrar = $("#pago");
+                    tipoCita.attr('placeholder', info.event.title);
+                    modalidad.attr('placeholder', info.event.extendedProps.modalidad);
+                    especialidad.attr('placeholder', info.event.extendedProps.especialidad);
+                    paciente.attr('placeholder', info.event.extendedProps.paciente);
+                    horaGa.attr('placeholder', formattedTime);
+                    fecha.attr('placeholder', formattedDate);
+                    estadoCita.attr('placeholder', info.event.extendedProps.estado);
+                    sede.attr('placeholder', info.event.extendedProps.sede);
+                    formaPago.attr('placeholder', info.event.extendedProps.formaPago);
+                    montoCobrar.attr('placeholder', info.event.extendedProps.pago);
+                })
+            }
+        });
+        // AJAX request to fetch events
+        $.ajax({
+            url: 'http://34.132.54.61:8081/api/citasDoctor', // Replace with your API endpoint URL
+            type: 'GET',
+            data: {
+                dni: [[${session.usuario.id}]] // Specify the GET parameter
+            },
+            headers: {
+                'Content-Type': 'application/json' // Set the Content-Type header
+            },
+            success: function(response) {
+                // Parse and format the received data
+                var events = [];
+                response.forEach(function(eventData) {
+                    var dateString = eventData.start;
+                    var date = moment(dateString, 'DD/MM/YYYY');
+                    var fechaFormateada = date.format('YYYY-MM-DD');
+                    var event = {
+                        title: eventData.title,
+                        start: fechaFormateada,
+                        modalidad: eventData.modalidad,
+                        paciente: eventData.paciente,
+                        hora: eventData.hora,
+                        sede: eventData.sede,
+                        especialidad: eventData.especialidad,
+                        formaPago: eventData.formaPago,
+                        pago: eventData.pago,
+                        estado: eventData.estado
+                        // Add more properties as needed
+                    };
+                    events.push(event);
+                });
+
+                // Add the events to FullCalendar
+                calendar.addEventSource(events);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
         });
         calendar.render();
     });
 </script>
-<!--    Scripts de DataTable -->
-<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
-<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
-
-<!-- Initialize DataTable in JavaScript -->
-<script>
-    $(document).ready(function () {
-        //Esta busacando por el ID del tah <table>
-        //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
-        $('#listaHistorial').DataTable({
-            dom: "<'d-flex justify-content-end pb-4'B>\n" +
-                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
-                "<'table-responsive'tr>\n" +
-                "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
-            language: {
-                processing: "Procesando...",
-                lengthMenu: "Mostrar  _MENU_  usuarios",
-                zeroRecords: "No se encontraron usuarios",
-                emptyTable: "No hay usuarios",
-                info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-                infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-                infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
-                loadingRecords: "Cargando...",
-                search: "Buscar:",
-                paginate: {
-                    previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
-                    next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
-                }
-            },
-            autoWidth: false,
-            lengthMenu: [
-                [6, 10, 15, -1], [6, 10, 15, "Todos"]
-            ],
-            buttons: [
-
-            ]
-        });
-    });
-</script>
-
-
 </body>
 </html>

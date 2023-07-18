@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Página Principal')}">
-</head>
 
+
+</head>
+<script src='https://8x8.vc/libs/external_api.min.js' async></script>
+
+<style>html, body, #jaas-container { height: 100%; }</style>
 
 <body class="">
 
@@ -13,11 +17,12 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
 
+            <div id="demo"></div>
             <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
                 <div class="card-body" style="background: #FFFFFF">
                     <div class="row justify-content-between align-items-center">
@@ -35,16 +40,17 @@
                     </div>
                 </div>
             </div>
-
+            <div th:if="${mensajeError != null}" th:text="${mensajeError}" class="alert alert-danger" role="alert"></div>
+            <div th:if="${respondido != null}" th:text="${respondido}" class="alert alert-success" role="alert"></div>
             <div style="display: flex; text-align: center">
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
-                        Notificaciones, Mensajería y Calendario
+                        Ponte al día
                     </button>
                 </a>
                 <a style="flex: 1; width: 100%;">
-                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
+                    <button onclick="mostrarDiv(2)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
                         Proximas Citas
                     </button>
@@ -58,84 +64,136 @@
                         Ponte al día
                     </h2>
                     <h6 class="mb-2 mb-md-0"  style="font-size: medium; color: #3d8af7; font-weight: 600;">
-                        Visualiza tus notificaciones, mensajería y calendario de citas.
+                        Visualiza tu calendario de citas y cuestionarios disponibles.
                     </h6>
                     <br>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-6" style="padding: 0">
-                            <div class="card" style="margin: 15px">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Notificaciones
-                                    </h4>
-                                    <div style="height: 250px;">
-                                        <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
-                                             th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
-                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
-                                                <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                    <div class="row no-gutters justify-content-between align-items-center">
+                        <div class="row" style="; width: 100%;">
+                            <div class="col-lg-6">
+                                <div class="card h-100 mb-3" style="margin: 15px;">
+                                    <div class="card-header h-100  bg-light py-2">
+                                        <div class="row flex-between-center">
+                                            <div class="col-md-6 col-lg-6">
+                                                <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold">
+                                                    Calendario
+                                                </h4>
+                                                <h5 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem"></h5>
+                                            </div>
+                                        </div>
+                                        <div class="row flex-between-center">
+                                            <div class="col-md-12 col-lg-12">
+                                                <div id="calendar"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6" style="padding: 0">
+                                <div class="card" style="margin: 15px;">
+                                    <div class="card-body" style="padding: 20px 2rem 20px 2rem;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
+                                            Cuestionarios
+                                        </h4>
+                                        <div>
+                                            <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
+                                                 th:if="${iterStatus2.index &lt; 5}" style="padding-bottom: 10px;
+                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <b th:text="|${cuestionario.nombre}|"></b>
+                                                    <div>
+                                                        <button type="button" class="btn btn-light btn-sm" style="background: #00a9b1; border-color: #00a9b1; color: #FFFFFF;
+                                                border-radius: 15px" data-toggle="modal" data-target="#exampleModal"  th:data-target="'#Cuestionario' + ${iterStatus2.index+1}">Previsualizar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; justify-content: right;">
+                                            <a th:href="@{/doctor/cuestionarios}">
+                                                <button type="button" class="btn btn-primary" style="border-radius: 15px;">Ir a la sección de cuestionarios</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-6" style="padding: 0">
-                            <div class="card" style="margin: 15px">
-                                <div class="card-body" style="padding: 25px !important;">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
-                                        Mensajería
-                                    </h4>
-                                    <div style="height: 250px;">
-                                        <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
-                                             th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
+                        <!--
+                        <div style="display: flex">
+                            <div class="col-sm-6" style="flex: 1;padding: 0">
+                                <div class="card" style="margin: 15px">
+                                    <div class="card-body" style="padding: 25px !important;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                            Mensajería
+                                        </h4>
+                                        <div style="height: 250px;">
+                                            <div class="card" th:each="mensaje, iterStatus2 : ${listaMensajes}"
+                                                 th:if="${iterStatus2.index &lt; 2}" style="padding-bottom: 10px;
                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
-                                                <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
-                                                <div th:text="${mensaje.contenido}"></div>
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <b th:text="|${mensaje.emisorDNI.nombre} ${mensaje.emisorDNI.apellido}|"></b>
+                                                    <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${mensaje.fecha} - ${mensaje.hora}hrs|"></p>
+                                                    <div th:text="${mensaje.contenido}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" style="flex: 1;padding: 0">
+                                <div class="card" style="margin: 15px">
+                                    <div class="card-body" style="padding: 25px !important;">
+                                        <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600;">
+                                            Notificaciones
+                                        </h4>
+                                        <div style="height: 250px;">
+                                            <div class="card" th:each="noti, iterStatus1 : ${listaNotificaciones} "
+                                                 th:if="${iterStatus1.index &lt; 2}" style="padding-bottom: 10px;
+                                             margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%;">
+                                                <div class="card-body" style="overflow: hidden; padding: 10px !important;">
+                                                    <p style="font-size: 12px; margin: 0;" th:text="|Fecha: ${noti.fecha} - ${noti.hora}hrs|"></p>
+                                                    <div th:text="${noti.contenido}" style="font-size: 15px;"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body" style="max-height: 650px">
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Calendario
-                                    </h4>
-                                    <div id="calendar"></div>
-                                    <!--div th:replace="~{fragmentos/calendar.html::calendar}"></div-->
-                                </div>
+                </div>
+            </div>
+
+            <!-- Modal previsualizar cuestionario -->
+            <div th:each="cuestionario, i : ${listaCuestionarios}">
+                <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" th:id="'Cuestionario' + ${i.index+1}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Aquí puedes agregar el contenido del modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title">Información del Cuestionario </h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="card mb-3">
-                                <div class="card-body" >
-                                    <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: 600; padding-bottom: 5px;">
-                                        Cuestionarios
-                                    </h4>
-                                    <div>
-                                        <div class="card" th:each="cuestionario, iterStatus2 : ${listaCuestionarios}"
-                                             th:if="${iterStatus2.index &lt; 4}" style="padding-bottom: 10px;
-                                            margin-bottom: 10px; margin-top: 10px; height: 45%; width: 100%; border: 1px solid #b6c1d2;">
-                                            <div class="card-body" style="overflow: hidden; padding: 10px !important;">
-                                                <b th:text="|${cuestionario.nombrecuestionario}|"></b>
-                                                <div> Descripción cuestionario respectiva</div>
-                                            </div>
-                                        </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <br>
+                                    <b>Nombre:  </b>
+                                    <p th:text="|${cuestionario.nombre}|">Título del Cuestionario</p>
+                                    <div th:each="pregunta, iterStatus2  : ${cuestionario.listapreguntas}">
+                                        <b th:text="|Pregunta ${iterStatus2.index+1}|"></b>
+                                        <p style="margin: 0" th:text="${pregunta}"> Información de Pregunta</p>
+                                        <input disabled>
+                                        <div style="width: 10px;height: 20px;"></div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-falcon-default" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <!-- Próximas Citas -->
             <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; display: none;" id="div2">
                 <div class="card-body">
@@ -145,48 +203,64 @@
                     <h6 class="mb-2 mb-md-0" style="font-size: medium; color: #3d8af7; font-weight: 600;">
                         Visualiza información de tus próximas citas
                     </h6>
+
                     <table class="table table-striped" id="userList">
-                        <thead style="background: #cdeffc">
+                        <thead style="background: rgba(43, 45, 80, 0.08)">
                         <tr>
-                            <th class="sort align-middle" style="width: 18%">Nombre Completo</th>
-                            <th class="sort align-middle" style="width: 20%;text-align: center">Fecha de Atención</th>
-                            <th class="sort align-middle" style="width: 12%;text-align: center">Tipo de Cita</th>
-                            <th class="sort align-middle" style="width: 15%;text-align: center">Estado de Cita</th>
-                            <th class="sort align-middle" style="width: 15%;text-align: center"></th>
+                            <th class="sort align-middle" style="width: 10%">Fecha</th>
+                            <th class="sort align-middle" style="width: 10%">Hora</th>
+                            <th class="sort align-middle" style="width: 13%">Estado de Cita</th>
+                            <th class="sort align-middle" style="width: 13%">Nombres</th>
+                            <th class="sort align-middle" style="width: 14%">Apellidos</th>
+                            <th class="sort align-middle" style="width: 10%">Tipo de Cita</th>
+                            <th class="sort align-middle" style="width: 10%;text-align: center">Iniciar Video</th>
                             <th class="sort align-middle" style="width: 20%;text-align: center"></th>
                         </tr>
                         </thead>
                         <tbody class="bg-white">
-                        <tr th:each="cita : ${listaProximasCitas}">
-                            <td class="align-middle" th:text="|${cita.paciente.nombre} ${cita.paciente.apellido}|">
-                                Nombre Completo
+                        <tr th:each="cita, info : ${listaProximasCitas}">
+                            <td th:text="|${cita.fecha}|" style="vertical-align: middle !important;">
+                                00/00/00
                             </td>
-                            <td class="align-middle" th:text="|${cita.fecha} - ${cita.hora}:00hrs|">
-                                00/00/00 - 00:00hrs
+                            <td th:text="|${cita.hora} hrs|" style="vertical-align: middle !important;">
+                                00:00hrs
                             </td>
-                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.modalidad)}">
-                                Presencial
-                            </td>
-                            <td class="align-middle" style="text-align: center" th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}">
+                            <td th:text="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}" style="vertical-align: middle !important;">
                                 Próxima cita
                             </td>
-                            <td class="align-middle" style="text-align: center" th:if="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
-                                <input type="hidden" id="fecha" th:value="${cita.fecha}" />
-                                <input type="hidden" id="hora" th:value="${cita.hora}" />
-                                <button id="botonInicioVideo" type="button" class="btn btn-primary btn-sm" style="text-align: center;background: grey;
-                                border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
+                            <input th:value="${#strings.capitalize(cita.estadoscitaIdestados.tipo)}" type="hidden" class="estado">
+                            <td th:text="|${cita.paciente.nombre}|" style="vertical-align: middle !important;">
+                                Nombre Completo
                             </td>
-                            <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
+                            <td th:text="|${cita.paciente.apellido}|" style="vertical-align: middle !important;">
+                                Nombre Completo
+                            </td>
+                            <td th:text="${#strings.capitalize(cita.modalidad)}" style="vertical-align: middle !important;">
+                                Presencial
+                            </td>
+
+                            <td class="align-middle" style="text-align: center" th:if="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual'}">
+                                <input type="hidden" th:class="fecha" th:value="${cita.fecha}" />
+                                <input type="hidden" th:class="hora" th:value="${cita.hora}" />
+
+                                <a th:href="${cita.reunionVirtual.enlace}" target="_blank">
+                                    <button  type="button" class="btn btn-primary btn-sm botones" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey" disabled>Iniciar Video</button>
+                                </a>
+                            </td>
+                            <td class="align-middle" style="text-align: center" th:unless="${cita.modalidad == 'Virtual' || cita.modalidad == 'virtual' || cita.reunionVirtual != null}">
                                 No disponible
                             </td>
                             <!--td class="align-middle" th:if="${#dates.createNow().toLocalDate()} le ${cita.fecha} and ${#temporals.createLocalTime()} le ${cita.hora}">
                               <a type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #3d8af7;
                                                   border-radius: 15px">Iniciar Video</a>
                             </td-->
-                            <td class="align-middle" style="text-align: center">
-                                <a th:href="@{'historial' + '?id=' + ${cita.paciente.id}}">
-                                    <button type="button" class="btn btn-primary btn-sm" style="text-align: center;background: #b38df7;
-                                border-radius: 15px; border-color: #b38df7">Historial Clínico</button>
+                            <td class="align-middle" style="text-align: center; vertical-align: middle !important;">
+                                <input type="hidden" th:class="fechacita" th:value="${cita.fecha}" />
+                                <input type="hidden" th:class="horacita" th:value="${cita.hora}" />
+                                <a th:href="@{'/doctor/elegirPlantilla?idCita='+${cita.id}+'&idUsuario='+${cita.paciente.id}}">
+                                    <button type="button" class="btn btn-primary btn-sm iniciarcita" style="text-align: center;background: grey;
+                                border-radius: 15px; border-color: grey;" disabled>Iniciar cita</button>
                                 </a>
                             </td>
                         </tr>
@@ -195,23 +269,122 @@
                     </table>
                 </div>
             </div>
-
             <script>
-                // Obtener la referencia al botón
-                var boton = document.getElementById('miBoton');
+                // Obtener datos y botones
+                var botones = document.getElementsByClassName('botones');
+                var fecha = document.getElementsByClassName('fecha');
+                var horas = document.getElementsByClassName('hora');
 
                 // Obtener la fecha y hora actual
                 var fechaActual = new Date();
 
-                // Crear la fecha y hora objetivo
-                var fecha = document.getElementById('fecha').value;
-                var hora = document.getElementById('hora').value;
-                var fechaObjetivo = new Date(fecha + ' ' + hora);
-                var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
-                var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+                for (var i=0;i<botones.length;i++) {
 
-                // Verificar si la fecha y hora actual están dentro del rango objetivo
-                boton.disabled = !(fechaActual >= fechaInicio && fechaActual <= fechaFin);
+                    var fechaString = fecha[i].value;
+                    var horaString = horas[i].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes = fechaString.split('-');
+                    var dia = fechaPartes[0];
+                    var mes = fechaPartes[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio = fechaPartes[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes = horaString.split(':');
+                    var hora = horaPartes[0];
+                    var minutos = horaPartes[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo = new Date(anio, mes, dia, hora, minutos); //Objeto DATE
+                    var fechaInicio = new Date(fechaObjetivo.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin = new Date(fechaObjetivo.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                    //var tiempo=fechaInicio-fechaActual;
+
+                    if (fechaActual >= fechaInicio && fechaActual <= fechaFin){
+                        mostrarBoton(i);
+
+                    }
+                }
+
+                var iniciarcita = document.getElementsByClassName('iniciarcita');
+                var estado = document.getElementsByClassName('estado');
+                console.log(estado)
+                var fechacita = document.getElementsByClassName('fechacita');
+                var horacita = document.getElementsByClassName('horacita');
+
+                for (var j=0;j<iniciarcita.length;j++){
+                    var fechaString1 = fechacita[j].value;
+                    var horaString1 = horacita[j].value;
+
+                    // Obtenemos las partes de la fecha
+                    var fechaPartes1 = fechaString1.split('-');
+                    var dia1 = fechaPartes1[0];
+                    var mes1 = fechaPartes1[1] - 1; // Restamos 1 al mes, ya que en JavaScript los meses van de 0 a 11
+                    var anio1 = fechaPartes1[2];
+
+                    // Obtenemos las partes de la hora
+                    var horaPartes1 = horaString1.split(':');
+                    var hora1 = horaPartes1[0];
+                    var minutos1 = horaPartes1[1];
+
+                    // Creamos el objeto de fecha combinando las partes correspondientes
+                    var fechaObjetivo1 = new Date(anio1, mes1, dia1, hora1, minutos1); //Objeto DATE
+                    var fechaInicio1 = new Date(fechaObjetivo1.getTime() - 30 * 60000); // Restar 30 minutos en milisegundos
+                    var fechaFin1 = new Date(fechaObjetivo1.getTime() + 30 * 60000); // Sumar 30 minutos en milisegundos
+
+                    //var tiempo=fechaInicio-fechaActual;
+
+                    if (fechaActual >= fechaInicio1 && fechaActual <= fechaFin1){
+                        mostrarBoton2(j);
+                    }
+                    var contenido = estado[j].value;
+                    if (contenido === 'En consulta'){
+                        mostrarBoton3(j);
+                    }
+                }
+
+                function accionesBotonIniciarVideo(parametro) {
+                    // Código de la función
+                    botones[parametro].disabled = false;
+                    botones[parametro].style.background = '#3d8af7';
+                    botones[parametro].style.borderColor = '#3d8af7';
+
+                }
+
+                function mostrarBoton(valor) {
+                    setTimeout(function() {
+                        accionesBotonIniciarVideo(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+                function accionesBotonIniciarCita(parametro) {
+                    // Código de la función
+                    iniciarcita[parametro].disabled = false;
+                    iniciarcita[parametro].style.background = '#00a9b1';
+                    iniciarcita[parametro].style.borderColor = '#00a9b1';
+
+                }
+
+                function desactivarIniciarCita(parametro) {
+                    // Código de la función
+                    iniciarcita[parametro].disabled = true;
+                    iniciarcita[parametro].style.background = 'grey';
+                    iniciarcita[parametro].style.borderColor = 'grey';
+
+                }
+
+                function mostrarBoton2(valor) {
+                    setTimeout(function() {
+                        accionesBotonIniciarCita(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
+
+                function mostrarBoton3(valor) {
+                    setTimeout(function() {
+                        desactivarIniciarCita(valor);
+                    }, 0); // Retraso de 2 segundos (2000 milisegundos)
+                }
 
                 function mostrarDiv(numeroDiv) {
                     // Ocultar todos los divs
@@ -221,6 +394,60 @@
                     // Mostrar el div seleccionado
                     document.getElementById("div" + numeroDiv).style.display = "block";
                 }
+            </script>
+            <script type="text/javascript">
+
+                //var elemento = document.getElementById('jitsi-button');
+                var botones = document.getElementsByClassName('botones');
+                for (var i = 0; i < botones.length; i++) {
+                    var boton = botones[i];
+
+                    // Agregar el evento de clic a cada botón
+                    boton.addEventListener("click", function () {
+                        // Tu código de manejo de eventos aquí
+
+                        //window.open("/videollamada", "_blank");
+
+                        //let contenidoDiv = document.getElementById('jaas-container').innerHTML ;
+
+                        /*var contenidoHTML = '<div id="jaas-container"></div>';
+
+                        nuevaPestana.document.open();
+                        nuevaPestana.document.write(contenidoHTML);
+                        nuevaPestana.document.close();
+
+                        const api = new JitsiMeetExternalAPI("8x8.vc", {
+                            roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal",
+                            parentNode: nuevaPestana.document.querySelector('#jaas-container'),
+                            // Make sure to include a JWT if you intend to record,
+                            // make outbound calls or use any other premium features!
+                            // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
+                        });*/
+                    });
+                }
+
+                //para iniciar la reunion con boton
+                /*elemento.addEventListener('click', () => {
+                    //var appURL = window.location.href;
+                    //console.log(appURL);
+                    var nuevaPestana = window.open("","reunion de jitsi");
+
+                    //let contenidoDiv = document.getElementById('jaas-container').innerHTML ;
+
+                    var contenidoHTML = '<div id="jaas-container"></div>';
+
+                    nuevaPestana.document.open();
+                    nuevaPestana.document.write(contenidoHTML);
+                    nuevaPestana.document.close();
+
+                    const api = new JitsiMeetExternalAPI("8x8.vc", {
+                        roomName: "vpaas-magic-cookie-64547877cba34cdb892bd4fb58d11524/salapersonal",
+                        parentNode: nuevaPestana.document.querySelector('#jaas-container'),
+                        // Make sure to include a JWT if you intend to record,
+                        // make outbound calls or use any other premium features!
+                        // jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQvNjhlZmUwLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE2ODcxMTQ3MDMsImV4cCI6MTY4NzEyMTkwMywibmJmIjoxNjg3MTE0Njk4LCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtNjQ1NDc4NzdjYmEzNGNkYjg5MmJkNGZiNThkMTE1MjQiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOmZhbHNlLCJvdXRib3VuZC1jYWxsIjpmYWxzZSwic2lwLW91dGJvdW5kLWNhbGwiOmZhbHNlLCJ0cmFuc2NyaXB0aW9uIjpmYWxzZSwicmVjb3JkaW5nIjpmYWxzZX0sInVzZXIiOnsiaGlkZGVuLWZyb20tcmVjb3JkZXIiOmZhbHNlLCJtb2RlcmF0b3IiOnRydWUsIm5hbWUiOiJUZXN0IFVzZXIiLCJpZCI6Imdvb2dsZS1vYXV0aDJ8MTAwNjExMzExODEyODI1ODU0NTAzIiwiYXZhdGFyIjoiIiwiZW1haWwiOiJ0ZXN0LnVzZXJAY29tcGFueS5jb20ifX0sInJvb20iOiIqIn0.U3nUY4NP7W3eTsDDnv9DweNdUtl5OzMjup7ezNpxdKBLw9ShgxIr6m7F1USOkeK6fDoPbxJULfW7T61ZRvfLeA6oC6Vaz3KTe_-_bGM92y3Tm4kF8EHzJjDsRTKf-55bz7UuL7AbVUyqkmJ01B191_kae1MNObtvtaJ8NdTUikF5-IXn7Zs02DTmX-XEcxhKICKqQiDux4CAJYmwScW3yU0Ew0qDzPGhffR7QBymC7CLxaKRpg-R0FnjMkbqcZ3sdnt4hYqcGNnHDIKWId4mM1gDNHhOHNXLix0qwXy1W25DMQ1rilD8PsiEDTxoWpeTWO-CRr2LaLekzkz3GgLcaQ"
+                    });
+                });*/
             </script>
 
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
@@ -238,8 +465,10 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
 <script th:src="@{/lib/fullcalendar/main.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6.3.4/dist/tippy-bundle.umd.js"></script>
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
@@ -309,10 +538,81 @@
             },
             firstDay: 1,
             locale: 'es',
+            eventDidMount: function(info) {
+                tippy(info.el, {
+                    trigger: 'mouseenter',
+                    content: generateTooltipContent(info.event), // call a function to generate the html content
+                    placement: 'top', // set the tooltip placement (e.g., top, bottom, left, right)
+                    animation: 'fade',
+                    allowHTML: 'true'
+                })
+            }
         });
+        // AJAX request to fetch events
+        $.ajax({
+            url: 'http://34.132.54.61:8081/api/citasDoctor', // Replace with your API endpoint URL
+            type: 'GET',
+            data: {
+                dni: [[${session.usuario.id}]] // Specify the GET parameter
+            },
+            headers: {
+                'Content-Type': 'application/json' // Set the Content-Type header
+            },
+            success: function(response) {
+                // Parse and format the received data
+                var events = [];
+                response.forEach(function(eventData) {
+                    var dateString = eventData.start;
+                    var date = moment(dateString, 'DD/MM/YYYY');
+                    var fechaFormateada = date.format('YYYY-MM-DD');
+                    var event = {
+                        title: eventData.title,
+                        start: fechaFormateada,
+                        modalidad: eventData.modalidad,
+                        paciente: eventData.paciente,
+                        hora: eventData.hora,
+                        sede: eventData.sede,
+                        especialidad: eventData.especialidad,
+                        formaPago: eventData.formaPago,
+                        pago: eventData.pago,
+                        estado: eventData.estado
+                        // Add more properties as needed
+                    };
+                    events.push(event);
+                });
+
+                // Add the events to FullCalendar
+                calendar.addEventSource(events);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+        calendar.updateSize();
         calendar.render();
     });
-</script>
+    function generateTooltipContent(event) {
+        // Generate the HTML content for the tooltip
+        // Assuming you have a time string like '14:30'
+        var timeString = event.extendedProps.hora;
 
+        // Parse the time string using Moment.js
+        var time = moment(timeString, 'HH:mm');
+
+        // Format the time as 'h:mm A' (e.g., '2:30 PM')
+        var formattedTime = time.format('h:mm A');
+
+        var dateString = event.start;
+        var date = moment(dateString, 'YYYY-MM-DD');
+        var fechaFormateada = date.format('DD/MM/YYYY');
+
+        var content = '<strong>' + event.title + '</strong>';
+        content += '<br>Paciente: ' + event.extendedProps.paciente;
+        content += '<br>Modalidad: ' + event.extendedProps.modalidad;
+        content += '<br>Fecha: ' + fechaFormateada;
+        content += '<br>Hora: ' + formattedTime;
+        return content;
+    }
+</script>
 </body>
 </html>

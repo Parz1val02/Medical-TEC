@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<title>Responder Cuestionario</title>
 <head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Responder Cuestionario')}">
 </head>
 
@@ -40,24 +40,45 @@
       <div class="card mb-3 bg-card-gradient">
         <div class="card-body" style="background-color: white">
           <div class="container">
-            <form th:action="@{/paciente/guardarRespuestas}" method="post" >
+            <form th:action="@{/paciente/guardarRespuestas}" method="post">
               <div class="row">
-                <!-- columna 1 -->
-                <div class="col-sm-6" th:each=" p: ${preguntas}">
-                  <div class="form-group" >
-
-                    <!--<input type="hidden" name="paciente.id" th:value="${session.usuario.id}" class="form-control">-->
-                    <label th:text="${p.getPregunta()}"></label>
-                    <input type="text" th:name="${respuesta.preguntasIdpreguntas}" hidden>
-                    <input type="text" th:name="${respuesta.respuesta}">
+                <div class="col-lg-12">
+                  <div class="row">
+                    <h3 th:text="${cuestionario.idcuestionario.nombre}"></h3>
                   </div>
+                  <div th:each="pregunta, status : ${cuestionario.idcuestionario.listapreguntas}">
+                    <div class="row">
+                      <div class="col mb-3">
+                        <label class="form-label" for="respuestasInput" th:text="${pregunta}"></label>
+                        <input type="text" class="form-control" placeholder="Respuesta" th:name="'respuestas'" />
+                      </div>
+                    </div>
+                  </div>
+                  <br>
                 </div>
               </div>
 
-              <!-- botón de envío -->
-              <button class="btn btn-primary submit">Enviar respuestas</button>
+              <input type="hidden" id="respuestasInput" name="listarespuestas" />
+              <input type="hidden" id="cuestionarioid" name="cuestionarioid" th:value="${cuestionario.id}"/>
+              <button class="btn btn-primary" type="submit" onclick="enviarRespuestas()">Enviar respuestas</button>
               <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/paciente/cuestionarios}">Cancelar</a>
             </form>
+
+            <script>
+              function enviarRespuestas() {
+                var respuestas = [];
+                var inputs = document.querySelectorAll('input[name="respuestas"]');
+
+                inputs.forEach(function(input) {
+                  respuestas.push(input.value);
+                });
+
+                document.getElementById('respuestasInput').value = respuestas.join(">%%%%%<%%%%>%%%%%<");
+                document.getElementById('respuestasInput').form.submit();
+
+              }
+            </script>
+
           </div>
         </div>
       </div>

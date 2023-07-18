@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Configuración')}">
 
 </head>
 
@@ -40,6 +40,14 @@
       <div th:if="${msgContrasenia != null}" th:text="${msgContrasenia}" class="alert alert-success" role="alert"></div>
 
       <div class="card mb-3 bg-card-gradient" style="; background: #FFFFFF">
+        <div class="card-header position-relative min-vh-25 mb-7">
+          <div class="bg-holder rounded-soft rounded-bottom-0" style="background-image:url(/img/generic/20.jpg)">
+          </div>
+          <!--/.bg-holder-->
+          <div class="avatar avatar-5xl avatar-profile">
+            <img class="rounded-circle img-thumbnail shadow-sm" th:src="@{/fotoPerfil}" width="200" alt="" />
+          </div>
+        </div>
         <div class="card-body" style="background: #FFFFFF">
 
           <div class="row">
@@ -51,31 +59,31 @@
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput1" class="form-label">Nombres</label>
-                      <input type="text" id="disabledTextInput1" class="form-control" th:value="${#strings.capitalize(admin.nombre)}">
+                      <div  style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput1" class="form-control" th:text="${#strings.capitalize(admin.nombre)}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput2" class="form-label">Apellidos</label>
-                      <input type="text" id="disabledTextInput2" class="form-control" th:value="${#strings.capitalize(admin.apellido)}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput2" class="form-control" th:text="${#strings.capitalize(admin.apellido)}"> </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput3" class="form-label">Correo</label>
-                      <input type="text" id="disabledTextInput3" class="form-control" th:value="${admin.email}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput3" class="form-control" th:text="${admin.email}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput4" class="form-label">Celular</label>
-                      <input type="text" id="disabledTextInput4" class="form-control" th:value="${admin.telefono}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput4" class="form-control" th:text="${admin.telefono}"> </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col mb-3">
                       <label for="disabledTextInput5" class="form-label">DNI</label>
-                      <input type="text" id="disabledTextInput5" class="form-control" th:value="${admin.id}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput5" class="form-control" th:text="${admin.id}"> </div>
                     </div>
                     <div class="col mb-3">
                       <label for="disabledTextInput6" class="form-label">Sede actual</label>
-                      <input type="text" id="disabledTextInput6" class="form-control" th:value="${admin.sedesIdsedes.nombre}">
+                      <div style="background-color: #edf2f9;opacity: 1;" id="disabledTextInput6" class="form-control" th:text="${admin.sedesIdsedes.nombre}"> </div>
                     </div>
                   </div>
                 </fieldset>
@@ -88,7 +96,29 @@
                     Cambio de contraseña
                   </h5>
                   <h6 class="mb-2 mb-md-0" style="color: #3d8af7; font-weight: bold; margin-top: 1rem; margin-bottom: 1rem">¿Desea cambiar su contraseña?</h6>
-                  <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" th:href="@{/paciente/password}">Cambiar Contraseña</button>
+                  <button  class="btn btn-primary" data-toggle="modal" data-target="#cambioContrasena" >Cambiar Contraseña</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- CAMBIAR FOTO DE PERFIL -->
+            <div id="div3" style="padding-left: 15px;">
+              <h4 class="mb-2 mb-md-0" style="color: #0032aa; font-weight: bold; padding: 16px 0 0 0;">
+                Foto de perfil
+              </h4>
+              <div th:if="${fotoSiu != null}" th:text="${fotoSiu}" class="alert alert-success" role="alert"></div>
+              <div th:if="${foto != null}" th:text="${foto}" class="alert alert-warning" role="alert"></div>
+              <div style="display: flex;">
+                <form method="POST" th:action="@{/uploadAdministrador}"
+                      class="dropzone"
+                      id="myGreatDropzone" style="margin: 10px 15px; width: 50%; flex: 2; "></form>
+                <div style="flex: 1;    padding-left: 20px;">
+                  <p style="padding: 15px 15px 15px 0;">
+                    Aquí puedes personalizar tu perfil agregando una foto.
+                    Simplemente haz clic en el área designada y selecciona la imagen que deseas utilizar.
+                  </p>
+                  <button class="btn btn-primary btn-sm" type="submit" id="arch">Guardar cambios</button>
                 </div>
               </div>
             </div>
@@ -180,54 +210,58 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
-
-<!--    Scripts de DataTable -->
-<script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/lib/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive/dataTables.responsive.js}"></script>
-<script th:src="@{/lib/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
-<script th:src="@{/lib/datatables-buttons/dataTables.buttons.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.bootstrap4.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.flash.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/jszip.min.js}"></script>
-<script th:src="@{/lib/datatables-buttons/buttons.html5.min.js}"></script>
+<script th:src="@{/lib/dropzone/dropzone.min.js}"></script>
 
 <!-- Initialize DataTable in JavaScript -->
 <script>
-  $(document).ready(function () {
-    //Esta busacando por el ID del tah <table>
-    //para que entiendan bien lo que se esta haciendo, leer la documentación de datatable
-    $('#userList').DataTable({
-      dom: "<'d-flex justify-content-end pb-4'B>\n" +
-              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
-              "<'table-responsive'tr>\n" +
-              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
-      language: {
-        processing: "Procesando...",
-        lengthMenu: "Mostrar  _MENU_  usuarios",
-        zeroRecords: "No se encontraron usuarios",
-        emptyTable: "No hay usuarios",
-        info: "Mostrando usuarios del _START_ al _END_ <br>Total _TOTAL_ usuarios",
-        infoEmpty: "Mostrando usuarios del 0 al 0 <br>Total 0 usuarios",
-        infoFiltered: "(filtrado de un total de _MAX_ usuarios)",
-        loadingRecords: "Cargando...",
-        search: "Buscar:",
-        paginate: {
-          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
-          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
-        }
-      },
-      autoWidth: false,
-      lengthMenu: [
-        [10, 25, 50, -1], [10, 25, 50, "Todos"]
-      ],
-      buttons: [
+  Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+    paramName: "file", // The name that will be used to transfer the file
+    maxFiles: 1,
+    autoProcessQueue: false,
+    acceptedFiles: ".jpg,.jpeg",
+    maxFilesize: 2,
+    addRemoveLinks: true,
+    dictResponseError: 'Server not Configured',
+    init:function(){
+      var self = this;
+// Update selector to match your button
+      $("#arch").click(function (e) {
+        e.preventDefault();
+        self.processQueue();
+// config
+        self.options.addRemoveLinks = true;
+        self.options.dictRemoveFile = "Delete";
+//New file added
+        self.on("addedfile", function (file) {
+          console.log('new file added ', file);
+        });
+// Send file starts
+        self.on("sending", function (file) {
+          console.log('upload started', file);
+          $('.meter').show();
+        });
 
-      ]
-    });
-  });
+// File upload Progress
+        self.on("totaluploadprogress", function (progress) {
+          console.log("progress ", progress);
+          $('.roller').width(progress + '%');
+        });
+
+        self.on("queuecomplete", function (progress) {
+          $('.meter').delay(999).slideUp(999);
+        });
+
+// On removing file
+        self.on("removedfile", function (file) {
+          console.log(file);
+        });
+      });
+      this.on("queuecomplete", function(progress) {
+// File upload is complete
+        location.reload();
+      });
+    }
+  };
 </script>
-
-
 </body>
 </html>

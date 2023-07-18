@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Dashboard')}">
+<head th:replace="~{fragmentos/cabecera.html::cabecera(titulo='Mensajería')}">
 </head>
 
 
@@ -13,7 +13,7 @@
 <main class="main" id="top">
 
 
-    <div class="container" data-layout="container">
+    <div style="padding: 0 50px 50px 50px;" data-layout="container">
         <nav th:replace="~{fragmentos/sidebardoctor.html::sideBar}"></nav>
         <div class="content" >
             <nav th:replace="~{fragmentos/topbardoctor.html::topBar}"></nav>
@@ -34,7 +34,11 @@
                 </div>
             </div>
 
-            <div th:replace="~{fragmentos/messages.html::messages}"></div>
+            <!-- <div th:replace="~{fragmentos/messages.html::messages}"></div> -->
+            <div class="card d-flex justify-content-center align-items-center" style="padding: 3%">
+                <div id="cometchat" style="z-index: 1" class="d-flex justify-content-center align-items-center"></div>
+            </div>
+
             <footer th:replace="~{fragmentos/footer.html::footer}"></footer>
         </div>
     </div>
@@ -50,6 +54,16 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:replace="~{fragmentos/scripts.html::scripts}"></div>
+
+<!--    Scripts de CometChat -->
+<script th:src="@{/js/CometChat.js}"></script>
+
+<script th:inline="javascript">
+
+    let usuarioId = [[${session.usuario.id}]];
+
+</script>
+
 
 <!--    Scripts de DataTable -->
 <script th:src="@{/lib/datatables/js/jquery.dataTables.min.js}"></script>

@@ -5,7 +5,6 @@
 <!--    JavaScripts-->
 <!-- ===============================================-->
 <div th:fragment="scripts">
-    <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/lib/@fortawesome/all.min.js}"></script>
@@ -19,6 +18,7 @@
     <script th:src="@{/lib/prismjs/prism.js}"></script>
     <script th:src="@{/lib/emojionearea/emojionearea.min.js}"></script>
     <script th:src="@{/lib/fancybox/jquery.fancybox.min.js}"></script>
+    <script th:src="@{/lib/flatpickr/flatpickr.min.js}"></script>
     <script th:src="@{/js/theme.js}"></script>
 
     <script>
@@ -29,6 +29,33 @@
                 console.log(link);
             }
         })
+    </script>
+
+    <script>
+        var logout = function () {
+            // log user out of CometChat
+            CometChatWidget.logout().then((response) => {
+                    // User successfully logged out.
+                    //Logout completed successfully
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA successfully Logout completed ");
+                },(error) => {
+                    //Logout failed with exception
+                    console.log(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx failed Logout with exception:", {error});
+                }
+            );
+
+            /*
+            CometChat.logout().then(
+                () => {
+                    //Logout completed successfully
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA successfully Logout completed");
+                },
+                (error) => {
+                    //Logout failed with exception
+                    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  failed Logout with exception:", { error });
+                }
+            );*/
+        };
     </script>
 
 </div>
