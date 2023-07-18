@@ -39,20 +39,31 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="row">
-                  <h3 th:text="'Informe correspondiente a la cita del paciente '+${citaOWO.paciente.nombre} + ${citaOWO.paciente.apellido}' realizada el día ' + ${citaOWO.fecha}"></h3>
+                  <h3 th:text="'Informe correspondiente a la cita del paciente '+${citaOWO.paciente.nombre} + ' '+ ${citaOWO.paciente.apellido}+' realizada el día ' + ${citaOWO.fecha}"></h3>
+                </div>
+                <div class="row" style="margin-bottom: 1rem;">
+                  <label for="diagnostico">Diagnóstico</label>
+                  <input type="text" class="form-control"  th:value="${citaOWO.idinforme.diagnostico}"
+                         style="min-height: 100px;" id="diagnostico" disabled>
+                </div>
+                <div class="row" style="margin-bottom: 1rem;">
+                  <label for="tratamiento">Tratamiento</label>
+                  <input type="text" class="form-control"  th:value="${citaOWO.idinforme.tratamiento}" style="min-height: 50px;" id="tratamiento" disabled>
                 </div>
                 <div th:each="pregunta, status : ${citaOWO.idinforme.informeNuevo.listacampos}">
                   <div class="row">
                     <div class="col mb-3">
                       <label class="form-label" th:text="${pregunta}"></label>
-                      <input type="text" class="form-control" placeholder="Respuesta" th:value="${citaOWO.idinforme.listacamposllenados[status.index]}"  disabled/>
+                      <input type="text" class="form-control" placeholder="Respuesta" th:value="${camposllenos[status.index]}"  disabled/>
                     </div>
                   </div>
                 </div>
                 <br>
               </div>
             </div>
-            <a class="btn btn-secondary" style="text-align: center;background: #b38df7; border-radius: 15px;" th:href="@{/doctor/citas}">Regresar</a>
+
+            <a class="btn btn-secondary" style="text-align: center;background: #00a9b1;
+                                border-radius: 15px; border-color: white" th:href="@{/doctor/citas}">Regresar</a>
           </div>
         </div>
       </div>

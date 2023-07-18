@@ -18,8 +18,8 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE doctor_dni1=?1", nativeQuery = true)
     List<Cita> listarCitas(String dnidoctor);
 
-    @Query(value = "SELECT * FROM telesystem_2.cita WHERE tipocita_idtipocita=1 AND doctor_dni1=?1 AND paciente_dni=?2 ORDER BY fecha DESC, hora DESC LIMIT 1;", nativeQuery = true)
-    Cita obtenerCitaPorPacienteyDoctor(String dnidoctor, String dnipaciente);
+    @Query(value = "SELECT * FROM telesystem_2.cita WHERE tipocita_idtipocita=1 AND doctor_dni1=?1 AND paciente_dni=?2 ORDER BY fecha DESC, hora DESC LIMIT 2;", nativeQuery = true)
+    List<Cita> obtenerCitaPorPacienteyDoctor(String dnidoctor, String dnipaciente);
 
     @Query(value = "SELECT * FROM telesystem_2.cita WHERE tipocita_idtipocita=2 AND  examen_medico_idexamen=?1 AND paciente_dni=?2 ORDER BY fecha DESC, hora DESC LIMIT 1;", nativeQuery = true)
     Cita obtenerExamenPorPacienteyDoctor(String examenmedico, String dnipaciente);
@@ -107,84 +107,84 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             "    CASE\n" +
             "        WHEN t.tipo_cita = 'Consulta médica' THEN\n" +
             "            CASE\n" +
-            "                WHEN s.nombre_seguro = 'rimac-EPS' THEN 60 * 0.85\n" +
-            "                WHEN s.nombre_seguro = 'Rimac seguros' THEN 60 * 0.75\n" +
-            "                WHEN s.nombre_seguro = 'Pacifico EPS' THEN 60 * 0.9\n" +
-            "                WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 60 * 0.8\n" +
-            "                WHEN s.nombre_seguro = 'Mapfre' THEN 60 * 0.6\n" +
-            "                WHEN s.nombre_seguro = 'Plan Salud' THEN 60 * 0.9\n" +
+            "                WHEN s.nombre_seguro = 'rimac-EPS' THEN 60 * (1-0.85)\n" +
+            "                WHEN s.nombre_seguro = 'Rimac seguros' THEN 60 * (1-0.75)\n" +
+            "                WHEN s.nombre_seguro = 'Pacifico EPS' THEN 60 * (1-0.9)\n" +
+            "                WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 60 * (1-0.8)\n" +
+            "                WHEN s.nombre_seguro = 'Mapfre' THEN 60 * (1-0.6)\n" +
+            "                WHEN s.nombre_seguro = 'Plan Salud' THEN 60 * (1-0.9)\n" +
             "                ELSE 60\n" +
             "            END\n" +
             "        WHEN t.tipo_cita = 'Examen médico' THEN\n" +
             "            CASE\n" +
             "                WHEN em.nombre IN ('examen fisico', 'pruebas de orina') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'rimac-EPS' THEN 30 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 30 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 30 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 30 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 30 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 30 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'rimac-EPS' THEN 30 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 30 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 30 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 30 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 30 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 30 * (1-0.9)\n" +
             "                        ELSE 30\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('analisis de sangre') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'rimac-EPS' THEN 50 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 50 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 50 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 50 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 50 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 50 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'rimac-EPS' THEN 50 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 50 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 50 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 50 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 50 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 50 * (1-0.9)\n" +
             "                        ELSE 50\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('radiografia', 'ecografia', 'electrocardiograma (ECG)') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 100 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 100 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 100 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 100 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 100 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 100 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 100 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 100 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 100 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 100 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 100 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 100 * (1-0.9)\n" +
             "                        ELSE 100\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('mamografía') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 125 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 125 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 125 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 125 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 125 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 125 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 125 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 125 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 125 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 125 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 125 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 125 * (1-0.9)\n" +
             "                        ELSE 125\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('colonoscopia') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 200 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 200 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 200 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 200 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 200 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 200 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 200 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 200 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 200 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 200 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 200 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 200 * (1-0.9)\n" +
             "                        ELSE 200\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('prueba de esfuerzo') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 75 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 75 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 75 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 75 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 75 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 75 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 75 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 75 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 75 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 75 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 75 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 75 * (1-0.9)\n" +
             "                        ELSE 75\n" +
             "                    END\n" +
             "                WHEN em.nombre IN ('examen de vista') THEN\n" +
             "                    CASE\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 50 * 0.85\n" +
-            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 50 * 0.75\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 50 * 0.9\n" +
-            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 50 * 0.8\n" +
-            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 50 * 0.6\n" +
-            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 50 * 0.9\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac-EPS' THEN 50 * (1-0.85)\n" +
+            "                        WHEN s.nombre_seguro = 'Rimac seguros' THEN 50 * (1-0.75)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico EPS' THEN 50 * (1-0.9)\n" +
+            "                        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN 50 * (1-0.8)\n" +
+            "                        WHEN s.nombre_seguro = 'Mapfre' THEN 50 * (1-0.6)\n" +
+            "                        WHEN s.nombre_seguro = 'Plan Salud' THEN 50 * (1-0.9)\n" +
             "                        ELSE 50\n" +
             "                    END\n" +
             "                ELSE 0\n" +
@@ -230,12 +230,12 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
                 "    p.email,\n" +
                 "    ROUND(\n" +
                 "    CASE\n" +
-                "        WHEN s.nombre_seguro = 'Rimac-EPS' THEN m.precio * rm.cantidad * 0.85\n" +
-                "        WHEN s.nombre_seguro = 'Rimac seguros' THEN m.precio * rm.cantidad * 0.75\n" +
-                "        WHEN s.nombre_seguro = 'Pacifico EPS' THEN m.precio * rm.cantidad * 0.9\n" +
-                "        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN m.precio * rm.cantidad * 0.8\n" +
-                "        WHEN s.nombre_seguro = 'Mapfre' THEN m.precio * rm.cantidad * 0.6\n" +
-                "        WHEN s.nombre_seguro = 'Plan Salud' THEN m.precio * rm.cantidad * 0.9\n" +
+                "        WHEN s.nombre_seguro = 'Rimac-EPS' THEN m.precio * rm.cantidad * (1-0.85)\n" +
+                "        WHEN s.nombre_seguro = 'Rimac seguros' THEN m.precio * rm.cantidad * (1-0.75)\n" +
+                "        WHEN s.nombre_seguro = 'Pacifico EPS' THEN m.precio * rm.cantidad * (1-0.9)\n" +
+                "        WHEN s.nombre_seguro = 'Pacifico Seguros' THEN m.precio * rm.cantidad * (1-0.8)\n" +
+                "        WHEN s.nombre_seguro = 'Mapfre' THEN m.precio * rm.cantidad * (1-0.6)\n" +
+                "        WHEN s.nombre_seguro = 'Plan Salud' THEN m.precio * rm.cantidad * (1-0.9)\n" +
                 "        ELSE m.precio * rm.cantidad -- Si no hay seguro o el seguro no está en la lista, no hay descuento\n" +
                 "    END,2) AS precio_calculado\n" +
                 "FROM cita c \n" +
