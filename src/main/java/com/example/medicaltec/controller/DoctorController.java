@@ -961,7 +961,7 @@ public class DoctorController {
             attr.addFlashAttribute("errorPass", "Los campos no pueden estar vacíos");
             return "redirect:/doctor/config";
         } else if (!passwordActualCoincide ) {
-            attr.addFlashAttribute("errorPass", "Ocurrió un error durante el cambio de contraseña. No se aplicaron cambios.");
+            attr.addFlashAttribute("errorPass", "La contraseña actual ingresada no es correcta");
             return "redirect:/doctor/config";
         } else if (!pass3.equals(pass2) ) {
             attr.addFlashAttribute("errorPass", "Las contraseñas ingresadas no coinciden");
