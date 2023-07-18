@@ -454,8 +454,8 @@ public class AdministrativoController {
 
 
                             "Bienvenido(a) "+nombres +" "+ apellidos + ", usted ha sido invitado(a) para ser parte de la plataforma telesystem \n"+
-                    "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+request.getRemoteAddr()+
-                            ":8080/registro/formPaciente/"+randomNumberStr +"\n"+
+                    "por tal motivo le solicitamos rellenar el formulario para completar sus datos de registro \n"+
+                            "34.28.246.152:8080/registro/formPaciente/"+randomNumberStr +"\n"+
                             "Usted tiene 30 minutos desde el momento que se ha enviado este correo. Fecha Envio: "+fechaHoraFormateada +
 
 
