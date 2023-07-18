@@ -23,8 +23,8 @@
                 </button>
             </a>
         </div>
-        <div id="consultamedica" style="display: none; margin: 30px">
-            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; border: 1px solid #b6c1d2; border-radius: 0;">
+        <div id="consultamedica" style="display: block; margin: 30px">
+            <div class="card mb-3 bg-card-gradient" style="background: #FFFFFF; border-radius: 0;">
                 <div class="card-body" style="background: #FFFFFF; padding: 50px 50px 90px 50px !important">
                     <div>
                         <h4 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Consulta Médica</h4>
@@ -40,20 +40,19 @@
                         </p>
                     </div>
                     <div class="row">
-                        <div class="col-md-5">
+
+                        <div class="col-md-5" style="display: flex; flex-wrap: wrap;">
+                            <h4 style="color: #0032aa; font-weight: bold; padding-bottom: 5px"> Nuestras especialidades:</h4>
+                            <div th:each="especialidad, i : ${especialidadesList}" >
+                                <p th:text="|${i.index+1}° ${especialidad.nombreEspecialidad}|" style="margin: 0 !important;"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
                             <img th:src="@{/img/principalpage/consultamedica.jpg}" class="img-fluid rounded-start"
                                  style="height: 100% !important; object-fit: cover; object-position: center;
                          width: 100% !important; max-height: 450px;">
                         </div>
-                        <div class="col-md-7" style="display: flex; flex-wrap: wrap;">
-                            <div th:each="especialidad : ${especialidadesList}" style="width: 50%;">
-                                <div class="card" style="border: 1px solid #b6c1d2; margin: 5px; background: white;">
-                                    <div class="card-body" style="padding: 5px 20px;">
-                                        <p th:text="${especialidad.nombreEspecialidad}" style="color: black; font-weight: 600; font-size: 18px; margin: 0 !important;"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
