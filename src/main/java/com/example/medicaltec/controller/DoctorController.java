@@ -457,34 +457,42 @@ public class DoctorController {
                     if (estadopaciente==8){
                         Usuario doctor = optionalCita.get().getDoctor();
                         Usuario paciente = optionalCita.get().getPaciente();
-                        Cita citaUltima =citaRepository.obtenerCitaPorPacienteyDoctor(doctor.getId(),paciente.getId());
+                        List<Cita> citaUltima1 =citaRepository.obtenerCitaPorPacienteyDoctor(doctor.getId(),paciente.getId());
+                        Cita citaUltima = citaUltima1.get(1);
+                        System.out.println(citaUltima.getId());
+
                         if (citaUltima.getExamenMedico() != null){
+                            System.out.println(citaUltima.getExamenMedico().getNombre());
                             //hacer lo de las citas
                             String nombreexamen = citaUltima.getExamenMedico().getNombre();
                             Cita examenmedico = citaRepository.obtenerExamenPorPacienteyDoctor(nombreexamen,paciente.getId());
 
-                            model.addAttribute("verificador",1);
-                            model.addAttribute("citaUltima",citaUltima);
-                            model.addAttribute("examenmedico",examenmedico);
+                            boolean existeexamen = (examenmedico == null);
 
-                            // Hallamos la resta de tiempo
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                            LocalDate citaFecha = LocalDate.parse(citaUltima.getFecha(), formatter);
+                            if (!existeexamen){
+                                model.addAttribute("verificador",1);
+                                model.addAttribute("citaUltima",citaUltima);
+                                model.addAttribute("examenmedico",examenmedico);
 
-                            LocalDate examenFecha = LocalDate.parse(examenmedico.getFecha(), formatter);
+                                // Hallamos la resta de tiempo
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                LocalDate citaFecha = LocalDate.parse(citaUltima.getFecha(), formatter);
 
-                            // Obtener la fecha límite que es 7 días después de la fecha de la cita
-                            LocalDate fechaLimite = citaFecha.plusDays(7);
+                                LocalDate examenFecha = LocalDate.parse(examenmedico.getFecha(), formatter);
 
-                            // Verificar si la fecha del examen está dentro del rango permitido
-                            if (examenFecha.isBefore(fechaLimite) || examenFecha.isEqual(fechaLimite)) {
-                                // La fecha del examen está dentro del rango permitido
-                                // Puedes continuar con el procesamiento
-                                citaRepository.cambiarPagadoCita(citaUltima.getId());
-                                attr.addFlashAttribute("msgFecha","La fecha del examen fue antes del plazo de 7 días establecido, la cita no tendrá costo.");
-                            } else {
-                                // La fecha del examen está fuera del rango permitido
-                                attr.addFlashAttribute("msgFecha","La fecha del examen fue posterior al plazo de 7 días establecido, la cita tendrá costo.");
+                                // Obtener la fecha límite que es 7 días después de la fecha de la cita
+                                LocalDate fechaLimite = citaFecha.plusDays(7);
+
+                                // Verificar si la fecha del examen está dentro del rango permitido
+                                if (examenFecha.isBefore(fechaLimite) || examenFecha.isEqual(fechaLimite)) {
+                                    // La fecha del examen está dentro del rango permitido
+                                    // Puedes continuar con el procesamiento
+                                    citaRepository.cambiarPagadoCita(citaUltima.getId());
+                                    attr.addFlashAttribute("msgFecha","La fecha del examen fue antes del plazo de 7 días establecido, la cita no tendrá costo.");
+                                } else {
+                                    // La fecha del examen está fuera del rango permitido
+                                    attr.addFlashAttribute("msgFecha","La fecha del examen fue posterior al plazo de 7 días establecido, la cita tendrá costo.");
+                                }
                             }
 
                         }
@@ -562,7 +570,7 @@ public class DoctorController {
 
     @PostMapping("/enviarBitacoras")
     public String enviarBitacoras(@RequestParam("listaidInformes") String listaidInformes, @RequestParam("listaBitacoras") String listaBitacoras,
-                                  Model model){
+                                  Model model, RedirectAttributes attr){
 
         String[] informesid = listaidInformes.split(">%%%%%<%%%%>%%%%%<");
         String[] bitacoraContent = listaBitacoras.split(">%%%%%<%%%%>%%%%%<");
@@ -576,7 +584,7 @@ public class DoctorController {
             informeRepository.ingresarBitacora(bitacora, Integer.parseInt(idInforme));
         }
 
-        model.addAttribute("bitacoracambios","Se guardaron los comentarios correctamento");
+        attr.addFlashAttribute("bitacoracambios","Se guardaron los comentarios (bitácora) exitosamente.");
         return "redirect:/doctor/pacientes";
     }
     @PostMapping("/rellenarInforme")

@@ -34,7 +34,7 @@
                     <div th:if="${msgError != null}" th:text="${msgError}" class="alert alert-danger" role="alert"></div>
                     <div th:if="${borrado != null}" th:text="${borrado}" class="alert alert-success" role="alert"></div>
                     <div th:if="${horasdoctornoexiste != null}" th:text="${horasdoctornoexiste}" class="alert alert-danger" role="alert"></div>
-                    <div style="display: flex; text-align: center">
+                    <div style="display: flex; flex-wrap: wrap; text-align: center">
                         <a style="flex: 1; width: 100%;">
                             <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #3d8af7; border: 5px solid #3d8af7; width: 95%;
                                 margin-right: 5px; margin-left: 5px; padding: 1px !important;">
@@ -56,7 +56,7 @@
                         <h6 style="color: #3d8af7;font-weight: 600;">
                             Visualizar el horario de este mes
                         </h6>
-                        <div style="display: flex">
+                        <div style="display: flex;  flex-wrap: wrap;">
                             <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes Actual:</p>
                             <p th:text="${mesActual}" style="margin: 0 10px;"></p>
                         </div>
@@ -94,15 +94,13 @@
                             Visualizar el horario de todos los meses:
                         </h4>
 
-                        <div style="width: 100%;display: flex;">
+                        <div style="width: 100%;display: flex; flex-wrap: wrap;">
                             <button type="button" class="btn btn-outline-primary" id="enero" style="flex: 1;">Enero</button>
                             <button type="button" class="btn btn-outline-primary" id="febrero" style="flex: 1;">Febrero</button>
                             <button type="button" class="btn btn-outline-primary" id="marzo" style="flex: 1;">Marzo</button>
                             <button type="button" class="btn btn-outline-primary" id="abril" style="flex: 1;">Abril</button>
                             <button type="button" class="btn btn-outline-primary" id="mayo" style="flex: 1;">Mayo</button>
                             <button type="button" class="btn btn-outline-primary" id="junio" style="flex: 1;">Junio</button>
-                        </div>
-                        <div style="width: 100%;display: flex;">
                             <button type="button" class="btn btn-outline-primary" id="julio" style="flex: 1;">Julio</button>
                             <button type="button" class="btn btn-outline-primary" id="agosto" style="flex: 1;">Agosto</button>
                             <button type="button" class="btn btn-outline-primary" id="septiembre" style="flex: 1;">Septiembre</button>
@@ -122,23 +120,23 @@
                             </div>
                             <div th:unless="${horasdoctorEnero == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorEnero.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorEnero.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorEnero.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorEnero.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorEnero.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -160,23 +158,23 @@
                             </div>
                             <div th:unless="${horasdoctorFebrero == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorFebrero.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorFebrero.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorFebrero.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorFebrero.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorFebrero.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -203,19 +201,19 @@
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorMarzo.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorMarzo.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorMarzo.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorMarzo.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorMarzo.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -237,23 +235,23 @@
                             </div>
                             <div th:unless="${horasdoctorAbril == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorAbril.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorAbril.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorAbril.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorAbril.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorAbril.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -275,23 +273,23 @@
                             </div>
                             <div th:unless="${horasdoctorMayo == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorMayo.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorMayo.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorMayo.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorMayo.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorMayo.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -313,23 +311,23 @@
                             </div>
                             <div th:unless="${horasdoctorJunio == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorJunio.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorJunio.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorJunio.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorJunio.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorJunio.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -351,23 +349,23 @@
                             </div>
                             <div th:unless="${horasdoctorJulio == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorJulio.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorJulio.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorJulio.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorJulio.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorJulio.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -389,23 +387,23 @@
                             </div>
                             <div th:unless="${horasdoctorAgosto == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorAgosto.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorAgosto.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorAgosto.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorAgosto.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorAgosto.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -428,23 +426,23 @@
                             </div>
                             <div th:unless="${horasdoctorSeptiembre == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorSeptiembre.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorSeptiembre.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorSeptiembre.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorSeptiembre.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorSeptiembre.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -466,23 +464,23 @@
                             </div>
                             <div th:unless="${horasdoctorOctubre == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorOctubre.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorOctubre.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorOctubre.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorOctubre.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorOctubre.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -504,23 +502,23 @@
                             </div>
                             <div th:unless="${horasdoctorNoviembre == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorNoviembre.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorNoviembre.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorNoviembre.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorNoviembre.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorNoviembre.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
@@ -543,23 +541,23 @@
                             </div>
                             <div th:unless="${horasdoctorDiciembre == null}">
                                 <!-- existe horario del mes de enero -->
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Mes:</p>
                                     <p th:text="${horasdoctorDiciembre.mes}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Días:</p>
                                     <p th:text="${horasdoctorDiciembre.dias}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora inicio:</p>
                                     <p th:text="${horasdoctorDiciembre.horainicio}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora fin:</p>
                                     <p th:text="${horasdoctorDiciembre.horafin}" style="margin: 0 10px;"></p>
                                 </div>
-                                <div style="display: flex">
+                                <div style="display: flex; flex-wrap: wrap;">
                                     <p class="form-label" style="font-weight: 600;margin: 0 0 5px;">Hora libre:</p>
                                     <p th:text="${horasdoctorDiciembre.horalibre}" style="margin: 0 10px;"></p>
                                 </div>
