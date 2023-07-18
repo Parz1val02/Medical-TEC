@@ -460,15 +460,16 @@ public class DoctorController {
                         List<Cita> citaUltima1 =citaRepository.obtenerCitaPorPacienteyDoctor(doctor.getId(),paciente.getId());
                         Cita citaUltima = citaUltima1.get(1);
                         System.out.println(citaUltima.getId());
+                        System.out.println("ENTREEEE");
 
                         if (citaUltima.getExamenMedico() != null){
                             System.out.println(citaUltima.getExamenMedico().getNombre());
                             //hacer lo de las citas
-                            String nombreexamen = citaUltima.getExamenMedico().getNombre();
+                            int nombreexamen = citaUltima.getExamenMedico().getId();
                             Cita examenmedico = citaRepository.obtenerExamenPorPacienteyDoctor(nombreexamen,paciente.getId());
-
+                            System.out.println(examenmedico);
                             boolean existeexamen = (examenmedico == null);
-
+                            System.out.println(existeexamen);
                             if (!existeexamen){
                                 model.addAttribute("verificador",1);
                                 model.addAttribute("citaUltima",citaUltima);
@@ -487,11 +488,17 @@ public class DoctorController {
                                 if (examenFecha.isBefore(fechaLimite) || examenFecha.isEqual(fechaLimite)) {
                                     // La fecha del examen está dentro del rango permitido
                                     // Puedes continuar con el procesamiento
-                                    citaRepository.cambiarPagadoCita(citaUltima.getId());
-                                    attr.addFlashAttribute("msgFecha","La fecha del examen fue antes del plazo de 7 días establecido, la cita no tendrá costo.");
+                                    model.addAttribute("msgFecha","La fecha del examen fue antes del plazo de 7 días establecido, la cita no tendrá costo.");
+                                    Cita cita2 = optionalCita.get();
+                                    System.out.println(cita2.getClass().getName());
+                                    System.out.println(cita2.getId());
+                                    Integer citaid = cita2.getId();
+                                    System.out.println(cita2.getId().getClass().getName());
+                                    citaRepository.cambiarPagadoCita2(1,citaid);
+
                                 } else {
                                     // La fecha del examen está fuera del rango permitido
-                                    attr.addFlashAttribute("msgFecha","La fecha del examen fue posterior al plazo de 7 días establecido, la cita tendrá costo.");
+                                    model.addAttribute("msgFecha","La fecha del examen fue posterior al plazo de 7 días establecido, la cita tendrá costo.");
                                 }
                             }
 
