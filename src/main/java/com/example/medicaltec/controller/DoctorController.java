@@ -481,12 +481,24 @@ public class DoctorController {
             if(optionalCita.isPresent()){
                 Cita cita = optionalCita.get();
                 Informe informe = cita.getIdinforme();
+
+                String campospallenar = informe.getInformeNuevo().getCampos();
+                List<String> listacampospallenar = List.of(campospallenar.split(">%%%%%<%%%%>%%%%%<"));
+                cita.getIdinforme().getInformeNuevo().setListacampos(listacampospallenar);
+
                 String camposfilled = informe.getCampos();
                 List<String> listacamposfilled = List.of(camposfilled.split("#!%&%!#"));
                 cita.getIdinforme().setListacamposllenados(listacamposfilled);
-                String campospallenar = informe.getInformeNuevo().getCampos();
-                List<String> listacampospallenar = List.of(campospallenar.split("#!%&%!#"));
-                cita.getIdinforme().getInformeNuevo().setListacampos(listacampospallenar);
+
+                String [] camposllenadosss = new String[listacampospallenar.size()];
+                for (int i = 0; i<listacampospallenar.size();i++){
+                    if (i<listacamposfilled.size()){
+                        camposllenadosss[i] = listacamposfilled.get(i);
+                    }else {
+                        camposllenadosss[i] = "";
+                    }
+                }
+                model.addAttribute("camposllenos",camposllenadosss);
                 model.addAttribute("citaOWO",cita);
                 return "doctor/verInforme";
             }else {
