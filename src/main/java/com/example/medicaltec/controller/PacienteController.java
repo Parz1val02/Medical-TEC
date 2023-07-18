@@ -675,9 +675,9 @@ public class PacienteController {
                     attr.addFlashAttribute("exitoCancelar", "Su cita se canceló de manera exitosa");
                     //Enviar correo cita cancelada
                     if(citaA.getEspecialidadesIdEspecialidad()!=null){
-                        correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
+                        correoConEstilos.sendEmailEstilos2( usuarioSession.getEmail()   , "Cita cancelada" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue cancelada.");
                     }else if(citaA.getExamenMedico()!=null){
-                        correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
+                        correoConEstilos.sendEmailEstilos2( usuarioSession.getEmail()   , "Cita cancelada" , "Su examen médico agendado para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getExamenMedico().getNombre() + " fue cancelado.");
                     }
                 }else{
                     attr.addFlashAttribute("errorCancelar", "Error al intentar cancelar la cita");
@@ -716,7 +716,7 @@ public class PacienteController {
                             citaRepository.estadoPagada(citaA.getId());
                             attr.addFlashAttribute("exitoPagar", "Su cita se pagó de manera exitosa");
                             //Enviar correo pago con tarjeta correcto
-                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Pago de cita exitoso" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
+                            correoConEstilos.sendEmailEstilos2( usuarioSession.getEmail()   , "Pago de cita exitoso" , "Su consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorPagar", "Monto a pagar erróneo");
                         } catch (MessagingException e) {
@@ -757,13 +757,12 @@ public class PacienteController {
                             boletaRepository.boletaReceta(citaA.getRecetaIdreceta().getId(), Double.parseDouble(precio), boleta.getId());
                             attr.addFlashAttribute("exitoReceta", "Su receta se pagó de manera exitosa");
                             //Enviar correo pago con tarjeta correcto
-                            correoConEstilos.sendEmailEstilos( usuarioSession.getEmail()   , "Pago de receta exitoso" , "La receta de consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
+                            correoConEstilos.sendEmailEstilos2( usuarioSession.getEmail()   , "Pago de receta exitoso" , "La receta de consulta médica agendada para la fecha " + citaA.getFecha() + " en la especialidad " + citaA.getEspecialidadesIdEspecialidad().getNombreEspecialidad() + " fue pagada de manera exitosa.");
                         }catch (NumberFormatException e){
                             attr.addFlashAttribute("errorReceta", "Monto a pagar erróneo");
                         } catch (MessagingException e) {
                             throw new RuntimeException(e);
                         }
-
                     }else{
                         attr.addFlashAttribute("errorReceta", "Error al intentar pagar la receta");
                     }
@@ -804,6 +803,7 @@ public class PacienteController {
             // La solicitud no se realizó correctamente
             // Manejar el error de acuerdo a tus necesidades
             // Devolver una vista de error o manejar el error de otra manera
+            attr.addFlashAttribute("errorReceta", "Error al momento de visualizar el delivery");
             return "redirect:/paciente/consultas";
         }
     }
