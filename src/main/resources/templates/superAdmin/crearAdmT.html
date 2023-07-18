@@ -79,9 +79,9 @@
               <div class="invalid-feedback" th:if="${passwordmsg!=null}" th:text="${passwordmsg}"></div>
             </div>
             <div class="form-group">
-              <label for="edad">Edad</label>
-              <input type="number" class="form-control" th:if="${edad != null}" th:value="${edad}" th:classappend="${edadmsg!=null?'is-invalid':''}"  id="edad" name="edad">
-              <input type="number" class="form-control" th:if="${edad == null}"  th:classappend="${edadmsg!=null?'is-invalid':''}"  id="edad" name="edad" placeholder="Ingrese la edad">
+              <label for="edad">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" th:if="${edad != null}" th:value="${edad}" th:classappend="${edadmsg!=null?'is-invalid':''}"  id="edad" name="edad">
+              <input type="date" class="form-control" th:if="${edad == null}"  th:classappend="${edadmsg!=null?'is-invalid':''}"  id="edad" name="edad" placeholder="Ingrese la edad">
               <div class="invalid-feedback" th:if="${edadmsg!=null}" th:text="${edadmsg}"></div>
             </div>
             <div class="form-group">
