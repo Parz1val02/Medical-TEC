@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div th:if="${mensajeError != null}" th:text="${mensajeError}" class="alert alert-danger" role="alert"></div>
-
+            <div th:if="${respondido != null}" th:text="${respondido}" class="alert alert-success" role="alert"></div>
             <div style="display: flex; text-align: center">
                 <a style="flex: 1; width: 100%;">
                     <button onclick="mostrarDiv(1)" type="submit" class="btn btn-primary" style="background: #00a9b1; border: 5px solid #00a9b1; width: 95%;
